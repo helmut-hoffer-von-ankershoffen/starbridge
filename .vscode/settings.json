@@ -1,0 +1,9 @@
+{
+    "editor.formatOnSave": true,
+    "[python]": {
+        "editor.defaultFormatter": "charliermarsh.ruff",
+        "editor.formatOnSave": true
+    },
+    "ruff.lint.args": [
+        "--ignore=F401"
+    ]

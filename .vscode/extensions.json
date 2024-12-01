@@ -1,0 +1,14 @@
+{
+    "recommendations": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.debugpy",
+        "donjayamanne.python-environment-manager",
+        "kaih2o.python-resource-monitor",
+        "charliermarsh.ruff",
+        "tamasfe.even-better-toml",
+        "mikestead.dotenv",
+        "wayou.vscode-todo-highlight",
+        "gruntfuggly.todo-tree",
+    ]
+}

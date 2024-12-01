@@ -1,0 +1,92 @@
+[project]
+name = "starbridge"
+version = "0.0.1"
+description = "Integrates Claude Desktop with Google workspace and Atlassian workspaces"
+readme = "README.md"
+authors = [
+    { name = "Helmut Hoffer von Ankershoffen", email = "helmuthva@googlemail.com" },
+]
+requires-python = ">=3.11"
+dependencies = ["atlassian-python-api>=3.41.16", "mcp>=1.0.0", "typer>=0.13.0"]
+keywords = ["mcp"]
+classifiers = [
+    "Development Status :: 1 - Planning",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3.11",
+    "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+]
+license = { file = "LICENSE" }
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.3.3",
+    "pyright>=1.1.389",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=6.0.0",
+    "ruff>=0.3.0",
+    "nox>=2024.10.9",
+    "pre-commit>=4.0.1",
+    "pip-audit>=2.7.3",
+    "pip-licenses>=5.0.0",
+    "cyclonedx-py>=1.0.1",
+    "tomli>=2.1.0",
+]
+
+[project.optional-dependencies]
+# used by uv pip install -e ".[dev]", as used within nox (uv run nox)
+dev = [
+    "pytest>=8.3.3",
+    "pyright>=1.1.389",
+    "pytest-asyncio>=0.24.0",
+    "pytest-cov>=6.0.0",
+    "ruff>=0.3.0",
+    "nox>=2024.10.9",
+    "pre-commit>=4.0.1",
+    "pip-audit>=2.7.3",
+    "pip-licenses>=5.0.0",
+    "cyclonedx-py>=1.0.1",
+    "tomli>=2.1.0",
+]
+
+[tool.ruff]
+target-version = "py311"
+line-length = 88
+fix = true
+preview = true
+
+[tool.ruff.lint]
+ignore = ["B008", "E501"]
+select = [
+    "E",  # pycodestyle errors
+    "F",  # pyflakes
+    "I",  # isort
+    "UP", # pyupgrade
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+]
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = 20
+quote-style = "double"
+indent-style = "space"
+line-ending = "lf"
+skip-magic-trailing-comma = false
+
+[tool.pytest.ini_options]
+addopts = "-v"
+testpaths = ["tests"]
+python_files = ["*_test.py"]
+
+[project.urls]
+Homepage = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge"
+Issues = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/issues"
+
+[project.scripts]
+starbridge = "starbridge:cli"

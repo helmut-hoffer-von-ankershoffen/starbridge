@@ -1,0 +1,73 @@
+# .github/workflows/ci.yml
+name: CI
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install tools
+        run: |
+          sudo apt-get update && sudo apt-get install -y curl jq xsltproc
+
+      - name: Install uv (python package manager)
+        uses: astral-sh/setup-uv@v3
+        with:
+          version: "0.5.2"
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Install Python, venv and dependencies
+        run: |
+          uv sync --frozen --link-mode=copy
+
+      - name: Release version check
+        if: startsWith(github.ref, 'refs/tags/v')
+        run: |
+          TAG_VERSION=${GITHUB_REF#refs/tags/v}
+          TOML_VERSION=$(uv run python -c "import tomli; print(tomli.load(open('pyproject.toml', 'rb'))['project']['version'])")
+
+          if [ "$TAG_VERSION" != "$TOML_VERSION" ]; then
+            echo "Release version mismatch: Tag $TAG_VERSION != pyproject.toml $TOML_VERSION"
+            exit 1
+          fi
+
+      - name: Print development version info
+        if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+        run: |
+          TOML_VERSION=$(uv run python -c "import tomli; print(tomli.load(open('pyproject.toml', 'rb'))['project']['version'])")
+          echo "Development build - Current version in pyproject.toml: $TOML_VERSION"
+
+      - name: Validate installation
+        run: |
+            OUTPUT=$(uv run starbridge)
+            if [[ "$OUTPUT" != *"Built with love"* ]]; then
+            echo "Output does not contain 'Built with love'"
+            exit 1
+            fi
+
+      - name: Run unit tests, measure coverage, lint, and check vulnerabilities
+        run: |
+          uv run nox
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results
+          path: |
+            junit.xml
+            coverage.xml
+            coverage_html/
+            vulnerabilities.json
+            licenses.json
+            licenses-inverted.json
+          retention-days: 30

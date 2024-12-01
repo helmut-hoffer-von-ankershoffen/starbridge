@@ -1,0 +1,10 @@
+# .pre-commit-config.yaml
+repos:
+  - repo: local
+    hooks:
+      - id: nox
+        name: nox
+        entry: uv run nox
+        language: system
+        pass_filenames: false
+        always_run: true
