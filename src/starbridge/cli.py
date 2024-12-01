@@ -37,7 +37,9 @@ def health():
 @cli.command()
 def tools():
     """Info about Starbridge Environment"""
-    console.print({"version": __version__})
+    tools = []
+    tools += starbridge.confluence.Handler().tool_list()
+    console.print(tools)
 
 
 cli.add_typer(
