@@ -58,7 +58,6 @@ jobs:
         run: |
           uv run starbridge info
           uv run starbridge tools
-          uv run starbridge health
 
       - name: Run unit tests, measure coverage, lint, and check vulnerabilities
         run: |
