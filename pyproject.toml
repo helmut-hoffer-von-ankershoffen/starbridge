@@ -1,16 +1,21 @@
 [project]
 name = "starbridge"
-version = "0.0.1"
+version = "0.0.2"
 description = "Integrates Claude Desktop with Google workspace and Atlassian workspaces"
 readme = "README.md"
 authors = [
     { name = "Helmut Hoffer von Ankershoffen", email = "helmuthva@googlemail.com" },
 ]
 requires-python = ">=3.11"
-dependencies = ["atlassian-python-api>=3.41.16", "mcp>=1.0.0", "typer>=0.13.0"]
+dependencies = [
+    "atlassian-python-api>=3.41.16",
+    "mcp>=1.0.0",
+    "python-dotenv>=1.0.1",
+    "typer>=0.13.0",
+]
 keywords = ["mcp"]
 classifiers = [
-    "Development Status :: 1 - Planning",
+    "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Developers",
     "Programming Language :: Python :: 3.11",
     "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",

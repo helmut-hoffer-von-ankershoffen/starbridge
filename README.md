@@ -1,8 +1,8 @@
-# [PLANNING] starbridge MCP server for Claude Desktop
+# [PRE-ALPHA] starbridge MCP server for Claude Desktop
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE.md)
 
-> ⚠️ **WARNING**: This project is currently in early planning phase and not yet functional. Feel free to watch or star the repository to stay updated on its progress.
+> ⚠️ **WARNING**: This project is currently in pre-alpha phase, i.e. partly functional. Feel free to watch or star the repository to stay updated on its progress.
 
 
 Integrates Cl aude Desktop with Google workspace and Atlassian workspaces.
@@ -14,7 +14,7 @@ This integration serves two main purposes:
 
 ## Examples
 
-[TODO: A few examples of how to use the integration]
+* "Create a page about road cycling, focusing on Canyon bikes, in the personal confluence space of Helmut."
 
 ## Setup
 
@@ -30,8 +30,14 @@ Step 2: Add the following configuration.
     "command": "uvx",
     "args": [
       "starbridge",
+      "mcp",
       "serve"
-    ]
+      "--confluence-url",
+      "{{ CONFLUENCE_URL }}",
+      "--confluence-email-address",
+      "{{ CONFLUENCE_EMAIL_ADDRESS }}",
+      "--confluence-api-token",
+      "{{ CONFLUENCE_API_TOKEN }}",
   }
 }
 ```
