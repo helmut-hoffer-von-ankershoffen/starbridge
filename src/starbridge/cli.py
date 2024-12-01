@@ -38,7 +38,7 @@ def health():
 def tools():
     """Tools exposed by modules"""
     tools = []
-    tools += starbridge.confluence.Handler().tool_list()
+    tools += starbridge.confluence.Handler.tool_list()
     console.print(tools)
 
 
