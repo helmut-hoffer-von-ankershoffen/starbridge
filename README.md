@@ -18,6 +18,14 @@ This integration serves two main purposes:
 
 ## Setup
 
+Step 1: Create .env
+
+
+```shell
+cp .env.template .env
+code .env
+```
+
 Step 1: Open configuration of Claude Desktop:
 - macOS: `code ~/Library/Application\ Support/Claude/claude_desktop_config.json`
 - Windows: `code %APPDATA%/Claude/claude_desktop_config.json`
