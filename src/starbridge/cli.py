@@ -36,7 +36,7 @@ def health():
 
 @cli.command()
 def tools():
-    """Info about Starbridge Environment"""
+    """Tools exposed by modules"""
     tools = []
     tools += starbridge.confluence.Handler().tool_list()
     console.print(tools)
