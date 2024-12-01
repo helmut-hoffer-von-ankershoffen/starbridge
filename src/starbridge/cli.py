@@ -1,10 +1,14 @@
-import asyncio
 import importlib.metadata
 
 import typer
+from dotenv import load_dotenv
 
-from .server import run_server
+import starbridge.confluence
+import starbridge.mcp
+
 from .utils.console import console
+
+load_dotenv()
 
 __version__ = importlib.metadata.version("starbridge")
 
@@ -17,12 +21,6 @@ cli = typer.Typer(
 
 
 @cli.command()
-def serve():
-    """Run MCP server."""
-    asyncio.run(run_server())
-
-
-@cli.command()
 def info():
     """Info about Starbridge Environment"""
     console.print({"version": __version__})
@@ -31,7 +29,27 @@ def info():
 @cli.command()
 def health():
     """Health of starbridge and dependencie"""
-    console.print({"health": "OK"})
+    dependencies = {"confluence": starbridge.confluence.Handler().health()}
+    healthy = all(status == "UP" for status in dependencies.values())
+    console.print({"healthy": healthy, "dependencies": dependencies})
+
+
+@cli.command()
+def tools():
+    """Tools exposed by modules"""
+    tools = []
+    tools += starbridge.confluence.Handler.tool_list()
+    console.print(tools)
+
+
+cli.add_typer(
+    starbridge.mcp.cli,
+    name="mcp",
+    help="MCP operations",
+)
+cli.add_typer(
+    starbridge.confluence.cli, name="confluence", help="Confluence operations"
+)
 
 
 if __name__ == "__main__":

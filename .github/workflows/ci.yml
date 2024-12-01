@@ -54,6 +54,11 @@ jobs:
             exit 1
             fi
 
+      - name: Info, tools and health
+        run: |
+          uv run starbridge info
+          uv run starbridge tools
+
       - name: Run unit tests, measure coverage, lint, and check vulnerabilities
         run: |
           uv run nox

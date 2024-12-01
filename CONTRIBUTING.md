@@ -36,24 +36,27 @@ Step 1: Open configuration file of Claude Desktop:
 
 Step 2: Add/replace the starbridge configuration to reference your local repository. Replace `{{DIRECTORY_OF_YOUR_LOCAL_REPOSITORY}}` with the path to your local repository.
 
-<details>
-  <summary>Development/Unpublished Servers Configuration</summary>
-  ```
-  "mcpServers": {
-    "starbridge": {
-      "command": "uv",
-      "args": [
-        "--directory",
-        "{{DIRECTORY_OF_YOUR_LOCAL_REPOSITORY}}",
-        "run",
-        "starbridge",
-        "serve"
-      ]
-    }
+```json
+"mcpServers": {
+  "starbridge": {
+    "command": "uv",
+    "args": [
+      "--directory",
+      "{{DIRECTORY_OF_YOUR_LOCAL_REPOSITORY}}",
+      "run",
+      "starbridge",
+      "mcp",
+      "serve",
+      "--confluence-url",
+      "{{ CONFLUENCE_URL }}",
+      "--confluence-email-address",
+      "{{ CONFLUENCE_EMAIL_ADDRESS }}",
+      "--confluence-api-token",
+      "{{ CONFLUENCE_API_TOKEN }}",
+    ]
   }
-  ```
-</details>
-
+}
+```
 ## Debugging
 
 Since MCP servers run over stdio, debugging can be challenging. For the best debugging
@@ -63,7 +66,7 @@ experience, we strongly recommend using the [MCP Inspector](https://github.com/m
 You can launch the MCP Inspector via [`npm`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) with this command:
 
 ```bash
-npx @modelcontextprotocol/inspector uv --directory {{DIRECTORY_OF_YOUR_LOCAL_REPOSITORY}} run starbridge serve
+npx @modelcontextprotocol/inspector uv --directory {{DIRECTORY_OF_YOUR_LOCAL_REPOSITORY}} run starbridge mcp serve
 ```
 
 Upon launching, the Inspector will display a URL that you can access in your browser to begin debugging.
