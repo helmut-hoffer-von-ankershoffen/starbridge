@@ -29,7 +29,15 @@ def info():
 @cli.command()
 def health():
     """Health of starbridge and dependencie"""
-    console.print({"health": "OK"})
+    dependencies = {"confluence": starbridge.confluence.Handler().health()}
+    healthy = all(status == "UP" for status in dependencies.values())
+    console.print({"healthy": healthy, "dependencies": dependencies})
+
+
+@cli.command()
+def tools():
+    """Info about Starbridge Environment"""
+    console.print({"version": __version__})
 
 
 cli.add_typer(

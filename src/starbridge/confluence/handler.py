@@ -12,6 +12,12 @@ from pydantic import AnyUrl
 class Handler:
     """Handles Confluence operations."""
 
+    def health(self) -> str:
+        spaces = self.space_list()
+        if len(spaces["results"]) > 0:
+            return "UP"
+        return "DOWN"
+
     @staticmethod
     def _parse_docstring_params(docstring: str) -> dict[str, str]:
         """Parse docstring to extract parameter descriptions."""
@@ -48,7 +54,7 @@ class Handler:
         return param_desc
 
     @staticmethod
-    def get_tools():
+    def tool_list():
         """Get available Confluence tools."""
         tools = []
         for method_name in dir(Handler):
@@ -123,6 +129,7 @@ class Handler:
             space_key = uri.path.split("/")[-1]
             return json.dumps(self.space_info(space_key), indent=2)
 
+    @staticmethod
     def prompt_list(self):
         return [
             types.Prompt(

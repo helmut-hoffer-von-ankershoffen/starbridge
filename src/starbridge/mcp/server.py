@@ -37,7 +37,7 @@ class MCPServer:
         @self.server.list_prompts()
         async def handle_list_prompts() -> list[types.Prompt]:
             prompts = []
-            prompts += self._confluence_handler.prompt_list()
+            prompts += starbridge.confluence.Handler.prompt_list()
             return prompts
 
         @self.server.get_prompt()
@@ -60,7 +60,7 @@ class MCPServer:
         @self.server.list_tools()
         async def handle_list_tools() -> list[types.Tool]:
             tools = []
-            tools += starbridge.confluence.Handler.get_tools()
+            tools += starbridge.confluence.Handler.tool_list()
             return tools
 
         @self.server.call_tool()
