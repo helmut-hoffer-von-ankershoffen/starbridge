@@ -35,7 +35,7 @@ def tool_list(
     verbose: bool = False,
 ):  # pylint: disable=W0613
     """List tools exposed via MCP"""
-    console.print(Handler().tool_list())
+    console.print(Handler.tool_list())
 
 
 @cli_mcp.command(name="resources")
