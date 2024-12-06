@@ -200,18 +200,31 @@ class Handler:
             types.TextContent(type="text", text=json.dumps(self.space_list(), indent=2))
         ]
 
-    def page_create(self, space_key, title, body, parent_id=None):
+    def page_create(
+        self,
+        space_key,
+        title,
+        body,
+        parent_id=None,
+        representation="wiki",
+        editor="v2",
+        full_width=True,
+        status="current",
+    ):
         return self._api.create_page(
             space=space_key,
             title=title,
             body=body,
             parent_id=parent_id,
             type="page",
-            representation="storage",
+            representation=representation,
+            editor=editor,
+            full_width=full_width,
+            status=status,
         )
 
     def mcp_tool_starbridge_confluence_page_create(
-        self, space_key, title, body, parent_id=None
+        self, space_key: str, title: str, body: str, parent_id=None, draft: bool = False
     ):
         """Create page in Confluence space given key of space, title and body of page and optional parent page id.
 
@@ -220,6 +233,7 @@ class Handler:
             title (str): The title of the new page to be created
             body (str): The content/body of the new page
             parent_id (str, optional): The ID of the parent page if this is to be created as a child page. Defaults to None.
+            draft (bool, optional): If to create the page in draft mode. Defaults to False, i.e. page will be published.
 
         Returns:
             list: A list containing a TextContent object with the JSON response of the page creation
@@ -229,7 +243,14 @@ class Handler:
                 type="text",
                 text=json.dumps(
                     self.page_create(
-                        space_key=space_key, title=title, body=body, parent_id=parent_id
+                        space_key=space_key,
+                        title=title,
+                        body=body,
+                        parent_id=parent_id,
+                        representation="wiki",
+                        editor="v2",
+                        full_width=True,
+                        status="draft" if draft else "current",
                     ),
                     indent=2,
                 ),
