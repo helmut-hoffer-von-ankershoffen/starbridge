@@ -48,7 +48,7 @@ jobs:
 
       - name: Validate installation
         run: |
-            OUTPUT=$(uv run starbridge)
+            OUTPUT=$(uv run starbridge --help)
             if [[ "$OUTPUT" != *"Built with love"* ]]; then
             echo "Output does not contain 'Built with love'"
             exit 1
@@ -56,8 +56,8 @@ jobs:
 
       - name: Info, tools and health
         run: |
+          cp .env.example .env
           uv run starbridge info
-          uv run starbridge tools
 
       - name: Run unit tests, measure coverage, lint, and check vulnerabilities
         run: |

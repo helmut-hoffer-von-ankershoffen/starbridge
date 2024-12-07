@@ -1,5 +1,5 @@
 # src/orion/geojson/__init__.py
 from .cli import cli
-from .handler import Handler
+from .service import Service
 
-__all__ = ["Handler", "cli"]
+__all__ = ["Service", "cli"]

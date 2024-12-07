@@ -4,28 +4,48 @@ CLI to interact with Confluence
 
 import asyncio
 import os
+import pathlib
+import subprocess
 
 import typer
 
-from .server import run_server
+from starbridge.utils.console import console
+
+from .server import MCPServer, mcp_server
 
 cli = typer.Typer(no_args_is_help=True)
 
 
 @cli.command()
-def serve(
-    confluence_url: str = typer.Option(
-        ..., envvar="CONFLUENCE_URL", help="Confluence url"
-    ),
-    confluence_email_address: str = typer.Option(
-        ..., envvar="CONFLUENCE_EMAIL_ADDRESS", help="Confluence email address"
-    ),
-    confluence_api_token: str = typer.Option(
-        ..., envvar="CONFLUENCE_API_TOKEN", help="Confluence API token"
-    ),
-):
+def tools():
+    """Tools exposed by modules"""
+    server = MCPServer()
+    # FIXME
+    console.print(server.tool_list())
+
+
+@cli.command()
+def inspect():
+    """Run inspector."""
+    project_root = str(pathlib.Path(__file__).parent.parent.parent.parent)
+    console.print("Starbridge project root:", project_root)
+    console.print("Starbridge environment:")
+    console.print(os.environ)
+    subprocess.run(
+        [
+            "npx",
+            "@modelcontextprotocol/inspector",
+            "uv",
+            "--directory",
+            project_root,
+            "run",
+            "starbridge",
+        ],
+        check=True,
+    )
+
+
+@cli.command()
+def serve():
     """Run MCP server."""
-    os.environ.setdefault("CONFLUENCE_URL", confluence_url)
-    os.environ.setdefault("CONFLUENCE_EMAIL_ADDRESS", confluence_email_address)
-    os.environ.setdefault("CONFLUENCE_API_TOKEN", confluence_api_token)
-    asyncio.run(run_server())
+    asyncio.run(mcp_server())

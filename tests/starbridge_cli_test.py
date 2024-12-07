@@ -11,7 +11,7 @@ def runner():
 
 def test_built_with_love(runner):
     """Check epilog shown."""
-    result = runner.invoke(cli, [])
+    result = runner.invoke(cli, ["--help"])
     assert result.exit_code == 0
     assert (
         "Built with love in Berlin by Helmut Hoffer von Ankershoffen" in result.stdout
