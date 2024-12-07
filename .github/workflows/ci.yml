@@ -56,6 +56,7 @@ jobs:
 
       - name: Info, tools and health
         run: |
+          cp .env.example .env
           uv run starbridge info
 
       - name: Run unit tests, measure coverage, lint, and check vulnerabilities

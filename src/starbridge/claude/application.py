@@ -76,7 +76,13 @@ class Application(BaseModel):
                 "Roaming",
                 "Claude",
             )
-        raise RuntimeError("Unsupported platform {sys.platform}")
+        elif sys.platform == "linux":
+            return Path(
+                Path.home(),
+                ".config",
+                "Claude",
+            )
+        raise RuntimeError(f"Unsupported platform {sys.platform}")
 
     @staticmethod
     def has_config() -> bool:
