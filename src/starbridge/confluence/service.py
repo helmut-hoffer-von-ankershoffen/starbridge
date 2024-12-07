@@ -9,14 +9,22 @@ from atlassian import Confluence
 from pydantic import AnyUrl
 
 
-class Handler:
-    """Handles Confluence operations."""
+class Service:
+    """Service class for Confluence operations."""
 
     def health(self) -> str:
-        spaces = self.space_list()
-        if len(spaces["results"]) > 0:
-            return "UP"
-        return "DOWN"
+        try:
+            spaces = self.space_list()
+        except Exception as e:
+            return f"DOWN: {str(e)}"
+        if (
+            isinstance(spaces, dict)
+            and "results" in spaces
+            and isinstance(spaces["results"], list)
+        ):
+            if len(spaces["results"]) > 0:
+                return "UP"
+        return "DOWN: No spaces found"
 
     @staticmethod
     def _parse_docstring_params(docstring: str) -> dict[str, str]:
@@ -57,15 +65,15 @@ class Handler:
     def tool_list():
         """Get available Confluence tools."""
         tools = []
-        for method_name in dir(Handler):
+        for method_name in dir(Service):
             if method_name.startswith("mcp_tool_"):
                 tool_name = method_name[9:].replace("_", "-")
-                method = getattr(Handler, method_name)
+                method = getattr(Service, method_name)
                 docstring = method.__doc__ or f"Call {tool_name}"
                 sig = inspect.signature(method)
 
                 # Get parameter descriptions from docstring
-                param_desc = Handler._parse_docstring_params(docstring)
+                param_desc = Service._parse_docstring_params(docstring)
                 # console.print(docstring)
 
                 # Generate properties from signature
@@ -130,7 +138,7 @@ class Handler:
             return json.dumps(self.space_info(space_key), indent=2)
 
     @staticmethod
-    def prompt_list(self):
+    def prompt_list():
         return [
             types.Prompt(
                 name="starbridge-space-summary",
@@ -170,9 +178,9 @@ class Handler:
         return self._api.get_space(space_key)
 
     def __init__(self):
-        self._url = os.environ.get("CONFLUENCE_URL")
-        self._email_address = os.environ.get("CONFLUENCE_EMAIL_ADDRESS")
-        self._api_token = os.environ.get("CONFLUENCE_API_TOKEN")
+        self._url = os.environ.get("STARBRIDGE_ATLASSIAN_URL")
+        self._email_address = os.environ.get("STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS")
+        self._api_token = os.environ.get("STARBRIDGE_ATLASSIAN_API_TOKEN")
         self._api = Confluence(
             url=self._url,
             username=self._email_address,

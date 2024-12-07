@@ -1258,11 +1258,12 @@ wheels = [
 
 [[package]]
 name = "starbridge"
-version = "0.0.2"
+version = "0.0.3"
 source = { editable = "." }
 dependencies = [
     { name = "atlassian-python-api" },
     { name = "mcp" },
+    { name = "pydantic" },
     { name = "python-dotenv" },
     { name = "typer" },
 ]
@@ -1306,6 +1307,7 @@ requires-dist = [
     { name = "pip-audit", marker = "extra == 'dev'", specifier = ">=2.7.3" },
     { name = "pip-licenses", marker = "extra == 'dev'", specifier = ">=5.0.0" },
     { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=4.0.1" },
+    { name = "pydantic", specifier = ">=2.10.2" },
     { name = "pyright", marker = "extra == 'dev'", specifier = ">=1.1.389" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.3" },
     { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.24.0" },

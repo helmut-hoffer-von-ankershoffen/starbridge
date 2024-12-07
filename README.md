@@ -18,41 +18,9 @@ This integration serves two main purposes:
 
 ## Setup
 
-Step 1: Create .env
-
-
 ```shell
-cp .env.template .env
-code .env
+uvx starbridge install
 ```
-
-Step 1: Open configuration of Claude Desktop:
-- macOS: `code ~/Library/Application\ Support/Claude/claude_desktop_config.json`
-- Windows: `code %APPDATA%/Claude/claude_desktop_config.json`
-
-Step 2: Add the following configuration.
-
-```json
-"mcpServers": {
-  "starbridge": {
-    "command": "uvx",
-    "args": [
-      "starbridge",
-      "mcp",
-      "serve"
-      "--confluence-url",
-      "{{ CONFLUENCE_URL }}",
-      "--confluence-email-address",
-      "{{ CONFLUENCE_EMAIL_ADDRESS }}",
-      "--confluence-api-token",
-      "{{ CONFLUENCE_API_TOKEN }}",
-  }
-}
-```
-
-Notes:
-1. Assumes you have Visual Studio Code installed and the `code` command is available.
-2. In case you already have a section ```mcpServers```, just add the ```starbridge``` entry.
 
 ## MCP Server
 

@@ -2,9 +2,9 @@
 
 Thank you for considering contributing to starbridge!
 
-## Setup
+## Development Environment Setup
 
-Clone this repository: ```git clone git@github.com:helmut-hoffer-von-ankershoffen/starbridge.git````
+Clone this GitHub repository via ```git clone git@github.com:helmut-hoffer-von-ankershoffen/starbridge.git``` and change into the directory of your local starbridge repository: ```cd starbridge```
 
 Install the dependencies:
 
@@ -28,48 +28,47 @@ curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/nektos/ac
 uv run pre-commit install                   # see https://pre-commit.com/
 ```
 
-## Claude Desktop
+## Configuration
 
-Step 1: Open configuration file of Claude Desktop:
-- MacOS: `code ~/Library/Application\ Support/Claude/claude_desktop_config.json`
-- Windows: `code %APPDATA%/Claude/claude_desktop_config.json`
-
-Step 2: Add/replace the starbridge configuration to reference your local repository. Replace `{{DIRECTORY_OF_YOUR_LOCAL_REPOSITORY}}` with the path to your local repository.
-
-```json
-"mcpServers": {
-  "starbridge": {
-    "command": "uv",
-    "args": [
-      "--directory",
-      "{{DIRECTORY_OF_YOUR_LOCAL_REPOSITORY}}",
-      "run",
-      "starbridge",
-      "mcp",
-      "serve",
-      "--confluence-url",
-      "{{ CONFLUENCE_URL }}",
-      "--confluence-email-address",
-      "{{ CONFLUENCE_EMAIL_ADDRESS }}",
-      "--confluence-api-token",
-      "{{ CONFLUENCE_API_TOKEN }}",
-    ]
-  }
-}
-```
-## Debugging
-
-Since MCP servers run over stdio, debugging can be challenging. For the best debugging
-experience, we strongly recommend using the [MCP Inspector](https://github.com/modelcontextprotocol/inspector).
-
-
-You can launch the MCP Inspector via [`npm`](https://docs.npmjs.com/downloading-and-installing-node-js-and-npm) with this command:
+You can use the following helper command to create the .env file. This will prompt you for the required configuration values.
 
 ```bash
-npx @modelcontextprotocol/inspector uv --directory {{DIRECTORY_OF_YOUR_LOCAL_REPOSITORY}} run starbridge mcp serve
+uv run starbridge configure # creates .env file
 ```
 
-Upon launching, the Inspector will display a URL that you can access in your browser to begin debugging.
+You can validate starbridge is working correctly by checking the health endpoint
+
+```bash
+uv run starbridge health # shows healtiness of starbridge including dependencies
+```
+
+To see all commands starvridge offers you can call ```uv run starbridge --help```
+
+## Debugging
+
+Inspect starbridge using the MCP inspector
+
+```bash
+uv run starbridge mcp inspect
+```
+
+Upon launching, the Inspector will display a URL that you can access in your browser to begin debugging. Environment values are loaded from the ```.env``` file generated in the previous step
+
+## Installing the development version of starbridge with Claude Desktop application
+
+You can use the following helper command to install the development version of starbridge with Claude Desktop application. This will amend the configuration file of Claude Desktop to reference your local repository, and restart Claude Desktop.
+
+```bash
+uv run starbridge install
+```
+
+## Code and configuration changes
+
+For the Claude Desktop app to pick up code changes to starbridge restart the Claude Desktop application with ```uv run starbridge claude restart```.
+
+If you added additional configuration keys in .env.template, run ```uv run starbridge configure``` again, to update the .env file. After that run ```uv run starbridge install``` to install the updated configuration with the Claude Desktop application.
+
+To show the configuration of starbridge within Claude, you can use ```uv run starbridge claude config```.
 
 ## Running all build steps
 
