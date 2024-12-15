@@ -7,7 +7,7 @@
 > ⚠️ **WARNING**: This project is currently in pre-alpha phase, i.e. partly functional. Feel free to watch or star the repository to stay updated on its progress.
 
 
-Integrates Cl aude Desktop with Google and Atlassian workspaces.
+Integrates Claude Desktop with Google and Atlassian workspaces.
 
 This integration serves two main purposes:
 1. **Make Claude smarter**: Makes Claude an informed member of your organisation by accessing your organization's key knowledge resources.

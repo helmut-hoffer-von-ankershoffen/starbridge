@@ -4,6 +4,7 @@ import pathlib
 import sys
 from typing import Annotated, Any
 
+import logfire
 import typer
 from dotenv import dotenv_values, load_dotenv
 from rich.prompt import Prompt
@@ -12,10 +13,34 @@ import starbridge.claude
 import starbridge.confluence
 import starbridge.mcp
 from starbridge.utils.console import console
-
-load_dotenv()
+from starbridge.utils.logging import log
 
 __version__ = importlib.metadata.version("starbridge")
+
+
+load_dotenv(dotenv_path=".env", verbose=True)
+
+logfire.configure(
+    send_to_logfire="if-token-present",
+    service_name="starbridge",
+    console=logfire.ConsoleOptions(
+        colors="auto",
+        span_style="show-parents",
+        include_timestamps=True,
+        verbose=False,
+        min_log_level=str.lower(os.environ.get("LOGLEVEL", "INFO")),
+        show_project_link=False,
+    ),
+    code_source=logfire.CodeSource(
+        repository="https://github.com/helmut-hoffer-von-ankershoffen/starbridge",
+        revision="<hash of commit used on release>",
+        root_path="",
+    ),
+)
+# logfire.install_auto_tracing(modules=["starbridge.confluence"], min_duration=0.001)
+
+logfire.info("Starbridge version {version}", version=__version__)
+console.log(f"(l) Starbridge version: {__version__}")
 
 cli = typer.Typer(
     name="Starbridge CLI",
@@ -39,6 +64,7 @@ def health():
         "claude": starbridge.claude.Application.health(),
     }
     healthy = all(status == "UP" for status in dependencies.values())
+    log.debug("debug")
     console.print({"healthy": healthy, "dependencies": dependencies})
 
 
@@ -193,4 +219,7 @@ cli.add_typer(
 cli.add_typer(starbridge.claude.cli, name="claude", help="Claude operations")
 
 if __name__ == "__main__":
-    cli()
+    try:
+        cli()
+    except Exception as e:
+        log.error(e)

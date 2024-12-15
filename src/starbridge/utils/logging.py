@@ -1,6 +1,8 @@
 import logging
+import os
 
 import click
+import logfire
 from rich.console import Console
 from rich.logging import RichHandler
 
@@ -22,10 +24,10 @@ rich_handler = RichHandler(
 rich_handler.addFilter(CustomFilter())
 
 logging.basicConfig(
-    level="INFO",
-    format="%(message)s",
-    datefmt="[%X]",
-    handlers=[rich_handler],
+    level=os.environ.get("LOGLEVEL", "INFO"),
+    format="%(asctime)s - %(message)s",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    handlers=[rich_handler, logfire.LogfireLoggingHandler()],
 )
 
 log = logging.getLogger()
