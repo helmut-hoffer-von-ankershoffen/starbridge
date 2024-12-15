@@ -21,8 +21,6 @@ This integration serves two main purposes:
 ```shell
 if ! command -v uvx &> /dev/null; then # if uv package manager not present ...
   curl -LsSf https://astral.sh/uv/install.sh | sh # ... install it
-else
-  which uvx # ... otherwise inform where uvx command was found
 fi
 uvx starbridge install # install starbridge package
 ```
