@@ -1,9 +1,8 @@
 import logging
 
 import click
+from rich.console import Console
 from rich.logging import RichHandler
-
-from starbridge.utils.console import console
 
 
 class CustomFilter(logging.Filter):
@@ -12,7 +11,7 @@ class CustomFilter(logging.Filter):
 
 
 rich_handler = RichHandler(
-    console=console,
+    console=Console(stderr=True),
     markup=True,
     rich_tracebacks=True,
     tracebacks_suppress=[click],
@@ -29,4 +28,4 @@ logging.basicConfig(
     handlers=[rich_handler],
 )
 
-log = logging.getLogger("rich")
+log = logging.getLogger()

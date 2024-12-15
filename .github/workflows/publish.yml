@@ -1,10 +1,11 @@
-# publish.yml
-
-name: "Publish"
+# .github/workflows/publish.yml
+name: "Publish to PyPI and create GitHub release"
 
 on:
-  release:
-    types: ["published"]
+  push:
+    tags:
+      - "*.*.*"
+
 jobs:
   run:
     name: "Build and publish release"
@@ -17,12 +18,18 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v3
         with:
-          version: "0.5.2"
+          version: "0.5.9"
           cache-dependency-glob: uv.lock
           enable-cache: true
 
-      - name: Build
+      - name: Build into dist/
         run: uv build
 
-      - name: Publish
+      - name: Publish to PyPI
         run: uv publish -t ${{ secrets.UV_PUBLISH_TOKEN }}
+
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create ${{ github.ref_name }} ./dist/* --generate-notes

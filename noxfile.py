@@ -9,13 +9,13 @@ nox.options.default_venv_backend = "uv"
 
 @nox.session(python=["3.11"])
 def test(session):
-    session.install(".[dev]")
+    session.install("-e .[dev]")
     session.run(
         "pytest",
         "--disable-warnings",
         "--junitxml=junit.xml",
         "--cov=starbridge",
-        "--cov-report=term-missing",  # console output
+        "--cov-report=term-missing",
         "--cov-report=html:coverage_html",
         "--cov-report=xml:coverage.xml",
     )
@@ -23,7 +23,7 @@ def test(session):
 
 @nox.session(python=["3.11"])
 def lint(session):
-    session.install(".[dev]")
+    session.install("-e .[dev]")
     session.run("ruff", "check", ".")
     session.run(
         "ruff",
@@ -35,7 +35,7 @@ def lint(session):
 
 @nox.session(python=["3.11"])
 def audit(session):
-    session.install(".[dev]")
+    session.install("-e .[dev]")
     session.run("pip-audit", "-f", "json", "-o", "vulnerabilities.json")
     session.run("jq", ".", "vulnerabilities.json", external=True)
     session.run("pip-licenses", "--format=json", "--output-file=licenses.json")

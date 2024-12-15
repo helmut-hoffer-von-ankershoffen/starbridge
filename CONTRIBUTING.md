@@ -11,8 +11,16 @@ Install the dependencies:
 ### macOS
 
 ```shell
-brew install jq xmllint act           # tooling
-uv run pre-commit install             # see https://pre-commit.com/
+if ! command -v brew &> /dev/null; then # if Homebrew package manager not present ...
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)" # ... install it
+else
+  which brew # ... otherwise inform where brew command was found
+fi
+# Install required tools if not present
+which jq &> /dev/null || brew install jq
+which xmllint &> /dev/null || brew install xmllint
+which act &> /dev/null || brew install act
+uv run pre-commit install             # install pre-commit hooks, see https://pre-commit.com/
 ```
 
 ### Linux
@@ -20,7 +28,7 @@ uv run pre-commit install             # see https://pre-commit.com/
 Notes:
 
 - Not yet validated
-- .github/workflows/ci.yml might provide further information
+- .github/workflows/test.yml might provide further information
 
 ```shell
 sudo sudo apt install -y curl jq xsltproc   # tooling
