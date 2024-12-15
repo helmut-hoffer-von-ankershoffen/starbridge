@@ -11,7 +11,7 @@ import typer
 
 from starbridge.utils.console import console
 
-from .server import MCPServer, mcp_server
+from .server import MCPServer, mcp_run_coroutine
 
 cli = typer.Typer(no_args_is_help=True)
 
@@ -20,8 +20,7 @@ cli = typer.Typer(no_args_is_help=True)
 def tools():
     """Tools exposed by modules"""
     server = MCPServer()
-    # FIXME
-    console.print(server.tool_list())
+    console.print(asyncio.run(server.tool_list()))
 
 
 @cli.command()
@@ -48,4 +47,4 @@ def inspect():
 @cli.command()
 def serve():
     """Run MCP server."""
-    asyncio.run(mcp_server())
+    asyncio.run(mcp_run_coroutine())

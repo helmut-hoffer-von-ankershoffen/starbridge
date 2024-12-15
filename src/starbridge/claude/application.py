@@ -14,19 +14,21 @@ class Application(BaseModel):
     """Class to interact with Claude Desktop application."""
 
     @staticmethod
-    def info() -> dict:
+    def info(mcp_server_name: str = "starbridge") -> dict:
         """Check if Claude Desktop application is installed."""
         data = {
             "is_installed": Application.is_installed(),
-            "application_path": None,
+            "application_directory": None,
             "config_path": None,
+            "log_path": None,
             "config": None,
         }
         if Application.is_installed():
-            data["application_path"] = str(Application.application_path())
+            data["application_directory"] = str(Application.application_directory())
             if Application.has_config():
                 data["config_path"] = str(Application.config_path())
                 data["config"] = Application.config_read()
+                data["log_path"] = str(Application.log_path(mcp_server_name))
         return data
 
     @staticmethod
@@ -41,7 +43,7 @@ class Application(BaseModel):
     @staticmethod
     def is_installed() -> bool:
         """Check if Claude Desktop application is installed."""
-        if Application.application_path().exists():
+        if Application.application_directory().is_dir():
             return True
         return False
 
@@ -60,7 +62,7 @@ class Application(BaseModel):
         return False
 
     @staticmethod
-    def application_path() -> Path:
+    def application_directory() -> Path:
         """Get path of Claude config directory based on platform."""
         if sys.platform == "darwin":
             return Path(
@@ -85,15 +87,15 @@ class Application(BaseModel):
         raise RuntimeError(f"Unsupported platform {sys.platform}")
 
     @staticmethod
+    def config_path() -> Path:
+        """Get path of Claude config based on platform."""
+        path = Application.application_directory()
+        return path / "claude_desktop_config.json"
+
+    @staticmethod
     def has_config() -> bool:
         """Check if Claud has configuration."""
         return Application.config_path().is_file()
-
-    @staticmethod
-    def config_path() -> Path:
-        """Get path of Claude config based on platform."""
-        path = Application.application_path()
-        return path / "claude_desktop_config.json"
 
     @staticmethod
     def config_read() -> dict:
@@ -113,11 +115,47 @@ class Application(BaseModel):
         return config
 
     @staticmethod
-    def install_mcp_server(name: str, mcp_server_config: dict, restart=True) -> bool:
+    def log_directory() -> Path:
+        """Get path of Claude log directory based on platform."""
+        if sys.platform == "darwin":
+            return Path(
+                Path.home(),
+                "Library",
+                "Logs",
+                "Claude",
+            )
+        elif sys.platform == "win32":
+            return Path(
+                Path.home(),
+                "AppData",
+                "Roaming",
+                "Claude",
+                "logs",
+            )
+        elif sys.platform == "linux":
+            return Path(
+                Path.home(),
+                ".logs",
+                "Claude",
+            )
+        raise RuntimeError(f"Unsupported platform {sys.platform}")
+
+    @staticmethod
+    def log_path(mcp_server_name: str | None = "starbridge") -> Path:
+        """Get path of mcp ."""
+        path = Application.log_directory()
+        if mcp_server_name is None:
+            return path / "mcp.log"
+        return path / f"mcp-server-{mcp_server_name}.log"
+
+    @staticmethod
+    def install_mcp_server(
+        mcp_server_config: dict, mcp_server_name="starbridge", restart=True
+    ) -> bool:
         """Install MCP server in Claude Desktop application."""
         if Application.is_installed() is False:
             raise RuntimeError(
-                f"Claude Desktop application is not installed at '{Application.application_path()}'"
+                f"Claude Desktop application is not installed at '{Application.application_directory()}'"
             )
         try:
             config = Application.config_read()
@@ -125,31 +163,31 @@ class Application(BaseModel):
             config = {"mcpServers": {}}
 
         if (
-            name in config["mcpServers"]
-            and config["mcpServers"][name] == mcp_server_config
+            mcp_server_name in config["mcpServers"]
+            and config["mcpServers"][mcp_server_name] == mcp_server_config
         ):
             return False
 
-        config["mcpServers"][name] = mcp_server_config
+        config["mcpServers"][mcp_server_name] = mcp_server_config
         Application.config_write(config)
         if restart:
             Application.restart()
         return True
 
     @staticmethod
-    def uninstall_mcp_server(name: str, restart=True) -> bool:
+    def uninstall_mcp_server(mcp_server_name: str = "starbridge", restart=True) -> bool:
         """Uninstall MCP server from Claude Desktop application."""
         if Application.is_installed() is False:
             raise RuntimeError(
-                f"Claude Desktop application is not installed at '{Application.application_path()}'"
+                f"Claude Desktop application is not installed at '{Application.application_directory()}'"
             )
         try:
             config = Application.config_read()
         except FileNotFoundError:
             config = {"mcpServers": {}}
-        if name not in config["mcpServers"]:
+        if "name" not in config["mcpServers"]:
             return False
-        del config["mcpServers"][name]
+        del config["mcpServers"][mcp_server_name]
         Application.config_write(config)
         if restart:
             Application.restart()

@@ -1,6 +1,6 @@
 # [PRE-ALPHA] starbridge MCP server for Claude Desktop
 
-[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](LICENSE.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)](LICENSE.md)
 
 > ⚠️ **WARNING**: This project is currently in pre-alpha phase, i.e. partly functional. Feel free to watch or star the repository to stay updated on its progress.
 
@@ -19,7 +19,12 @@ This integration serves two main purposes:
 ## Setup
 
 ```shell
-uvx starbridge install
+if ! command -v uvx &> /dev/null; then # if uv package manager not present ...
+  curl -LsSf https://astral.sh/uv/install.sh | sh # ... install it
+else
+  which uvx # ... otherwise inform where uvx command was found
+fi
+uvx starbridge install # install starbridge package
 ```
 
 ## MCP Server
@@ -46,9 +51,12 @@ Starbridge implements the [MCP Server](https://modelcontextprotocol.io/docs/conc
 
 Please read our [Contributing Guidelines](CONTRIBUTING.md) for how to setup for development, and before making a pull request.
 
-## References
+## Resources
 
-[Awesome MCP Servers](https://github.com/punkpeye/awesome-mcp-servers)
+* [MCP Press release](https://www.anthropic.com/news/model-context-protocol)
+* [MCP Specification and SDKs](https://github.com/modelcontextprotocol)
+# [MCP Info to amend Claude's context](https://modelcontextprotocol.io/llms-full.txt)
+* [Awesome MCP Servers](https://github.com/punkpeye/awesome-mcp-servers)
 
 ## Star History
 

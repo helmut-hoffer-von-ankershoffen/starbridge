@@ -8,6 +8,9 @@ import mcp.types as types
 from atlassian import Confluence
 from pydantic import AnyUrl
 
+from starbridge.mcp import MCPContext
+from starbridge.utils.logging import log
+
 
 class Service:
     """Service class for Confluence operations."""
@@ -62,7 +65,7 @@ class Service:
         return param_desc
 
     @staticmethod
-    def tool_list():
+    def tool_list(context: MCPContext | None = None) -> list[types.Tool]:
         """Get available Confluence tools."""
         tools = []
         for method_name in dir(Service):
@@ -116,7 +119,7 @@ class Service:
                 )
         return tools
 
-    def resource_list(self):
+    def resource_list(self, context: MCPContext | None = None):
         spaces = self.space_list()
         return [
             types.Resource(
@@ -128,7 +131,11 @@ class Service:
             for space in spaces["results"]
         ]
 
-    def resource_get(self, uri: AnyUrl) -> str:
+    def resource_get(
+        self,
+        context: MCPContext,
+        uri: AnyUrl,
+    ) -> str:
         if (uri.scheme, uri.host) != ("starbridge", "confluence"):
             raise ValueError(
                 f"Unsupported URI scheme/host combination: {uri.scheme}:{uri.host}"
@@ -138,7 +145,7 @@ class Service:
             return json.dumps(self.space_info(space_key), indent=2)
 
     @staticmethod
-    def prompt_list():
+    def prompt_list(context: MCPContext | None = None):
         return [
             types.Prompt(
                 name="starbridge-space-summary",
@@ -153,8 +160,10 @@ class Service:
             )
         ]
 
-    def mcp_prompt_starbridge_space_summary(
-        self, style: str = "brief"
+    def mcp_prompt_starbridge_confluence_space_summary(
+        self,
+        context: MCPContext,
+        style: str = "brief",
     ) -> types.GetPromptResult:
         detail_prompt = " Give extensive details." if style == "detailed" else ""
         return types.GetPromptResult(
@@ -174,7 +183,7 @@ class Service:
             ],
         )
 
-    def space_info(self, space_key):
+    def space_info(self, space_key: str):
         return self._api.get_space(space_key)
 
     def __init__(self):
@@ -189,20 +198,21 @@ class Service:
         )
 
     def info(self):
+        log.info("Confluence service info")
         return {
             "url": self._url,
             "email": self._email_address,
             "api_token": self._api_token,
         }
 
-    def mcp_tool_starbridge_confluence_info(self):
+    def mcp_tool_starbridge_confluence_info(self, context: MCPContext):
         """Info about Confluence environment"""
         return [types.TextContent(type="text", text=json.dumps(self.info(), indent=2))]
 
     def space_list(self):
         return self._api.get_all_spaces()
 
-    def mcp_tool_starbridge_confluence_space_list(self):
+    def mcp_tool_starbridge_confluence_space_list(self, context: MCPContext):
         """List spaces in Confluence"""
         return [
             types.TextContent(type="text", text=json.dumps(self.space_list(), indent=2))
@@ -232,7 +242,13 @@ class Service:
         )
 
     def mcp_tool_starbridge_confluence_page_create(
-        self, space_key: str, title: str, body: str, parent_id=None, draft: bool = False
+        self,
+        context: MCPContext,
+        space_key: str,
+        title: str,
+        body: str,
+        parent_id=None,
+        draft: bool = False,
     ):
         """Create page in Confluence space given key of space, title and body of page and optional parent page id.
 
