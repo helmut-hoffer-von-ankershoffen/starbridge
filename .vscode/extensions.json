@@ -10,6 +10,7 @@
         "mikestead.dotenv",
         "wayou.vscode-todo-highlight",
         "gruntfuggly.todo-tree",
-        "github.vscode-github-actions"
+        "github.vscode-github-actions",
+        "codecov.codecov"
     ]
 }

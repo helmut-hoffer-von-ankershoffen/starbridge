@@ -1,6 +1,8 @@
 # [PRE-ALPHA] starbridge MCP server for Claude Desktop
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) [![Test](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/actions/workflows/test.yml/badge.svg)](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/actions/workflows/test.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) 
+[![Test](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/actions/workflows/test.yml/badge.svg)](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/actions/workflows/test.yml) 
+[![codecov](https://codecov.io/gh/helmut-hoffer-von-ankershoffen/starbridge/graph/badge.svg?token=SX34YRP30E)](https://codecov.io/gh/helmut-hoffer-von-ankershoffen/starbridge)
 
 > ⚠️ **WARNING**: This project is currently in pre-alpha phase, i.e. partly functional. Feel free to watch or star the repository to stay updated on its progress.
 
