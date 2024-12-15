@@ -1,5 +1,5 @@
 # .github/workflows/test.yml
-name: Test
+name: "Run tests and archive results"
 
 on:
   push:
@@ -76,3 +76,9 @@ jobs:
             licenses.json
             licenses-inverted.json
           retention-days: 30
+
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: helmut-hoffer-von-ankershoffen/starbridge

@@ -27,9 +27,9 @@ def tools():
 def inspect():
     """Run inspector."""
     project_root = str(pathlib.Path(__file__).parent.parent.parent.parent)
-    console.print("Starbridge project root:", project_root)
-    console.print("Starbridge environment:")
-    console.print(os.environ)
+    console.print(
+        f"Starbridge project root: {project_root}\nStarbridge environment:\n{os.environ}"
+    )
     subprocess.run(
         [
             "npx",

@@ -8,7 +8,8 @@ from typing import Annotated
 
 import typer
 
-from ..utils.console import console
+from starbridge.utils.console import console
+
 from .application import Application
 
 cli = typer.Typer(no_args_is_help=True)

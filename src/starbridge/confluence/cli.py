@@ -5,7 +5,8 @@ CLI to interact with Confluence
 import typer
 from pydantic import AnyUrl
 
-from ..utils.console import console
+from starbridge.utils.console import console
+
 from .service import Service
 
 cli = typer.Typer(no_args_is_help=True)

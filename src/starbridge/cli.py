@@ -11,8 +11,7 @@ from rich.prompt import Prompt
 import starbridge.claude
 import starbridge.confluence
 import starbridge.mcp
-
-from .utils.console import console
+from starbridge.utils.console import console
 
 load_dotenv()
 
