@@ -18,7 +18,7 @@ from starbridge.utils.logging import log
 __version__ = importlib.metadata.version("starbridge")
 
 
-load_dotenv(dotenv_path=".env", verbose=True)
+load_dotenv()
 
 logfire.configure(
     send_to_logfire="if-token-present",
@@ -28,19 +28,20 @@ logfire.configure(
         span_style="show-parents",
         include_timestamps=True,
         verbose=False,
-        min_log_level=str.lower(os.environ.get("LOGLEVEL", "INFO")),
+        min_log_level="debug",
         show_project_link=False,
     ),
     code_source=logfire.CodeSource(
         repository="https://github.com/helmut-hoffer-von-ankershoffen/starbridge",
-        revision="<hash of commit used on release>",
+        revision=__version__,
         root_path="",
     ),
 )
+logfire.instrument_system_metrics(base="full")
+
 # logfire.install_auto_tracing(modules=["starbridge.confluence"], min_duration=0.001)
 
-logfire.info("Starbridge version {version}", version=__version__)
-console.log(f"(l) Starbridge version: {__version__}")
+log.debug(f"Booting version: {__version__}")
 
 cli = typer.Typer(
     name="Starbridge CLI",

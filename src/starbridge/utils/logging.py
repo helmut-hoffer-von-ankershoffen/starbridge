@@ -3,8 +3,11 @@ import os
 
 import click
 import logfire
+from dotenv import load_dotenv
 from rich.console import Console
 from rich.logging import RichHandler
+
+load_dotenv()
 
 
 class CustomFilter(logging.Filter):
@@ -23,11 +26,19 @@ rich_handler = RichHandler(
 )
 rich_handler.addFilter(CustomFilter())
 
+handlers = []
+if os.environ.get("LOG_CONSOLE", "0").lower() in ("1", "true"):
+    handlers.append(rich_handler)
+handlers.extend([
+    logging.FileHandler("starbridge.log"),
+    logfire.LogfireLoggingHandler(),
+])
+
 logging.basicConfig(
     level=os.environ.get("LOGLEVEL", "INFO"),
-    format="%(asctime)s - %(message)s",
+    format="%(asctime)s - %(name)s - %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
-    handlers=[rich_handler, logfire.LogfireLoggingHandler()],
+    handlers=handlers,
 )
 
-log = logging.getLogger()
+log = logging.getLogger("starbridge")
