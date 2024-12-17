@@ -5,7 +5,9 @@ CLI to interact with Confluence
 import asyncio
 import os
 import pathlib
+import re
 import subprocess
+import webbrowser
 
 import typer
 
@@ -30,7 +32,7 @@ def inspect():
     console.print(
         f"Starbridge project root: {project_root}\nStarbridge environment:\n{os.environ}"
     )
-    subprocess.run(
+    process = subprocess.Popen(
         [
             "npx",
             "@modelcontextprotocol/inspector",
@@ -40,8 +42,24 @@ def inspect():
             "run",
             "starbridge",
         ],
-        check=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        universal_newlines=True,
     )
+
+    url_pattern = r"MCP Inspector is up and running at (http://[^\s]+)"
+
+    while True:
+        line = process.stdout.readline()
+        if not line:
+            break
+        print(line, end="")
+        match = re.search(url_pattern, line)
+        if match:
+            url = match.group(1)
+            webbrowser.open(url)
+
+    process.wait()
 
 
 @cli.command()

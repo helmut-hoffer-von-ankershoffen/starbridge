@@ -10,8 +10,8 @@ from dotenv import dotenv_values, load_dotenv
 from rich.prompt import Prompt
 
 import starbridge.claude
-import starbridge.confluence
 import starbridge.mcp
+from starbridge.mcp.service import MCPBaseService
 from starbridge.utils.console import console
 from starbridge.utils.logging import log
 
@@ -59,11 +59,13 @@ def main(ctx: typer.Context):
 
 @cli.command()
 def health():
-    """Health of starbridge and dependencie"""
-    dependencies = {
-        "confluence": starbridge.confluence.Service().health(),
-        "claude": starbridge.claude.Application.health(),
-    }
+    """Health of starbridge and dependencies"""
+    dependencies = {}
+    for service_class in MCPBaseService.get_services():
+        service = service_class()
+        service_name = service.__class__.__module__.split(".")[1]
+        dependencies[service_name] = service.health()
+
     healthy = all(status == "UP" for status in dependencies.values())
     log.debug("debug")
     console.print({"healthy": healthy, "dependencies": dependencies})
@@ -76,10 +78,15 @@ def info():
         "version": __version__,
         "path": _get_starbridge_path(),
         "development_mode": _is_development_mode(),
+        "env": _get_starbridge_env(),
     }
-    data["confluence"] = starbridge.confluence.Service().info()
-    data["claude"] = starbridge.claude.Application().info()
-    data["env"] = _get_starbridge_env()
+
+    # Auto-discover and get info from all services
+    for service_class in MCPBaseService.get_services():
+        service = service_class()
+        service_name = service.__class__.__module__.split(".")[1]
+        data[service_name] = service.info()
+
     console.print(data)
 
 
@@ -145,7 +152,7 @@ def install(
     restart_claude: bool = True,
 ):
     """Install starbridge within Claude Desktop application by adding to configuration and restarting Claude Desktop app"""
-    if starbridge.claude.Application.install_mcp_server(
+    if starbridge.claude.Service.install_mcp_server(
         _generate_mcp_server_config(
             atlassian_url, atlassian_email_address, atlassian_api_token
         ),
@@ -159,7 +166,7 @@ def install(
 @cli.command()
 def uninstall():
     """Install starbridge from Claude Desktop application by removing from configuration and restarting Claude Desktop app"""
-    if starbridge.claude.Application.uninstall_mcp_server():
+    if starbridge.claude.Service.uninstall_mcp_server():
         console.print("Starbridge uninstalled from Claude Destkop application.")
     else:
         console.print("Starbridge was no installed", style="warning")
@@ -214,10 +221,15 @@ cli.add_typer(
     name="mcp",
     help="MCP operations",
 )
-cli.add_typer(
-    starbridge.confluence.cli, name="confluence", help="Confluence operations"
-)
-cli.add_typer(starbridge.claude.cli, name="claude", help="Claude operations")
+
+for service_class in MCPBaseService.get_services():
+    name, typer_cli = service_class.get_cli()
+    if name and typer_cli:
+        cli.add_typer(
+            typer_cli,
+            name=name,
+            help=f"{name.title()} operations",
+        )
 
 if __name__ == "__main__":
     try:

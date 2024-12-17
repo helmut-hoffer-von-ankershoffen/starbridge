@@ -9,6 +9,7 @@ authors = [
 requires-python = ">=3.11"
 dependencies = [
     "atlassian-python-api>=3.41.16",
+    "griffe>=1.5.1",
     "logfire[system-metrics]>=2.7.1",
     "mcp>=1.0.0",
     "pydantic>=2.10.2",
@@ -93,7 +94,15 @@ python_files = ["*_test.py"]
 
 [project.urls]
 Homepage = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge"
+Source = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge"
+Changelog = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/releases"
+Documentation = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/README.md"
 Issues = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/issues"
 
 [project.scripts]
 starbridge = "starbridge:cli"
+
+[project.entry-points."starbridge.services"]
+confluence = "starbridge.confluence.service:Service"
+claude = "starbridge.claude.service:Service"
+hello = "starbridge.hello.service:Service"

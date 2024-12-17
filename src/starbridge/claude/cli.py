@@ -10,24 +10,25 @@ import typer
 
 from starbridge.utils.console import console
 
-from .application import Application
+from .service import Service
 
 cli = typer.Typer(no_args_is_help=True)
+service = Service()
 
 
 @cli.command(name="config")
 def config():
     """Print config of Claude Desktop application"""
-    if Application.is_installed() is False:
+    if not service.is_installed():
         console.print(
-            "Claude Desktop application is not installed at '{Application.application_path()'} - you can install it from https://claude.ai/download"
+            f"Claude Desktop application is not installed at '{service.application_directory()}' - you can install it from https://claude.ai/download"
         )
         return
-    if Application.config_path().is_file() is False:
-        console.print("No config file found at '{Application.config_path()}'")
+    if not service.config_path().is_file():
+        console.print(f"No config file found at '{service.config_path()}'")
         return
-    console.print(f"Printing config file at '{Application.config_path()}'")
-    console.print_json(data=Application.config_read())
+    console.print(f"Printing config file at '{service.config_path()}'")
+    console.print_json(data=service.config_read())
 
 
 @cli.command()
@@ -50,7 +51,7 @@ def log(
     ] = "starbridge",
 ):
     """Show logs."""
-    log_path = Application.log_path(name if name != "main" else None)
+    log_path = service.log_path(name if name != "main" else None)
     size = pathlib.Path(log_path).stat().st_size
     human_size = (
         f"{size / 1024 / 1024:.1f}MB" if size > 1024 * 1024 else f"{size / 1024:.1f}KB"
@@ -65,7 +66,7 @@ def log(
                 "-n",
                 str(last),
                 "-f",
-                Application.log_path(name if name != "main" else None),
+                service.log_path(name if name != "main" else None),
             ],
             check=False,
         )
@@ -75,7 +76,7 @@ def log(
                 "tail",
                 "-n",
                 str(last),
-                Application.log_path(name if name != "main" else None),
+                service.log_path(name if name != "main" else None),
             ],
             check=False,
         )
@@ -84,10 +85,10 @@ def log(
 @cli.command(name="restart")
 def restart():
     """Restart Claude Desktop application"""
-    if Application.is_installed() is False:
+    if not service.is_installed():
         console.print(
-            "Claude Desktop application is not installed at '{Application.application_path()'} - you can install it from https://claude.ai/download"
+            f"Claude Desktop application is not installed at '{service.application_directory()}' - you can install it from https://claude.ai/download"
         )
         return
-    Application.restart()
+    service.restart()
     console.print("Claude Desktop application was restarted")

@@ -1,19 +1,51 @@
 """Handles Confluence operations."""
 
-import inspect
 import json
 import os
 
 import mcp.types as types
+import typer
 from atlassian import Confluence
 from pydantic import AnyUrl
 
-from starbridge.mcp import MCPContext
+from starbridge.mcp import MCPBaseService, MCPContext
+from starbridge.mcp.decorators import mcp_tool
 from starbridge.utils.logging import log
 
+from . import cli
 
-class Service:
+
+class Service(MCPBaseService):
     """Service class for Confluence operations."""
+
+    @classmethod
+    def get_cli(cls) -> tuple[str | None, typer.Typer | None]:
+        """Get CLI for Confluence service."""
+        return "confluence", cli.cli
+
+    def __init__(self):
+        self._url = os.environ.get("STARBRIDGE_ATLASSIAN_URL")
+        self._email_address = os.environ.get("STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS")
+        self._api_token = os.environ.get("STARBRIDGE_ATLASSIAN_API_TOKEN")
+        self._api = Confluence(
+            url=self._url,
+            username=self._email_address,
+            password=self._api_token,
+            cloud=True,
+        )
+
+    def info(self) -> dict:
+        log.info("Confluence service info")
+        return {
+            "url": self._url,
+            "email": self._email_address,
+            "api_token": self._api_token,
+        }
+
+    @mcp_tool()
+    def starbridge_confluence_info(self, context: MCPContext):
+        """Info about Confluence environment"""
+        return [types.TextContent(type="text", text=json.dumps(self.info(), indent=2))]
 
     def health(self) -> str:
         try:
@@ -28,96 +60,6 @@ class Service:
             if len(spaces["results"]) > 0:
                 return "UP"
         return "DOWN: No spaces found"
-
-    @staticmethod
-    def _parse_docstring_params(docstring: str) -> dict[str, str]:
-        """Parse docstring to extract parameter descriptions."""
-        if not docstring:
-            return {}
-
-        param_desc = {}
-        lines = docstring.split("\n")
-        in_args_section = False
-
-        for line in lines:
-            line = line.strip()
-
-            # Check for Args: section
-            if line.lower().startswith("args:"):
-                in_args_section = True
-                continue
-
-            # We're in the Args section and have indented content
-            if in_args_section and line:
-                # New parameter definition
-                if line and line.startswith("Returns:"):
-                    in_args_section = False
-                    continue
-
-                parts = line.strip().split(":", 1)
-                if len(parts) == 2:
-                    param_name = parts[0].strip()
-                    description = parts[1].strip()
-                    if "(" in param_name:
-                        param_name = param_name.split("(")[0].strip()
-                    param_desc[param_name] = description
-
-        return param_desc
-
-    @staticmethod
-    def tool_list(context: MCPContext | None = None) -> list[types.Tool]:
-        """Get available Confluence tools."""
-        tools = []
-        for method_name in dir(Service):
-            if method_name.startswith("mcp_tool_"):
-                tool_name = method_name[9:].replace("_", "-")
-                method = getattr(Service, method_name)
-                docstring = method.__doc__ or f"Call {tool_name}"
-                sig = inspect.signature(method)
-
-                # Get parameter descriptions from docstring
-                param_desc = Service._parse_docstring_params(docstring)
-                # console.print(docstring)
-
-                # Generate properties from signature
-                properties = {}
-                required_params = []
-
-                for param in sig.parameters.values():
-                    if param.name == "self":
-                        continue
-
-                    param_type = "string"  # default type
-                    if param.annotation != inspect.Parameter.empty:
-                        if param.annotation is str:
-                            param_type = "string"
-                        elif param.annotation is int:
-                            param_type = "number"
-                        elif param.annotation is bool:
-                            param_type = "boolean"
-
-                    if param.default == inspect.Parameter.empty:
-                        required_params.append(param.name)
-
-                    properties[param.name] = {
-                        "type": param_type,
-                        "description": param_desc.get(
-                            param.name, f"Parameter {param.name}"
-                        ),
-                    }
-
-                tools.append(
-                    types.Tool(
-                        name=tool_name,
-                        description=docstring.split("\n")[0].strip(),
-                        inputSchema={
-                            "type": "object",
-                            "required": required_params,
-                            "properties": properties,
-                        },
-                    )
-                )
-        return tools
 
     def resource_list(self, context: MCPContext | None = None):
         spaces = self.space_list()
@@ -186,33 +128,11 @@ class Service:
     def space_info(self, space_key: str):
         return self._api.get_space(space_key)
 
-    def __init__(self):
-        self._url = os.environ.get("STARBRIDGE_ATLASSIAN_URL")
-        self._email_address = os.environ.get("STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS")
-        self._api_token = os.environ.get("STARBRIDGE_ATLASSIAN_API_TOKEN")
-        self._api = Confluence(
-            url=self._url,
-            username=self._email_address,
-            password=self._api_token,
-            cloud=True,
-        )
-
-    def info(self):
-        log.info("Confluence service info")
-        return {
-            "url": self._url,
-            "email": self._email_address,
-            "api_token": self._api_token,
-        }
-
-    def mcp_tool_starbridge_confluence_info(self, context: MCPContext):
-        """Info about Confluence environment"""
-        return [types.TextContent(type="text", text=json.dumps(self.info(), indent=2))]
-
     def space_list(self):
         return self._api.get_all_spaces()
 
-    def mcp_tool_starbridge_confluence_space_list(self, context: MCPContext):
+    @mcp_tool()
+    def starbridge_confluence_space_list(self, context: MCPContext):
         """List spaces in Confluence"""
         return [
             types.TextContent(type="text", text=json.dumps(self.space_list(), indent=2))
@@ -220,14 +140,14 @@ class Service:
 
     def page_create(
         self,
-        space_key,
-        title,
-        body,
-        parent_id=None,
-        representation="wiki",
-        editor="v2",
-        full_width=True,
-        status="current",
+        space_key: str,
+        title: str,
+        body: str,
+        parent_id: str = None,
+        representation: str = "wiki",
+        editor: str = "v2",
+        full_width: bool = True,
+        status: str = "current",
     ):
         return self._api.create_page(
             space=space_key,
@@ -241,13 +161,14 @@ class Service:
             status=status,
         )
 
-    def mcp_tool_starbridge_confluence_page_create(
+    @mcp_tool()
+    def starbridge_confluence_page_create(
         self,
         context: MCPContext,
         space_key: str,
         title: str,
         body: str,
-        parent_id=None,
+        parent_id: str = None,
         draft: bool = False,
     ):
         """Create page in Confluence space given key of space, title and body of page and optional parent page id.

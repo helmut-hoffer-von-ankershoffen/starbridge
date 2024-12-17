@@ -1,5 +1,3 @@
-"""Handles Claude operations."""
-
 import json
 import platform
 import subprocess
@@ -7,100 +5,104 @@ import sys
 import time
 from pathlib import Path
 
-from pydantic import BaseModel
+import mcp.types as types
+import typer
+
+from starbridge.mcp import MCPBaseService, MCPContext, mcp_tool
+
+from . import cli
 
 
-class Application(BaseModel):
-    """Class to interact with Claude Desktop application."""
+class Service(MCPBaseService):
+    """Service class for Claude operations."""
 
-    @staticmethod
-    def info(mcp_server_name: str = "starbridge") -> dict:
+    def __init__(self):
+        super().__init__()
+
+    @classmethod
+    def get_cli(cls) -> tuple[str | None, typer.Typer | None]:
+        """Get CLI for Claude service."""
+        return "claude", cli.cli
+
+    def info(self) -> dict:
         """Check if Claude Desktop application is installed."""
         data = {
-            "is_installed": Application.is_installed(),
+            "is_installed": self.is_installed(),
             "application_directory": None,
             "config_path": None,
             "log_path": None,
             "config": None,
         }
-        if Application.is_installed():
-            data["application_directory"] = str(Application.application_directory())
-            if Application.has_config():
-                data["config_path"] = str(Application.config_path())
-                data["config"] = Application.config_read()
-                data["log_path"] = str(Application.log_path(mcp_server_name))
+        if self.is_installed():
+            data["application_directory"] = str(self.application_directory())
+            if self.has_config():
+                data["config_path"] = str(self.config_path())
+                data["config"] = self.config_read()
+                data["log_path"] = str(self.log_path())
         return data
 
-    @staticmethod
-    def health() -> str:
+    def health(self) -> str:
         """Check if Claude Desktop application is installed and is running."""
-        if Application.is_installed() is False:
+        if not self.is_installed():
             return "DOWN: Not installed"
-        if Application.is_running() is False:
+        if not self.is_running():
             return "DOWN: Not running"
         return "UP"
 
+    @mcp_tool()
+    def starbridge_claude_info(self, context: MCPContext):
+        """Get info about Claude Desktop application."""
+        return [types.TextContent(type="text", text=json.dumps(self.info(), indent=2))]
+
+    @mcp_tool()
+    def starbridge_claude_restart(self, context: MCPContext):
+        """Restart Claude Desktop application."""
+        self.restart()
+        return [
+            types.TextContent(type="text", text="Claude Desktop application restarted")
+        ]
+
+    @staticmethod
+    def application_directory() -> Path:
+        """Get path of Claude config directory based on platform."""
+        if sys.platform == "darwin":
+            return Path(Path.home(), "Library", "Application Support", "Claude")
+        elif sys.platform == "win32":
+            return Path(Path.home(), "AppData", "Roaming", "Claude")
+        elif sys.platform == "linux":
+            return Path(Path.home(), ".config", "Claude")
+        raise RuntimeError(f"Unsupported platform {sys.platform}")
+
+    # Move all the static methods from Application
     @staticmethod
     def is_installed() -> bool:
         """Check if Claude Desktop application is installed."""
-        if Application.application_directory().is_dir():
-            return True
-        return False
+        return Service.application_directory().is_dir()
 
     @staticmethod
     def is_running() -> bool:
         """Check if Claude Desktop application is running."""
         if platform.system() != "Darwin":
             raise RuntimeError("This command only works on macOS")
-
         ps_check = subprocess.run(
             ["pgrep", "-x", "Claude"], capture_output=True, text=True, check=False
         )
-
-        if ps_check.returncode == 0:
-            return True
-        return False
-
-    @staticmethod
-    def application_directory() -> Path:
-        """Get path of Claude config directory based on platform."""
-        if sys.platform == "darwin":
-            return Path(
-                Path.home(),
-                "Library",
-                "Application Support",
-                "Claude",
-            )
-        elif sys.platform == "win32":
-            return Path(
-                Path.home(),
-                "AppData",
-                "Roaming",
-                "Claude",
-            )
-        elif sys.platform == "linux":
-            return Path(
-                Path.home(),
-                ".config",
-                "Claude",
-            )
-        raise RuntimeError(f"Unsupported platform {sys.platform}")
+        return ps_check.returncode == 0
 
     @staticmethod
     def config_path() -> Path:
         """Get path of Claude config based on platform."""
-        path = Application.application_directory()
-        return path / "claude_desktop_config.json"
+        return Service.application_directory() / "claude_desktop_config.json"
 
     @staticmethod
     def has_config() -> bool:
         """Check if Claud has configuration."""
-        return Application.config_path().is_file()
+        return Service.config_path().is_file()
 
     @staticmethod
     def config_read() -> dict:
         """Read config from file."""
-        config_path = Application.config_path()
+        config_path = Service.config_path()
         if config_path.is_file():
             with open(config_path, encoding="utf8") as file:
                 return json.load(file)
@@ -109,7 +111,7 @@ class Application(BaseModel):
     @staticmethod
     def config_write(config: dict) -> dict:
         """Write config to file."""
-        config_path = Application.config_path()
+        config_path = Service.config_path()
         with open(config_path, "w", encoding="utf8") as file:
             json.dump(config, file, indent=2)
         return config
@@ -143,7 +145,7 @@ class Application(BaseModel):
     @staticmethod
     def log_path(mcp_server_name: str | None = "starbridge") -> Path:
         """Get path of mcp ."""
-        path = Application.log_directory()
+        path = Service.log_directory()
         if mcp_server_name is None:
             return path / "mcp.log"
         return path / f"mcp-server-{mcp_server_name}.log"
@@ -153,12 +155,12 @@ class Application(BaseModel):
         mcp_server_config: dict, mcp_server_name="starbridge", restart=True
     ) -> bool:
         """Install MCP server in Claude Desktop application."""
-        if Application.is_installed() is False:
+        if Service.is_installed() is False:
             raise RuntimeError(
-                f"Claude Desktop application is not installed at '{Application.application_directory()}'"
+                f"Claude Desktop application is not installed at '{Service.application_directory()}'"
             )
         try:
-            config = Application.config_read()
+            config = Service.config_read()
         except FileNotFoundError:
             config = {"mcpServers": {}}
 
@@ -169,28 +171,28 @@ class Application(BaseModel):
             return False
 
         config["mcpServers"][mcp_server_name] = mcp_server_config
-        Application.config_write(config)
+        Service.config_write(config)
         if restart:
-            Application.restart()
+            Service.restart()
         return True
 
     @staticmethod
     def uninstall_mcp_server(mcp_server_name: str = "starbridge", restart=True) -> bool:
         """Uninstall MCP server from Claude Desktop application."""
-        if Application.is_installed() is False:
+        if Service.is_installed() is False:
             raise RuntimeError(
-                f"Claude Desktop application is not installed at '{Application.application_directory()}'"
+                f"Claude Desktop application is not installed at '{Service.application_directory()}'"
             )
         try:
-            config = Application.config_read()
+            config = Service.config_read()
         except FileNotFoundError:
             config = {"mcpServers": {}}
         if "name" not in config["mcpServers"]:
             return False
         del config["mcpServers"][mcp_server_name]
-        Application.config_write(config)
+        Service.config_write(config)
         if restart:
-            Application.restart()
+            Service.restart()
         return True
 
     @staticmethod
@@ -224,12 +226,12 @@ class Application(BaseModel):
             raise RuntimeError("Homebrew installation only supported on macOS")
 
         # Check if already installed
-        returncode, _, _ = Application._run_brew_command(["list", "--cask", "claude"])
+        returncode, _, _ = Service._run_brew_command(["list", "--cask", "claude"])
         if returncode == 0:
             return False  # Already installed
 
         # Install Claude
-        returncode, _, stderr = Application._run_brew_command([
+        returncode, _, stderr = Service._run_brew_command([
             "install",
             "--cask",
             "claude",
@@ -246,12 +248,12 @@ class Application(BaseModel):
             raise RuntimeError("Homebrew uninstallation only supported on macOS")
 
         # Check if installed
-        returncode, _, _ = Application._run_brew_command(["list", "--cask", "claude"])
+        returncode, _, _ = Service._run_brew_command(["list", "--cask", "claude"])
         if returncode != 0:
             return False  # Not installed
 
         # Uninstall Claude
-        returncode, _, stderr = Application._run_brew_command([
+        returncode, _, stderr = Service._run_brew_command([
             "uninstall",
             "--cask",
             "claude",
