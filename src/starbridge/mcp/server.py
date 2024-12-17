@@ -65,7 +65,7 @@ class MCPServer:
     ) -> types.GetPromptResult:
         for service in self._services:
             if name.startswith(service.service_prefix):
-                method = getattr(service, f"mcp_prompt_{name.replace('-', '_')}")
+                method = getattr(service, f"mcp_prompt_{name}")
                 if arguments:
                     arguments = arguments.copy()
                     arguments.pop("context", None)

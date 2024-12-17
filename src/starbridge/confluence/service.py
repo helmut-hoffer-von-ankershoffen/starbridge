@@ -90,7 +90,7 @@ class Service(MCPBaseService):
     def prompt_list(context: MCPContext | None = None):
         return [
             types.Prompt(
-                name="starbridge-space-summary",
+                name="starbridge_confluence_space_summary",
                 description="Creates a summary of spaces in Confluence",
                 arguments=[
                     types.PromptArgument(
