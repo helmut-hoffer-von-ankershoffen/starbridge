@@ -11,6 +11,7 @@
         "wayou.vscode-todo-highlight",
         "gruntfuggly.todo-tree",
         "github.vscode-github-actions",
-        "codecov.codecov"
+        "codecov.codecov",
+        "ms-azuretools.vscode-docker"
     ]
 }

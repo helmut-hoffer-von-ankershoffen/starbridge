@@ -1,11 +1,13 @@
 {
-	"image": "mcr.microsoft.com/devcontainers/python:0-3.11-bullseye",
+	"build": {
+		"dockerfile": "Dockerfile"
+	},
 	"features": {
 		"ghcr.io/devcontainers/features/github-cli:1": {},
 		"ghcr.io/va-h/devcontainers-features/uv:1": {},
 		"ghcr.io/dhoeric/features/act:1": {}
 	},
-	"postCreateCommand": "sudo apt-get update -y && sudo apt-get install curl jq libxml2-utils libcairo2 gnupg2 -y && sudo curl -sL https://deb.nodesource.com/setup_20.x | sudo bash - && sudo apt-get install nodejs -y && rm -rf .nox && rm -rf .venv && uv sync --frozen && git config --global --add safe.directory /workspaces/starbridge && uv run pre-commit install",
+	"postCreateCommand": "rm -rf .nox && rm -rf .venv && uv sync --frozen && git config --global --add safe.directory /workspaces/starbridge && uv run pre-commit install",
 	"customizations": {
 		// Configure properties specific to VS Code.
 		"vscode": {
@@ -22,7 +24,8 @@
 				"wayou.vscode-todo-highlight",
 				"gruntfuggly.todo-tree",
 				"github.vscode-github-actions",
-				"codecov.codecov"
+				"codecov.codecov",
+				"ms-azuretools.vscode-docker"
 			]
 		}
 	},
