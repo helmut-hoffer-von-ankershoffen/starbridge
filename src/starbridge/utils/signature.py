@@ -24,7 +24,7 @@ def description_and_params(
     """
     doc = func.__doc__
     if doc is None:
-        return "", {}
+        return func.__name__, [], {}
 
     sig = signature(func)
 

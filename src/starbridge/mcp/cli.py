@@ -25,15 +25,39 @@ def tools():
 
 
 @cli.command()
+def tool(name: str):
+    """Get tool by name"""
+    console.print(MCPServer.tool(name))
+
+
+@cli.command()
 def resources():
     """Resources exposed by modules"""
     console.print(MCPServer.resources())
 
 
 @cli.command()
+def resource(uri: str):
+    """Get resource by URI"""
+    console.print(MCPServer.resource(uri))
+
+
+@cli.command()
 def prompts():
     """Prompts exposed by modules"""
     console.print(MCPServer.prompts())
+
+
+@cli.command()
+def resource_types():
+    """Resource types exposed by modules"""
+    console.print(MCPServer.resource_types())
+
+
+@cli.command()
+def services():
+    """Services exposed by modules"""
+    console.print(MCPServer.services())
 
 
 @cli.command()
@@ -63,6 +87,7 @@ def serve(
 
 @cli.command()
 def health():
+    """Check health of the services and their dependencies."""
     console.print(MCPServer().get_health())
 
 

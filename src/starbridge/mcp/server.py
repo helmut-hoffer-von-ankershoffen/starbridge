@@ -5,6 +5,7 @@ import json
 import os
 from collections.abc import Sequence
 from typing import Any
+from urllib.parse import urlparse
 
 import mcp.server.stdio
 import mcp.types as types
@@ -24,6 +25,7 @@ from starlette.responses import PlainTextResponse
 from starlette.routing import Route
 
 from starbridge.mcp.context import MCPContext
+from starbridge.mcp.models import ResourceMetadata
 from starbridge.mcp.service import MCPBaseService
 from starbridge.utils import get_logger
 
@@ -47,8 +49,8 @@ class MCPServer:
         self._server.list_tools()(self.tool_list)
         self._server.call_tool()(self.tool_call)
 
-    @classmethod
-    def get_health(cls):
+    @staticmethod
+    def get_health():
         """Health of services and their dependencies"""
         dependencies = {}
         for service_class in MCPBaseService.get_services():
@@ -80,10 +82,31 @@ class MCPServer:
         return resources
 
     async def resource_get(self, uri: AnyUrl) -> str:
+        """Get a resource from any service that can handle it."""
+        parsed = urlparse(str(uri))
+
+        # Try each service's resource handlers
         for service in self._services:
-            result = service.resource_get(uri=uri, context=self.get_context())
-            if result is not None:
-                return result
+            # Find all resource handlers in the service
+            for method_name in dir(service.__class__):
+                method = getattr(service.__class__, method_name)
+                if hasattr(method, "__mcp_resource__"):
+                    meta = method.__mcp_resource__
+                    # Check if this handler matches the URI pattern
+                    if (
+                        meta.server == parsed.scheme
+                        and meta.service == parsed.netloc
+                        and parsed.path.startswith(f"/{meta.type}/")
+                    ):  # renamed from prefix
+                        # Call the handler with the resource ID (last part of path)
+                        result = method(
+                            service,
+                            parsed.path.split("/")[-1],
+                            context=self.get_context(),
+                        )
+                        if result is not None:
+                            return result
+
         raise ValueError(f"No service found for URI: {uri}")
 
     async def prompt_list(
@@ -97,18 +120,31 @@ class MCPServer:
     async def prompt_get(
         self, name: str, arguments: dict[str, str] | None
     ) -> types.GetPromptResult:
-        for service in self._services:
-            if name.startswith(service.service_prefix):
-                method = getattr(service, f"mcp_prompt_{name}")
-                if arguments:
-                    arguments = arguments.copy()
-                    arguments.pop("context", None)
-                    return method(**arguments, context=self.get_context())
-                return method(context=self.get_context())
-        return types.GetPromptResult(
-            description=None,
-            messages=[],
-        )
+        """Get a prompt by its full name (server_service_type)."""
+        server, service, prompt_type = name.split("_", 2)
+
+        for service_instance in self._services:
+            for method_name in dir(service_instance.__class__):
+                method = getattr(service_instance.__class__, method_name)
+                if hasattr(method, "__mcp_prompt__"):
+                    meta = method.__mcp_prompt__
+                    if (
+                        meta.server == server
+                        and meta.service == service
+                        and meta.type == prompt_type
+                    ):
+                        # Found matching prompt handler
+                        if arguments:
+                            arguments = arguments.copy()
+                            arguments.pop("context", None)
+                            return method(
+                                service_instance,
+                                **arguments,
+                                context=self.get_context(),
+                            )
+                        return method(service_instance, context=self.get_context())
+
+        return types.GetPromptResult(description=None, messages=[])
 
     async def tool_list(
         self,
@@ -121,18 +157,45 @@ class MCPServer:
     async def tool_call(
         self, name: str, arguments: dict | None
     ) -> list[types.TextContent | types.ImageContent | types.EmbeddedResource]:
-        for service in self._services:
-            if name.startswith(service.service_prefix):
-                method = getattr(service, name)
-                if arguments:
-                    arguments = arguments.copy()
-                    arguments.pop("context", None)
-                    return MCPServer._marshal_result(
-                        method(**arguments, context=self.get_context())
-                    )
-                return MCPServer._marshal_result(method(context=self.get_context()))
+        server, service, tool_name = name.split("_", 2)
+
+        for service_instance in self._services:
+            for method_name in dir(service_instance.__class__):
+                method = getattr(service_instance.__class__, method_name)
+                if hasattr(method, "__mcp_tool__"):
+                    meta = method.__mcp_tool__
+                    if (
+                        meta.server == server
+                        and meta.service == service
+                        and meta.name == tool_name
+                    ):
+                        if arguments:
+                            arguments = arguments.copy()
+                            arguments.pop("context", None)
+                            return MCPServer._marshal_result(
+                                method(
+                                    service_instance,
+                                    **arguments,
+                                    context=self.get_context(),
+                                )
+                            )
+                        return MCPServer._marshal_result(
+                            method(service_instance, context=self.get_context())
+                        )
 
         raise ValueError(f"Unknown tool: {name}")
+
+    async def resource_type_list(self) -> set[ResourceMetadata]:
+        """Get all available resource types across all services."""
+        types = set()
+        for service in self._services:
+            types.update(service.resource_type_list(context=self.get_context()))
+        return types
+
+    @staticmethod
+    def resource_types() -> list[str]:
+        """Get all available resource types as formatted strings."""
+        return sorted(str(rt) for rt in asyncio.run(MCPServer().resource_type_list()))
 
     def starlette_app(self, debug: bool = True) -> Starlette:
         sse = SseServerTransport("/messages")
@@ -171,22 +234,34 @@ class MCPServer:
                 self._create_initialization_options(),
             )
 
-    @classmethod
-    def tools(cls) -> list[types.Tool]:
+    @staticmethod
+    def services() -> list[MCPBaseService]:
+        return MCPBaseService.get_services()
+
+    @staticmethod
+    def tools() -> list[types.Tool]:
         return asyncio.run(MCPServer().tool_list())
 
-    @classmethod
-    def resources(cls) -> list[types.Resource]:
+    @staticmethod
+    def tool(
+        name: str, arguments: dict | None = None
+    ) -> list[types.TextContent | types.ImageContent | types.EmbeddedResource]:
+        return asyncio.run(MCPServer().tool_call(name, arguments))
+
+    @staticmethod
+    def resources() -> list[types.Resource]:
         return asyncio.run(MCPServer().resource_list())
 
-    @classmethod
-    def prompts(cls) -> list[types.Prompt]:
+    @staticmethod
+    def prompts() -> list[types.Prompt]:
         return asyncio.run(MCPServer().prompt_list())
 
-    @classmethod
-    def serve(
-        cls, host: str | None = None, port: int | None = None, debug: bool = True
-    ):
+    @staticmethod
+    def resource(uri: str) -> str:
+        return asyncio.run(MCPServer().resource_get(uri))
+
+    @staticmethod
+    def serve(host: str | None = None, port: int | None = None, debug: bool = True):
         if host and port:
             import uvicorn
 
@@ -214,9 +289,8 @@ class MCPServer:
             ),
         )
 
-    @classmethod
+    @staticmethod
     def _marshal_result(
-        cls,
         result: Any,
     ) -> Sequence[TextContent | ImageContent | EmbeddedResource]:
         """Marshals a result into a sequence of TextContent, ImageContent, or EmbeddedResource."""

@@ -18,13 +18,23 @@ class Service(MCPBaseService):
     def __init__(self):
         super().__init__()
 
-    @classmethod
-    def get_cli(cls) -> tuple[str | None, typer.Typer | None]:
+    @staticmethod
+    def get_cli() -> tuple[str | None, typer.Typer | None]:
         """Get CLI for Claude service."""
         return "claude", cli.cli
 
-    def info(self) -> dict:
-        """Check if Claude Desktop application is installed."""
+    @mcp_tool()
+    def health(self, context: MCPContext | None = None) -> str:
+        """Check if Claude Desktop application is installed and is running."""
+        if not self.is_installed():
+            return "DOWN: Not installed"
+        if not self.is_running():
+            return "DOWN: Not running"
+        return "UP"
+
+    @mcp_tool()
+    def info(self, context: MCPContext | None = None):
+        """Get info about Claude Desktop application."""
         data = {
             "is_installed": self.is_installed(),
             "application_directory": None,
@@ -40,23 +50,10 @@ class Service(MCPBaseService):
                 data["log_path"] = str(self.log_path())
         return data
 
-    def health(self) -> str:
-        """Check if Claude Desktop application is installed and is running."""
-        if not self.is_installed():
-            return "DOWN: Not installed"
-        if not self.is_running():
-            return "DOWN: Not running"
-        return "UP"
-
     @mcp_tool()
-    def starbridge_claude_info(self, context: MCPContext):
-        """Get info about Claude Desktop application."""
-        return self.info()
-
-    @mcp_tool()
-    def starbridge_claude_restart(self, context: MCPContext):
+    def restart(self, context: MCPContext | None = None):
         """Restart Claude Desktop application."""
-        self.restart()
+        self._restart()
         return "Claude Desktop application restarted"
 
     @staticmethod
@@ -193,7 +190,7 @@ class Service(MCPBaseService):
         return True
 
     @staticmethod
-    def restart():
+    def _restart():
         """Restarts the Claude desktop application on macOS."""
         if platform.system() != "Darwin":
             raise RuntimeError("This command only works on macOS")

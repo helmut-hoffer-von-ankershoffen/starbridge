@@ -19,46 +19,38 @@ from . import cli
 class Service(MCPBaseService):
     """Service class for Hello World operations."""
 
-    @classmethod
-    def get_cli(cls) -> tuple[str | None, typer.Typer | None]:
-        """Get CLI for Hello World service."""
-        return "hello", cli.cli
-
     def __init__(self):
         pass
 
-    def info(self) -> dict:
+    @staticmethod
+    def get_cli() -> tuple[str | None, typer.Typer | None]:
+        """Get CLI for Hello World service."""
+        return "hello", cli.cli
+
+    @mcp_tool()
+    def health(self, context: MCPContext | None = None) -> str:
+        return "UP"
+
+    @mcp_tool()
+    def info(self, context: MCPContext | None = None) -> dict:
+        """Info about Hello world environment"""
         return {"locale": "en_US"}
 
     @mcp_tool()
-    def starbridge_hello_info(self, context: MCPContext | None = None):
-        """Info about Hello world environment"""
-        return self.info()
-
-    def health(self) -> str:
-        return "UP"
-
-    def hello(self) -> str:
-        return "Hello, World!"
-
-    @mcp_tool()
-    def starbridge_hello_hello(self, context: MCPContext | None = None):
+    def hello(self, context: MCPContext | None = None):
         """Print hello world!"""
         context.error("Hello world!")
         return self.hello()
 
     @mcp_tool()
-    def starbridge_hello_bridge(self, context: MCPContext | None = None):
+    def bridge(self, context: MCPContext | None = None):
         """Show image of starbridge"""
-        return self.bridge()
-
-    def bridge(self) -> Image:
         return Image.open(
             io.BytesIO(cairosvg.svg2png(bytestring=self._starbridge_svg()))
         )
 
-    @classmethod
-    def _starbridge_svg(cls) -> str:
+    @staticmethod
+    def _starbridge_svg() -> str:
         """Image of starbridge, generated with Claude (Sonnet 3.5 new)"""
         return """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
     <!-- Background -->
