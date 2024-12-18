@@ -1,0 +1,9 @@
+{
+	"image": "mcr.microsoft.com/devcontainers/python:0-3.11-bullseye",
+	"features": {
+		"ghcr.io/va-h/devcontainers-features/uv:1": {},
+		"ghcr.io/eitsupi/devcontainer-features/jq-likes:2": {},
+		"ghcr.io/dhoeric/features/act:1": {}
+	},
+	"postCreateCommand": "sudo apt-get update -y && sudo apt-get install libcairo2 -y && uv sync --frozen"
+}
