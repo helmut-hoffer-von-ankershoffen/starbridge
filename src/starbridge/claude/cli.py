@@ -16,7 +16,19 @@ cli = typer.Typer(no_args_is_help=True)
 service = Service()
 
 
-@cli.command(name="config")
+@cli.command()
+def health():
+    """Health of Claude"""
+    console.print(Service().health())
+
+
+@cli.command()
+def info():
+    """Info about Claude"""
+    console.print(Service().info())
+
+
+@cli.command()
 def config():
     """Print config of Claude Desktop application"""
     if not service.is_installed():

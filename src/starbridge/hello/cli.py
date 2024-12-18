@@ -12,13 +12,19 @@ cli = typer.Typer(no_args_is_help=True)
 
 
 @cli.command()
+def health():
+    """Health of Hello World"""
+    console.print(Service().health())
+
+
+@cli.command()
 def info():
     """Info about Hello World"""
     console.print(Service().info())
 
 
 @cli.command()
-def world():
+def hello():
     """Print Hello World!"""
     console.print(Service().hello())
 
