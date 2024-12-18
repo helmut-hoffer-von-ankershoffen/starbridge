@@ -31,7 +31,7 @@ Notes:
 - .github/workflows/test.yml might provide further information
 
 ```shell
-sudo sudo apt install -y jq libxml2-utils   # tooling
+sudo sudo apt install -y curl jq libxml2-utils libcairo2 gnupg2 npm  # tooling
 curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash # act
 uv run pre-commit install                   # see https://pre-commit.com/
 ```

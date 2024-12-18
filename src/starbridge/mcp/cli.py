@@ -101,6 +101,7 @@ def inspect():
     process = subprocess.Popen(
         [
             "npx",
+            "--yes",
             "@modelcontextprotocol/inspector",
             "uv",
             "--directory",
