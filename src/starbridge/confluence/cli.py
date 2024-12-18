@@ -2,8 +2,9 @@
 CLI to interact with Confluence
 """
 
+from typing import Annotated
+
 import typer
-from pydantic import AnyUrl
 
 from starbridge.utils.console import console
 
@@ -12,7 +13,13 @@ from .service import Service
 cli = typer.Typer(no_args_is_help=True)
 
 
-@cli.command(name="info")
+@cli.command()
+def health():
+    """Health of Confluence"""
+    console.print(Service().health())
+
+
+@cli.command()
 def info():
     """Info about Confluence"""
     console.print(Service().info())
@@ -27,36 +34,46 @@ def mcp():
     """MCP endpoints"""
 
 
-@cli_mcp.command(name="tools")
-def tool_list():
+@cli_mcp.command()
+def tools():
     """List tools exposed via MCP"""
     console.print(Service().tool_list())
 
 
-@cli_mcp.command(name="resources")
-def resources_list():
+@cli_mcp.command()
+def resources():
     """List resources exposed via MCP"""
     console.print(Service().resource_list())
 
 
-@cli_mcp.command(name="resource")
-def resource_get(
-    uri: str = typer.Option(..., help="Resource URI"),
+@cli_mcp.command()
+def resource_types():
+    """List resources exposed via MCP"""
+    console.print(Service().resource_type_list())
+
+
+@cli_mcp.command(name="space")
+def resource_space(
+    key: Annotated[
+        str, typer.Argument(help="Key of the space to retrieve as resource")
+    ],
 ):
-    """Get resource exposed via MCP"""
-    console.print(Service().resource_get(uri=AnyUrl(uri)))
+    """Get space resource as exposed via MCP"""
+    console.print(Service().space_get(key))
 
 
-@cli_mcp.command(name="prompts")
-def prompt_list():
+@cli_mcp.command()
+def prompts():
     """List prompts exposed via MCP"""
     console.print(Service().prompt_list())
 
 
 @cli_mcp.command(name="space-summary")
-def prompt_space_summary():
-    """Summary of all spaces"""
-    console.print(Service().mcp_prompt_starbridge_space_summary())
+def prompt_space_summary(
+    style: Annotated[str, typer.Option(help="Style of summary")] = "brief",
+):
+    """Prompt to generate summary of spaces"""
+    console.print(Service().space_summary(style))
 
 
 cli_space = typer.Typer(no_args_is_help=True)
@@ -83,8 +100,14 @@ def page():
     """Operations on Confluence pages"""
 
 
+@cli_page.command(name="list")
+def page_list(space_key: str = typer.Option(..., help="Space key")):
+    """List pages in a space"""
+    console.print(Service().page_list(space_key))
+
+
 @cli_page.command(name="create")
-def page_list(
+def page_create(
     space_key: str = typer.Option(..., help="Space key"),
     title: str = typer.Option(..., help="Title of the page"),
     body: str = typer.Option(..., help="Body of the page"),
@@ -92,3 +115,27 @@ def page_list(
 ):
     """Create a new page"""
     console.print(Service().page_create(space_key, title, body, page_id))
+
+
+@cli_page.command(name="read")
+def page_get(
+    page_id: str = typer.Option(None, help="Parent page id"),
+):
+    """Read a page"""
+    console.print(Service().page_get(page_id))
+
+
+@cli_page.command(name="update")
+def page_update(
+    page_id: str = typer.Option(..., help="Pager id"),
+    title: str = typer.Option(..., help="Title of the page"),
+    body: str = typer.Option(..., help="Body of the page"),
+):
+    """Update a page"""
+    console.print(Service().page_update(page_id, title, body))
+
+
+@cli_page.command(name="delete")
+def page_delete(page_id: str = typer.Option(..., help="Pager id")):
+    """Delete a page"""
+    console.print(Service().page_delete(page_id))

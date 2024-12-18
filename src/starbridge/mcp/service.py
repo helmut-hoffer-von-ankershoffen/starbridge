@@ -64,7 +64,7 @@ class MCPBaseService:
         """Get info about configuration of this service. Override in subclass."""
         raise NotImplementedError
 
-    def health(self) -> str:
+    def health(self, context: MCPContext | None = None) -> str:
         """Get health of this service. Override in subclass."""
         raise NotImplementedError
 

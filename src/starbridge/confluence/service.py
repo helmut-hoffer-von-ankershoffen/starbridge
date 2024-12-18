@@ -43,7 +43,7 @@ class Service(MCPBaseService):
         return "confluence", cli.cli
 
     @mcp_tool()
-    def health(self) -> str:
+    def health(self, context: MCPContext | None = None) -> str:
         try:
             spaces = self.space_list()
         except Exception as e:

@@ -88,7 +88,7 @@ def serve(
 @cli.command()
 def health():
     """Check health of the services and their dependencies."""
-    console.print(MCPServer().get_health())
+    console.print(MCPServer().health())
 
 
 @cli.command()

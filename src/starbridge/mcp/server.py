@@ -25,6 +25,7 @@ from starlette.responses import PlainTextResponse
 from starlette.routing import Route
 
 from starbridge.mcp.context import MCPContext
+from starbridge.mcp.decorators import mcp_tool
 from starbridge.mcp.models import ResourceMetadata
 from starbridge.mcp.service import MCPBaseService
 from starbridge.utils import get_logger
@@ -33,7 +34,7 @@ __version__ = importlib.metadata.version("starbridge")
 logger = get_logger(__name__)
 
 
-class MCPServer:
+class MCPServer(MCPBaseService):
     """MCP Server for Starbridge."""
 
     def __init__(self):
@@ -49,8 +50,8 @@ class MCPServer:
         self._server.list_tools()(self.tool_list)
         self._server.call_tool()(self.tool_call)
 
-    @staticmethod
-    def get_health():
+    @mcp_tool()
+    def health(self, context: MCPContext | None = None):
         """Health of services and their dependencies"""
         dependencies = {}
         for service_class in MCPBaseService.get_services():
@@ -59,9 +60,6 @@ class MCPServer:
             dependencies[service_name] = service.health()
 
         healthy = all(status == "UP" for status in dependencies.values())
-        logger.info(
-            'Health check: {"healthy": %s, "dependencies": %s}', healthy, dependencies
-        )
         return {"healthy": healthy, "dependencies": dependencies}
 
     def get_context(self) -> MCPContext:
@@ -214,7 +212,7 @@ class MCPServer:
         async def handle_health(request):
             return PlainTextResponse(
                 headers={"content-type": "application/json"},
-                content=json.dumps({"health": True}),
+                content=json.dumps(self.health()),
             )
 
         return Starlette(

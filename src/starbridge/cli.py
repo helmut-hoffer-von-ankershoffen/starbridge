@@ -38,7 +38,7 @@ def main(ctx: typer.Context):
 @cli.command()
 def health():
     """Check health Starbridge, services, and their dependencies."""
-    console.print(MCPServer.get_health())
+    console.print(MCPServer().health())
 
 
 @cli.command()
