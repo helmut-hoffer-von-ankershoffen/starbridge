@@ -21,12 +21,18 @@ This integration serves two main purposes:
 ## Setup
 
 ```shell
-if ! command -v uvx &> /dev/null; then # if uv package manager not present ...
-  curl -LsSf https://astral.sh/uv/install.sh | sh # ... install it
+if [[ "$OSTYPE" == "darwin"* ]]; then # Install dependencies for macOS X
+  brew install curl cairo
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then # ... resp. Linux
+  sudo apt-get update -y && sudo apt-get install curl libcairo2 -y
 fi
-brew install cairo # #on macOS - set export DYLD_LIBRARY_PATH="/opt/homebrew/lib:$DYLD_LIBRARY_PATH" in your shell
-uvx starbridge install # install starbridge package
+if ! command -v uvx &> /dev/null; then # Install uv package manager if not present
+  curl -LsSf https://astral.sh/uv/install.sh | sh
+fi
+uvx starbridge install # Install starbridge, including configuration and injection into Claude Desktop App
 ```
+
+Note: The above works for macOS X and Linux. Windows not supported.
 
 ## MCP Server
 
