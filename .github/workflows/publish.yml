@@ -6,6 +6,10 @@ on:
     tags:
       - "*.*.*"
 
+permissions:
+  contents: write
+  packages: read
+
 jobs:
   run:
     name: "Build and publish release"
