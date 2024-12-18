@@ -5,5 +5,28 @@
 		"ghcr.io/va-h/devcontainers-features/uv:1": {},
 		"ghcr.io/dhoeric/features/act:1": {}
 	},
-	"postCreateCommand": "sudo apt-get update -y && sudo apt-get install curl jq libxml2-utils libcairo2 -y && uv sync --frozen"
+	"postCreateCommand": "sudo apt-get update -y && sudo apt-get install curl jq libxml2-utils libcairo2 -y && rm -rf .nox && rm -rf .venv && uv sync --frozen && git config --global --add safe.directory /workspaces/starbridge && uv run pre-commit install",
+	"customizations": {
+		// Configure properties specific to VS Code.
+		"vscode": {
+			// Add the IDs of extensions you want installed when the container is created.
+			"extensions": [
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-python.debugpy",
+				"donjayamanne.python-environment-manager",
+				"kaih2o.python-resource-monitor",
+				"charliermarsh.ruff",
+				"tamasfe.even-better-toml",
+				"mikestead.dotenv",
+				"wayou.vscode-todo-highlight",
+				"gruntfuggly.todo-tree",
+				"github.vscode-github-actions",
+				"codecov.codecov"
+			]
+		}
+	},
+	"forwardPorts": [
+		8080
+	]
 }
