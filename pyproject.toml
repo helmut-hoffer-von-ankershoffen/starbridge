@@ -9,11 +9,13 @@ authors = [
 requires-python = ">=3.11"
 dependencies = [
     "atlassian-python-api>=3.41.16",
+    "cairosvg>=2.7.1",
     "griffe>=1.5.1",
     "logfire[system-metrics]>=2.7.1",
     "mcp>=1.0.0",
     "pydantic>=2.10.2",
     "python-dotenv>=1.0.1",
+    "svglib>=1.5.1",
     "typer>=0.13.0",
 ]
 keywords = ["mcp"]

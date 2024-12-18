@@ -5,7 +5,6 @@ import sys
 import time
 from pathlib import Path
 
-import mcp.types as types
 import typer
 
 from starbridge.mcp import MCPBaseService, MCPContext, mcp_tool
@@ -52,15 +51,13 @@ class Service(MCPBaseService):
     @mcp_tool()
     def starbridge_claude_info(self, context: MCPContext):
         """Get info about Claude Desktop application."""
-        return [types.TextContent(type="text", text=json.dumps(self.info(), indent=2))]
+        return self.info()
 
     @mcp_tool()
     def starbridge_claude_restart(self, context: MCPContext):
         """Restart Claude Desktop application."""
         self.restart()
-        return [
-            types.TextContent(type="text", text="Claude Desktop application restarted")
-        ]
+        return "Claude Desktop application restarted"
 
     @staticmethod
     def application_directory() -> Path:

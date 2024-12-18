@@ -76,7 +76,11 @@ class MCPBaseService:
         """Get available resources. Override in subclass."""
         return []
 
-    def resource_get(self, context: MCPContext, uri: AnyUrl) -> str | None:
+    def resource_get(
+        self,
+        uri: AnyUrl,
+        context: MCPContext | None = None,
+    ) -> str | None:
         """Get resource content. Override in subclass."""
         return None
 
@@ -85,7 +89,10 @@ class MCPBaseService:
         return []
 
     def get_prompt(
-        self, name: str, arguments: dict[str, Any] | None, context: MCPContext
+        self,
+        name: str,
+        arguments: dict[str, Any] | None,
+        context: MCPContext | None = None,
     ) -> types.GetPromptResult:
         """Get prompt content. Override in subclass."""
         return types.GetPromptResult(description=None, messages=[])

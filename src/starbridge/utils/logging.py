@@ -1,3 +1,4 @@
+import importlib.metadata
 import logging
 import os
 
@@ -7,7 +8,21 @@ from dotenv import load_dotenv
 from rich.console import Console
 from rich.logging import RichHandler
 
+__version__ = importlib.metadata.version("starbridge")
 load_dotenv()
+
+logfire.configure(
+    send_to_logfire="if-token-present",
+    service_name="starbridge",
+    console=False,
+    code_source=logfire.CodeSource(
+        repository="https://github.com/helmut-hoffer-von-ankershoffen/starbridge",
+        revision=__version__,
+        root_path="",  # FIXME: root_path
+    ),
+)
+logfire.instrument_system_metrics(base="full")
+logfire.install_auto_tracing(modules=["starbridge.confluence"], min_duration=0.001)
 
 
 class CustomFilter(logging.Filter):
@@ -41,4 +56,8 @@ logging.basicConfig(
     handlers=handlers,
 )
 
-log = logging.getLogger("starbridge")
+
+def get_logger(name: str | None) -> logging.Logger:
+    if (name is None) or (name == "starbridge"):
+        return logging.getLogger("starbridge")
+    return logging.getLogger(f"starbridge.{name}")

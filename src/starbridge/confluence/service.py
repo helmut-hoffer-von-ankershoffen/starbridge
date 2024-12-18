@@ -8,20 +8,16 @@ import typer
 from atlassian import Confluence
 from pydantic import AnyUrl
 
-from starbridge.mcp import MCPBaseService, MCPContext
-from starbridge.mcp.decorators import mcp_tool
-from starbridge.utils.logging import log
+from starbridge.mcp import MCPBaseService, MCPContext, mcp_tool
+from starbridge.utils import get_logger
 
 from . import cli
+
+logger = get_logger(__name__)
 
 
 class Service(MCPBaseService):
     """Service class for Confluence operations."""
-
-    @classmethod
-    def get_cli(cls) -> tuple[str | None, typer.Typer | None]:
-        """Get CLI for Confluence service."""
-        return "confluence", cli.cli
 
     def __init__(self):
         self._url = os.environ.get("STARBRIDGE_ATLASSIAN_URL")
@@ -34,8 +30,13 @@ class Service(MCPBaseService):
             cloud=True,
         )
 
+    @classmethod
+    def get_cli(cls) -> tuple[str | None, typer.Typer | None]:
+        """Get CLI for Confluence service."""
+        return "confluence", cli.cli
+
     def info(self) -> dict:
-        log.info("Confluence service info")
+        logger.info("Confluence service info")
         return {
             "url": self._url,
             "email": self._email_address,
@@ -43,9 +44,9 @@ class Service(MCPBaseService):
         }
 
     @mcp_tool()
-    def starbridge_confluence_info(self, context: MCPContext):
+    def starbridge_confluence_info(self, context: MCPContext | None = None):
         """Info about Confluence environment"""
-        return [types.TextContent(type="text", text=json.dumps(self.info(), indent=2))]
+        return self.info()
 
     def health(self) -> str:
         try:
@@ -75,8 +76,8 @@ class Service(MCPBaseService):
 
     def resource_get(
         self,
-        context: MCPContext,
         uri: AnyUrl,
+        context: MCPContext | None = None,
     ) -> str:
         if (uri.scheme, uri.host) != ("starbridge", "confluence"):
             raise ValueError(
@@ -104,8 +105,8 @@ class Service(MCPBaseService):
 
     def mcp_prompt_starbridge_confluence_space_summary(
         self,
-        context: MCPContext,
         style: str = "brief",
+        context: MCPContext | None = None,
     ) -> types.GetPromptResult:
         detail_prompt = " Give extensive details." if style == "detailed" else ""
         return types.GetPromptResult(
@@ -132,11 +133,9 @@ class Service(MCPBaseService):
         return self._api.get_all_spaces()
 
     @mcp_tool()
-    def starbridge_confluence_space_list(self, context: MCPContext):
+    def starbridge_confluence_space_list(self, context: MCPContext | None = None):
         """List spaces in Confluence"""
-        return [
-            types.TextContent(type="text", text=json.dumps(self.space_list(), indent=2))
-        ]
+        return self.space_list()
 
     def page_create(
         self,
@@ -164,13 +163,13 @@ class Service(MCPBaseService):
     @mcp_tool()
     def starbridge_confluence_page_create(
         self,
-        context: MCPContext,
         space_key: str,
         title: str,
         body: str,
         parent_id: str = None,
         draft: bool = False,
-    ):
+        context: MCPContext | None = None,
+    ) -> str:
         """Create page in Confluence space given key of space, title and body of page and optional parent page id.
 
         Args:
@@ -181,23 +180,17 @@ class Service(MCPBaseService):
             draft (bool, optional): If to create the page in draft mode. Defaults to False, i.e. page will be published.
 
         Returns:
-            list: A list containing a TextContent object with the JSON response of the page creation
+            The JSON response of the page creation
         """
-        return [
-            types.TextContent(
-                type="text",
-                text=json.dumps(
-                    self.page_create(
-                        space_key=space_key,
-                        title=title,
-                        body=body,
-                        parent_id=parent_id,
-                        representation="wiki",
-                        editor="v2",
-                        full_width=True,
-                        status="draft" if draft else "current",
-                    ),
-                    indent=2,
-                ),
-            )
-        ]
+        return (
+            self.page_create(
+                space_key=space_key,
+                title=title,
+                body=body,
+                parent_id=parent_id,
+                representation="wiki",
+                editor="v2",
+                full_width=True,
+                status="draft" if draft else "current",
+            ),
+        )

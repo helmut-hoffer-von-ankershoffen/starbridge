@@ -2,18 +2,18 @@
 CLI to interact with Confluence
 """
 
-import asyncio
 import os
 import pathlib
 import re
 import subprocess
 import webbrowser
+from typing import Annotated
 
 import typer
 
 from starbridge.utils.console import console
 
-from .server import MCPServer, mcp_run_coroutine
+from .server import MCPServer
 
 cli = typer.Typer(no_args_is_help=True)
 
@@ -21,8 +21,49 @@ cli = typer.Typer(no_args_is_help=True)
 @cli.command()
 def tools():
     """Tools exposed by modules"""
-    server = MCPServer()
-    console.print(asyncio.run(server.tool_list()))
+    console.print(MCPServer.tools())
+
+
+@cli.command()
+def resources():
+    """Resources exposed by modules"""
+    console.print(MCPServer.resources())
+
+
+@cli.command()
+def prompts():
+    """Prompts exposed by modules"""
+    console.print(MCPServer.prompts())
+
+
+@cli.command()
+def serve(
+    host: Annotated[
+        str,
+        typer.Option(
+            help="Host to run the server on",
+        ),
+    ] = None,
+    port: Annotated[
+        int,
+        typer.Option(
+            help="Port to run the server on",
+        ),
+    ] = None,
+    debug: Annotated[
+        bool,
+        typer.Option(
+            help="Debug mode",
+        ),
+    ] = True,
+):
+    """Run MCP server."""
+    MCPServer().serve(host, port, debug)
+
+
+@cli.command()
+def health():
+    console.print(MCPServer().get_health())
 
 
 @cli.command()
@@ -60,9 +101,3 @@ def inspect():
             webbrowser.open(url)
 
     process.wait()
-
-
-@cli.command()
-def serve():
-    """Run MCP server."""
-    asyncio.run(mcp_run_coroutine())

@@ -4,44 +4,22 @@ import pathlib
 import sys
 from typing import Annotated, Any
 
-import logfire
 import typer
 from dotenv import dotenv_values, load_dotenv
 from rich.prompt import Prompt
 
 import starbridge.claude
-import starbridge.mcp
-from starbridge.mcp.service import MCPBaseService
-from starbridge.utils.console import console
-from starbridge.utils.logging import log
+from starbridge.mcp import MCPBaseService, MCPServer
+from starbridge.utils import console, get_logger
 
 __version__ = importlib.metadata.version("starbridge")
 
 
 load_dotenv()
+logger = get_logger(__name__)
 
-logfire.configure(
-    send_to_logfire="if-token-present",
-    service_name="starbridge",
-    console=logfire.ConsoleOptions(
-        colors="auto",
-        span_style="show-parents",
-        include_timestamps=True,
-        verbose=False,
-        min_log_level="debug",
-        show_project_link=False,
-    ),
-    code_source=logfire.CodeSource(
-        repository="https://github.com/helmut-hoffer-von-ankershoffen/starbridge",
-        revision=__version__,
-        root_path="",
-    ),
-)
-logfire.instrument_system_metrics(base="full")
 
-# logfire.install_auto_tracing(modules=["starbridge.confluence"], min_duration=0.001)
-
-log.debug(f"Booting version: {__version__}")
+logger.debug(f"Booting version: {__version__}")
 
 cli = typer.Typer(
     name="Starbridge CLI",
@@ -59,16 +37,7 @@ def main(ctx: typer.Context):
 
 @cli.command()
 def health():
-    """Health of starbridge and dependencies"""
-    dependencies = {}
-    for service_class in MCPBaseService.get_services():
-        service = service_class()
-        service_name = service.__class__.__module__.split(".")[1]
-        dependencies[service_name] = service.health()
-
-    healthy = all(status == "UP" for status in dependencies.values())
-    log.debug("debug")
-    console.print({"healthy": healthy, "dependencies": dependencies})
+    console.print(MCPServer.get_health())
 
 
 @cli.command()
@@ -235,4 +204,4 @@ if __name__ == "__main__":
     try:
         cli()
     except Exception as e:
-        log.error(e)
+        logger.error(e)

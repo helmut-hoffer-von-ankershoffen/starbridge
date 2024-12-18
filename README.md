@@ -24,6 +24,7 @@ This integration serves two main purposes:
 if ! command -v uvx &> /dev/null; then # if uv package manager not present ...
   curl -LsSf https://astral.sh/uv/install.sh | sh # ... install it
 fi
+brew install cairo # #on macOS - set export DYLD_LIBRARY_PATH="/opt/homebrew/lib:$DYLD_LIBRARY_PATH" in your shell
 uvx starbridge install # install starbridge package
 ```
 
