@@ -19,6 +19,18 @@ cli = typer.Typer(no_args_is_help=True)
 
 
 @cli.command()
+def health():
+    """Check health of the services and their dependencies."""
+    console.print(MCPServer().health())
+
+
+@cli.command()
+def services():
+    """Services exposed by modules"""
+    console.print(MCPServer.services())
+
+
+@cli.command()
 def tools():
     """Tools exposed by modules"""
     console.print(MCPServer.tools())
@@ -55,12 +67,6 @@ def resource_types():
 
 
 @cli.command()
-def services():
-    """Services exposed by modules"""
-    console.print(MCPServer.services())
-
-
-@cli.command()
 def serve(
     host: Annotated[
         str,
@@ -83,12 +89,6 @@ def serve(
 ):
     """Run MCP server."""
     MCPServer().serve(host, port, debug)
-
-
-@cli.command()
-def health():
-    """Check health of the services and their dependencies."""
-    console.print(MCPServer().health())
 
 
 @cli.command()
