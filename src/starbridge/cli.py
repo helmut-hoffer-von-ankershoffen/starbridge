@@ -117,11 +117,17 @@ def install(
         ),
     ] = os.environ.get("STARBRIDGE_ATLASSIAN_API_TOKEN", "YOUR_TOKEN"),
     restart_claude: bool = starbridge.claude.Service.platform_supports_restart(),
+    image: Annotated[
+        str,
+        typer.Option(
+            help="Image to use for Starbridge in case called via Docker. Defaults to helmuthva/starbridge",
+        ),
+    ] = None,
 ):
     """Install starbridge within Claude Desktop application by adding to configuration and restarting Claude Desktop app"""
     if starbridge.claude.Service.install_mcp_server(
         _generate_mcp_server_config(
-            atlassian_url, atlassian_email_address, atlassian_api_token
+            atlassian_url, atlassian_email_address, atlassian_api_token, image
         ),
         restart=restart_claude,
     ):
@@ -161,6 +167,7 @@ def _generate_mcp_server_config(
     atlassian_url: str,
     atlassian_email_address: str,
     atlassian_api_token: str,
+    image: str | None = None,
 ) -> dict:
     """Generate configuration file for Starbridge"""
     env = {
@@ -169,6 +176,8 @@ def _generate_mcp_server_config(
         "STARBRIDGE_ATLASSIAN_API_TOKEN": atlassian_api_token,
     }
     if starbridge.claude.Service.is_running_in_starbridge_container():
+        if image is None:
+            image = "helmuthva/starbridge"
         return {
             "command": "docker",
             "args": [
@@ -181,7 +190,7 @@ def _generate_mcp_server_config(
                 "STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS",
                 "-e",
                 "STARBRIDGE_ATLASSIAN_API_TOKEN",
-                "starbridge",
+                image,
             ],
             "env": env,
         }
