@@ -54,6 +54,7 @@ def info():
         data[service_name] = service.info()
 
     console.print(data)
+    logger.debug(data)
 
 
 @cli.command()
@@ -115,7 +116,7 @@ def install(
             help="API token of your Atlassian account, go to https://id.atlassian.com/manage-profile/security/api-tokens to create one",
         ),
     ] = os.environ.get("STARBRIDGE_ATLASSIAN_API_TOKEN", "YOUR_TOKEN"),
-    restart_claude: bool = True,
+    restart_claude: bool = starbridge.claude.Service.platform_supports_restart(),
 ):
     """Install starbridge within Claude Desktop application by adding to configuration and restarting Claude Desktop app"""
     if starbridge.claude.Service.install_mcp_server(
@@ -124,7 +125,12 @@ def install(
         ),
         restart=restart_claude,
     ):
-        console.print("Starbridge insalled with Claude Desktop application.")
+        console.print("Starbridge installed with Claude Desktop application.")
+        if not restart_claude:
+            console.print(
+                "Please restart Claude Desktop application to complete the installation."
+            )
+
     else:
         console.print("Starbridge was already installed", style="warning")
 
@@ -162,6 +168,23 @@ def _generate_mcp_server_config(
         "STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS": atlassian_email_address,
         "STARBRIDGE_ATLASSIAN_API_TOKEN": atlassian_api_token,
     }
+    if starbridge.claude.Service.is_running_in_starbridge_container():
+        return {
+            "command": "docker",
+            "args": [
+                "run",
+                "-i",
+                "--rm",
+                "-e",
+                "STARBRIDGE_ATLASSIAN_URL",
+                "-e",
+                "STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS",
+                "-e",
+                "STARBRIDGE_ATLASSIAN_API_TOKEN",
+                "starbridge",
+            ],
+            "env": env,
+        }
     if _is_development_mode():
         return {
             "command": "uv",

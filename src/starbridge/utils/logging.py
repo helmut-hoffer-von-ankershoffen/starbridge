@@ -8,6 +8,7 @@ from rich.console import Console
 from rich.logging import RichHandler
 
 from starbridge.base import __project_name__, __version__
+from starbridge.utils.settings import load_settings
 
 
 class LoggingSettings(BaseSettings):
@@ -25,7 +26,7 @@ class LoggingSettings(BaseSettings):
     logfire_environment: str = "default"
 
 
-settings = LoggingSettings()
+settings = load_settings(LoggingSettings)
 
 logfire.configure(
     send_to_logfire="if-token-present",
@@ -71,7 +72,7 @@ handlers.extend([
 
 logging.basicConfig(
     level=settings.loglevel,
-    format="%(asctime)s - %(name)s - %(message)s",
+    format="%(name)s: %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
     handlers=handlers,
 )

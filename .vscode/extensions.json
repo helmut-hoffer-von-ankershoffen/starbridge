@@ -12,6 +12,7 @@
         "gruntfuggly.todo-tree",
         "github.vscode-github-actions",
         "codecov.codecov",
+        "oderwat.indent-rainbow",
         "ms-azuretools.vscode-docker"
     ]
 }

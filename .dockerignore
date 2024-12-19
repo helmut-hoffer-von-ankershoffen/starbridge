@@ -1,0 +1,4 @@
+# The project virtual environment is dependent on the local platform and must be created from scratch in the image.
+.venv
+.env
+.env.backup

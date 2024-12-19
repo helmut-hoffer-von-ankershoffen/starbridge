@@ -58,8 +58,21 @@ class Service(MCPBaseService):
         return "Claude Desktop application restarted"
 
     @staticmethod
+    def _get_starbridge_container_claude_path() -> Path:
+        return Path("/Claude")
+
+    @staticmethod
+    def is_running_in_starbridge_container() -> bool:
+        return Service._get_starbridge_container_claude_path().is_dir()
+
+    @staticmethod
     def application_directory() -> Path:
         """Get path of Claude config directory based on platform."""
+        # Check if running in starbridge container with mounted /Claude directory
+        if Service.is_running_in_starbridge_container():
+            return Service._get_starbridge_container_claude_path()
+
+        # Regular platform-specific paths
         if sys.platform == "darwin":
             return Path(Path.home(), "Library", "Application Support", "Claude")
         elif sys.platform == "win32":
@@ -168,7 +181,7 @@ class Service(MCPBaseService):
         config["mcpServers"][mcp_server_name] = mcp_server_config
         Service.config_write(config)
         if restart:
-            Service.restart()
+            Service._restart()
         return True
 
     @staticmethod
@@ -189,14 +202,18 @@ class Service(MCPBaseService):
         del config["mcpServers"][mcp_server_name]
         Service.config_write(config)
         if restart:
-            Service.restart()
+            Service.__restart()
         return True
+
+    @staticmethod
+    def platform_supports_restart():
+        return platform.system() == "Darwin"
 
     @staticmethod
     def _restart():
         """Restarts the Claude desktop application on macOS."""
-        if platform.system() != "Darwin":
-            raise RuntimeError("This command only works on macOS")
+        if Service.platform_supports_restart() is False:
+            raise RuntimeError("Restart of Claude not supported on this platform")
 
         ps_check = subprocess.run(
             ["pgrep", "-x", "Claude"], capture_output=True, text=True, check=False

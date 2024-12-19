@@ -45,3 +45,4 @@ sbom.json
 
 # Env
 .env
+.env.backup

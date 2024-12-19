@@ -4,15 +4,9 @@ FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 # Install the project into `/app`
 WORKDIR /app
 
-# Install system dependencies
-RUN apt-get update && apt-get install -y \
-    curl \
-    jq \
-    libxml2-utils \
-    libcairo2 \
-    gnupg2 \
-    && rm -rf /var/lib/apt/lists/*
+RUN apt update -y && apt install -y curl jq libxml2-utils libcairo2 gnupg2
 
+RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && apt-get install -y nodejs
 
 # Enable bytecode compilation
 ENV UV_COMPILE_BYTECODE=1
@@ -35,5 +29,8 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 # Place executables in the environment at the front of the path
 ENV PATH="/app/.venv/bin:$PATH"
 
+# Uncomment for debugging
+# RUN apt install -y procps less nano iputils-ping
+
 # When running the container, start the Starbridge MCP server
-ENTRYPOINT ["uvx" , "starbridge"]
+ENTRYPOINT ["uv", "run", "starbridge"]

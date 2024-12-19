@@ -17,6 +17,7 @@ from starbridge.mcp import (
     mcp_tool,
 )
 from starbridge.utils import get_logger
+from starbridge.utils.settings import load_settings
 
 from . import cli
 
@@ -27,7 +28,7 @@ class Service(MCPBaseService):
     """Service class for Confluence operations."""
 
     def __init__(self):
-        self._atlassian_settings = AtlassianSettings()
+        self._atlassian_settings = load_settings(AtlassianSettings)
         self._api = Confluence(
             url=str(self._atlassian_settings.url),
             username=self._atlassian_settings.email_address,
@@ -61,7 +62,7 @@ class Service(MCPBaseService):
         return {
             "url": self._atlassian_settings.url,
             "email_address": self._atlassian_settings.email_address,
-            "api_token": "MASKED",
+            "api_token": f"MASKED ({len(self._atlassian_settings.api_token)} characters)",
         }
 
     @mcp_resource_iterator(type="space")

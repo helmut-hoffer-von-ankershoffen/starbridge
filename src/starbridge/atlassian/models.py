@@ -10,6 +10,6 @@ class AtlassianSettings(BaseSettings):
         env_file_encoding="utf-8",
     )
 
-    url: AnyUrl | None = None
-    email_address: str | None = None
-    api_token: str | None = None
+    url: AnyUrl
+    email_address: str
+    api_token: str
