@@ -1,6 +1,6 @@
 [project]
 name = "starbridge"
-version = "0.0.17"
+version = "0.0.18"
 description = "Integrates Claude Desktop with Google workspace and Atlassian workspaces"
 readme = "README.md"
 authors = [
