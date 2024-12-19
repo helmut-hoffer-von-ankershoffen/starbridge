@@ -39,6 +39,8 @@ jobs:
           gh release create ${{ github.ref_name }} ./dist/* --generate-notes 
 
       - name: Trigger Docker Publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh api repos/helmut-hoffer-von-ankershoffen/starbridge/dispatches \
             -f event_type=release_created_programatically
