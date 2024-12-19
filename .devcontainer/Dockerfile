@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/python:0-3.11-bullseye
+FROM mcr.microsoft.com/devcontainers/python:1-3.11-bullseye
 
 # Install system dependencies
 RUN apk add \
