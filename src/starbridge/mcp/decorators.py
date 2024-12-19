@@ -26,7 +26,7 @@ def mcp_tool(
         def wrapper(*args, **kwargs):
             return func(*args, **kwargs)
 
-        wrapper.__mcp_tool__ = ToolMetadata(
+        wrapper.__mcp_tool__ = ToolMetadata(  # type: ignore
             server=server,
             service=service or _get_service_name(func),
             name=name or func.__name__,
@@ -37,7 +37,7 @@ def mcp_tool(
 
 
 def mcp_resource_iterator(
-    server: str = __project_name__, service: str | None = None, type: str = None
+    server: str = __project_name__, service: str | None = None, type: str | None = None
 ):
     """Decorator to mark a method as a resource iterator."""
 
@@ -46,10 +46,10 @@ def mcp_resource_iterator(
         def wrapper(*args, **kwargs):
             return func(*args, **kwargs)
 
-        wrapper.__mcp_resource_iterator__ = ResourceMetadata(
+        wrapper.__mcp_resource_iterator__ = ResourceMetadata(  # type: ignore
             server=server,
             service=service or _get_service_name(func),
-            type=type,
+            type=type or "",
         )
         return wrapper
 
@@ -57,7 +57,7 @@ def mcp_resource_iterator(
 
 
 def mcp_resource(
-    server: str = __project_name__, service: str | None = None, type: str = None
+    server: str = __project_name__, service: str | None = None, type: str | None = None
 ):
     """Decorator to mark a method as a resource handler."""
 
@@ -66,10 +66,10 @@ def mcp_resource(
         def wrapper(*args, **kwargs):
             return func(*args, **kwargs)
 
-        wrapper.__mcp_resource__ = ResourceMetadata(
+        wrapper.__mcp_resource__ = ResourceMetadata(  # type: ignore
             server=server,
             service=service or _get_service_name(func),
-            type=type,
+            type=type or "",
         )
         return wrapper
 
@@ -77,7 +77,7 @@ def mcp_resource(
 
 
 def mcp_prompt(
-    server: str = __project_name__, service: str | None = None, type: str = None
+    server: str = __project_name__, service: str | None = None, type: str | None = None
 ):
     """Decorator to mark a method as a prompt handler."""
 
@@ -86,7 +86,7 @@ def mcp_prompt(
         def wrapper(*args, **kwargs):
             return func(*args, **kwargs)
 
-        wrapper.__mcp_prompt__ = PromptMetadata(
+        wrapper.__mcp_prompt__ = PromptMetadata(  # type: ignore
             server=server,
             service=service or _get_service_name(func),
             type=type or func.__name__.replace("prompt_", ""),

@@ -213,7 +213,7 @@ class Service(MCPBaseService):
         page_id: str,
         title: str,
         body: str,
-        parent_id: None,
+        parent_id: str | None = None,
         type: str = "page",
         representation: str = "storage",
         minor_edit: bool = False,

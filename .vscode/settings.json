@@ -22,4 +22,9 @@
     "python.languageServer": "Pylance",
     "python.analysis.languageServerMode": "full",
     "python.analysis.typeCheckingMode": "basic",
+    "python.analysis.diagnosticMode": "workspace",
+    "python.analysis.include": [
+        "src/**",
+        "test/**"
+    ]
 }

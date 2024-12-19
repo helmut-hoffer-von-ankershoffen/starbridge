@@ -50,11 +50,9 @@ def load_settings(settings_class: type[T]) -> T:
             "\nCheck settings defined in the process environment and in file ",
             style="info",
         )
+        env_file = str(settings_class.model_config.get("env_file", ".env") or ".env")
         text.append(
-            str(
-                Path(__file__).parent.parent.parent.parent
-                / settings_class.model_config.get("env_file", ".env")
-            ),
+            str(Path(__file__).parent.parent.parent.parent / env_file),
             style="bold blue underline",
         )
 

@@ -39,9 +39,7 @@ class Service(MCPBaseService):
     @mcp_tool()
     def hello(self, context: MCPContext | None = None):
         """Print hello world!"""
-        if context:
-            context.info("Hello world!")
-        return self.hello()
+        return "Hello World!"
 
     @mcp_tool()
     def bridge(self, context: MCPContext | None = None):
