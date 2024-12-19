@@ -1,5 +1,5 @@
 # .github/workflows/publish.yml
-name: "Publish to PyPI and create GitHub release"
+name: "Build package, publish to to PyPI, and create GitHub release"
 
 on:
   push:
@@ -11,8 +11,7 @@ permissions:
   packages: read
 
 jobs:
-  run:
-    name: "Build and publish release"
+  package_build_publish_release:
     environment: release
     runs-on: ubuntu-latest
 
@@ -26,19 +25,19 @@ jobs:
           cache-dependency-glob: uv.lock
           enable-cache: true
 
-      - name: Build into dist/
+      - name: Build package into dist/
         run: uv build
 
-      - name: Publish to PyPI
+      - name: Publish package to PyPI
         run: uv publish -t ${{ secrets.UV_PUBLISH_TOKEN }}
 
-      - name: Create GitHub Release
+      - name: Create GitHub release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create ${{ github.ref_name }} ./dist/* --generate-notes 
 
-      - name: Trigger Docker Publish
+      - name: Allow other workflows to trigger on release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
