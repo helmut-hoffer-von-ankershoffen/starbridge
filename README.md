@@ -32,7 +32,7 @@ fi
 uvx starbridge install # Install starbridge, including configuration and injection into Claude Desktop App
 ```
 
-Note: The above works for macOS X and Linux. Windows not supported.
+See [here](DOCKER.md) for running Starbridge in a Docker container.
 
 ## MCP Server
 
