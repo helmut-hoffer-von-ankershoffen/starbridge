@@ -23,8 +23,10 @@
     "python.analysis.languageServerMode": "full",
     "python.analysis.typeCheckingMode": "basic",
     "python.analysis.diagnosticMode": "workspace",
-    "python.analysis.include": [
-        "src/**",
-        "test/**"
-    ]
+    "python.analysis.exclude": [
+        "**/.nox/**",
+        "**/.venv/**",
+        "**/site-packages/**",
+        "**/dist-packages/**"
+    ],
 }
