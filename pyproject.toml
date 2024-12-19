@@ -13,6 +13,7 @@ dependencies = [
     "griffe>=1.5.1",
     "logfire[system-metrics]>=2.7.1",
     "mcp>=1.0.0",
+    "pydantic-settings>=2.7.0",
     "pydantic>=2.10.2",
     "python-dotenv>=1.0.1",
     "svglib>=1.5.1",

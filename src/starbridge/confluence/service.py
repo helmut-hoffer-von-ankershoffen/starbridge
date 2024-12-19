@@ -1,13 +1,13 @@
 """Handles Confluence operations."""
 
 import json
-import os
 
 import mcp.types as types
 import typer
 from atlassian import Confluence
 from pydantic import AnyUrl
 
+from starbridge.atlassian.models import AtlassianSettings
 from starbridge.mcp import (
     MCPBaseService,
     MCPContext,
@@ -27,13 +27,11 @@ class Service(MCPBaseService):
     """Service class for Confluence operations."""
 
     def __init__(self):
-        self._url = os.environ.get("STARBRIDGE_ATLASSIAN_URL")
-        self._email_address = os.environ.get("STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS")
-        self._api_token = os.environ.get("STARBRIDGE_ATLASSIAN_API_TOKEN")
+        self._atlassian_settings = AtlassianSettings()
         self._api = Confluence(
-            url=self._url,
-            username=self._email_address,
-            password=self._api_token,
+            url=str(self._atlassian_settings.url),
+            username=self._atlassian_settings.email_address,
+            password=self._atlassian_settings.api_token,
             cloud=True,
         )
 
@@ -61,8 +59,8 @@ class Service(MCPBaseService):
     def info(self, context: MCPContext | None = None):
         """Info about Confluence environment"""
         return {
-            "url": self._url,
-            "email_address": self._email_address,
+            "url": self._atlassian_settings.url,
+            "email_address": self._atlassian_settings.email_address,
             "api_token": "MASKED",
         }
 

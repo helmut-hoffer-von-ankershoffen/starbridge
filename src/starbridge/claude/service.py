@@ -7,6 +7,7 @@ from pathlib import Path
 
 import typer
 
+from starbridge.base import __project_name__
 from starbridge.mcp import MCPBaseService, MCPContext, mcp_tool
 
 from . import cli
@@ -137,7 +138,7 @@ class Service(MCPBaseService):
         raise RuntimeError(f"Unsupported platform {sys.platform}")
 
     @staticmethod
-    def log_path(mcp_server_name: str | None = "starbridge") -> Path:
+    def log_path(mcp_server_name: str | None = __project_name__) -> Path:
         """Get path of mcp ."""
         path = Service.log_directory()
         if mcp_server_name is None:
@@ -146,7 +147,7 @@ class Service(MCPBaseService):
 
     @staticmethod
     def install_mcp_server(
-        mcp_server_config: dict, mcp_server_name="starbridge", restart=True
+        mcp_server_config: dict, mcp_server_name=__project_name__, restart=True
     ) -> bool:
         """Install MCP server in Claude Desktop application."""
         if Service.is_installed() is False:
@@ -171,7 +172,9 @@ class Service(MCPBaseService):
         return True
 
     @staticmethod
-    def uninstall_mcp_server(mcp_server_name: str = "starbridge", restart=True) -> bool:
+    def uninstall_mcp_server(
+        mcp_server_name: str = __project_name__, restart=True
+    ) -> bool:
         """Uninstall MCP server from Claude Desktop application."""
         if Service.is_installed() is False:
             raise RuntimeError(

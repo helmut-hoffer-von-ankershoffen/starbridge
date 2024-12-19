@@ -1,19 +1,37 @@
-import importlib.metadata
 import logging
-import os
+from typing import Literal
 
 import click
 import logfire
-from dotenv import load_dotenv
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from rich.console import Console
 from rich.logging import RichHandler
 
-__version__ = importlib.metadata.version("starbridge")
-load_dotenv()
+from starbridge.base import __project_name__, __version__
+
+
+class LoggingSettings(BaseSettings):
+    model_config = SettingsConfigDict(
+        env_prefix=f"{__project_name__.upper()}_LOGGING_",
+        extra="ignore",
+        env_file=".env",
+        env_file_encoding="utf-8",
+    )
+
+    loglevel: Literal["FATAL", "CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"] = "INFO"
+    log_console: bool = False
+
+    logfire_token: str | None = None
+    logfire_environment: str = "default"
+
+
+settings = LoggingSettings()
 
 logfire.configure(
     send_to_logfire="if-token-present",
-    service_name="starbridge",
+    token=settings.logfire_token,
+    environment=settings.logfire_environment,
+    service_name=__project_name__,
     console=False,
     code_source=logfire.CodeSource(
         repository="https://github.com/helmut-hoffer-von-ankershoffen/starbridge",
@@ -22,7 +40,9 @@ logfire.configure(
     ),
 )
 logfire.instrument_system_metrics(base="full")
-logfire.install_auto_tracing(modules=["starbridge.confluence"], min_duration=0.001)
+logfire.install_auto_tracing(
+    modules=["starbridge.confluence"], min_duration=0.001
+)  # FIXME: get modules from settings
 
 
 class CustomFilter(logging.Filter):
@@ -42,7 +62,7 @@ rich_handler = RichHandler(
 rich_handler.addFilter(CustomFilter())
 
 handlers = []
-if os.environ.get("LOG_CONSOLE", "0").lower() in ("1", "true"):
+if settings.log_console:
     handlers.append(rich_handler)
 handlers.extend([
     logging.FileHandler("starbridge.log"),
@@ -50,7 +70,7 @@ handlers.extend([
 ])
 
 logging.basicConfig(
-    level=os.environ.get("LOGLEVEL", "INFO"),
+    level=settings.loglevel,
     format="%(asctime)s - %(name)s - %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
     handlers=handlers,
@@ -58,6 +78,6 @@ logging.basicConfig(
 
 
 def get_logger(name: str | None) -> logging.Logger:
-    if (name is None) or (name == "starbridge"):
-        return logging.getLogger("starbridge")
-    return logging.getLogger(f"starbridge.{name}")
+    if (name is None) or (name == __project_name__):
+        return logging.getLogger(__project_name__)
+    return logging.getLogger(f"{__project_name__}.{name}")

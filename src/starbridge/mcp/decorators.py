@@ -2,6 +2,8 @@ from collections.abc import Callable
 from functools import wraps
 from typing import ParamSpec, TypeVar
 
+from starbridge.base import __project_name__
+
 from .models import PromptMetadata, ResourceMetadata, ToolMetadata
 
 P = ParamSpec("P")
@@ -9,7 +11,7 @@ R = TypeVar("R")
 
 
 def mcp_tool(
-    server: str = "starbridge", service: str | None = None, name: str | None = None
+    server: str = __project_name__, service: str | None = None, name: str | None = None
 ) -> Callable[[Callable[P, R]], Callable[P, R]]:
     """Decorator to mark a method as an MCP tool.
 
@@ -35,7 +37,7 @@ def mcp_tool(
 
 
 def mcp_resource_iterator(
-    server: str = "starbridge", service: str | None = None, type: str = None
+    server: str = __project_name__, service: str | None = None, type: str = None
 ):
     """Decorator to mark a method as a resource iterator."""
 
@@ -55,7 +57,7 @@ def mcp_resource_iterator(
 
 
 def mcp_resource(
-    server: str = "starbridge", service: str | None = None, type: str = None
+    server: str = __project_name__, service: str | None = None, type: str = None
 ):
     """Decorator to mark a method as a resource handler."""
 
@@ -75,7 +77,7 @@ def mcp_resource(
 
 
 def mcp_prompt(
-    server: str = "starbridge", service: str | None = None, type: str = None
+    server: str = __project_name__, service: str | None = None, type: str = None
 ):
     """Decorator to mark a method as a prompt handler."""
 

@@ -1,6 +1,5 @@
 import asyncio
 import base64
-import importlib.metadata
 import json
 import os
 from collections.abc import Sequence
@@ -24,13 +23,13 @@ from starlette.applications import Starlette
 from starlette.responses import PlainTextResponse
 from starlette.routing import Route
 
+from starbridge.base import __project_name__, __version__
 from starbridge.mcp.context import MCPContext
 from starbridge.mcp.decorators import mcp_tool
 from starbridge.mcp.models import ResourceMetadata
 from starbridge.mcp.service import MCPBaseService
 from starbridge.utils import get_logger
 
-__version__ = importlib.metadata.version("starbridge")
 logger = get_logger(__name__)
 
 
@@ -42,7 +41,7 @@ class MCPServer(MCPBaseService):
         for service_class in MCPBaseService.get_services():
             self._services.append(service_class())
 
-        self._server = Server("starbridge")
+        self._server = Server(__project_name__)
         self._server.list_prompts()(self.prompt_list)
         self._server.get_prompt()(self.prompt_get)
         self._server.list_resources()(self.resource_list)
@@ -275,7 +274,7 @@ class MCPServer(MCPBaseService):
 
     def _create_initialization_options(self) -> InitializationOptions:
         return InitializationOptions(
-            server_name="starbridge",
+            server_name=__project_name__,
             server_version=__version__,
             capabilities=self._server.get_capabilities(
                 notification_options=NotificationOptions(

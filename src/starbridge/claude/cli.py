@@ -8,6 +8,7 @@ from typing import Annotated
 
 import typer
 
+from starbridge.base import __project_name__
 from starbridge.utils.console import console
 
 from .service import Service
@@ -60,7 +61,7 @@ def log(
         typer.Option(
             help="Name of the MCP server - use 'main' for main mcp.log of Claude Desktop application",
         ),
-    ] = "starbridge",
+    ] = __project_name__,
 ):
     """Show logs."""
     log_path = service.log_path(name if name != "main" else None)

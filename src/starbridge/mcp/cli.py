@@ -11,6 +11,7 @@ from typing import Annotated
 
 import typer
 
+from starbridge.base import __project_name__
 from starbridge.utils.console import console
 
 from .server import MCPServer
@@ -101,13 +102,12 @@ def inspect():
     process = subprocess.Popen(
         [
             "npx",
-            "--yes",
             "@modelcontextprotocol/inspector",
             "uv",
             "--directory",
             project_root,
             "run",
-            "starbridge",
+            __project_name__,
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,

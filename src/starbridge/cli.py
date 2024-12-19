@@ -1,21 +1,17 @@
-import importlib.metadata
 import os
 import pathlib
 import sys
 from typing import Annotated, Any
 
 import typer
-from dotenv import dotenv_values, load_dotenv
+from dotenv import dotenv_values
 from rich.prompt import Prompt
 
 import starbridge.claude
+from starbridge.base import __project_name__, __version__
 from starbridge.mcp import MCPBaseService, MCPServer
 from starbridge.utils import console, get_logger
 
-__version__ = importlib.metadata.version("starbridge")
-
-
-load_dotenv()
 logger = get_logger(__name__)
 
 
@@ -173,14 +169,14 @@ def _generate_mcp_server_config(
                 "--directory",
                 _get_starbridge_path(),
                 "run",
-                "starbridge",
+                __project_name__,
             ],
             "env": env,
         }
     return {
         "command": "uvx",
         "args": [
-            "starbridge",
+            __project_name__,
         ],
         "env": env,
     }
