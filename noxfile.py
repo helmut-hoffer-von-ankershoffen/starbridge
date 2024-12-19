@@ -8,7 +8,7 @@ nox.options.default_venv_backend = "uv"
 
 
 @nox.session(python=["3.11", "3.12", "3.13", "3.14"])
-def test(session):
+def test(session: nox.Session):
     session.install("-e .[dev]")
     session.run(
         "pytest",
@@ -22,7 +22,7 @@ def test(session):
 
 
 @nox.session(python=["3.11"])
-def lint(session):
+def lint(session: nox.Session):
     session.install("-e .[dev]")
     session.run("ruff", "check", ".")
     session.run(
@@ -34,7 +34,7 @@ def lint(session):
 
 
 @nox.session(python=["3.11"])
-def audit(session):
+def audit(session: nox.Session):
     session.install("-e .[dev]")
     session.run("pip-audit", "-f", "json", "-o", "vulnerabilities.json")
     session.run("jq", ".", "vulnerabilities.json", external=True)
@@ -43,7 +43,7 @@ def audit(session):
     # Read and parse licenses.json
     licenses_data = json.loads(Path("licenses.json").read_text(encoding="utf-8"))
 
-    # Create inverted structure
+    licenses_inverted: dict[str, list[dict[str, str]]] = {}
     licenses_inverted = {}
     for pkg in licenses_data:
         license_name = pkg["License"]

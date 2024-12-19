@@ -25,7 +25,7 @@ class Service(MCPBaseService):
     @staticmethod
     def get_cli() -> tuple[str | None, typer.Typer | None]:
         """Get CLI for Hello World service."""
-        return "hello", cli.cli
+        return "hello", cli.cli  # type: ignore
 
     @mcp_tool()
     def health(self, context: MCPContext | None = None) -> str:
@@ -39,14 +39,15 @@ class Service(MCPBaseService):
     @mcp_tool()
     def hello(self, context: MCPContext | None = None):
         """Print hello world!"""
-        context.error("Hello world!")
+        if context:
+            context.info("Hello world!")
         return self.hello()
 
     @mcp_tool()
     def bridge(self, context: MCPContext | None = None):
         """Show image of starbridge"""
         return Image.open(
-            io.BytesIO(cairosvg.svg2png(bytestring=self._starbridge_svg()))
+            io.BytesIO(cairosvg.svg2png(bytestring=self._starbridge_svg()) or b"")
         )
 
     @staticmethod

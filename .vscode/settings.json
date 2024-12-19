@@ -18,5 +18,8 @@
     "python.testing.pytestEnabled": true,
     "files.exclude": {
         "**/__pycache__ ": true
-    }
+    },
+    "python.languageServer": "Pylance",
+    "python.analysis.languageServerMode": "full",
+    "python.analysis.typeCheckingMode": "basic",
 }

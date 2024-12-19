@@ -2,7 +2,6 @@ import asyncio
 import base64
 import json
 import os
-from collections.abc import Sequence
 from typing import Any
 from urllib.parse import urlparse
 
@@ -233,7 +232,7 @@ class MCPServer(MCPBaseService):
 
     @staticmethod
     def services() -> list[MCPBaseService]:
-        return MCPBaseService.get_services()
+        return MCPBaseService.get_services()  # type: ignore
 
     @staticmethod
     def tools() -> list[types.Tool]:
@@ -255,7 +254,7 @@ class MCPServer(MCPBaseService):
 
     @staticmethod
     def resource(uri: str) -> str:
-        return asyncio.run(MCPServer().resource_get(uri))
+        return asyncio.run(MCPServer().resource_get(AnyUrl(uri)))
 
     @staticmethod
     def serve(host: str | None = None, port: int | None = None, debug: bool = True):
@@ -289,7 +288,7 @@ class MCPServer(MCPBaseService):
     @staticmethod
     def _marshal_result(
         result: Any,
-    ) -> Sequence[TextContent | ImageContent | EmbeddedResource]:
+    ) -> list[TextContent | ImageContent | EmbeddedResource]:
         """Marshals a result into a sequence of TextContent, ImageContent, or EmbeddedResource."""
         if result is None:
             return []
@@ -301,11 +300,17 @@ class MCPServer(MCPBaseService):
             return [TextContent(type="text", text=result)]
 
         if isinstance(result, Image.Image):
+            mime_type = (
+                Image.MIME.get(result.format, "application/octet-stream")
+                if result.format
+                else "application/octet-stream"
+            )
+            result.load()
             return [
                 ImageContent(
                     type="image",
                     data=base64.b64encode(result.tobytes()).decode("utf-8"),
-                    mimeType=result.get_format_mimetype(),
+                    mimeType=mime_type,
                 )
             ]
 

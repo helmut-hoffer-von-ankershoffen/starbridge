@@ -70,13 +70,13 @@ def resource_types():
 @cli.command()
 def serve(
     host: Annotated[
-        str,
+        str | None,
         typer.Option(
             help="Host to run the server on",
         ),
     ] = None,
     port: Annotated[
-        int,
+        int | None,
         typer.Option(
             help="Port to run the server on",
         ),
@@ -111,13 +111,16 @@ def inspect():
         ],
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
-        universal_newlines=True,
+        text=True,
     )
 
     url_pattern = r"MCP Inspector is up and running at (http://[^\s]+)"
 
     while True:
-        line = process.stdout.readline()
+        if process.stdout is not None:
+            line = process.stdout.readline()
+        else:
+            line = ""
         if not line:
             break
         print(line, end="")

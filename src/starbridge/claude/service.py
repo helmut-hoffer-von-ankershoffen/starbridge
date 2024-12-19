@@ -22,7 +22,7 @@ class Service(MCPBaseService):
     @staticmethod
     def get_cli() -> tuple[str | None, typer.Typer | None]:
         """Get CLI for Claude service."""
-        return "claude", cli.cli
+        return "claude", cli.cli  # type: ignore
 
     @mcp_tool()
     def health(self, context: MCPContext | None = None) -> str:
@@ -202,7 +202,7 @@ class Service(MCPBaseService):
         del config["mcpServers"][mcp_server_name]
         Service.config_write(config)
         if restart:
-            Service.__restart()
+            Service._restart()
         return True
 
     @staticmethod

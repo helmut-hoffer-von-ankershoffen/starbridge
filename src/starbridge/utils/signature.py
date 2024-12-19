@@ -16,7 +16,7 @@ DocstringStyle = Literal["google", "numpy", "sphinx"]
 
 def description_and_params(
     func: Callable[..., Any], excluded_params=("self", "context")
-) -> tuple[str, dict[str, dict]]:
+) -> tuple[str, list, dict[str, dict]]:
     """Extract the function description and parameter descriptions from a function's docstring.
 
     Returns:

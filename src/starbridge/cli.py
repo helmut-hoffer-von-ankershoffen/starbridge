@@ -8,6 +8,7 @@ from dotenv import dotenv_values
 from rich.prompt import Prompt
 
 import starbridge.claude
+import starbridge.mcp
 from starbridge.base import __project_name__, __version__
 from starbridge.mcp import MCPBaseService, MCPServer
 from starbridge.utils import console, get_logger
@@ -28,7 +29,7 @@ cli = typer.Typer(
 def main(ctx: typer.Context):
     """Run MCP Server - alias for 'mcp serve'"""
     if ctx.invoked_subcommand is None:
-        starbridge.mcp.serve()
+        MCPServer.serve()
 
 
 @cli.command()
@@ -118,7 +119,7 @@ def install(
     ] = os.environ.get("STARBRIDGE_ATLASSIAN_API_TOKEN", "YOUR_TOKEN"),
     restart_claude: bool = starbridge.claude.Service.platform_supports_restart(),
     image: Annotated[
-        str,
+        str | None,
         typer.Option(
             help="Image to use for Starbridge in case called via Docker. Defaults to helmuthva/starbridge",
         ),

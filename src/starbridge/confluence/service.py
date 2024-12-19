@@ -39,7 +39,7 @@ class Service(MCPBaseService):
     @staticmethod
     def get_cli() -> tuple[str | None, typer.Typer | None]:
         """Get CLI for Confluence service."""
-        return "confluence", cli.cli
+        return "confluence", cli.cli  # type: ignore
 
     @mcp_tool()
     def health(self, context: MCPContext | None = None) -> str:
@@ -122,7 +122,7 @@ class Service(MCPBaseService):
         space_type=None,
         space_status="current",
         context: MCPContext | None = None,
-    ):
+    ) -> dict:
         """List spaces in Confluence.
 
         Args:
@@ -143,7 +143,7 @@ class Service(MCPBaseService):
             expand,
             space_type,
             space_status,
-        )
+        )  # type: ignore
 
     @mcp_tool()
     def page_create(
@@ -152,13 +152,13 @@ class Service(MCPBaseService):
         title: str,
         body: str,
         type: str = "page",
-        parent_id: str = None,
+        parent_id: str | None = None,
         representation: str = "storage",
         editor: str | None = None,
         full_width: bool = False,
         status: str = "current",
         context: MCPContext | None = None,
-    ) -> str:
+    ):  # -> Response | Any | None:# -> Response | Any | None:# -> Response | Any | None:  # -> Response | Any | bytes | Any | None | str:
         """Create page in Confluence space.
 
         Args:
@@ -192,7 +192,7 @@ class Service(MCPBaseService):
         expand: str | None = None,
         version: str | None = None,
         context: MCPContext | None = None,
-    ):
+    ):  # -> Response | Any | bytes | Any | None | str:
         """Get a specific Confluence page by its ID.
 
         Args:

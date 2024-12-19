@@ -32,4 +32,4 @@ def hello():
 @cli.command()
 def bridge():
     """Show image of starbridge"""
-    console.print(Service().bridge())
+    Service().bridge().show()
