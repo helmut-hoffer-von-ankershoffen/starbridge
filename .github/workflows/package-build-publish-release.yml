@@ -1,5 +1,5 @@
 # .github/workflows/publish.yml
-name: "Build package, publish to to PyPI, and create GitHub release"
+name: "Build package, publish to PyPI, create GitHub release"
 
 on:
   push:
