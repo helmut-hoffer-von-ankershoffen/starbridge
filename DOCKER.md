@@ -34,35 +34,33 @@ Determine health
 docker run helmuthva/starbridge health
 ```
 
-Note: This will indicate which environment variables to set
-
-```bash
-  -e STARBRIDGE_ATLASSIAN_URL=https://your-domain.atlassian.net \
-  -e STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS=your-email@domain.com \
-  -e STARBRIDGE_ATLASSIAN_API_TOKEN=your-api-token \
-docker run helmuthva/starbridge health
-```
-
-Note: Inject your settings
-
-List Confluence spaces:
+This will indicate which environment variables to set.
 
 ```bash
 docker run \
   -e STARBRIDGE_ATLASSIAN_URL=https://your-domain.atlassian.net \
   -e STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS=your-email@domain.com \
   -e STARBRIDGE_ATLASSIAN_API_TOKEN=your-api-token \
-  helmuthva/starbridge confluence space list
+  helmuthva/starbridge health
+```
+
+Alternatively manage the settings via an .env file on the host
+
+```bash
+# cp .env.example .env && nano .env
+docker run --env-file=.env helmuthva/starbridge health
+```
+
+List Confluence spaces:
+
+```bash
+docker run --env-file=.env helmuthva/starbridge confluence space list
 ```
 
 Start the MCP Server on given host and port
 
 ```bash
-docker run \
-  -e STARBRIDGE_ATLASSIAN_URL=https://your-domain.atlassian.net \
-  -e STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS=your-email@domain.com \
-  -e STARBRIDGE_ATLASSIAN_API_TOKEN=your-api-token \
-  helmuthva/starbridge mcp serve --host=localhost --port=8080
+docker run --env-file=.env helmuthva/starbridge mcp serve --host=localhost --port=8080
 ```
 
 ## Build and install Docker image from source
