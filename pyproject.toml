@@ -21,7 +21,26 @@ dependencies = [
     "opentelemetry-api>=1.29.0",
     "opentelemetry-instrumentation>=0.50b0",
 ]
-keywords = ["mcp"]
+keywords = [
+    "mcp",
+    "docker",
+    "jira",
+    "mcp",
+    "google-drive",
+    "confluence",
+    "devcontainer",
+    "ruff",
+    "atlassian",
+    "typer",
+    "claude",
+    "nox",
+    "github-actions",
+    "pydantic",
+    "cyclonedx",
+    "opentelemetry",
+    "anthropic",
+    "logfire",
+]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Developers",
