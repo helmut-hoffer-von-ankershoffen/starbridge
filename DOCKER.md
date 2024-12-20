@@ -25,12 +25,25 @@ Note:
 Show commands and their help
 
 ```bash
-docker run \
+docker run helmuthva/starbridge --help
+```
+
+Determine health 
+
+```bash
+docker run helmuthva/starbridge health
+```
+
+Note: This will indicate which environment variables to set
+
+```bash
   -e STARBRIDGE_ATLASSIAN_URL=https://your-domain.atlassian.net \
   -e STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS=your-email@domain.com \
   -e STARBRIDGE_ATLASSIAN_API_TOKEN=your-api-token \
-  helmuthva/starbridge --help
+docker run helmuthva/starbridge health
 ```
+
+Note: Inject your settings
 
 List Confluence spaces:
 
