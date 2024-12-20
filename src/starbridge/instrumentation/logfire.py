@@ -27,7 +27,7 @@ def logfire_initialize():
 
     def scrubbing_callback(m: logfire.ScrubMatch):
         if (
-            m.path == ("attributes", "jsonrpc.message")
+            m.path == ("attributes", "rpc.jsonrpc.result")
             and m.pattern_match.group(0) == "session"
         ):
             return m.value

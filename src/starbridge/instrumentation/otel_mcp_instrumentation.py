@@ -4,7 +4,7 @@ from functools import wraps
 
 import mcp.server.stdio
 from mcp import JSONRPCError, JSONRPCRequest, JSONRPCResponse
-from mcp.types import JSONRPCMessage, JSONRPCNotification
+from mcp.types import JSONRPCNotification
 from opentelemetry import trace
 from opentelemetry.instrumentation.instrumentor import BaseInstrumentor
 from opentelemetry.trace import StatusCode
@@ -41,6 +41,62 @@ class MCPInstrumentor(BaseInstrumentor):
         pass
 
 
+def _handle_transaction(tracer, msg, span_kind, active_spans):
+    """Handle span lifecycle for a JSON-RPC request/response transaction"""
+    root = msg.root
+    msg_id = getattr(root, "id", None)
+
+    if isinstance(root, JSONRPCRequest):
+        # Start new transaction span
+        span = tracer.start_span(
+            f"mcp.{span_kind.lower()}.transaction.{root.method}",
+            kind=getattr(trace.SpanKind, span_kind.upper()),
+        )
+        _set_request_attributes(span, msg)
+        active_spans[msg_id] = span
+    elif isinstance(root, JSONRPCResponse | JSONRPCError):
+        # End existing transaction span
+        span = active_spans.pop(msg_id, None)
+        if span:
+            _set_response_attributes(span, msg)
+            span.end()
+
+
+def _handle_notification(tracer, msg, span_kind):
+    """Handle span for a JSON-RPC notification"""
+    with tracer.start_span(
+        f"mcp.{span_kind.lower()}.notification.{msg.root.method}",
+        kind=getattr(trace.SpanKind, span_kind.upper()),
+    ) as span:
+        if isinstance(msg.root, JSONRPCNotification):
+            span.set_attribute("jsonrpc.notification.method", msg.root.method)
+            if hasattr(msg.root, "params"):
+                span.set_attribute("jsonrpc.notification.params", str(msg.root.params))
+            span.set_status(StatusCode.OK)
+
+
+def _set_request_attributes(span, msg):
+    """Set span attributes for a JSON-RPC request"""
+    root = msg.root
+    if isinstance(root, JSONRPCRequest):
+        span.set_attribute("jsonrpc.request.id", root.id)
+        span.set_attribute("jsonrpc.request.method", root.method)
+        if hasattr(root, "params"):
+            span.set_attribute("jsonrpc.request.params", str(root.params))
+
+
+def _set_response_attributes(span, msg):
+    """Set span attributes for a JSON-RPC response"""
+    root = msg.root
+    if isinstance(root, JSONRPCResponse):
+        span.set_attribute("jsonrpc.response.result", str(root.result))
+        span.set_status(StatusCode.OK)
+    elif isinstance(root, JSONRPCError):
+        span.set_attribute("jsonrpc.error.code", root.error.code)
+        span.set_attribute("jsonrpc.error.message", root.error.message)
+        span.set_status(StatusCode.ERROR, root.error.message)
+
+
 class TracedSendStream:
     def __init__(self, stream, tracer, active_spans):
         self._stream = stream
@@ -56,29 +112,17 @@ class TracedSendStream:
 
     async def send(self, msg):
         root = getattr(msg, "root", None)
-        txn_span = (
-            self._active_spans.get(root.id)
-            if root and getattr(root, "id", None) in self._active_spans
-            else None
-        )
 
-        with self._tracer.start_as_current_span(
-            "jsonrpc.response",
-            context=trace.set_span_in_context(txn_span) if txn_span else None,
-        ) as response_span:
-            _set_jsonrpc_span_attributes(response_span, msg)
-            try:
-                await self._stream.send(msg)
-                response_span.set_status(StatusCode.OK)
-            except Exception as e:
-                response_span.set_status(StatusCode.ERROR, str(e))
-                response_span.record_exception(e)
-                raise
+        if isinstance(root, JSONRPCNotification):
+            _handle_notification(
+                self._tracer, msg, "CLIENT"
+            )  # We're sending a notification
+        else:
+            _handle_transaction(
+                self._tracer, msg, "CLIENT", self._active_spans
+            )  # We're sending a request/response
 
-        # Remove the empty "response" subspan block; end the transaction here if needed
-        if txn_span and isinstance(root, JSONRPCResponse | JSONRPCError):
-            txn_span.end()
-            self._active_spans.pop(root.id, None)
+        await self._stream.send(msg)
 
     def __getattr__(self, attr):
         return getattr(self._stream, attr)
@@ -99,29 +143,17 @@ class TracedReceiveStream:
         return await self._stream.__aexit__(exc_type, exc_val, exc_tb)
 
     async def receive(self):
-        # Manually start a transaction span
-        txn_span = self._tracer.start_span(
-            "mcp.server.transaction", kind=trace.SpanKind.SERVER
-        )
-        # Child: jsonrpc.request
-        with self._tracer.start_as_current_span(
-            "jsonrpc.request", context=trace.set_span_in_context(txn_span)
-        ) as request_span:
-            msg = await self._stream.receive()
-            _set_jsonrpc_span_attributes(request_span, msg)
-            request_span.set_status(StatusCode.OK)
-
-        # If request with an ID, store txn_span for the response
+        msg = await self._stream.receive()
         root = getattr(msg, "root", None)
-        if isinstance(root, JSONRPCRequest) and root.id is not None:
-            self._active_spans[root.id] = txn_span
-            with self._tracer.start_as_current_span(
-                "request", context=trace.set_span_in_context(txn_span)
-            ) as req_span:
-                req_span.set_attribute("rpc.method", root.method)
+
+        if isinstance(root, JSONRPCNotification):
+            _handle_notification(
+                self._tracer, msg, "SERVER"
+            )  # It's an incoming notification
         else:
-            # If no ID, we can end now
-            txn_span.end()
+            _handle_transaction(
+                self._tracer, msg, "SERVER", self._active_spans
+            )  # It's an incoming request/response
 
         return msg
 
@@ -144,50 +176,12 @@ class TracedAsyncIterator:
         return self
 
     async def __anext__(self):
-        # Manually start a transaction span
-        txn_span = self._tracer.start_span(
-            "mcp.server.transaction", kind=trace.SpanKind.SERVER
-        )
-        # Child: jsonrpc.request
-        with self._tracer.start_as_current_span(
-            "jsonrpc.request", context=trace.set_span_in_context(txn_span)
-        ) as request_span:
-            msg = await self._iterator.__anext__()
-            _set_jsonrpc_span_attributes(request_span, msg)
-            request_span.set_status(StatusCode.OK)
-
+        msg = await self._iterator.__anext__()
         root = getattr(msg, "root", None)
-        if isinstance(root, JSONRPCRequest) and root.id is not None:
-            self._active_spans[root.id] = txn_span
+
+        if isinstance(root, JSONRPCNotification):
+            _handle_notification(self._tracer, msg, "CLIENT")
         else:
-            txn_span.end()
+            _handle_transaction(self._tracer, msg, "SERVER", self._active_spans)
 
         return msg
-
-
-def _set_jsonrpc_span_attributes(span, msg):
-    """Helper to set JSON-RPC span attributes consistently."""
-    if not isinstance(msg, JSONRPCMessage):
-        return
-
-    root = msg.root
-    span.set_attribute("jsonrpc.message", str(msg))
-
-    if isinstance(root, JSONRPCRequest):
-        span.set_attribute("jsonrpc.id", root.id)
-        span.set_attribute("jsonrpc.type", "request")
-        span.set_attribute("jsonrpc.method", root.method)
-        if hasattr(root, "params"):
-            span.set_attribute("jsonrpc.params", str(root.params))
-    elif isinstance(root, JSONRPCNotification):
-        span.set_attribute("jsonrpc.type", "notification")
-        span.set_attribute("jsonrpc.method", root.method)
-    elif isinstance(root, JSONRPCResponse):
-        span.set_attribute("jsonrpc.id", root.id)
-        span.set_attribute("jsonrpc.type", "response")
-        if hasattr(root, "result"):
-            span.set_attribute("jsonrpc.result", str(root.result))
-    elif isinstance(root, JSONRPCError):
-        span.set_attribute("jsonrpc.type", "error")
-    else:
-        span.set_attribute("jsonrpc.type", "unknown_message_type")
