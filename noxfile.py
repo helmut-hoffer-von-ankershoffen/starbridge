@@ -7,7 +7,7 @@ nox.options.reuse_existing_virtualenvs = True
 nox.options.default_venv_backend = "uv"
 
 
-@nox.session(python=["3.11", "3.12", "3.13", "3.14"])
+@nox.session(python=["3.11", "3.12", "3.13"])
 def test(session: nox.Session):
     session.install("-e .[dev]")
     session.run(
