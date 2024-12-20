@@ -2,6 +2,7 @@ import asyncio
 import base64
 import json
 import os
+from io import BytesIO
 from typing import Any
 from urllib.parse import urlparse
 
@@ -305,11 +306,12 @@ class MCPServer(MCPBaseService):
                 if result.format
                 else "application/octet-stream"
             )
-            result.load()
+            data = BytesIO()
+            result.save(data, format=result.format)
             return [
                 ImageContent(
                     type="image",
-                    data=base64.b64encode(result.tobytes()).decode("utf-8"),
+                    data=base64.b64encode(data.getvalue()).decode("utf-8"),
                     mimeType=mime_type,
                 )
             ]

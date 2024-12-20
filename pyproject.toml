@@ -18,6 +18,8 @@ dependencies = [
     "python-dotenv>=1.0.1",
     "svglib>=1.5.1",
     "typer>=0.13.0",
+    "opentelemetry-api>=1.29.0",
+    "opentelemetry-instrumentation>=0.50b0",
 ]
 keywords = ["mcp"]
 classifiers = [

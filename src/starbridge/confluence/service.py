@@ -135,7 +135,7 @@ class Service(MCPBaseService):
             context: MCP context for the operation
 
         Returns:
-            dict: JSON response containing the spaces list under 'results' key
+            (dict): JSON response containing the spaces list under 'results' key
         """
         return self._api.get_all_spaces(
             start,
@@ -203,7 +203,7 @@ class Service(MCPBaseService):
             context: MCP context for the operation
 
         Returns:
-            dict: JSON response containing the page details
+            (Any): JSON response containing the page details
         """
         return self._api.get_page_by_id(page_id, status, expand, version)
 
@@ -236,7 +236,7 @@ class Service(MCPBaseService):
             full_width: If to use full width layout (defaults to False)
 
         Returns:
-            dict: JSON response containing the updated page details
+            (Any): JSON response containing the updated page details
 
         Notes:
             The 'storage' representation is the default Confluence storage format.
@@ -283,7 +283,7 @@ class Service(MCPBaseService):
         expand: str | None = None,
         content_type: str = "page",
         context: MCPContext | None = None,
-    ):
+    ):  # -> Any | Any:# -> Any | Any:
         """List pages in a Confluence space.
 
         Args:
@@ -296,7 +296,7 @@ class Service(MCPBaseService):
             context: MCP context for the operation
 
         Returns:
-            list: List of pages in the specified space
+            (Any): List of pages in the specified space
         """
         return self._api.get_all_pages_from_space(
             space_key,

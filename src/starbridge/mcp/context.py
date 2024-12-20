@@ -111,7 +111,7 @@ class MCPContext(BaseModel):
             uri: Resource URI to read
 
         Returns:
-            The resource content as either text or bytes
+            (str | bytes): The resource content as either text or bytes
         """
         assert self._mcp is not None, "Context is not available outside of a request"
         return await self._mcp.read_resource(uri)

@@ -25,7 +25,8 @@
 				"gruntfuggly.todo-tree",
 				"github.vscode-github-actions",
 				"codecov.codecov",
-				"ms-azuretools.vscode-docker"
+				"ms-azuretools.vscode-docker",
+				"tomoki1207.pdf"
 			]
 		}
 	},

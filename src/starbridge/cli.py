@@ -13,10 +13,11 @@ from starbridge.base import __project_name__, __version__
 from starbridge.mcp import MCPBaseService, MCPServer
 from starbridge.utils import console, get_logger
 
+# Initializes logging and instrumentation
 logger = get_logger(__name__)
 
-
 logger.debug(f"Booting version: {__version__}")
+
 
 cli = typer.Typer(
     name="Starbridge CLI",
@@ -117,13 +118,18 @@ def install(
             help="API token of your Atlassian account, go to https://id.atlassian.com/manage-profile/security/api-tokens to create one",
         ),
     ] = os.environ.get("STARBRIDGE_ATLASSIAN_API_TOKEN", "YOUR_TOKEN"),
-    restart_claude: bool = starbridge.claude.Service.platform_supports_restart(),
-    image: Annotated[
-        str | None,
+    restart_claude: Annotated[
+        bool,
         typer.Option(
-            help="Image to use for Starbridge in case called via Docker. Defaults to helmuthva/starbridge",
+            help="Restart Claude Desktop application post installation",
         ),
-    ] = None,
+    ] = starbridge.claude.Service.platform_supports_restart(),
+    image: Annotated[
+        str,
+        typer.Option(
+            help="Docker image to use for Starbridge. Only applies if started as container.",
+        ),
+    ] = "helmuthva/starbridge:latest",
 ):
     """Install starbridge within Claude Desktop application by adding to configuration and restarting Claude Desktop app"""
     if starbridge.claude.Service.install_mcp_server(
@@ -168,7 +174,7 @@ def _generate_mcp_server_config(
     atlassian_url: str,
     atlassian_email_address: str,
     atlassian_api_token: str,
-    image: str | None = None,
+    image: str = "helmuthva/starbridge:latest",
 ) -> dict:
     """Generate configuration file for Starbridge"""
     env = {
@@ -177,8 +183,6 @@ def _generate_mcp_server_config(
         "STARBRIDGE_ATLASSIAN_API_TOKEN": atlassian_api_token,
     }
     if starbridge.claude.Service.is_running_in_starbridge_container():
-        if image is None:
-            image = "helmuthva/starbridge"
         return {
             "command": "docker",
             "args": [

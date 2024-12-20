@@ -24,7 +24,7 @@ def load_settings(settings_class: type[T]) -> T:
         settings_class: The Pydantic settings class to instantiate
 
     Returns:
-        Instance of the settings class
+        (T): Instance of the settings class
 
     Raises:
         SystemExit: If settings validation fails

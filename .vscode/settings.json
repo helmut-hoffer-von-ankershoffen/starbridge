@@ -29,4 +29,7 @@
         "**/site-packages/**",
         "**/dist-packages/**"
     ],
+    "python.analysis.ignore": [
+        "**/typing.py"
+    ],
 }

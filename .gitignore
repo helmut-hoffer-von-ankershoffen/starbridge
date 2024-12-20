@@ -46,3 +46,7 @@ sbom.json
 # Env
 .env
 .env.backup
+
+# Application specific
+starbridge.png
+starbridge.pdf

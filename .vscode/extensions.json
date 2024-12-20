@@ -13,6 +13,7 @@
         "github.vscode-github-actions",
         "codecov.codecov",
         "oderwat.indent-rainbow",
-        "ms-azuretools.vscode-docker"
+        "ms-azuretools.vscode-docker",
+        "tomoki1207.pdf"
     ]
 }

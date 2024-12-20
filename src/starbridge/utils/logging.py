@@ -7,8 +7,15 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from rich.console import Console
 from rich.logging import RichHandler
 
-from starbridge.base import __project_name__, __version__
+from starbridge.base import __project_name__
+from starbridge.instrumentation import logfire_initialize
 from starbridge.utils.settings import load_settings
+
+
+def get_logger(name: str | None) -> logging.Logger:
+    if (name is None) or (name == __project_name__):
+        return logging.getLogger(__project_name__)
+    return logging.getLogger(f"{__project_name__}.{name}")
 
 
 class LoggingSettings(BaseSettings):
@@ -20,55 +27,44 @@ class LoggingSettings(BaseSettings):
     )
 
     loglevel: Literal["FATAL", "CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"] = "INFO"
-    log_console: bool = False
-
-    logfire_token: str | None = None
-    logfire_environment: str = "default"
+    log_file_enabled: bool = True
+    log_file_name: str = "starbridge.log"
+    log_console_enabled: bool = False
 
 
 settings = load_settings(LoggingSettings)
 
-logfire.configure(
-    send_to_logfire="if-token-present",
-    token=settings.logfire_token,
-    environment=settings.logfire_environment,
-    service_name=__project_name__,
-    console=False,
-    code_source=logfire.CodeSource(
-        repository="https://github.com/helmut-hoffer-von-ankershoffen/starbridge",
-        revision=__version__,
-        root_path="",  # FIXME: root_path
-    ),
-)
-logfire.instrument_system_metrics(base="full")
-logfire.install_auto_tracing(
-    modules=["starbridge.confluence"], min_duration=0.001
-)  # FIXME: get modules from settings
-
-
-class CustomFilter(logging.Filter):
-    def filter(self, record):
-        return True
-
-
-rich_handler = RichHandler(
-    console=Console(stderr=True),
-    markup=True,
-    rich_tracebacks=True,
-    tracebacks_suppress=[click],
-    show_path=True,
-    show_level=True,
-    enable_link_path=True,
-)
-rich_handler.addFilter(CustomFilter())
-
 handlers = []
-if settings.log_console:
+
+if settings.log_file_enabled:
+    handlers.append(
+        logging.FileHandler(settings.log_file_name),
+    )
+
+if settings.log_console_enabled:
+    rich_handler = RichHandler(
+        console=Console(stderr=True),
+        markup=True,
+        rich_tracebacks=True,
+        tracebacks_suppress=[click],
+        show_path=True,
+        show_level=True,
+        enable_link_path=True,
+    )
+
+    class CustomFilter(logging.Filter):
+        def filter(self, record):
+            return True
+
+    rich_handler.addFilter(CustomFilter())
     handlers.append(rich_handler)
-handlers.extend([
-    logging.FileHandler("starbridge.log"),
-    logfire.LogfireLoggingHandler(),
-])
+
+logfire_initialized = logfire_initialize()
+if logfire_initialized:
+    handlers.append(
+        logfire.LogfireLoggingHandler(),
+    )
+
 
 logging.basicConfig(
     level=settings.loglevel,
@@ -76,9 +72,3 @@ logging.basicConfig(
     datefmt="%Y-%m-%d %H:%M:%S",
     handlers=handlers,
 )
-
-
-def get_logger(name: str | None) -> logging.Logger:
-    if (name is None) or (name == __project_name__):
-        return logging.getLogger(__project_name__)
-    return logging.getLogger(f"{__project_name__}.{name}")
