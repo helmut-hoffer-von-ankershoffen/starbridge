@@ -28,6 +28,7 @@ ADD tests/ /app
 ADD src/ /app
 ADD LICENSE /app
 ADD *.md /app
+ADD .python-version /app
 
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev

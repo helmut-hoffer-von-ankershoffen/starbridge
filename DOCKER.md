@@ -11,7 +11,9 @@ case "$OSTYPE" in
   win32*|cygwin*|msys*) SRC="%APPDATA%/Claude" ;;
   *) echo "Unsupported OS"; exit 1 ;;
 esac
-docker run -it --mount type=bind,src="$SRC",dst="/Claude" helmuthva/starbridge install
+```bash
+docker run -it --pull always --mount type=bind,src="$SRC",dst="/Claude" helmuthva/starbridge install
+```
 ```
 
 Note:
