@@ -2,6 +2,7 @@
 CLI to interact with Confluence
 """
 
+import json
 from typing import Annotated
 
 import typer
@@ -88,7 +89,7 @@ def space():
 @cli_space.command(name="list")
 def space_list():
     """Get info about all space"""
-    console.print(Service().space_list())
+    console.print_json(json.dumps(Service().space_list()))
 
 
 cli_page = typer.Typer()

@@ -1,6 +1,7 @@
 """Handles Confluence operations."""
 
 import json
+import os
 
 import mcp.types as types
 import typer
@@ -137,6 +138,12 @@ class Service(MCPBaseService):
         Returns:
             (dict): JSON response containing the spaces list under 'results' key
         """
+        # Mock response if requested
+        if "atlassian.Confluence.get_all_spaces" in os.environ.get("MOCKS", "").split(
+            ","
+        ):
+            with open("tests/fixtures/get_all_spaces.json") as f:
+                return json.load(f)
         return self._api.get_all_spaces(
             start,
             limit,

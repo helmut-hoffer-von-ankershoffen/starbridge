@@ -6,7 +6,7 @@ from mcp.client.stdio import get_default_environment, stdio_client
 from mcp.types import TextContent
 
 
-def _server_parameters():
+def _server_parameters(mocks: list[str] | None = None) -> StdioServerParameters:
     """Create server parameters with coverage enabled"""
     env = dict(get_default_environment())
     # Add coverage config to subprocess
@@ -15,6 +15,9 @@ def _server_parameters():
         "COVERAGE_FILE": os.getenv("COVERAGE_FILE", ".coverage"),
         "PYTHONPATH": ".",
     })
+    if (mocks is not None) and mocks:
+        env.update({"MOCKS": ",".join(mocks)})
+
     return StdioServerParameters(
         command="uv",
         args=["run", "starbridge"],
@@ -62,8 +65,9 @@ async def test_mcp_server_list_tools():
 
 @pytest.mark.asyncio
 async def test_mcp_server_list_resources():
-    """Test listing of resources from the server"""
-    async with stdio_client(_server_parameters()) as (read, write):
+    async with stdio_client(
+        _server_parameters(["atlassian.Confluence.get_all_spaces"])
+    ) as (read, write):
         async with ClientSession(read, write) as session:
             # Initialize the connection
             await session.initialize()
@@ -72,6 +76,13 @@ async def test_mcp_server_list_resources():
             result = await session.list_resources()
 
             assert result.resources is not None
+            assert len(result.resources) == 1
+            assert any(
+                resource.name == "helmut"
+                for resource in result.resources
+                if str(resource.uri)
+                == "starbridge://confluence/space/~7120201709026d2b41448e93bb58d5fa301026"
+            )
 
 
 @pytest.mark.asyncio
