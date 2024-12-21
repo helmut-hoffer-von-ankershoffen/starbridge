@@ -28,7 +28,7 @@ from starbridge.mcp.context import MCPContext
 from starbridge.mcp.decorators import mcp_tool
 from starbridge.mcp.models import ResourceMetadata
 from starbridge.mcp.service import MCPBaseService
-from starbridge.utils import get_logger
+from starbridge.utils import AggregatedHealth, get_logger
 
 logger = get_logger(__name__)
 
@@ -50,7 +50,7 @@ class MCPServer(MCPBaseService):
         self._server.call_tool()(self.tool_call)
 
     @mcp_tool()
-    def health(self, context: MCPContext | None = None):
+    def health(self, context: MCPContext | None = None) -> AggregatedHealth:
         """Health of services and their dependencies"""
         dependencies = {}
         for service_class in MCPBaseService.get_services():
@@ -58,8 +58,7 @@ class MCPServer(MCPBaseService):
             service_name = service.__class__.__module__.split(".")[1]
             dependencies[service_name] = service.health()
 
-        healthy = all(status == "UP" for status in dependencies.values())
-        return {"healthy": healthy, "dependencies": dependencies}
+        return AggregatedHealth(dependencies=dependencies)
 
     def get_context(self) -> MCPContext:
         """
@@ -211,7 +210,9 @@ class MCPServer(MCPBaseService):
         async def handle_health(request):
             return PlainTextResponse(
                 headers={"content-type": "application/json"},
-                content=json.dumps(self.health()),
+                content=json.dumps(
+                    self.health().model_dump()
+                ),  # Use json.dumps instead of model_dump_json
             )
 
         return Starlette(

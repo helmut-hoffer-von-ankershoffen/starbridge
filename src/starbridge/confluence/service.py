@@ -16,7 +16,7 @@ from starbridge.mcp import (
     mcp_resource_iterator,
     mcp_tool,
 )
-from starbridge.utils import get_logger
+from starbridge.utils import Health, get_logger
 from starbridge.utils.settings import load_settings
 
 from . import cli
@@ -42,19 +42,19 @@ class Service(MCPBaseService):
         return "confluence", cli.cli  # type: ignore
 
     @mcp_tool()
-    def health(self, context: MCPContext | None = None) -> str:
+    def health(self, context: MCPContext | None = None) -> Health:
         try:
             spaces = self.space_list()
         except Exception as e:
-            return f"DOWN: {str(e)}"
+            return Health(status=Health.Status.DOWN, reason=str(e))
         if (
             isinstance(spaces, dict)
             and "results" in spaces
             and isinstance(spaces["results"], list)
         ):
             if len(spaces["results"]) > 0:
-                return "UP"
-        return "DOWN: No spaces found"
+                return Health(status=Health.Status.UP)
+        return Health(status=Health.Status.DOWN, reason="No spaces found")
 
     @mcp_tool()
     def info(self, context: MCPContext | None = None):

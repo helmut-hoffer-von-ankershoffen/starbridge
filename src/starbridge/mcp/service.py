@@ -10,7 +10,7 @@ import typer
 
 from starbridge.mcp.context import MCPContext
 from starbridge.mcp.models import ResourceMetadata
-from starbridge.utils.signature import description_and_params
+from starbridge.utils import Health, description_and_params
 
 
 @dataclass(frozen=True)
@@ -64,7 +64,7 @@ class MCPBaseService:
         """Get info about configuration of this service. Override in subclass."""
         raise NotImplementedError
 
-    def health(self, context: MCPContext | None = None) -> str:
+    def health(self, context: MCPContext | None = None) -> Health:
         """Get health of this service. Override in subclass."""
         raise NotImplementedError
 

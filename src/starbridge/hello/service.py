@@ -16,6 +16,7 @@ import typer
 from PIL import Image
 
 from starbridge.mcp import MCPBaseService, MCPContext, mcp_tool
+from starbridge.utils import Health
 
 from . import cli
 
@@ -32,8 +33,8 @@ class Service(MCPBaseService):
         return "hello", cli.cli  # type: ignore
 
     @mcp_tool()
-    def health(self, context: MCPContext | None = None) -> str:
-        return "UP"
+    def health(self, context: MCPContext | None = None) -> Health:
+        return Health(status=Health.Status.UP)
 
     @mcp_tool()
     def info(self, context: MCPContext | None = None) -> dict:

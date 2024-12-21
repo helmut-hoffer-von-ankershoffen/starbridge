@@ -19,7 +19,7 @@ cli = typer.Typer(no_args_is_help=True)
 @cli.command()
 def health():
     """Health of Claude"""
-    console.print(Service().health())
+    console.print(Service().health().model_dump_json())
 
 
 @cli.command()

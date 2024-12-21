@@ -1,6 +1,6 @@
 [project]
 name = "starbridge"
-version = "0.0.23"
+version = "0.0.24"
 description = "Integrates Claude Desktop with Google workspace and Atlassian workspaces"
 readme = "README.md"
 authors = [
@@ -51,10 +51,18 @@ keywords = [
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Developers",
-    "Programming Language :: Python :: 3.11",
+    "Intended Audience :: End Users/Desktop",
+    "Programming Language :: Python",
     "License :: OSI Approved :: MIT License",
     "Operating System :: MacOS :: MacOS X",
+    "Operating System :: POSIX :: Linux",
     "Operating System :: Microsoft :: Windows",
+    "Framework :: AsyncIO",
+    "Framework :: OpenTelemetry :: Instrumentations",
+    "Framework :: Pydantic",
+    "Framework :: Pytest",
+    "Typing :: Typed",
+    "Natural Language :: English",
 ]
 license = { file = "LICENSE" }
 

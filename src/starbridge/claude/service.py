@@ -10,6 +10,7 @@ import typer
 
 from starbridge.base import __project_name__
 from starbridge.mcp import MCPBaseService, MCPContext, mcp_tool
+from starbridge.utils import Health
 
 from . import cli
 
@@ -26,13 +27,13 @@ class Service(MCPBaseService):
         return "claude", cli.cli  # type: ignore
 
     @mcp_tool()
-    def health(self, context: MCPContext | None = None) -> str:
+    def health(self, context: MCPContext | None = None) -> Health:
         """Check if Claude Desktop application is installed and is running."""
         if not self.is_installed():
-            return "DOWN: Not installed"
+            return Health(status=Health.Status.DOWN, reason="not installed")
         if not self.is_running():
-            return "DOWN: Not running"
-        return "UP"
+            return Health(status=Health.Status.DOWN, reason="not running")
+        return Health(status=Health.Status.UP)
 
     @mcp_tool()
     def info(self, context: MCPContext | None = None):

@@ -34,12 +34,26 @@ class LoggingSettings(BaseSettings):
 
 settings = load_settings(LoggingSettings)
 
+
+class CustomFilter(logging.Filter):
+    # TODO: Define what log lines you want to filter here
+    def filter(self, record):
+        return True
+
+
+log_filter = CustomFilter()
+
 handlers = []
 
 if settings.log_file_enabled:
-    handlers.append(
-        logging.FileHandler(settings.log_file_name),
+    file_handler = logging.FileHandler(settings.log_file_name)
+    file_formatter = logging.Formatter(
+        fmt="%(asctime)s %(levelname)s %(name)s %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
     )
+    file_handler.setFormatter(file_formatter)
+    file_handler.addFilter(log_filter)
+    handlers.append(file_handler)
 
 if settings.log_console_enabled:
     rich_handler = RichHandler(
@@ -47,28 +61,25 @@ if settings.log_console_enabled:
         markup=True,
         rich_tracebacks=True,
         tracebacks_suppress=[click],
+        show_time=True,
+        omit_repeated_times=True,
         show_path=True,
         show_level=True,
         enable_link_path=True,
     )
-
-    class CustomFilter(logging.Filter):
-        def filter(self, record):
-            return True
-
-    rich_handler.addFilter(CustomFilter())
+    rich_handler.addFilter(log_filter)
     handlers.append(rich_handler)
 
 logfire_initialized = logfire_initialize()
 if logfire_initialized:
-    handlers.append(
-        logfire.LogfireLoggingHandler(),
-    )
+    logfire_handler = logfire.LogfireLoggingHandler()
+    logfire_handler.addFilter(log_filter)
+    handlers.append(logfire_handler)
 
 
 logging.basicConfig(
     level=settings.loglevel,
-    format="%(name)s: %(message)s",
+    format="%(name)s %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",
     handlers=handlers,
 )
