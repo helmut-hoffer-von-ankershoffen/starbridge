@@ -241,7 +241,7 @@ for service_class in MCPBaseService.get_services():
 
 def _add_epilog_recursively(cli: typer.Typer):
     """Add epilog to all typers in the tree"""
-    cli.info.epilog = f"⭐ Starbridge v{__version__}: built with love in Berlin"
+    cli.info.epilog = f"⭐ Starbridge v{__version__}: built with love in Berlin 🐻"
     for group in cli.registered_groups:
         if isinstance(group, typer.models.TyperInfo):
             typer_instance = group.typer_instance
