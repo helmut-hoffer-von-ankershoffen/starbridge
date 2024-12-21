@@ -153,9 +153,16 @@ def install(
 
 
 @cli.command()
-def uninstall():
+def uninstall(
+    restart_claude: Annotated[
+        bool,
+        typer.Option(
+            help="Restart Claude Desktop application post installation",
+        ),
+    ] = starbridge.claude.Service.platform_supports_restart(),
+):
     """Install starbridge from Claude Desktop application by removing from configuration and restarting Claude Desktop app"""
-    if starbridge.claude.Service.uninstall_mcp_server():
+    if starbridge.claude.Service.uninstall_mcp_server(restart=restart_claude):
         console.print("Starbridge uninstalled from Claude Destkop application.")
     else:
         console.print("Starbridge was no installed", style="warning")

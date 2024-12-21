@@ -67,7 +67,7 @@ def test_install(runner, tmp_path):
             == "YOUR_TEST_API_TOKEN"
         )
 
-        result = runner.invoke(cli, ["uninstall"], input=inputs)
+        result = runner.invoke(cli, ["uninstall", "--no-restart-claude"], input=inputs)
         assert result.exit_code == 0
 
         result = runner.invoke(cli, ["claude", "config"], input=inputs)
