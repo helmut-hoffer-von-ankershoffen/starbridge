@@ -62,7 +62,7 @@ Please read our [Contributing Guidelines](CONTRIBUTING.md) for how to setup for 
 
 * [MCP Press release](https://www.anthropic.com/news/model-context-protocol)
 * [MCP Specification and SDKs](https://github.com/modelcontextprotocol)
-# [MCP Info to amend Claude's context](https://modelcontextprotocol.io/llms-full.txt)
+* [MCP Info to amend Claude's context](https://modelcontextprotocol.io/llms-full.txt)
 * [Awesome MCP Servers](https://github.com/punkpeye/awesome-mcp-servers)
 
 ## Star History
