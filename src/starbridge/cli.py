@@ -254,6 +254,19 @@ def _add_epilog_recursively(cli: typer.Typer):
 
 _add_epilog_recursively(cli)
 
+
+def _no_args_is_help_recursively(cli: typer.Typer):
+    """Add epilog to all typers in the tree"""
+    for group in cli.registered_groups:
+        if isinstance(group, typer.models.TyperInfo):
+            group.no_args_is_help = True
+            typer_instance = group.typer_instance
+            if (typer_instance is not cli) and typer_instance:
+                _no_args_is_help_recursively(typer_instance)
+
+
+_no_args_is_help_recursively(cli)
+
 if __name__ == "__main__":
     try:
         cli()

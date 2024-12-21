@@ -15,7 +15,7 @@ from starbridge.utils.console import console
 
 from .service import Service
 
-cli = typer.Typer(no_args_is_help=True)
+cli = typer.Typer()
 
 
 @cli.command()
