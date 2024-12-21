@@ -51,10 +51,11 @@ jobs:
           echo "Development build - Current version in pyproject.toml: $TOML_VERSION"
 
       - name: Create .env file
-        uses: ozaytsev86/create-env-file@v2.0.0
+        uses: SpicyPizza/create-envfile@v2.0
         with:
-          ENV_STARBRIDGE_LOGFIRE_TOKEN: ${{ secrets.STARBRIDGE_LOGFIRE_TOKEN }}
-          ENV_STARBRIDGE_LOGFIRE_INSTRUMENT_MCP_ENABLED: 1
+          envkey_STARBRIDGE_LOGFIRE_TOKEN: ${{ secrets.STARBRIDGE_LOGFIRE_TOKEN }}
+          envkey_STARBRIDGE_LOGFIRE_INSTRUMENT_MCP_ENABLED: 1
+          fail_on_empty: false
 
       - name: Validate installation
         run: |
