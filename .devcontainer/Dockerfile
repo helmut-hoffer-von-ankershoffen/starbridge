@@ -5,8 +5,8 @@ RUN apk add \
     curl \
     jq \
     libxml2-utils \
-    libcairo2 \
     gnupg2 \
+    libcairo2 \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js

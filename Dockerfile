@@ -4,7 +4,7 @@ FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 # Install the project into `/app`
 WORKDIR /app
 
-RUN apt update -y && apt install -y curl jq libxml2-utils libcairo2 gnupg2
+RUN apt update -y && apt install -y libcairo2
 
 RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && apt-get install -y nodejs
 
@@ -37,7 +37,8 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 ENV PATH="/app/.venv/bin:$PATH"
 
 # Uncomment for debugging
-# RUN apt install -y procps less nano iputils-ping
+# RUN apt install -y curl jq libxml2-utils gnupg2 procps less nano iputils-ping
 
 # When running the container, start the Starbridge MCP server
+# But feel free to add arguments and options as needed when doing a docker run
 ENTRYPOINT ["uv", "run", "--no-dev", "starbridge"]
