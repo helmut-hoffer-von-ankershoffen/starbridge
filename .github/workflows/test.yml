@@ -50,6 +50,12 @@ jobs:
           TOML_VERSION=$(uv run python -c "import tomli; print(tomli.load(open('pyproject.toml', 'rb'))['project']['version'])")
           echo "Development build - Current version in pyproject.toml: $TOML_VERSION"
 
+      - name: Create .env file
+        uses: ozaytsev86/create-env-file@v2.0.0
+        with:
+          ENV_STARBRIDGE_LOGFIRE_TOKEN: ${{ secrets.STARBRIDGE_LOGFIRE_TOKEN }}
+          ENV_STARBRIDGE_LOGFIRE_INSTRUMENT_MCP_ENABLED: 1
+
       - name: Validate installation
         run: |
             OUTPUT=$(uv run starbridge --help)
