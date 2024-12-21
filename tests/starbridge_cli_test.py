@@ -17,7 +17,7 @@ def test_built_with_love(runner):
         terminal_width=80,
     )
     assert result.exit_code == 0
-    assert "built by Helmut Hoffer von Ankershoffen in Berlin" in result.output
+    assert "built with love in Berlin" in result.output
 
 
 def test_invalid_command(runner):
