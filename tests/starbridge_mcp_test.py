@@ -1,9 +1,17 @@
+import base64
 import os
+from pathlib import Path
 
 import pytest
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import get_default_environment, stdio_client
-from mcp.types import TextContent
+from mcp.types import ImageContent, PromptMessage, TextContent
+from typer.testing import CliRunner
+
+
+@pytest.fixture
+def runner():
+    return CliRunner()
 
 
 def _server_parameters(mocks: list[str] | None = None) -> StdioServerParameters:
@@ -100,6 +108,28 @@ async def test_mcp_server_list_prompts():
 
 
 @pytest.mark.asyncio
+async def test_mcp_server_prompt_get():
+    """Test getting prompt from server"""
+    async with stdio_client(
+        _server_parameters(["atlassian.Confluence.get_all_spaces"])
+    ) as (read, write):
+        async with ClientSession(read, write) as session:
+            # Initialize the connection
+            await session.initialize()
+
+            # List available prompts
+            result = await session.get_prompt("starbridge_confluence_space_summary")
+            assert len(result.messages) == 1
+            message = result.messages[0]
+            assert type(message) is PromptMessage
+            assert type(message.content) is TextContent
+            assert (
+                message.content.text
+                == "Here are the current spaces to summarize:\n\n- ~7120201709026d2b41448e93bb58d5fa301026: helmut (personal)"
+            )
+
+
+@pytest.mark.asyncio
 async def test_mcp_server_tool_call():
     """Test listing of prompts from the server"""
     async with stdio_client(_server_parameters()) as (read, write):
@@ -113,3 +143,22 @@ async def test_mcp_server_tool_call():
             content = result.content[0]
             assert type(content) is TextContent
             assert content.text == "Hello World!"
+
+
+@pytest.mark.asyncio
+async def test_mcp_server_tool_call_with_image():
+    """Test listing of prompts from the server"""
+    async with stdio_client(_server_parameters()) as (read, write):
+        async with ClientSession(read, write) as session:
+            # Initialize the connection
+            await session.initialize()
+
+            # List available prompts
+            result = await session.call_tool("starbridge_hello_bridge", {})
+            assert len(result.content) == 1
+            content = result.content[0]
+            assert type(content) is ImageContent
+            # Check base64 encoded data returned equals what's found in starbridge.png, again base64 encoded
+            assert content.data == base64.b64encode(
+                Path("tests/fixtures/starbridge.png").read_bytes()
+            ).decode("utf-8")

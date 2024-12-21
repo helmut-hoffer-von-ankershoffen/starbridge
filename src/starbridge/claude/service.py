@@ -214,7 +214,7 @@ class Service(MCPBaseService):
             config = Service.config_read()
         except FileNotFoundError:
             config = {"mcpServers": {}}
-        if "name" not in config["mcpServers"]:
+        if mcp_server_name not in config["mcpServers"]:
             return False
         del config["mcpServers"][mcp_server_name]
         Service.config_write(config)

@@ -1,6 +1,6 @@
 [project]
 name = "starbridge"
-version = "0.0.25"
+version = "0.0.26"
 description = "Integrates Claude Desktop with Google workspace and Atlassian workspaces"
 readme = "README.md"
 authors = [
@@ -8,16 +8,16 @@ authors = [
 ]
 requires-python = ">=3.11"
 dependencies = [
+    "pydantic>=2.10.2",
+    "pydantic-settings>=2.7.0",
+    "mcp>=1.0.0",
+    "griffe>=1.5.1",
+    "typer>=0.13.0",
     "atlassian-python-api>=3.41.16",
     "cairosvg>=2.7.1",
-    "griffe>=1.5.1",
-    "logfire[system-metrics]>=2.7.1",
-    "mcp>=1.0.0",
-    "pydantic-settings>=2.7.0",
-    "pydantic>=2.10.2",
     "python-dotenv>=1.0.1",
     "svglib>=1.5.1",
-    "typer>=0.13.0",
+    "logfire[system-metrics]>=2.7.1",
     "opentelemetry-api>=1.29.0",
     "opentelemetry-instrumentation>=0.50b0",
     "opentelemetry-instrumentation-httpx>=0.50b0",
@@ -72,35 +72,35 @@ build-backend = "hatchling.build"
 
 [dependency-groups]
 dev = [
-    "pytest>=8.3.3",
+    "nox>=2024.10.9",
+    "tomli>=2.1.0",
     "pyright>=1.1.389",
+    "ruff>=0.3.0",
+    "pytest>=8.3.3",
     "pytest-asyncio>=0.24.0",
     "pytest-cov>=6.0.0",
-    "ruff>=0.3.0",
-    "nox>=2024.10.9",
-    "pre-commit>=4.0.1",
+    "pytest-env>=1.1.5",
     "pip-audit>=2.7.3",
     "pip-licenses>=5.0.0",
     "cyclonedx-py>=1.0.1",
-    "tomli>=2.1.0",
-    "pytest-env>=1.1.5",
+    "pre-commit>=4.0.1",
 ]
 
 [project.optional-dependencies]
 # used by uv pip install -e ".[dev]", as used within nox (uv run nox)
 dev = [
-    "pytest>=8.3.3",
+    "nox>=2024.10.9",
+    "tomli>=2.1.0",
     "pyright>=1.1.389",
+    "ruff>=0.3.0",
+    "pytest>=8.3.3",
     "pytest-asyncio>=0.24.0",
     "pytest-cov>=6.0.0",
-    "ruff>=0.3.0",
-    "nox>=2024.10.9",
-    "pre-commit>=4.0.1",
+    "pytest-env>=1.1.5",
     "pip-audit>=2.7.3",
     "pip-licenses>=5.0.0",
     "cyclonedx-py>=1.0.1",
-    "tomli>=2.1.0",
-    "pytest-env>=1.1.5",
+    "pre-commit>=4.0.1",
 ]
 
 [tool.ruff]
@@ -143,7 +143,7 @@ source = ["starbridge"]
 concurrency = ["multiprocessing", "thread"]
 
 [tool.coverage.paths]
-source = ["src/", ".tox/*/lib/python*/site-packages/"]
+source = ["src/"]
 
 [project.urls]
 Homepage = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge"
@@ -152,10 +152,10 @@ Changelog = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/releas
 Documentation = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/README.md"
 Issues = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/issues"
 
-[project.scripts]
-starbridge = "starbridge:cli"
-
 [project.entry-points."starbridge.services"]
 confluence = "starbridge.confluence.service:Service"
 claude = "starbridge.claude.service:Service"
 hello = "starbridge.hello.service:Service"
+
+[project.scripts]
+starbridge = "starbridge:cli"
