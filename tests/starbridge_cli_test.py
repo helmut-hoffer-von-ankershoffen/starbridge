@@ -45,7 +45,7 @@ def test_install(runner, tmp_path):
             "YOUR_TEST_API_TOKEN\n"  # Atlassian token
             "\n"  # Possibly other prompt input
         )
-        result = runner.invoke(cli, ["install"], input=inputs)
+        result = runner.invoke(cli, ["install", "--no-restart-claude"], input=inputs)
         assert result.exit_code == 0
 
         result = runner.invoke(cli, ["claude", "config"], input=inputs)
