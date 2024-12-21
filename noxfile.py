@@ -10,15 +10,8 @@ nox.options.default_venv_backend = "uv"
 @nox.session(python=["3.11", "3.12", "3.13"])
 def test(session: nox.Session):
     session.install("-e .[dev]")
-    session.run(
-        "pytest",
-        "--disable-warnings",
-        "--junitxml=junit.xml",
-        "--cov=starbridge",
-        "--cov-report=term-missing",
-        "--cov-report=html:coverage_html",
-        "--cov-report=xml:coverage.xml",
-    )
+    session.run("rm", "-rf", ".coverage")
+    session.run("pytest", "--disable-warnings", "--junitxml=junit.xml")
 
 
 @nox.session(python=["3.11"])

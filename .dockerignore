@@ -8,3 +8,4 @@ venv/
 # No secrets
 .env
 .env.backup
+sitecustomize.py
