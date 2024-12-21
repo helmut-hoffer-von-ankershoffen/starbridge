@@ -58,10 +58,6 @@ jobs:
           envkey_STARBRIDGE_LOGFIRE_ENVIRONMENT: "github_action_test"
           fail_on_empty: true
 
-      - name: Cat .env file
-        run: 
-          cat ".env"
-
       - name: Validate installation
         run: |
             OUTPUT=$(uv run starbridge --help)
@@ -72,7 +68,6 @@ jobs:
 
       - name: Info, tools and health
         run: |
-          cp .env.example .env
           uv run starbridge info
 
       - name: Run unit tests, measure coverage, lint, and check vulnerabilities
