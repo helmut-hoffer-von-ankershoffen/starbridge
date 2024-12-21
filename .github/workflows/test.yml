@@ -1,5 +1,5 @@
 # .github/workflows/test.yml
-name: "Run tests and archive results"
+name: "CI"
 
 on:
   push:
