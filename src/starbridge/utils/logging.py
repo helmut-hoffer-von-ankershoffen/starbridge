@@ -26,7 +26,7 @@ class LoggingSettings(BaseSettings):
         env_file_encoding="utf-8",
     )
 
-    loglevel: Literal["FATAL", "CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"] = "INFO"
+    loglevel: Literal["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"] = "INFO"
     log_file_enabled: bool = True
     log_file_name: str = "starbridge.log"
     log_console_enabled: bool = False

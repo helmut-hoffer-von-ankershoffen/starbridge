@@ -258,4 +258,4 @@ if __name__ == "__main__":
     try:
         cli()
     except Exception as e:
-        logger.error(e)
+        logger.critical(e)
