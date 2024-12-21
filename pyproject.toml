@@ -83,6 +83,7 @@ dev = [
     "pip-licenses>=5.0.0",
     "cyclonedx-py>=1.0.1",
     "tomli>=2.1.0",
+    "pytest-env>=1.1.5",
 ]
 
 [project.optional-dependencies]
@@ -99,6 +100,7 @@ dev = [
     "pip-licenses>=5.0.0",
     "cyclonedx-py>=1.0.1",
     "tomli>=2.1.0",
+    "pytest-env>=1.1.5",
 ]
 
 [tool.ruff]

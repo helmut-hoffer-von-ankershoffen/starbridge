@@ -11,11 +11,13 @@ def runner():
 
 def test_built_with_love(runner):
     """Check epilog shown."""
-    result = runner.invoke(cli, ["--help"])
-    assert result.exit_code == 0
-    assert (
-        "Built with love in Berlin by Helmut Hoffer von Ankershoffen" in result.stdout
+    result = runner.invoke(
+        cli,
+        ["--help"],
+        terminal_width=80,
     )
+    assert result.exit_code == 0
+    assert "built by Helmut Hoffer von Ankershoffen in Berlin" in result.output
 
 
 def test_invalid_command(runner):
