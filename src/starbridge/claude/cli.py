@@ -78,7 +78,7 @@ def log(
                 "-n",
                 str(last),
                 "-f",
-                Service.log_path(name if name != "main" else None),
+                str(Service.log_path(name if name != "main" else None)),
             ],
             check=False,
         )
@@ -88,7 +88,7 @@ def log(
                 "tail",
                 "-n",
                 str(last),
-                Service.log_path(name if name != "main" else None),
+                str(Service.log_path(name if name != "main" else None)),
             ],
             check=False,
         )
