@@ -147,10 +147,10 @@ concurrency = ["multiprocessing", "thread"]
 source = ["src/"]
 
 [project.urls]
-Homepage = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge"
+Homepage = "https://helmuthva.gitbook.io/starbridge"
 Source = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge"
 Changelog = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/releases"
-Documentation = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/README.md"
+Documentation = "https://helmuthva.gitbook.io/starbridge"
 Issues = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/issues"
 
 [project.entry-points."starbridge.services"]
