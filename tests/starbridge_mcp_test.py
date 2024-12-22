@@ -102,6 +102,7 @@ async def test_mcp_server_list_tools_sse():
     env.update({
         "COVERAGE_PROCESS_START": "pyproject.toml",
         "COVERAGE_FILE": os.getenv("COVERAGE_FILE", ".coverage"),
+        "PYTHONPATH": ".",
     })
 
     process = await asyncio.create_subprocess_exec(

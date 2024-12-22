@@ -99,6 +99,13 @@ def test_mcp_prompt(mock_get_all_spaces, runner):
     assert "details" in result.stdout
 
 
+def test_mcp_resource_types(runner):
+    """Check available resources."""
+    result = runner.invoke(cli, ["mcp", "resource-types"])
+    assert result.exit_code == 0
+    assert "starbridge://confluence/space" in result.stdout
+
+
 @patch("atlassian.Confluence.get_all_spaces")
 def test_mcp_resources(mock_get_all_spaces, runner):
     """Check available resources."""
