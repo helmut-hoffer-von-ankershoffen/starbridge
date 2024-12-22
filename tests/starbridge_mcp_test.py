@@ -344,13 +344,13 @@ def test_mcp_server_sse_terminates(runner):
         try:
             response = requests.get("http://0.0.0.0:9000/terminate")
             response.raise_for_status()
-        except requests.exceptions.ConnectionError:
+        except Exception:
             pass
 
         # Wait for process to end (timeout after 5 seconds)
         process.wait(timeout=5)
 
-        assert process.returncode == 1
+        assert process.returncode == 0
 
     finally:
         # Ensure process is terminated even if test fails

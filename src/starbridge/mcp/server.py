@@ -2,6 +2,7 @@ import asyncio
 import base64
 import json
 import os
+import signal
 from io import BytesIO
 from typing import Any
 from urllib.parse import urlparse
@@ -232,7 +233,8 @@ class MCPServer:
             )
 
         async def handle_terminate(request):
-            os.kill(os.getpid(), 1)
+            os.kill(os.getpid(), signal.SIGINT)
+            os.kill(os.getpid(), signal.SIGINT)
 
         return Starlette(
             debug=debug,
