@@ -83,6 +83,10 @@ class Service(MCPBaseService):
     @mcp_resource(type="space")
     def space_get(self, space_key: str, context: MCPContext | None = None) -> str:
         """Get specific Confluence space by key."""
+        # Mock response if requested
+        if "atlassian.Confluence.get_space" in os.environ.get("MOCKS", "").split(","):
+            with open("tests/fixtures/get_space.json") as f:
+                return json.dumps(json.load(f), indent=2)
         return json.dumps(self._api.get_space(space_key), indent=2)
 
     @mcp_prompt(type="space_summary")

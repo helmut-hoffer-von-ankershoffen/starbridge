@@ -98,8 +98,14 @@ async def test_mcp_server_list_resources():
 async def test_mcp_server_read_resource():
     """Test getting prompt from server"""
     async with stdio_client(
-        _server_parameters(["atlassian.Confluence.get_all_spaces"])
-    ) as (read, write):
+        _server_parameters([
+            "atlassian.Confluence.get_all_spaces",
+            "atlassian.Confluence.get_space",
+        ])
+    ) as (
+        read,
+        write,
+    ):
         async with ClientSession(read, write) as session:
             # Initialize the connection
             await session.initialize()
@@ -113,10 +119,7 @@ async def test_mcp_server_read_resource():
             assert len(result.contents) == 1
             content = result.contents[0]
             assert type(content) is TextResourceContents
-            assert (
-                content.text
-                == Path("tests/fixtures/resource_confluence_space.json").read_text()
-            )
+            assert content.text == Path("tests/fixtures/get_space.json").read_text()
 
 
 @pytest.mark.asyncio
