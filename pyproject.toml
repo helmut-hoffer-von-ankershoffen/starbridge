@@ -26,6 +26,7 @@ dependencies = [
     "opentelemetry-instrumentation-sqlite3>=0.50b0",
     "opentelemetry-instrumentation-requests>=0.50b0",
     "opentelemetry-instrumentation-urllib3>=0.50b0",
+    "greenlet>=3.1.1",
 ]
 keywords = [
     "mcp",
@@ -141,7 +142,7 @@ parallel = true
 branch = true
 relative_files = false
 source = ["src"]
-concurrency = ["multiprocessing", "thread"]
+concurrency = ["greenlet", "thread", "multiprocessing"]
 
 [tool.coverage.paths]
 source = ["src/"]

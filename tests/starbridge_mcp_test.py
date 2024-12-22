@@ -12,6 +12,10 @@ from mcp.types import ImageContent, PromptMessage, TextContent, TextResourceCont
 from pydantic import AnyUrl
 from typer.testing import CliRunner
 
+from starbridge.instrumentation import logfire_initialize
+
+logfire_initialize()
+
 
 @pytest.fixture
 def runner():

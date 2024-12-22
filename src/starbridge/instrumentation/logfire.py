@@ -41,7 +41,3 @@ def logfire_initialize():
 
     if settings.instrument_mcp_enabled:
         MCPInstrumentor().instrument()
-
-    logfire.install_auto_tracing(
-        modules=["starbridge.confluence"], min_duration=0.001
-    )  # FIXME: get modules from settings

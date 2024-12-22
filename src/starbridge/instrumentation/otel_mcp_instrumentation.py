@@ -12,7 +12,7 @@ from opentelemetry.trace import StatusCode
 tracer = trace.get_tracer("mcp.server")
 
 
-class MCPInstrumentor(BaseInstrumentor):
+class MCPInstrumentor(BaseInstrumentor):  # pragma: no cover
     def instrumentation_dependencies(self):
         return []
 

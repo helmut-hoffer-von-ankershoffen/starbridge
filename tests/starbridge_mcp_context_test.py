@@ -1,6 +1,9 @@
 import pytest
 
+from starbridge.instrumentation import logfire_initialize
 from starbridge.mcp import MCPContext, MCPServer
+
+logfire_initialize()
 
 
 async def test_read_request_fails_outside_server():
