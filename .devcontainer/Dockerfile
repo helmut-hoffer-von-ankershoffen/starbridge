@@ -10,5 +10,6 @@ RUN apk add \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Node.js
-RUN apk add nodejs npm
+RUN apk add nodejs npm \
+    && rm -rf /var/lib/apt/lists/*
 
