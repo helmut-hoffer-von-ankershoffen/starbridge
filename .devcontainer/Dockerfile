@@ -6,4 +6,4 @@ RUN curl --proto '=https' --tlsv1.2 -fsSL https://deb.nodesource.com/setup_22.x 
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN npm install -g @modelcontextprotocol/inspector@0.3.0
+RUN npm install --ignore-scripts -g @modelcontextprotocol/inspector@0.3.0
