@@ -1,7 +1,6 @@
 import json
 import os
 import subprocess
-import time
 from pathlib import Path
 from unittest.mock import patch
 
@@ -130,7 +129,6 @@ def test_mcp_resource(mock_get_space, runner):
 
 
 def test_mcp_inspector(runner):
-    expected_msg = "MCP Inspector is up and running"
     env = os.environ.copy()
     env.update({
         "COVERAGE_PROCESS_START": "pyproject.toml",
@@ -138,49 +136,15 @@ def test_mcp_inspector(runner):
         "MOCKS": "webbrowser.open",
     })
 
-    process = subprocess.Popen(
-        ["uv", "run", "starbridge", "mcp", "inspect"],
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True,
-        env=env,
-    )
-
-    found_expected_msg = False
-    output_lines = []
-    out = ""
-    err = ""
-
     try:
-        start_time = time.time()
-        while time.time() - start_time < 20:
-            if process.stdout is None:
-                break
-
-            line = process.stdout.readline()
-            if line:
-                output_lines.append(line)
-            if expected_msg in line:
-                found_expected_msg = True
-                break
-
-            if process.poll() is not None:
-                break
-
-            time.sleep(0.1)
-
-        # Get any remaining output
-        try:
-            out, err = process.communicate(timeout=1)
-            out = "\n".join(output_lines) + (out or "")
-            if not found_expected_msg:
-                found_expected_msg = expected_msg in out
-        except subprocess.TimeoutExpired:
-            out = "\n".join(output_lines)
-            err = ""
-
-        assert found_expected_msg, (
-            f"Expected message '{expected_msg}' not found in output. STDOUT: {out}, STDERR: {err}"
+        process = subprocess.run(
+            ["uv", "run", "starbridge", "mcp", "inspect"],
+            capture_output=True,
+            timeout=10,
+            text=True,
+            env=env,
         )
-    finally:
-        process.kill()
+    except subprocess.TimeoutExpired:
+        pass
+
+    assert "Opened browser pointing to MCP Inspector" in process.stdout
