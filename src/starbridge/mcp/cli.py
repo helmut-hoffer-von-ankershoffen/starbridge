@@ -62,6 +62,22 @@ def prompts():
 
 
 @cli.command()
+def prompt(
+    name: str,
+    arguments: Annotated[
+        list[str] | None, typer.Option(help="Arguments in key=value format")
+    ] = None,
+):
+    """Get a prompt by name with optional arguments"""
+    args = {}
+    if arguments:
+        for arg in arguments:
+            key, value = arg.split("=", 1)
+            args[key] = value
+    console.print(MCPServer.prompt(name, args))
+
+
+@cli.command()
 def resource_types():
     """Resource types exposed by modules"""
     console.print(MCPServer.resource_types())

@@ -31,9 +31,9 @@ def info():
 
 
 @cli.command()
-def hello():
+def hello(locale: Annotated[str, typer.Option(help="Locale to use")] = "en_US") -> None:
     """Print Hello World!"""
-    console.print(Service().hello())
+    console.print(Service().hello(locale))
 
 
 @cli.command()

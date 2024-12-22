@@ -1,9 +1,12 @@
+import asyncio
 import base64
 import os
+import signal
 from pathlib import Path
 
 import pytest
 from mcp import ClientSession, StdioServerParameters
+from mcp.client.sse import sse_client
 from mcp.client.stdio import get_default_environment, stdio_client
 from mcp.types import ImageContent, PromptMessage, TextContent, TextResourceContents
 from pydantic import AnyUrl
@@ -70,6 +73,82 @@ async def test_mcp_server_list_tools():
             tool_names = [tool.name for tool in result.tools]
             for expected_tool in expected_tools:
                 assert expected_tool in tool_names
+
+
+@pytest.mark.skip(reason="SSE test disabled temporarily")
+@pytest.mark.asyncio
+async def test_mcp_server_list_tools_sse():
+    """Test listing of tools from the server in sse mode"""
+    expected_tools = [
+        "starbridge_claude_health",
+        "starbridge_claude_info",
+        "starbridge_claude_restart",
+        "starbridge_confluence_health",
+        "starbridge_confluence_info",
+        "starbridge_confluence_page_create",
+        "starbridge_confluence_page_delete",
+        "starbridge_confluence_page_get",
+        "starbridge_confluence_page_list",
+        "starbridge_confluence_page_update",
+        "starbridge_confluence_space_list",
+        "starbridge_hello_bridge",
+        "starbridge_hello_health",
+        "starbridge_hello_hello",
+        "starbridge_hello_info",
+        "starbridge_hello_pdf",
+    ]
+
+    # Start the server in SSE mode
+    env = os.environ.copy()
+    env.update({
+        "COVERAGE_PROCESS_START": "pyproject.toml",
+        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", ".coverage"),
+        "PYTHONPATH": ".",
+    })
+
+    process = await asyncio.create_subprocess_exec(
+        "uv",
+        "run",
+        "starbridge",
+        "mcp",
+        "serve",
+        "--host",
+        "0.0.0.0",
+        "--port",
+        "8002",
+        env=env,
+        stdout=asyncio.subprocess.PIPE,
+        stderr=asyncio.subprocess.PIPE,
+    )
+
+    try:
+        # Give the server a moment to start up
+        await asyncio.sleep(2)
+
+        # Connect to the server using SSE
+        async with sse_client(
+            "http://0.0.0.0:8002/sse", timeout=1, sse_read_timeout=1
+        ) as (read, write):
+            async with ClientSession(read, write) as session:
+                # Initialize the connection
+                await session.initialize()
+
+                # List available tools
+                result = await session.list_tools()
+
+                # Verify each expected tool is present
+                tool_names = [tool.name for tool in result.tools]
+                for expected_tool in expected_tools:
+                    assert expected_tool in tool_names
+
+        process.terminate()
+
+    finally:
+        process.terminate()
+        # Clean up the subprocess
+        if process.returncode is None:
+            process.send_signal(signal.SIGTERM)
+            await process.wait()
 
 
 @pytest.mark.asyncio

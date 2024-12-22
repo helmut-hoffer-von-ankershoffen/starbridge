@@ -267,12 +267,16 @@ class MCPServer(MCPBaseService):
         return asyncio.run(MCPServer().resource_list())
 
     @staticmethod
+    def resource(uri: str) -> str:
+        return asyncio.run(MCPServer().resource_get(AnyUrl(uri)))
+
+    @staticmethod
     def prompts() -> list[types.Prompt]:
         return asyncio.run(MCPServer().prompt_list())
 
     @staticmethod
-    def resource(uri: str) -> str:
-        return asyncio.run(MCPServer().resource_get(AnyUrl(uri)))
+    def prompt(name: str, arguments: dict | None = None) -> types.GetPromptResult:
+        return asyncio.run(MCPServer().prompt_get(name, arguments))
 
     @staticmethod
     def serve(host: str | None = None, port: int | None = None, debug: bool = True):
