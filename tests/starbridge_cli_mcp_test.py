@@ -191,4 +191,3 @@ def test_mcp_inspector(runner):
                 process.wait(timeout=1)
             except subprocess.TimeoutExpired:
                 process.kill()
-                process.wait()
