@@ -130,17 +130,15 @@ def test_mcp_resource(mock_get_space, runner):
 
 
 def test_mcp_inspector(runner):
-    """Test the MCP inspector command with timeout and browser check."""
     expected_msg = "MCP Inspector is up and running"
-
     env = os.environ.copy()
-    # Add coverage config to subprocess
     env.update({
         "COVERAGE_PROCESS_START": "pyproject.toml",
         "COVERAGE_FILE": os.getenv("COVERAGE_FILE", ".coverage"),
         "PYTHONPATH": ".",
         "MOCKS": "webbrowser.open",
     })
+
     process = subprocess.Popen(
         ["uv", "run", "starbridge", "mcp", "inspect"],
         stdout=subprocess.PIPE,
@@ -150,19 +148,24 @@ def test_mcp_inspector(runner):
     )
 
     found_expected_msg = False
+    output_lines = []
+    out = ""
+    err = ""
+
     try:
-        # Wait up to 10 seconds for the expected output
         start_time = time.time()
         while time.time() - start_time < 10:
             if process.stdout is None:
                 break
 
             line = process.stdout.readline()
+            if line:
+                output_lines.append(line)
             if expected_msg in line:
                 found_expected_msg = True
                 break
 
-            if process.poll() is not None:  # Process ended
+            if process.poll() is not None:
                 break
 
             time.sleep(0.1)
@@ -170,15 +173,20 @@ def test_mcp_inspector(runner):
         # Get any remaining output
         try:
             out, err = process.communicate(timeout=1)
+            out = "\n".join(output_lines) + (out or "")
             if not found_expected_msg:
-                found_expected_msg = expected_msg in (out or "")
+                found_expected_msg = expected_msg in out
         except subprocess.TimeoutExpired:
-            pass
+            out = "\n".join(output_lines)
+            err = ""
 
-        # Fail test if message wasn't found
         assert found_expected_msg, (
             f"Expected message '{expected_msg}' not found in output. STDOUT: {out}, STDERR: {err}"
         )
-
     finally:
-        process.kill()
+        if process.poll() is None:
+            process.terminate()
+            try:
+                process.wait(timeout=1)
+            except subprocess.TimeoutExpired:
+                process.kill()
