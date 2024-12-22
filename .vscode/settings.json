@@ -33,4 +33,8 @@
     "python.analysis.ignore": [
         "**/typing.py"
     ],
+    "sonarlint.connectedMode.project": {
+        "connectionId": "helmut-hoffer-von-ankershoffen",
+        "projectKey": "helmut-hoffer-von-ankershoffen_starbridge"
+    },
 }

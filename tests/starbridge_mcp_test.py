@@ -5,7 +5,8 @@ from pathlib import Path
 import pytest
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import get_default_environment, stdio_client
-from mcp.types import ImageContent, PromptMessage, TextContent
+from mcp.types import ImageContent, PromptMessage, TextContent, TextResourceContents
+from pydantic import AnyUrl
 from typer.testing import CliRunner
 
 
@@ -94,6 +95,31 @@ async def test_mcp_server_list_resources():
 
 
 @pytest.mark.asyncio
+async def test_mcp_server_read_resource():
+    """Test getting prompt from server"""
+    async with stdio_client(
+        _server_parameters(["atlassian.Confluence.get_all_spaces"])
+    ) as (read, write):
+        async with ClientSession(read, write) as session:
+            # Initialize the connection
+            await session.initialize()
+
+            # List available prompts
+            result = await session.read_resource(
+                AnyUrl(
+                    "starbridge://confluence/space/~7120201709026d2b41448e93bb58d5fa301026"
+                )
+            )
+            assert len(result.contents) == 1
+            content = result.contents[0]
+            assert type(content) is TextResourceContents
+            assert (
+                content.text
+                == Path("tests/fixtures/resource_confluence_space.json").read_text()
+            )
+
+
+@pytest.mark.asyncio
 async def test_mcp_server_list_prompts():
     """Test listing of prompts from the server"""
     async with stdio_client(_server_parameters()) as (read, write):
@@ -118,14 +144,17 @@ async def test_mcp_server_prompt_get():
             await session.initialize()
 
             # List available prompts
-            result = await session.get_prompt("starbridge_confluence_space_summary")
+            result = await session.get_prompt(
+                "starbridge_confluence_space_summary", {"style": "detailed"}
+            )
+
             assert len(result.messages) == 1
             message = result.messages[0]
             assert type(message) is PromptMessage
             assert type(message.content) is TextContent
             assert (
                 message.content.text
-                == "Here are the current spaces to summarize:\n\n- ~7120201709026d2b41448e93bb58d5fa301026: helmut (personal)"
+                == "Here are the current spaces to summarize: Give extensive details.\n\n- ~7120201709026d2b41448e93bb58d5fa301026: helmut (personal)"
             )
 
 
@@ -143,6 +172,15 @@ async def test_mcp_server_tool_call():
             content = result.content[0]
             assert type(content) is TextContent
             assert content.text == "Hello World!"
+
+            # List available prompts
+            result = await session.call_tool(
+                "starbridge_hello_hello", {"locale": "de_DE"}
+            )
+            assert len(result.content) == 1
+            content = result.content[0]
+            assert type(content) is TextContent
+            assert content.text == "Hallo Welt!"
 
 
 @pytest.mark.asyncio

@@ -159,4 +159,4 @@ claude = "starbridge.claude.service:Service"
 hello = "starbridge.hello.service:Service"
 
 [project.scripts]
-starbridge = "starbridge:cli"
+starbridge = "starbridge.cli:cli"

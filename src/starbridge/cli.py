@@ -276,9 +276,11 @@ def _no_args_is_help_recursively(cli: typer.Typer):
 
 _no_args_is_help_recursively(cli)
 
-if __name__ == "__main__":  # pragma: no cover
+if __name__ == "__main__":
     try:
         cli()
-    except BaseException as e:
+        sys.exit(0)
+    except Exception as e:
         logger.critical(f"Fatal error occurred: {e}")
+        console.print(f"Fatal error occurred: {e}", style="error")
         sys.exit(1)

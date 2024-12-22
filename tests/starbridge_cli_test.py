@@ -1,4 +1,7 @@
 import json
+import os
+import subprocess
+import sys
 from unittest.mock import patch
 
 import pytest
@@ -75,3 +78,38 @@ def test_install(runner, tmp_path):
         json_start = result.output.find("{")
         output_json = json.loads(result.output[json_start:])
         assert output_json["mcpServers"].get("starbridge") is None
+
+
+def test_cli_main_guard():
+    env = os.environ.copy()
+    env.update({
+        "COVERAGE_PROCESS_START": "pyproject.toml",
+        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", ".coverage"),
+        "PYTHONPATH": ".",
+    })
+    result = subprocess.run(
+        [sys.executable, "-m", "starbridge.cli", "hello", "hello"],
+        capture_output=True,
+        text=True,  # Get string output instead of bytes
+        env=env,
+    )
+    assert result.returncode == 0
+    assert "Hello World!" in result.stdout
+
+
+def test_cli_main_guard_fail():
+    env = os.environ.copy()
+    env.update({
+        "COVERAGE_PROCESS_START": "pyproject.toml",
+        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", ".coverage"),
+        "PYTHONPATH": ".",
+        "MOCKS": "starbridge_hello_service_hello_fail",
+    })
+    result = subprocess.run(
+        [sys.executable, "-m", "starbridge.cli", "hello", "hello"],
+        capture_output=True,
+        text=True,
+        env=env,  # Get string output instead of bytes
+    )
+    assert result.returncode == 1
+    assert "Fatal error occurred: Hello World failed" in result.stdout

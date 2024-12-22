@@ -39,8 +39,14 @@ class Service(MCPBaseService):
         return {"locale": "en_US"}
 
     @mcp_tool()
-    def hello(self, context: MCPContext | None = None):
+    def hello(self, locale: str = "en_US", context: MCPContext | None = None):
         """Print hello world!"""
+        if "starbridge_hello_service_hello_fail" in os.environ.get("MOCKS", "").split(
+            ","
+        ):
+            raise RuntimeError("Hello World failed")
+        if locale == "de_DE":
+            return "Hallo Welt!"
         return "Hello World!"
 
     @mcp_tool()

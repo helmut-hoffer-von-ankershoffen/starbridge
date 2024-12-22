@@ -9,6 +9,7 @@
 [![Coverage](https://codecov.io/gh/helmut-hoffer-von-ankershoffen/starbridge/graph/badge.svg?token=SX34YRP30E)](https://codecov.io/gh/helmut-hoffer-von-ankershoffen/starbridge)
 [![PyPI](https://img.shields.io/pypi/v/starbridge.svg)](https://pypi.python.org/pypi/starbridge)
 [![Docker](https://badgen.net/docker/size/helmuthva/starbridge?icon=docker&label=image%20size)](https://hub.docker.com/r/helmuthva/starbridge/)
+[![GitHub Repo stars](https://img.shields.io/github/stars/helmut-hoffer-von-ankershoffen/starbridge)](https://github.com/helmut-hoffer-von-ankershoffen/starbridge)
 
 > ⚠️ **WARNING**: This project is currently in pre-alpha phase, i.e. partly functional. Feel free to watch or star the repository to stay updated on its progress.
 
