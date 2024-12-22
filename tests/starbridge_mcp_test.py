@@ -2,9 +2,12 @@ import asyncio
 import base64
 import os
 import signal
+import subprocess
+import time
 from pathlib import Path
 
 import pytest
+import requests
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.sse import sse_client
 from mcp.client.stdio import get_default_environment, stdio_client
@@ -307,3 +310,49 @@ async def test_mcp_server_tool_call_with_pdf():
             assert content.resource.blob == base64.b64encode(
                 Path("tests/fixtures/starbridge.pdf").read_bytes()
             ).decode("utf-8")
+
+
+def test_mcp_server_sse_terminates(runner):
+    env = os.environ.copy()
+    env.update({
+        "COVERAGE_PROCESS_START": "pyproject.toml",
+        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", ".coverage"),
+        "MOCKS": "webbrowser.open",
+    })
+
+    process = subprocess.Popen(
+        [
+            "uv",
+            "run",
+            "starbridge",
+            "mcp",
+            "serve",
+            "--host",
+            "0.0.0.0",
+            "--port",
+            "9000",
+        ],
+        text=True,
+        env=env,
+    )
+
+    try:
+        # Give the server time to start
+        time.sleep(5)
+
+        # Send terminate request
+        try:
+            response = requests.get("http://0.0.0.0:9000/terminate")
+            response.raise_for_status()
+        except requests.exceptions.ConnectionError:
+            pass
+
+        # Wait for process to end (timeout after 5 seconds)
+        process.wait(timeout=5)
+
+        assert process.returncode == 1
+
+    finally:
+        # Ensure process is terminated even if test fails
+        if process.poll() is None:
+            process.kill()

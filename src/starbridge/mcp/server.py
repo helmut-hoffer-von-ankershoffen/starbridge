@@ -231,10 +231,14 @@ class MCPServer:
                 ),  # Use json.dumps instead of model_dump_json
             )
 
+        async def handle_terminate(request):
+            os.kill(os.getpid(), 1)
+
         return Starlette(
             debug=debug,
             routes=[
                 Route("/health", endpoint=handle_health, methods=["GET"]),
+                Route("/terminate", endpoint=handle_terminate, methods=["GET"]),
                 Route("/sse", endpoint=handle_sse),
                 Route("/messages", endpoint=handle_messages, methods=["POST"]),
             ],
