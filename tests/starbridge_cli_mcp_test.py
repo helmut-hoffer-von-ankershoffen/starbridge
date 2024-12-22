@@ -184,8 +184,7 @@ def test_mcp_inspector(runner):
         )
 
     finally:
-        # Ensure the process is terminated
-        if process.poll() is None:
+        if process:
             process.terminate()
             try:
                 process.wait(timeout=1)
