@@ -139,7 +139,8 @@ env = ["COVERAGE_FILE=.coverage", "COVERAGE_PROCESS_START=pyproject.toml"]
 [tool.coverage.run]
 parallel = true
 branch = true
-source = ["starbridge"]
+relative_files = true
+source = ["src"]
 concurrency = ["multiprocessing", "thread"]
 
 [tool.coverage.paths]
