@@ -8,13 +8,16 @@ import pytest
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.sse import sse_client
 from mcp.client.stdio import get_default_environment, stdio_client
-from mcp.types import ImageContent, PromptMessage, TextContent, TextResourceContents
+from mcp.types import (
+    BlobResourceContents,
+    EmbeddedResource,
+    ImageContent,
+    PromptMessage,
+    TextContent,
+    TextResourceContents,
+)
 from pydantic import AnyUrl
 from typer.testing import CliRunner
-
-from starbridge.instrumentation import logfire_initialize
-
-logfire_initialize()
 
 
 @pytest.fixture
@@ -281,7 +284,26 @@ async def test_mcp_server_tool_call_with_image():
             assert len(result.content) == 1
             content = result.content[0]
             assert type(content) is ImageContent
-            # Check base64 encoded data returned equals what's found in starbridge.png, again base64 encoded
             assert content.data == base64.b64encode(
                 Path("tests/fixtures/starbridge.png").read_bytes()
+            ).decode("utf-8")
+
+
+@pytest.mark.asyncio
+async def test_mcp_server_tool_call_with_pdf():
+    """Test listing of prompts from the server"""
+    async with stdio_client(_server_parameters()) as (read, write):
+        async with ClientSession(read, write) as session:
+            # Initialize the connection
+            await session.initialize()
+
+            # List available prompts
+            result = await session.call_tool("starbridge_hello_pdf", {})
+            assert len(result.content) == 1
+            content = result.content[0]
+            assert type(content) is EmbeddedResource
+            assert type(content.resource) is BlobResourceContents
+            assert content.resource.mimeType == "application/pdf"
+            assert content.resource.blob == base64.b64encode(
+                Path("tests/fixtures/starbridge.pdf").read_bytes()
             ).decode("utf-8")
