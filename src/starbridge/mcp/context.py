@@ -3,8 +3,6 @@ from typing import Any, Literal
 from mcp.shared.context import RequestContext
 from pydantic import AnyUrl, BaseModel
 
-_CONTEXT_NOT_AVAILABLE_MESSAGE = "Context is not available outside of a request"
-
 
 class MCPContext(BaseModel):
     """Context object providing access to MCP capabilities.
@@ -56,7 +54,7 @@ class MCPContext(BaseModel):
     """
 
     _request_context: RequestContext | None
-    _mcp: Any | None  # Avoid circular import by using Any
+    _mcp: Any  # Avoid circular import by using Any
 
     def __init__(
         self,
@@ -72,15 +70,13 @@ class MCPContext(BaseModel):
     @property
     def mcp(self) -> Any:
         """Access to the MCP server."""
-        if self._mcp is None:
-            raise ValueError(_CONTEXT_NOT_AVAILABLE_MESSAGE)
         return self._mcp
 
     @property
     def request_context(self) -> RequestContext:
         """Access to the underlying request context."""
         if self._request_context is None:
-            raise ValueError(_CONTEXT_NOT_AVAILABLE_MESSAGE)
+            raise RuntimeError("Context is not available outside of a request")
         return self._request_context
 
     async def report_progress(
@@ -115,7 +111,6 @@ class MCPContext(BaseModel):
         Returns:
             (str | bytes): The resource content as either text or bytes
         """
-        assert self._mcp is not None, _CONTEXT_NOT_AVAILABLE_MESSAGE
         return await self._mcp.read_resource(uri)
 
     async def log(

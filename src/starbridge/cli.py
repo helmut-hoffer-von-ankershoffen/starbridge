@@ -276,7 +276,7 @@ def _no_args_is_help_recursively(cli: typer.Typer):
 
 _no_args_is_help_recursively(cli)
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     try:
         cli()
     except BaseException as e:
