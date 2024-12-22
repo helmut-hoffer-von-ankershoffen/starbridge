@@ -143,7 +143,7 @@ def inspect():
         match = re.search(url_pattern, line)
         if match:
             url = match.group(1)
-            console.print(print(f"Opened browser pointing to MCP Inspector at {url}"))
+            console.print(f"Opened browser pointing to MCP Inspector at {url}")
             webbrowser.open(url)
 
     process.wait()
