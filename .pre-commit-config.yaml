@@ -4,7 +4,7 @@ repos:
     hooks:
       - id: nox
         name: nox
-        entry: uv run nox -s lint
+        entry: uv run nox
         language: system
         pass_filenames: false
         always_run: true
