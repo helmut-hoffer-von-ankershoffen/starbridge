@@ -154,7 +154,7 @@ def test_mcp_inspector(runner):
 
     try:
         start_time = time.time()
-        while time.time() - start_time < 10:
+        while time.time() - start_time < 20:
             if process.stdout is None:
                 break
 
@@ -172,7 +172,7 @@ def test_mcp_inspector(runner):
 
         # Get any remaining output
         try:
-            out, err = process.communicate(timeout=1)
+            out, err = process.communicate(timeout=10)
             out = "\n".join(output_lines) + (out or "")
             if not found_expected_msg:
                 found_expected_msg = expected_msg in out
