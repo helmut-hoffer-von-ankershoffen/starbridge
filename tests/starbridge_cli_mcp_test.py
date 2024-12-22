@@ -63,9 +63,11 @@ def test_mcp_tools(runner):
 
 def test_mcp_tool(runner):
     """Check a tool."""
-    result = runner.invoke(cli, ["mcp", "tool", "starbridge_hello_hello"])
+    result = runner.invoke(
+        cli, ["mcp", "tool", "starbridge_hello_hello", "--arguments", "locale=de_DE"]
+    )
     assert result.exit_code == 0
-    assert "Hello World!" in result.stdout
+    assert "Hallo Welt!" in result.stdout
 
 
 def test_mcp_prompts(runner):

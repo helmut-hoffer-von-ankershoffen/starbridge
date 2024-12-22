@@ -38,9 +38,19 @@ def tools():
 
 
 @cli.command()
-def tool(name: str):
-    """Get tool by name"""
-    console.print(MCPServer.tool(name))
+def tool(
+    name: str,
+    arguments: Annotated[
+        list[str] | None, typer.Option(help="Arguments in key=value format")
+    ] = None,
+):
+    """Get tool by name with optional arguments"""
+    args = {}
+    if arguments:
+        for arg in arguments:
+            key, value = arg.split("=", 1)
+            args[key] = value
+    console.print(MCPServer.tool(name, args))
 
 
 @cli.command()

@@ -25,19 +25,6 @@ def logfire_initialize():
     if settings.token is None:
         return False
 
-    def scrubbing_callback(m: logfire.ScrubMatch):
-        if (
-            m.path == ("attributes", "rpc.jsonrpc.result")
-            and m.pattern_match.group(0) == "session"
-        ):
-            return m.value
-
-        if (
-            m.path == ("attributes", "jsonrpc.result")
-            and m.pattern_match.group(0) == "session"
-        ):
-            return m.value
-
     logfire.configure(
         send_to_logfire="if-token-present",
         token=settings.token,
@@ -49,15 +36,12 @@ def logfire_initialize():
             revision=__version__,
             root_path="",
         ),
-        scrubbing=logfire.ScrubbingOptions(callback=scrubbing_callback),
     )
     logfire.instrument_system_metrics(base="full")
-
-    logfire.install_auto_tracing(
-        modules=["starbridge.confluence"], min_duration=0.001
-    )  # FIXME: get modules from settings
 
     if settings.instrument_mcp_enabled:
         MCPInstrumentor().instrument()
 
-    return True
+    logfire.install_auto_tracing(
+        modules=["starbridge.confluence"], min_duration=0.001
+    )  # FIXME: get modules from settings
