@@ -15,7 +15,7 @@ RUN apt update -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-RUN npm install @modelcontextprotocol/inspector@0.3.0
+RUN npm install -g @modelcontextprotocol/inspector@0.3.0
 
 # Enable bytecode compilation
 ENV UV_COMPILE_BYTECODE=1
