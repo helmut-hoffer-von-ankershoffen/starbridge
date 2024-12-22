@@ -52,9 +52,9 @@ class Service(MCPBaseService):
             isinstance(spaces, dict)
             and "results" in spaces
             and isinstance(spaces["results"], list)
+            and len(spaces["results"]) > 0
         ):
-            if len(spaces["results"]) > 0:
-                return Health(status=Health.Status.UP)
+            return Health(status=Health.Status.UP)
         return Health(status=Health.Status.DOWN, reason="No spaces found")
 
     @mcp_tool()

@@ -67,14 +67,16 @@ def info():
 def configure():
     """Generate .env file for Starbridge"""
     if not _is_development_mode():
-        raise Exception("This command is only available in development mode")
+        raise RuntimeError("This command is only available in development mode")
 
     starbridge_path = pathlib.Path(_get_starbridge_path())
     env_example_path = starbridge_path / ".env.example"
     env_path = starbridge_path / ".env"
 
     if not env_example_path.exists():
-        raise Exception(".env.example file not found")
+        raise FileNotFoundError(
+            f"Required .env.example file not found at {env_example_path}"
+        )
 
     example_values = dotenv_values(env_example_path)
     current_values = dotenv_values(env_path) if env_path.exists() else {}
@@ -277,6 +279,6 @@ _no_args_is_help_recursively(cli)
 if __name__ == "__main__":
     try:
         cli()
-    except Exception as e:
-        logger.critical(e)
+    except BaseException as e:
+        logger.critical(f"Fatal error occurred: {e}")
         sys.exit(1)

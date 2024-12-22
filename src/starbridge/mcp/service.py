@@ -2,7 +2,6 @@ from collections import defaultdict
 from dataclasses import dataclass
 from importlib.metadata import entry_points
 from inspect import signature
-from typing import Any
 from urllib.parse import urlparse
 
 import mcp.types as types
@@ -184,12 +183,3 @@ class MCPBaseService:
                     )
                 )
         return prompts
-
-    def get_prompt(
-        self,
-        name: str,
-        arguments: dict[str, Any] | None,
-        context: MCPContext | None = None,
-    ) -> types.GetPromptResult:
-        """Get prompt content. Override in subclass."""
-        return types.GetPromptResult(description=None, messages=[])

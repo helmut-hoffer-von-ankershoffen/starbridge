@@ -24,9 +24,6 @@ from . import cli
 class Service(MCPBaseService):
     """Service class for Hello World operations."""
 
-    def __init__(self):
-        pass
-
     @staticmethod
     def get_cli() -> tuple[str | None, typer.Typer | None]:
         """Get CLI for Hello World service."""

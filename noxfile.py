@@ -6,17 +6,19 @@ import nox
 nox.options.reuse_existing_virtualenvs = True
 nox.options.default_venv_backend = "uv"
 
+_INSTALL_ARGS = "-e .[dev]"
+
 
 @nox.session(python=["3.11", "3.12", "3.13"])
 def test(session: nox.Session):
-    session.install("-e .[dev]")
+    session.install(_INSTALL_ARGS)
     session.run("rm", "-rf", ".coverage")
     session.run("pytest", "--disable-warnings", "--junitxml=junit.xml")
 
 
 @nox.session(python=["3.11"])
 def lint(session: nox.Session):
-    session.install("-e .[dev]")
+    session.install(_INSTALL_ARGS)
     session.run("ruff", "check", ".")
     session.run(
         "ruff",
@@ -28,7 +30,7 @@ def lint(session: nox.Session):
 
 @nox.session(python=["3.11"])
 def audit(session: nox.Session):
-    session.install("-e .[dev]")
+    session.install(_INSTALL_ARGS)
     session.run("pip-audit", "-f", "json", "-o", "vulnerabilities.json")
     session.run("jq", ".", "vulnerabilities.json", external=True)
     session.run("pip-licenses", "--format=json", "--output-file=licenses.json")

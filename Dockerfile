@@ -4,9 +4,12 @@ FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 # Install the project into `/app`
 WORKDIR /app
 
-RUN apt update -y && apt install -y libcairo2
+RUN apt update -y && apt install -y libcairo2 apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && apt-get install -y nodejs
+RUN apt update -y && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt-get install -y nodejs && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Enable bytecode compilation
 ENV UV_COMPILE_BYTECODE=1
@@ -22,13 +25,13 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 # Then, add the rest of the project source code and install it
 # Installing separately from its dependencies allows optimal layer caching
-ADD pyproject.toml /app
-ADD uv.lock /app
-ADD tests/ /app
-ADD src/ /app
-ADD LICENSE /app
-ADD *.md /app
-ADD .python-version /app
+COPY pyproject.toml /app
+COPY uv.lock /app
+COPY tests/ /app
+COPY src/ /app
+COPY LICENSE /app
+COPY *.md /app
+COPY .python-version /app
 
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev
