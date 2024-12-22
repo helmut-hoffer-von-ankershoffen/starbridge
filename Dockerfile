@@ -4,9 +4,13 @@ FROM ghcr.io/astral-sh/uv:python3.12-bookworm-slim
 # Install the project into `/app`
 WORKDIR /app
 
-RUN apt update -y && apt install -y libcairo2 && apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN apt update -y && \
+    apt install -y --no-install-recommends libcairo2 && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-RUN apt update -y && curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+RUN apt update -y && \
+    curl -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt-get install -y --no-install-recommends nodejs && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
