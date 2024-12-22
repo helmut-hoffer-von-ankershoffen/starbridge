@@ -135,7 +135,6 @@ def test_mcp_inspector(runner):
     env.update({
         "COVERAGE_PROCESS_START": "pyproject.toml",
         "COVERAGE_FILE": os.getenv("COVERAGE_FILE", ".coverage"),
-        "PYTHONPATH": ".",
         "MOCKS": "webbrowser.open",
     })
 
@@ -172,7 +171,7 @@ def test_mcp_inspector(runner):
 
         # Get any remaining output
         try:
-            out, err = process.communicate(timeout=10)
+            out, err = process.communicate(timeout=1)
             out = "\n".join(output_lines) + (out or "")
             if not found_expected_msg:
                 found_expected_msg = expected_msg in out
