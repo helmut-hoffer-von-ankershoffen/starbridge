@@ -11,9 +11,11 @@ RUN apt update -y && \
 
 RUN apt update -y && \
     curl --proto '=https' --tlsv1.2 -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
-    apt-get install -y --no-install-recommends nodejs && \
+    apt-get install -y --no-install-recommends nodejs npm && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+
+RUN npm install @modelcontextprotocol/inspector@0.3.0
 
 # Enable bytecode compilation
 ENV UV_COMPILE_BYTECODE=1
