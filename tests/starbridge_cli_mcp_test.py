@@ -151,7 +151,7 @@ def test_mcp_inspector(runner):
 
     found_expected_msg = False
     try:
-        # Wait up to 5 seconds for the expected output
+        # Wait up to 10 seconds for the expected output
         start_time = time.time()
         while time.time() - start_time < 10:
             if process.stdout is None:
@@ -173,10 +173,7 @@ def test_mcp_inspector(runner):
             if not found_expected_msg:
                 found_expected_msg = expected_msg in (out or "")
         except subprocess.TimeoutExpired:
-            process.kill()
-            out, err = process.communicate()
-            if not found_expected_msg:
-                found_expected_msg = expected_msg in (out or "")
+            pass
 
         # Fail test if message wasn't found
         assert found_expected_msg, (
@@ -184,9 +181,4 @@ def test_mcp_inspector(runner):
         )
 
     finally:
-        if process:
-            process.terminate()
-            try:
-                process.wait(timeout=1)
-            except subprocess.TimeoutExpired:
-                process.kill()
+        process.kill()
