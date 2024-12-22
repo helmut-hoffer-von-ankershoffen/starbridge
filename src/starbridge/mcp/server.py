@@ -33,7 +33,7 @@ from starbridge.utils import AggregatedHealth, get_logger
 logger = get_logger(__name__)
 
 
-class MCPServer(MCPBaseService):
+class MCPServer:
     """MCP Server for Starbridge."""
 
     def __init__(self):
