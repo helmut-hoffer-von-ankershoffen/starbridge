@@ -184,9 +184,4 @@ def test_mcp_inspector(runner):
             f"Expected message '{expected_msg}' not found in output. STDOUT: {out}, STDERR: {err}"
         )
     finally:
-        if process.poll() is None:
-            process.terminate()
-            try:
-                process.wait(timeout=1)
-            except subprocess.TimeoutExpired:
-                process.kill()
+        process.kill()
