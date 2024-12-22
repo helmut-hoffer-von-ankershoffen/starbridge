@@ -129,7 +129,6 @@ def test_mcp_resource(mock_get_space, runner):
     assert "7120201709026d2b41448e93bb58d" in result.stdout
 
 
-@pytest.mark.skip(reason="test_mcp_inspector disabled temporarily")
 def test_mcp_inspector(runner):
     """Test the MCP inspector command with timeout and browser check."""
     expected_msg = "MCP Inspector is up and running"
@@ -150,6 +149,7 @@ def test_mcp_inspector(runner):
         env=env,
     )
 
+    found_expected_msg = False
     try:
         # Wait up to 5 seconds for the expected output
         start_time = time.time()
@@ -159,6 +159,7 @@ def test_mcp_inspector(runner):
 
             line = process.stdout.readline()
             if expected_msg in line:
+                found_expected_msg = True
                 break
 
             if process.poll() is not None:  # Process ended
@@ -166,16 +167,28 @@ def test_mcp_inspector(runner):
 
             time.sleep(0.1)
 
-        # Get any remaining output for the assertion
-        out, _ = process.communicate(timeout=1)
-        assert expected_msg in (out or "")
+        # Get any remaining output
+        try:
+            out, err = process.communicate(timeout=1)
+            if not found_expected_msg:
+                found_expected_msg = expected_msg in (out or "")
+        except subprocess.TimeoutExpired:
+            process.kill()
+            out, err = process.communicate()
+            if not found_expected_msg:
+                found_expected_msg = expected_msg in (out or "")
+
+        # Fail test if message wasn't found
+        assert found_expected_msg, (
+            f"Expected message '{expected_msg}' not found in output. STDOUT: {out}, STDERR: {err}"
+        )
 
     finally:
         # Ensure the process is terminated
-        if process.poll() is None:  # If process is still running
+        if process.poll() is None:
             process.terminate()
             try:
                 process.wait(timeout=1)
             except subprocess.TimeoutExpired:
-                process.kill()  # Force kill if it doesn't terminate
+                process.kill()
                 process.wait()
