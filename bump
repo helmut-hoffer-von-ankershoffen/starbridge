@@ -1,0 +1,2 @@
+!#/bin/sh
+bump-my-version bump patch && git push
