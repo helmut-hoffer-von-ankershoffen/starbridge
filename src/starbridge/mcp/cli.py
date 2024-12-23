@@ -11,8 +11,8 @@ from typing import Annotated
 
 import typer
 
-from starbridge.base import __project_name__
-from starbridge.utils.console import console
+from starbridge.base import __project_name__, __version__
+from starbridge.utils import console, get_process_info
 
 from .server import MCPServer
 
@@ -113,6 +113,13 @@ def serve(
             help="Debug mode",
         ),
     ] = True,
+    env: Annotated[  # Parsed in bootstrap.py
+        list[str] | None,
+        typer.Option(
+            "--env",
+            help='Environment variables in key=value format. Can be used multiple times in one call. Only STARBRIDGE_ prefixed vars are used. Example --env STARBRIDGE_ATLASSIAN_URL="https://your-domain.atlassian.net" --env STARBRIDGE_ATLASSIAN_EMAIL="YOUR_EMAIL"',
+        ),
+    ] = None,
 ):
     """Run MCP server."""
     MCPServer().serve(host, port, debug)
@@ -121,20 +128,28 @@ def serve(
 @cli.command()
 def inspect():
     """Run inspector."""
-    project_root = str(pathlib.Path(__file__).parent.parent.parent.parent)
+    process_info = get_process_info()
     console.print(
-        f"Starbridge project root: {project_root}\nStarbridge environment:\n{os.environ}"
+        f"⭐ Starbridge controller: v{__version__} (project root {process_info.project_root}, pid {process_info.pid}), parent '{process_info.parent.name}' (pid {process_info.parent.pid})"
     )
+    env_args = []
+    for key, value in os.environ.items():
+        if key.startswith("STARBRIDGE_"):
+            env_args.extend(["--env", f'{key}="{value}"'])
+    cmd = [
+        "npx",
+        "@modelcontextprotocol/inspector",
+        "uv",
+        "--directory",
+        process_info.project_root,
+        "run",
+        "--no-dev",
+        __project_name__,
+    ] + env_args
+    console.print(f"Executing: {' '.join(cmd)}")
+
     process = subprocess.Popen(
-        [
-            "npx",
-            "@modelcontextprotocol/inspector",
-            "uv",
-            "--directory",
-            project_root,
-            "run",
-            __project_name__,
-        ],
+        cmd,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,

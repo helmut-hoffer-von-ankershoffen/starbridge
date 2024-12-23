@@ -33,8 +33,9 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 # Installing separately from its dependencies allows optimal layer caching
 COPY pyproject.toml /app
 COPY uv.lock /app
-COPY tests/ /app
-COPY src/ /app
+COPY src /app/src
+COPY .env.example /app/.env.example
+COPY tests /app/tests
 COPY LICENSE /app
 COPY *.md /app
 COPY .python-version /app
@@ -46,7 +47,16 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 ENV PATH="/app/.venv/bin:$PATH"
 
 # Uncomment for debugging
-# RUN apt install -y curl jq libxml2-utils gnupg2 procps less nano iputils-ping
+RUN apt update -y && \
+    apt install -y --no-install-recommends curl gnupg2 iputils-ping jq less libxml2-utils nano procps psmisc && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
+
+# MCP Inspector
+EXPOSE 5173/tcp
+
+# MCP proxy server
+EXPOSE 3000/tcp
 
 # When running the container, start the Starbridge MCP server
 # But feel free to add arguments and options as needed when doing a docker run

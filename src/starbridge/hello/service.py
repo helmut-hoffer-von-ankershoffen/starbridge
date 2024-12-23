@@ -10,7 +10,7 @@ from PIL import Image
 from pydantic import AnyUrl
 
 from starbridge.mcp import MCPBaseService, MCPContext, mcp_tool
-from starbridge.utils import Health, get_logger, patch_for_homebrew_libs
+from starbridge.utils import Health, get_logger
 
 from . import cli
 
@@ -48,7 +48,6 @@ class Service(MCPBaseService):
     @mcp_tool()
     def bridge(self, context: MCPContext | None = None):
         """Show image of starbridge"""
-        patch_for_homebrew_libs()
         import cairosvg
         import cairosvg.svg
 

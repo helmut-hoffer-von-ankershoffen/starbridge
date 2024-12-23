@@ -11,13 +11,10 @@ import starbridge.claude
 import starbridge.mcp
 from starbridge.base import __project_name__, __version__
 from starbridge.mcp import MCPBaseService, MCPServer
-from starbridge.utils import console, get_logger
+from starbridge.utils import console, get_logger, get_process_info
 
 # Initializes logging and instrumentation
 logger = get_logger(__name__)
-
-logger.debug(f"Booting version: {__version__}")
-
 
 cli = typer.Typer(
     name="Starbridge CLI",
@@ -25,10 +22,38 @@ cli = typer.Typer(
 
 
 @cli.callback(invoke_without_command=True)
-def main(ctx: typer.Context):
+def main(
+    ctx: typer.Context,
+    host: Annotated[
+        str | None,
+        typer.Option(
+            help="Host to run the server on",
+        ),
+    ] = None,
+    port: Annotated[
+        int | None,
+        typer.Option(
+            help="Port to run the server on",
+        ),
+    ] = None,
+    debug: Annotated[
+        bool,
+        typer.Option(
+            help="Debug mode",
+        ),
+    ] = True,
+    env: Annotated[  # Parsed in bootstrap.py
+        list[str] | None,
+        typer.Option(
+            "--env",
+            help='Environment variables in key=value format. Can be used multiple times in one call. Only STARBRIDGE_ prefixed vars are used. Example --env STARBRIDGE_ATLASSIAN_URL="https://your-domain.atlassian.net" --env STARBRIDGE_ATLASSIAN_EMAIL="YOUR_EMAIL"',
+        ),
+    ] = None,
+):
     """Run MCP Server - alias for 'mcp serve'"""
+    # Environment variables are handled in bootstrap
     if ctx.invoked_subcommand is None:
-        MCPServer.serve()
+        MCPServer.serve(host, port, debug)
 
 
 @cli.command()
@@ -51,6 +76,7 @@ def info():
         "path": _get_starbridge_path(),
         "development_mode": _is_development_mode(),
         "env": _get_starbridge_env(),
+        "process": get_process_info().model_dump(),
     }
 
     # Auto-discover and get info from all services
@@ -219,6 +245,7 @@ def _generate_mcp_server_config(
                 "--directory",
                 _get_starbridge_path(),
                 "run",
+                "--no-dev",
                 __project_name__,
             ],
             "env": env,
@@ -275,6 +302,7 @@ def _no_args_is_help_recursively(cli: typer.Typer):
 
 
 _no_args_is_help_recursively(cli)
+
 
 if __name__ == "__main__":
     try:

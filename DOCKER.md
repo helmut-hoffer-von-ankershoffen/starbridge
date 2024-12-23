@@ -11,9 +11,7 @@ case "$OSTYPE" in
   win32*|cygwin*|msys*) SRC="%APPDATA%/Claude" ;;
   *) echo "Unsupported OS"; exit 1 ;;
 esac
-```bash
 docker run -it --pull always --mount type=bind,src="$SRC",dst="/Claude" helmuthva/starbridge install
-```
 ```
 
 Note:
@@ -53,6 +51,11 @@ Alternatively manage the settings via an .env file on the host
 docker run --env-file=.env helmuthva/starbridge health
 ```
 
+Run inspector to interact with the server via the MCP protocol - point your browser to https://127.0.0.1:5173.
+```bash
+docker run --env-file=.env -it  -p 127.0.0.1:5173:5173 -p 127.0.0.1:3000:3000 helmuthva/starbridge mcp inspect
+```
+
 List Confluence spaces:
 
 ```bash
@@ -85,16 +88,21 @@ docker run -it --mount type=bind,src="$SRC",dst="/Claude" starbridge install --i
 
 Enter starbridge container via bash for inspection:
 ```bash
-docker run -it --entrypoint bash starbridge
+docker run --env-file=.env -it --entrypoint bash starbridge
 ```
 
 Enter running starbridge container:
 
 ```bash
-docker exec -it $(docker ps | grep starbridge | awk '{print $1}') bash
+docker exec -it $(docker ps | awk '$2 ~ /starbridge/ {print $1}') bash
 ```
 
 Check logs:
 ```bash
-docker logs -f $(docker ps | grep starbridge | awk '{print $1}')
+docker logs -f $(docker ps | awk '$2 ~ /starbridge/ {print $1}')
+```
+
+Run MCP Inspector connected to Starbridge MCP Server
+```bash
+docker run --env-file=.env -it  -p 127.0.0.1:5173:5173 -p 127.0.0.1:3000:3000 starbridge mcp inspect
 ```

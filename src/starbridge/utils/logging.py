@@ -15,7 +15,7 @@ from starbridge.utils.settings import load_settings
 def get_logger(name: str | None) -> logging.Logger:
     if (name is None) or (name == __project_name__):
         return logging.getLogger(__project_name__)
-    return logging.getLogger(f"{__project_name__}.{name}")
+    return logging.getLogger(name)
 
 
 class LoggingSettings(BaseSettings):
@@ -48,7 +48,7 @@ handlers = []
 if settings.log_file_enabled:
     file_handler = logging.FileHandler(settings.log_file_name)
     file_formatter = logging.Formatter(
-        fmt="%(asctime)s %(levelname)s %(name)s %(message)s",
+        fmt="%(asctime)s %(process)d %(levelname)s %(name)s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
     file_handler.setFormatter(file_formatter)
