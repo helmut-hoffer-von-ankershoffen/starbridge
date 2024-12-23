@@ -88,49 +88,47 @@ class MCPBaseService:
                 )
         return tools
 
+    def _validate_resource_uri(self, resource, meta, method_name):
+        """Validate resource URI against metadata."""
+        parsed = urlparse(str(resource.uri))
+        if parsed.scheme != meta.server:
+            raise ValueError(
+                f"Resource URI scheme '{parsed.scheme}' doesn't match decorator scheme '{meta.server}'"
+            )
+        if parsed.netloc != meta.service:
+            raise ValueError(
+                f"Resource URI service '{parsed.netloc}' doesn't match decorator service '{meta.service}'"
+            )
+        if not parsed.path.startswith(f"/{meta.type}/"):
+            raise ValueError(f"Resource URI path doesn't start with '/{meta.type}/'")
+
+    def _check_type_uniqueness(self, type_map, meta, method_name):
+        """Ensure resource type is unique."""
+        type_map[meta.type].append(method_name)
+        if len(type_map[meta.type]) > 1:
+            raise ValueError(
+                f"Multiple resource iterators found for type '{meta.type}': {type_map[meta.type]}"
+            )
+
     def resource_list(self, context: MCPContext | None = None) -> list[types.Resource]:
         """Get available resources by discovering and calling all resource iterators."""
         resources = []
-        type_map = defaultdict(list)  # renamed from prefix_map
+        type_map = defaultdict(list)
 
-        # Find all resource iterators
         for method_name in dir(self.__class__):
             method = getattr(self.__class__, method_name)
             if hasattr(method, "__mcp_resource_iterator__"):
                 meta = method.__mcp_resource_iterator__
-                if not meta.type:  # renamed from prefix
+                if not meta.type:
                     raise ValueError(
                         f"Resource iterator {method_name} missing required type"
                     )
 
-                # Check type uniqueness
-                type_map[meta.type].append(method_name)
-                if len(type_map[meta.type]) > 1:
-                    raise ValueError(
-                        f"Multiple resource iterators found for type '{meta.type}': {type_map[meta.type]}"
-                    )
-
-                # Get resources from iterator
+                self._check_type_uniqueness(type_map, meta, method_name)
                 iterator_resources = method(self, context)
 
-                # Validate each resource URI
                 for resource in iterator_resources:
-                    parsed = urlparse(str(resource.uri))
-                    if parsed.scheme != meta.server:
-                        raise ValueError(
-                            f"Resource URI scheme '{parsed.scheme}' doesn't match decorator scheme '{meta.server}'"
-                        )
-                    if parsed.netloc != meta.service:
-                        raise ValueError(
-                            f"Resource URI service '{parsed.netloc}' doesn't match decorator service '{meta.service}'"
-                        )
-                    if not parsed.path.startswith(
-                        f"/{meta.type}/"
-                    ):  # renamed from prefix
-                        raise ValueError(
-                            f"Resource URI path doesn't start with '/{meta.type}/'"
-                        )
-
+                    self._validate_resource_uri(resource, meta, method_name)
                 resources.extend(iterator_resources)
 
         return resources

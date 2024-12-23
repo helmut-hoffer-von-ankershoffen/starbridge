@@ -48,6 +48,9 @@ keywords = [
     "anthropic",
     "logfire",
     "uv",
+    "codecov",
+    "sonarqube",
+    "gitbook",
 ]
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",

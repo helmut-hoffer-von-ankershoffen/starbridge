@@ -22,6 +22,10 @@ from mcp.types import (
 from pydantic import AnyUrl
 from typer.testing import CliRunner
 
+MOCK_GET_ALL_SPACES = "atlassian.Confluence.get_all_spaces"
+MOCK_GET_SPACE = "atlassian.Confluence.get_space"
+PYPROJECT_TOML = "pyproject.toml"
+
 
 @pytest.fixture
 def runner():
@@ -162,9 +166,7 @@ async def test_mcp_server_list_tools_sse():
 
 @pytest.mark.asyncio
 async def test_mcp_server_list_resources():
-    async with stdio_client(
-        _server_parameters(["atlassian.Confluence.get_all_spaces"])
-    ) as (read, write):
+    async with stdio_client(_server_parameters([MOCK_GET_ALL_SPACES])) as (read, write):
         async with ClientSession(read, write) as session:
             # Initialize the connection
             await session.initialize()
@@ -187,8 +189,8 @@ async def test_mcp_server_read_resource():
     """Test getting prompt from server"""
     async with stdio_client(
         _server_parameters([
-            "atlassian.Confluence.get_all_spaces",
-            "atlassian.Confluence.get_space",
+            MOCK_GET_ALL_SPACES,
+            MOCK_GET_SPACE,
         ])
     ) as (
         read,
@@ -227,9 +229,7 @@ async def test_mcp_server_list_prompts():
 @pytest.mark.asyncio
 async def test_mcp_server_prompt_get():
     """Test getting prompt from server"""
-    async with stdio_client(
-        _server_parameters(["atlassian.Confluence.get_all_spaces"])
-    ) as (read, write):
+    async with stdio_client(_server_parameters([MOCK_GET_ALL_SPACES])) as (read, write):
         async with ClientSession(read, write) as session:
             # Initialize the connection
             await session.initialize()

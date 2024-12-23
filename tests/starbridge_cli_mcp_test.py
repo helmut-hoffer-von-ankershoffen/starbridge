@@ -9,6 +9,9 @@ from typer.testing import CliRunner
 
 from starbridge.cli import cli
 
+MOCK_GET_ALL_SPACES = "atlassian.Confluence.get_all_spaces"
+MOCK_GET_SPACE = "atlassian.Confluence.get_space"
+
 
 @pytest.fixture
 def runner():
@@ -77,7 +80,7 @@ def test_mcp_prompts(runner):
     assert "starbridge_confluence_space_summary" in result.stdout
 
 
-@patch("atlassian.Confluence.get_all_spaces")
+@patch(MOCK_GET_ALL_SPACES)
 def test_mcp_prompt(mock_get_all_spaces, runner):
     """Check available resources."""
     # Mock the response data that would come from get_all_spaces
@@ -106,7 +109,7 @@ def test_mcp_resource_types(runner):
     assert "starbridge://confluence/space" in result.stdout
 
 
-@patch("atlassian.Confluence.get_all_spaces")
+@patch(MOCK_GET_ALL_SPACES)
 def test_mcp_resources(mock_get_all_spaces, runner):
     """Check available resources."""
     # Mock the response data that would come from get_all_spaces
@@ -118,7 +121,7 @@ def test_mcp_resources(mock_get_all_spaces, runner):
     assert "7120201709026d2b41448e93bb58d" in result.stdout
 
 
-@patch("atlassian.Confluence.get_space")
+@patch(MOCK_GET_SPACE)
 def test_mcp_resource(mock_get_space, runner):
     """Read a resource."""
     # Mock the response data that would come from get_all_spaces
@@ -156,7 +159,6 @@ def test_mcp_inspector(runner):
         )
     except subprocess.TimeoutExpired as e:
         process = e.stdout
-        pass
 
     # Handle both cases where process completed or timed out
     if isinstance(process, subprocess.CompletedProcess):

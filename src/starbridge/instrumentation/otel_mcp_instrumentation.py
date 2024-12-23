@@ -38,7 +38,7 @@ class MCPInstrumentor(BaseInstrumentor):  # pragma: no cover
         mcp.server.stdio.stdio_server = instrumented_stdio_server
 
     def _uninstrument(self, **kwargs):
-        pass
+        raise NotImplementedError("Uninstrumentation not supported")
 
 
 def _handle_transaction(tracer, msg, span_kind, active_spans):
