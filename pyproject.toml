@@ -177,6 +177,12 @@ setup_hooks = []
 pre_commit_hooks = []
 post_commit_hooks = []
 
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+
+[[tool.bumpversion.files]]
+filename = "VERSION"
+
 [project.urls]
 Homepage = "https://helmuthva.gitbook.io/starbridge"
 Source = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge"
