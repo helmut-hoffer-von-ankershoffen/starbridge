@@ -37,4 +37,7 @@
         "connectionId": "helmut-hoffer-von-ankershoffen",
         "projectKey": "helmut-hoffer-von-ankershoffen_starbridge"
     },
+    "python.experiments.optOutFrom": [
+        "pythonTerminalEnvVarActivation"
+    ]
 }
