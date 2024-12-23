@@ -44,3 +44,10 @@ def test_hello_pdf_open(mock_run, runner):
         assert args[0][0] == "xdg-open"
         assert str(args[0][1]).endswith(".pdf")
         assert kwargs["check"] is True
+
+
+@patch("cairosvg.svg2png", side_effect=OSError)
+def test_hello_bridge_error(mock_svg2png, runner):
+    """Check we handle cairo missing."""
+    result = runner.invoke(cli, ["hello", "bridge"])
+    assert result.exit_code == 78

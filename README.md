@@ -29,8 +29,11 @@ This integration serves two main purposes:
 
 ```shell
 if [[ "$OSTYPE" == "darwin"* ]]; then # Install dependencies for macOS X
-  brew install curl cairo
-elif [[ "$OSTYPE" == "linux-gnu"* ]]; then # ... resp. Linux
+  if ! command -v brew &> /dev/null; then # Install Homebrew if not present
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  fi
+  brew install cairo
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then # Install dependencies for Linux
   sudo apt-get update -y && sudo apt-get install curl libcairo2 -y
 fi
 if ! command -v uvx &> /dev/null; then # Install uv package manager if not present

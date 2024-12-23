@@ -33,7 +33,7 @@ def main(ctx: typer.Context):
 
 @cli.command()
 def health(json: Annotated[bool, typer.Option(help="Output health as JSON")] = False):
-    """Check health Starbridge, services, and their dependencies."""
+    """Check health of services and their dependencies."""
     health = MCPServer().health()
     if not health.healthy:
         logger.warning(f"health: {health}")
@@ -45,7 +45,7 @@ def health(json: Annotated[bool, typer.Option(help="Output health as JSON")] = F
 
 @cli.command()
 def info():
-    """Info about Starbridge"""
+    """Info about Starbridge and it's environment"""
     data: dict[str, Any] = {
         "version": __version__,
         "path": _get_starbridge_path(),

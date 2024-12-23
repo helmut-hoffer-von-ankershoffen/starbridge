@@ -25,6 +25,7 @@ from typer.testing import CliRunner
 MOCK_GET_ALL_SPACES = "atlassian.Confluence.get_all_spaces"
 MOCK_GET_SPACE = "atlassian.Confluence.get_space"
 PYPROJECT_TOML = "pyproject.toml"
+DOT_COVERAGE = ".coverage"
 
 
 @pytest.fixture
@@ -37,8 +38,8 @@ def _server_parameters(mocks: list[str] | None = None) -> StdioServerParameters:
     env = dict(get_default_environment())
     # Add coverage config to subprocess
     env.update({
-        "COVERAGE_PROCESS_START": "pyproject.toml",
-        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", ".coverage"),
+        "COVERAGE_PROCESS_START": PYPROJECT_TOML,
+        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
     })
     if (mocks is not None) and mocks:
         env.update({"MOCKS": ",".join(mocks)})
@@ -114,8 +115,8 @@ async def test_mcp_server_list_tools_sse():
     # Start the server in SSE mode
     env = os.environ.copy()
     env.update({
-        "COVERAGE_PROCESS_START": "pyproject.toml",
-        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", ".coverage"),
+        "COVERAGE_PROCESS_START": PYPROJECT_TOML,
+        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
         "PYTHONPATH": ".",
     })
 
@@ -315,8 +316,8 @@ async def test_mcp_server_tool_call_with_pdf():
 def test_mcp_server_sse_terminates(runner):
     env = os.environ.copy()
     env.update({
-        "COVERAGE_PROCESS_START": "pyproject.toml",
-        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", ".coverage"),
+        "COVERAGE_PROCESS_START": PYPROJECT_TOML,
+        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
         "MOCKS": "webbrowser.open",
     })
 

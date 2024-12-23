@@ -10,6 +10,8 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
+from rich.panel import Panel
+from rich.text import Text
 
 from starbridge.utils.console import console
 
@@ -46,11 +48,24 @@ def bridge(
     ] = False,
 ) -> None:
     """Show image of starbridge"""
-    image = Service().bridge()
-    if dump:
-        image.save("starbridge.png")
-    else:
-        image.show()
+    try:
+        image = Service().bridge()
+        if dump:
+            image.save("starbridge.png")
+        else:
+            image.show()
+    except OSError:
+        text = Text()
+        text.append("Please follow setup instructions for starbridge ")
+        text.append("Install the library needed for image manipulation using:\n")
+        text.append("• macOS: ", style="yellow")
+        text.append("brew install cairo\n")
+        text.append("• Linux: ", style="yellow")
+        text.append("sudo apt-get install libcairo2")
+        console.print(
+            Panel(text, title="Setup Required: Cairo not found", border_style="red")
+        )
+        sys.exit(78)
 
 
 @cli.command()

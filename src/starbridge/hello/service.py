@@ -4,21 +4,17 @@ import base64
 import io
 import os
 
+import typer
 from mcp.types import BlobResourceContents, EmbeddedResource
+from PIL import Image
 from pydantic import AnyUrl
 
-# TODO: Generic solution
-os.environ["DYLD_FALLBACK_LIBRARY_PATH"] = "/opt/homebrew/lib"
-
-import cairosvg
-import cairosvg.svg
-import typer
-from PIL import Image
-
 from starbridge.mcp import MCPBaseService, MCPContext, mcp_tool
-from starbridge.utils import Health
+from starbridge.utils import Health, get_logger, patch_for_homebrew_libs
 
 from . import cli
+
+logger = get_logger(__name__)
 
 
 class Service(MCPBaseService):
@@ -52,6 +48,10 @@ class Service(MCPBaseService):
     @mcp_tool()
     def bridge(self, context: MCPContext | None = None):
         """Show image of starbridge"""
+        patch_for_homebrew_libs()
+        import cairosvg
+        import cairosvg.svg
+
         return Image.open(
             io.BytesIO(cairosvg.svg2png(bytestring=Service._starbridge_svg()) or b"")
         )
@@ -72,6 +72,12 @@ class Service(MCPBaseService):
     def pdf_bytes(context: MCPContext | None = None) -> bytes:
         """Show pdf document with Hello World"""
         return base64.b64decode(Service._starbridge_pdf_base64())
+
+    @staticmethod
+    def _import_cairo():
+        os.environ["DYLD_FALLBACK_LIBRARY_PATH"] = (
+            f"{os.getenv('HOMEBREW_PREFIX', '/opt/homebrew')}/lib/"
+        )
 
     @staticmethod
     def _starbridge_svg() -> str:

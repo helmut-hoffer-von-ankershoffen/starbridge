@@ -88,7 +88,7 @@ class MCPBaseService:
                 )
         return tools
 
-    def _validate_resource_uri(self, resource, meta, method_name):
+    def _validate_resource_uri(self, resource, meta):
         """Validate resource URI against metadata."""
         parsed = urlparse(str(resource.uri))
         if parsed.scheme != meta.server:
@@ -128,7 +128,7 @@ class MCPBaseService:
                 iterator_resources = method(self, context)
 
                 for resource in iterator_resources:
-                    self._validate_resource_uri(resource, meta, method_name)
+                    self._validate_resource_uri(resource, meta)
                 resources.extend(iterator_resources)
 
         return resources

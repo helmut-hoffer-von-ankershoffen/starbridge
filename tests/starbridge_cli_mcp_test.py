@@ -11,6 +11,8 @@ from starbridge.cli import cli
 
 MOCK_GET_ALL_SPACES = "atlassian.Confluence.get_all_spaces"
 MOCK_GET_SPACE = "atlassian.Confluence.get_space"
+PYPROJECT_TOML = "pyproject.toml"
+DOT_COVERAGE = ".coverage"
 
 
 @pytest.fixture
@@ -143,8 +145,8 @@ def test_mcp_resource(mock_get_space, runner):
 def test_mcp_inspector(runner):
     env = os.environ.copy()
     env.update({
-        "COVERAGE_PROCESS_START": "pyproject.toml",
-        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", ".coverage"),
+        "COVERAGE_PROCESS_START": PYPROJECT_TOML,
+        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
         "MOCKS": "webbrowser.open",
     })
 

@@ -1,10 +1,16 @@
 # .pre-commit-config.yaml
 repos:
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    # uv version.
+    rev: 0.5.8
+    hooks:
+      - id: uv-lock
   - repo: local
     hooks:
       - id: nox
         name: nox
-        entry: uv run nox
+        entry: uv run nox --python 3.13
         language: system
         pass_filenames: false
         always_run: true
+        verbose: true
