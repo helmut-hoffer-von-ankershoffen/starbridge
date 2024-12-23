@@ -19,7 +19,7 @@ jobs:
       attestations: write
       id-token: write
     steps:
-      - name: Check out the repo
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up QEMU
