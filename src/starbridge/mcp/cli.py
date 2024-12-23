@@ -3,7 +3,6 @@ CLI to interact with Confluence
 """
 
 import os
-import pathlib
 import re
 import subprocess
 import webbrowser

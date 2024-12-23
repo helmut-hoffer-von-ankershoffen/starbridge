@@ -476,6 +476,19 @@ wheels = [
 ]
 
 [[package]]
+name = "detect-secrets"
+version = "1.5.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "pyyaml" },
+    { name = "requests" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/69/67/382a863fff94eae5a0cf05542179169a1c49a4c8784a9480621e2066ca7d/detect_secrets-1.5.0.tar.gz", hash = "sha256:6bb46dcc553c10df51475641bb30fd69d25645cc12339e46c824c1e0c388898a", size = 97351 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/4e/5e/4f5fe4b89fde1dc3ed0eb51bd4ce4c0bca406246673d370ea2ad0c58d747/detect_secrets-1.5.0-py3-none-any.whl", hash = "sha256:e24e7b9b5a35048c313e983f76c4bd09dad89f045ff059e354f9943bf45aa060", size = 120341 },
+]
+
+[[package]]
 name = "distlib"
 version = "0.3.9"
 source = { registry = "https://pypi.org/simple" }
@@ -509,6 +522,23 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/30/3e/a80a8c077fd798951169626cde3e239adeba7dab75deb3555716415bd9b0/fqdn-1.5.1.tar.gz", hash = "sha256:105ed3677e767fb5ca086a0c1f4bb66ebc3c100be518f0e0d755d9eae164d89f", size = 6015 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/cf/58/8acf1b3e91c58313ce5cb67df61001fc9dcd21be4fadb76c1a2d540e09ed/fqdn-1.5.1-py3-none-any.whl", hash = "sha256:3a179af3761e4df6eb2e026ff9e1a3033d3587bf980a0b1b2e1e5d08d7358014", size = 9121 },
+]
+
+[[package]]
+name = "git-cliff"
+version = "2.7.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/95/cd/7381f5d86719ab014f062d37049fc098efd95efb79a29eaa120784088bc0/git_cliff-2.7.0.tar.gz", hash = "sha256:15badec95cc5c9c7755dc5a0775cc8c836f5c5f271f20ed6a4f32af093ec1eaa", size = 86336 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a8/76/c0369d630f451dbc4537c2f5d2390b8af136aeedfe73d7bf76e093487bfd/git_cliff-2.7.0-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:84de0ab5e213c64f59c0f5e1a8285c578ed5a28667bdab31ebc2f7db764fc32e", size = 7046377 },
+    { url = "https://files.pythonhosted.org/packages/40/3e/be84bcd50b9bacc06be4069168a3f09fc2d1ca00f61a02032ee6576e8819/git_cliff-2.7.0-py3-none-macosx_11_0_arm64.whl", hash = "sha256:45dcda6206f8b2b7ec0de56b9ee3a7ff12253e59737290a5a918ed8eb62adfe2", size = 6586141 },
+    { url = "https://files.pythonhosted.org/packages/45/0b/bc123e0cf8e1291f95f3a0d420ba8f7ad039cd1d57570f78c401cce08538/git_cliff-2.7.0-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:5f8b0cb192ab12f3b23b113e6f190c8b060a03f306e447a60580d1e0563f0d3e", size = 6270855 },
+    { url = "https://files.pythonhosted.org/packages/ab/94/822352866f7fbbf46fbc091f3d1aec8d9be001f38ffc4dde0d5ca1263a63/git_cliff-2.7.0-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:e65f9ee3f747c57356a7efee156fcd2b6d01428dba61c4cd1f0e773d8c842ca6", size = 6743909 },
+    { url = "https://files.pythonhosted.org/packages/50/16/74cd2c84c8f92845856298265c781a4bc5feb45a37d187f6f419bb1371c2/git_cliff-2.7.0-py3-none-manylinux_2_28_aarch64.whl", hash = "sha256:7b2f5dbb82e1d8b62c6885d06eda8a11daa063e6f124b16db634f5e23371ac49", size = 6326845 },
+    { url = "https://files.pythonhosted.org/packages/16/ec/155991fe9663baca233125b56393278669f619605dc6d1a9cb6d701c8a62/git_cliff-2.7.0-py3-none-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:1bdf9c04a883a70cdb0b29bf033ea39d64fab6ba28459b332cd221a7f47d86f0", size = 6569951 },
+    { url = "https://files.pythonhosted.org/packages/f7/ac/16c6475b896a7da9bbc60ac6d61d3c86375b32592fd8df63bc4261aad337/git_cliff-2.7.0-py3-none-manylinux_2_5_x86_64.manylinux1_x86_64.whl", hash = "sha256:a698f9b8b10e6df0dd47b049b75c25f8cfb3dc4f973ab05790912ba55e5a4ebb", size = 6993157 },
+    { url = "https://files.pythonhosted.org/packages/37/5d/539bdd9ce6ca813adc595fc2bf7f057952c2787cc32908b066e75302e6a0/git_cliff-2.7.0-py3-none-win32.whl", hash = "sha256:914015dd0deab69f23718a8ee982018140095b5b1f45268b15abdfd99d60e098", size = 6058153 },
+    { url = "https://files.pythonhosted.org/packages/51/08/eb7d104031f3cb267ef547b5291b4e44698aa3100a39b27eb36c61930b8e/git_cliff-2.7.0-py3-none-win_amd64.whl", hash = "sha256:7180874591548846cf30e4cb6953ff74e8ed2d4bed4487c5e39122581bef15c7", size = 6794695 },
 ]
 
 [[package]]
@@ -1902,7 +1932,7 @@ wheels = [
 
 [[package]]
 name = "starbridge"
-version = "0.0.28"
+version = "0.0.29"
 source = { editable = "." }
 dependencies = [
     { name = "atlassian-python-api" },
@@ -1923,12 +1953,15 @@ dependencies = [
     { name = "python-dotenv" },
     { name = "svglib" },
     { name = "typer" },
+    { name = "typos" },
 ]
 
 [package.optional-dependencies]
 dev = [
     { name = "bump-my-version" },
     { name = "cyclonedx-py" },
+    { name = "detect-secrets" },
+    { name = "git-cliff" },
     { name = "greenlet" },
     { name = "nox" },
     { name = "pip-audit" },
@@ -1947,6 +1980,8 @@ dev = [
 dev = [
     { name = "bump-my-version" },
     { name = "cyclonedx-py" },
+    { name = "detect-secrets" },
+    { name = "git-cliff" },
     { name = "greenlet" },
     { name = "nox" },
     { name = "pip-audit" },
@@ -1967,6 +2002,8 @@ requires-dist = [
     { name = "bump-my-version", marker = "extra == 'dev'", specifier = ">=0.29.0" },
     { name = "cairosvg", specifier = ">=2.7.1" },
     { name = "cyclonedx-py", marker = "extra == 'dev'", specifier = ">=1.0.1" },
+    { name = "detect-secrets", marker = "extra == 'dev'", specifier = ">=1.5.0" },
+    { name = "git-cliff", marker = "extra == 'dev'", specifier = ">=2.7.0" },
     { name = "greenlet", marker = "extra == 'dev'", specifier = ">=3.1.1" },
     { name = "griffe", specifier = ">=1.5.1" },
     { name = "logfire", extras = ["system-metrics"], specifier = ">=2.7.1" },
@@ -1995,12 +2032,15 @@ requires-dist = [
     { name = "svglib", specifier = ">=1.5.1" },
     { name = "tomli", marker = "extra == 'dev'", specifier = ">=2.1.0" },
     { name = "typer", specifier = ">=0.13.0" },
+    { name = "typos", specifier = ">=1.28.4" },
 ]
 
 [package.metadata.requires-dev]
 dev = [
     { name = "bump-my-version", specifier = ">=0.29.0" },
     { name = "cyclonedx-py", specifier = ">=1.0.1" },
+    { name = "detect-secrets", specifier = ">=1.5.0" },
+    { name = "git-cliff", specifier = ">=2.7.0" },
     { name = "greenlet", specifier = ">=3.1.1" },
     { name = "nox", specifier = ">=2024.10.9" },
     { name = "pip-audit", specifier = ">=2.7.3" },
@@ -2139,6 +2179,23 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/df/db/f35a00659bc03fec321ba8bce9420de607a1d37f8342eee1863174c69557/typing_extensions-4.12.2.tar.gz", hash = "sha256:1a7ead55c7e559dd4dee8856e3a88b41225abfe1ce8df57b7c13915fe121ffb8", size = 85321 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/26/9f/ad63fc0248c5379346306f8668cda6e2e2e9c95e01216d2b8ffd9ff037d0/typing_extensions-4.12.2-py3-none-any.whl", hash = "sha256:04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d", size = 37438 },
+]
+
+[[package]]
+name = "typos"
+version = "1.28.4"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/52/26/b3c29fbf2726b8278578841a5f34ba244819660000b75d283a1afd1630a1/typos-1.28.4.tar.gz", hash = "sha256:7afd8ad79ab8b84f7adb12350d5630abc5e061c8a76802ddbc29eea256689600", size = 1127000 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/ff/03/00d37e1992013a5c50ad21600d79a4cdf8a6c34e688cc06bb7c857249c24/typos-1.28.4-py3-none-macosx_10_12_x86_64.whl", hash = "sha256:0bb4945868432848bdb378137411f0c5d6f7f763e4da64b84b037ad2392b45f8", size = 3239364 },
+    { url = "https://files.pythonhosted.org/packages/81/cd/65a7d392bae05fa970efd1a73497f68b2e97d96a690be5b96a6534940086/typos-1.28.4-py3-none-macosx_11_0_arm64.whl", hash = "sha256:54d507db5439e65ebb36a15551ba0fd23d317ed6d4212d0b866a5310a14d8841", size = 3114865 },
+    { url = "https://files.pythonhosted.org/packages/62/6e/84fe32eacaf2cc07647536f85c3d8329f804056d2c38b2294770b25a6c07/typos-1.28.4-py3-none-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:bacfb01a2ab60b146f1412252f327e58e32a430613a761d76dbcc6e275ecffe3", size = 4530518 },
+    { url = "https://files.pythonhosted.org/packages/9c/a8/ed642eff75832f1088a49414919d3d9323f1ea0ad467e65c7e122b2215c9/typos-1.28.4-py3-none-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:b3bc312a10df63211b4f8730d551bc086f71ec5fb7a0a587a50f16c3902edf76", size = 3614918 },
+    { url = "https://files.pythonhosted.org/packages/1c/89/974ef4925ba63aa5678157724eb96626b649e8601840821527e550b32a7f/typos-1.28.4-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:f605b3bb8c928cc0a0d46b29335d400630d43da0a9977bc890987a6cc175420a", size = 4339147 },
+    { url = "https://files.pythonhosted.org/packages/63/ac/bbb69d77ae50106685a488aec676a6b43e1147dcd80ef0133a65c931fc54/typos-1.28.4-py3-none-musllinux_1_2_aarch64.whl", hash = "sha256:d854c5f854304efb959d7fe56fef5720163738687a6db6232bbd951ee2190167", size = 3567775 },
+    { url = "https://files.pythonhosted.org/packages/48/0c/b7d85b3665d98e6f0eed10d534fafb3753a0712f07e86353be8cc86d2836/typos-1.28.4-py3-none-musllinux_1_2_x86_64.whl", hash = "sha256:ce87ddde847c535354dbe036691473fc6029f2c895f47340167874185b14bb29", size = 4400492 },
+    { url = "https://files.pythonhosted.org/packages/63/d9/8c5ac1d74ba3a4793b6ed41c404e9ac6af1337586311cc4da8fe2281fc7c/typos-1.28.4-py3-none-win32.whl", hash = "sha256:92a1a2eaa88f682f9f23152d3f20c932d64e18390819e69b2d006c3e83afe3e3", size = 2632332 },
+    { url = "https://files.pythonhosted.org/packages/af/59/3761e517c9ad49fcb588d87ebe339aa07a90cac5e749e9de70fa7183d337/typos-1.28.4-py3-none-win_amd64.whl", hash = "sha256:23dbb854917e4d8eaba6ff364d4849d09fc70faeb0f88bc35c814b622b6d045a", size = 2779568 },
 ]
 
 [[package]]
