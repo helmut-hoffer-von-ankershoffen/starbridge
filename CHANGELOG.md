@@ -1,5 +1,12 @@
 [![starbridge](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/tests/fixtures/starbridge.png?raw=true)](https://helmuthva.gitbook.io/starbridge) Starbridge
 
+## [unreleased]
+
+### 📚 Documentation
+
+- *(CHANGELOG.md)* Introduce in repo - ([78e11aa](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/78e11aa5400fba9803dbbc1793b4eadba6271976))
+
+
 ## [0.0.41](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.40..v0.0.41) - 2024-12-24
 
 ### ⚙️ Miscellaneous Tasks
