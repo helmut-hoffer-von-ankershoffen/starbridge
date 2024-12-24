@@ -1,9 +1,5 @@
 version = 1
-requires-python = ">=3.11"
-resolution-markers = [
-    "python_full_version < '3.12'",
-    "python_full_version >= '3.12'",
-]
+requires-python = ">=3.11, <4.0"
 
 [[package]]
 name = "annotated-types"
@@ -1959,7 +1955,7 @@ wheels = [
 
 [[package]]
 name = "starbridge"
-version = "0.0.43"
+version = "0.0.44"
 source = { editable = "." }
 dependencies = [
     { name = "atlassian-python-api" },

@@ -2,6 +2,19 @@
 
 ## [unreleased]
 
+### 📚 Documentation
+
+- *(badges)* Consolidate to shields.io - ([a237a46](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/a237a46f476e378ec5d0dadfded69f20ad8646a0))
+- *(pypi)* Define supported python versions - ([bea82aa](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/bea82aa8ec04db7622f886835fed8c643cf73c9d))
+
+### 🎨 Styling
+
+- *(badges)* Consolidate labels - ([2630832](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/263083262830b4c1ceaebbbb3d2bfd75ef05a122))
+- *(badges)* Use CD for github, pypi and docker - ([a300b36](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/a300b36867da42b1eb2b5af59635c5ff849b692f))
+
+
+## [0.0.43](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.42..v0.0.43) - 2024-12-24
+
 ### ⚙️ Miscellaneous Tasks
 
 - *(docker)* Set docker tags from semver tags - ([7d236c2](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/7d236c24fff1d52c5bc7a8804e1245608ce00eab))
