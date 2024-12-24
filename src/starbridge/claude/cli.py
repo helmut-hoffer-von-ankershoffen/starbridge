@@ -13,13 +13,13 @@ from starbridge.utils.console import console
 
 from .service import Service
 
-cli = typer.Typer(no_args_is_help=True)
+cli = typer.Typer()
 
 
 @cli.command()
 def health():
     """Health of Claude"""
-    console.print(Service().health())
+    console.print(Service().health().model_dump_json())
 
 
 @cli.command()
@@ -78,7 +78,7 @@ def log(
                 "-n",
                 str(last),
                 "-f",
-                Service.log_path(name if name != "main" else None),
+                str(Service.log_path(name if name != "main" else None)),
             ],
             check=False,
         )
@@ -88,7 +88,7 @@ def log(
                 "tail",
                 "-n",
                 str(last),
-                Service.log_path(name if name != "main" else None),
+                str(Service.log_path(name if name != "main" else None)),
             ],
             check=False,
         )

@@ -11,41 +11,72 @@ import starbridge.claude
 import starbridge.mcp
 from starbridge.base import __project_name__, __version__
 from starbridge.mcp import MCPBaseService, MCPServer
-from starbridge.utils import console, get_logger
+from starbridge.utils import console, get_logger, get_process_info
 
+# Initializes logging and instrumentation
 logger = get_logger(__name__)
-
-
-logger.debug(f"Booting version: {__version__}")
 
 cli = typer.Typer(
     name="Starbridge CLI",
-    help=f"Starbride (Version: {__version__})",
-    epilog="Built with love in Berlin by Helmut Hoffer von Ankershoffen",
 )
 
 
 @cli.callback(invoke_without_command=True)
-def main(ctx: typer.Context):
+def main(
+    ctx: typer.Context,
+    host: Annotated[
+        str | None,
+        typer.Option(
+            help="Host to run the server on",
+        ),
+    ] = None,
+    port: Annotated[
+        int | None,
+        typer.Option(
+            help="Port to run the server on",
+        ),
+    ] = None,
+    debug: Annotated[
+        bool,
+        typer.Option(
+            help="Debug mode",
+        ),
+    ] = True,
+    env: Annotated[  # Parsed in bootstrap.py
+        list[str] | None,
+        typer.Option(
+            "--env",
+            help='Environment variables in key=value format. Can be used multiple times in one call. Only STARBRIDGE_ prefixed vars are used. Example --env STARBRIDGE_ATLASSIAN_URL="https://your-domain.atlassian.net" --env STARBRIDGE_ATLASSIAN_EMAIL="YOUR_EMAIL"',
+        ),
+    ] = None,
+):
     """Run MCP Server - alias for 'mcp serve'"""
+    # Environment variables are handled in bootstrap
     if ctx.invoked_subcommand is None:
-        MCPServer.serve()
+        MCPServer.serve(host, port, debug)
 
 
 @cli.command()
-def health():
-    """Check health Starbridge, services, and their dependencies."""
-    console.print(MCPServer().health())
+def health(json: Annotated[bool, typer.Option(help="Output health as JSON")] = False):
+    """Check health of services and their dependencies."""
+    health = MCPServer().health()
+    if not health.healthy:
+        logger.warning(f"health: {health}")
+    if json:
+        console.print(health.model_dump_json())
+    else:
+        console.print(health)
 
 
 @cli.command()
 def info():
-    """Info about Starbridge"""
+    """Info about Starbridge and it's environment"""
     data: dict[str, Any] = {
         "version": __version__,
         "path": _get_starbridge_path(),
         "development_mode": _is_development_mode(),
         "env": _get_starbridge_env(),
+        "process": get_process_info().model_dump(),
     }
 
     # Auto-discover and get info from all services
@@ -62,14 +93,16 @@ def info():
 def configure():
     """Generate .env file for Starbridge"""
     if not _is_development_mode():
-        raise Exception("This command is only available in development mode")
+        raise RuntimeError("This command is only available in development mode")
 
     starbridge_path = pathlib.Path(_get_starbridge_path())
     env_example_path = starbridge_path / ".env.example"
     env_path = starbridge_path / ".env"
 
     if not env_example_path.exists():
-        raise Exception(".env.example file not found")
+        raise FileNotFoundError(
+            f"Required .env.example file not found at {env_example_path}"
+        )
 
     example_values = dotenv_values(env_example_path)
     current_values = dotenv_values(env_path) if env_path.exists() else {}
@@ -117,13 +150,18 @@ def install(
             help="API token of your Atlassian account, go to https://id.atlassian.com/manage-profile/security/api-tokens to create one",
         ),
     ] = os.environ.get("STARBRIDGE_ATLASSIAN_API_TOKEN", "YOUR_TOKEN"),
-    restart_claude: bool = starbridge.claude.Service.platform_supports_restart(),
-    image: Annotated[
-        str | None,
+    restart_claude: Annotated[
+        bool,
         typer.Option(
-            help="Image to use for Starbridge in case called via Docker. Defaults to helmuthva/starbridge",
+            help="Restart Claude Desktop application post installation",
         ),
-    ] = None,
+    ] = starbridge.claude.Service.platform_supports_restart(),
+    image: Annotated[
+        str,
+        typer.Option(
+            help="Docker image to use for Starbridge. Only applies if started as container.",
+        ),
+    ] = "helmuthva/starbridge:latest",
 ):
     """Install starbridge within Claude Desktop application by adding to configuration and restarting Claude Desktop app"""
     if starbridge.claude.Service.install_mcp_server(
@@ -143,9 +181,16 @@ def install(
 
 
 @cli.command()
-def uninstall():
+def uninstall(
+    restart_claude: Annotated[
+        bool,
+        typer.Option(
+            help="Restart Claude Desktop application post installation",
+        ),
+    ] = starbridge.claude.Service.platform_supports_restart(),
+):
     """Install starbridge from Claude Desktop application by removing from configuration and restarting Claude Desktop app"""
-    if starbridge.claude.Service.uninstall_mcp_server():
+    if starbridge.claude.Service.uninstall_mcp_server(restart=restart_claude):
         console.print("Starbridge uninstalled from Claude Destkop application.")
     else:
         console.print("Starbridge was no installed", style="warning")
@@ -168,7 +213,7 @@ def _generate_mcp_server_config(
     atlassian_url: str,
     atlassian_email_address: str,
     atlassian_api_token: str,
-    image: str | None = None,
+    image: str = "helmuthva/starbridge:latest",
 ) -> dict:
     """Generate configuration file for Starbridge"""
     env = {
@@ -177,8 +222,6 @@ def _generate_mcp_server_config(
         "STARBRIDGE_ATLASSIAN_API_TOKEN": atlassian_api_token,
     }
     if starbridge.claude.Service.is_running_in_starbridge_container():
-        if image is None:
-            image = "helmuthva/starbridge"
         return {
             "command": "docker",
             "args": [
@@ -202,6 +245,7 @@ def _generate_mcp_server_config(
                 "--directory",
                 _get_starbridge_path(),
                 "run",
+                "--no-dev",
                 __project_name__,
             ],
             "env": env,
@@ -230,8 +274,41 @@ for service_class in MCPBaseService.get_services():
             help=f"{name.title()} operations",
         )
 
+
+def _add_epilog_recursively(cli: typer.Typer):
+    """Add epilog to all typers in the tree"""
+    cli.info.epilog = f"⭐ Starbridge v{__version__}: built with love in Berlin 🐻"
+    for group in cli.registered_groups:
+        if isinstance(group, typer.models.TyperInfo):
+            typer_instance = group.typer_instance
+            if (typer_instance is not cli) and typer_instance:
+                _add_epilog_recursively(typer_instance)
+    for command in cli.registered_commands:
+        if isinstance(command, typer.models.CommandInfo):
+            command.epilog = cli.info.epilog
+
+
+_add_epilog_recursively(cli)
+
+
+def _no_args_is_help_recursively(cli: typer.Typer):
+    """Add epilog to all typers in the tree"""
+    for group in cli.registered_groups:
+        if isinstance(group, typer.models.TyperInfo):
+            group.no_args_is_help = True
+            typer_instance = group.typer_instance
+            if (typer_instance is not cli) and typer_instance:
+                _no_args_is_help_recursively(typer_instance)
+
+
+_no_args_is_help_recursively(cli)
+
+
 if __name__ == "__main__":
     try:
         cli()
+        sys.exit(0)
     except Exception as e:
-        logger.error(e)
+        logger.critical(f"Fatal error occurred: {e}")
+        console.print(f"Fatal error occurred: {e}", style="error")
+        sys.exit(1)

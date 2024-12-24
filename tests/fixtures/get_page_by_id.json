@@ -1,0 +1,140 @@
+{
+    "id": "2088927594",
+    "type": "page",
+    "status": "current",
+    "title": "Amazon Leadership Principles - Key Insights and Application",
+    "space": {
+        "id": 1426260309,
+        "key": "~7120201709026d2b41448e93bb58d5fa301026",
+        "alias": "~7120201709026d2b41448e93bb58d5fa301026",
+        "name": "helmut",
+        "type": "personal",
+        "status": "current",
+        "_expandable": {
+            "settings": "/rest/api/space/~7120201709026d2b41448e93bb58d5fa301026/settings",
+            "metadata": "",
+            "operations": "",
+            "lookAndFeel": "/rest/api/settings/lookandfeel?spaceKey=~7120201709026d2b41448e93bb58d5fa301026",
+            "identifiers": "",
+            "permissions": "",
+            "roles": "",
+            "icon": "",
+            "description": "",
+            "theme": "/rest/api/space/~7120201709026d2b41448e93bb58d5fa301026/theme",
+            "history": "",
+            "homepage": "/rest/api/content/1426260788"
+        },
+        "_links": {
+            "webui": "/spaces/~7120201709026d2b41448e93bb58d5fa301026",
+            "self": "https://helmuthva.atlassian.net/wiki/rest/api/space/~7120201709026d2b41448e93bb58d5fa301026"
+        }
+    },
+    "history": {
+        "latest": true,
+        "createdBy": {
+            "type": "known",
+            "accountId": "712020:1709026d-2b41-448e-93bb-58d5fa301026",
+            "accountType": "atlassian",
+            "email": "helmut@aignostics.com",
+            "publicName": "Helmut",
+            "timeZone": "Europe/Berlin",
+            "profilePicture": {
+                "path": "/wiki/aa-avatar/712020:1709026d-2b41-448e-93bb-58d5fa301026",
+                "width": 48,
+                "height": 48,
+                "isDefault": false
+            },
+            "displayName": "Helmut Hoffer von Ankershoffen",
+            "isExternalCollaborator": false,
+            "isGuest": false,
+            "_expandable": {
+                "operations": "",
+                "personalSpace": ""
+            },
+            "_links": {
+                "self": "https://helmuthva.atlassian.net/wiki/rest/api/user?accountId=712020:1709026d-2b41-448e-93bb-58d5fa301026"
+            }
+        },
+        "createdDate": "2024-12-01T22:01:31.578Z",
+        "_expandable": {
+            "lastUpdated": "",
+            "previousVersion": "",
+            "lastOwnedBy": "",
+            "contributors": "",
+            "nextVersion": "",
+            "ownedBy": ""
+        },
+        "_links": {
+            "self": "https://helmuthva.atlassian.net/wiki/rest/api/content/2088927594/history"
+        }
+    },
+    "version": {
+        "by": {
+            "type": "known",
+            "accountId": "712020:1709026d-2b41-448e-93bb-58d5fa301026",
+            "accountType": "atlassian",
+            "email": "helmut@aignostics.com",
+            "publicName": "Helmut",
+            "timeZone": "Europe/Berlin",
+            "profilePicture": {
+                "path": "/wiki/aa-avatar/712020:1709026d-2b41-448e-93bb-58d5fa301026",
+                "width": 48,
+                "height": 48,
+                "isDefault": false
+            },
+            "displayName": "Helmut Hoffer von Ankershoffen",
+            "isExternalCollaborator": false,
+            "isGuest": false,
+            "_expandable": {
+                "operations": "",
+                "personalSpace": ""
+            },
+            "_links": {
+                "self": "https://helmuthva.atlassian.net/wiki/rest/api/user?accountId=712020:1709026d-2b41-448e-93bb-58d5fa301026"
+            }
+        },
+        "when": "2024-12-01T22:01:31.578Z",
+        "friendlyWhen": "01.12.2024",
+        "message": "",
+        "number": 1,
+        "minorEdit": false,
+        "ncsStepVersion": "1",
+        "ncsStepVersionSource": "ncs-ack",
+        "confRev": "confluence$content$2088927594.4",
+        "contentTypeModified": false,
+        "_expandable": {
+            "collaborators": "",
+            "content": "/rest/api/content/2088927594"
+        },
+        "_links": {
+            "self": "https://helmuthva.atlassian.net/wiki/rest/api/content/2088927594/version/1"
+        }
+    },
+    "macroRenderedOutput": {},
+    "extensions": {
+        "position": 8024
+    },
+    "_expandable": {
+        "childTypes": "",
+        "container": "/rest/api/space/~7120201709026d2b41448e93bb58d5fa301026",
+        "schedulePublishInfo": "",
+        "metadata": "",
+        "operations": "",
+        "schedulePublishDate": "",
+        "children": "/rest/api/content/2088927594/child",
+        "restrictions": "/rest/api/content/2088927594/restriction/byOperation",
+        "ancestors": "",
+        "body": "",
+        "descendants": "/rest/api/content/2088927594/descendant"
+    },
+    "_links": {
+        "editui": "/pages/resumedraft.action?draftId=2088927594",
+        "webui": "/spaces/~7120201709026d2b41448e93bb58d5fa301026/pages/2088927594/Amazon+Leadership+Principles+-+Key+Insights+and+Application",
+        "edituiv2": "/spaces/~7120201709026d2b41448e93bb58d5fa301026/pages/edit-v2/2088927594",
+        "context": "/wiki",
+        "self": "https://helmuthva.atlassian.net/wiki/rest/api/content/2088927594",
+        "tinyui": "/x/aoGCf",
+        "collection": "/rest/api/content",
+        "base": "https://helmuthva.atlassian.net/wiki"
+    }
+}

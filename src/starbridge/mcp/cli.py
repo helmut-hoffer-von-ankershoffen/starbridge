@@ -3,7 +3,6 @@ CLI to interact with Confluence
 """
 
 import os
-import pathlib
 import re
 import subprocess
 import webbrowser
@@ -11,18 +10,18 @@ from typing import Annotated
 
 import typer
 
-from starbridge.base import __project_name__
-from starbridge.utils.console import console
+from starbridge.base import __project_name__, __version__
+from starbridge.utils import console, get_process_info
 
 from .server import MCPServer
 
-cli = typer.Typer(no_args_is_help=True)
+cli = typer.Typer()
 
 
 @cli.command()
 def health():
     """Check health of the services and their dependencies."""
-    console.print(MCPServer().health())
+    console.print(MCPServer().health().model_dump_json())
 
 
 @cli.command()
@@ -38,9 +37,19 @@ def tools():
 
 
 @cli.command()
-def tool(name: str):
-    """Get tool by name"""
-    console.print(MCPServer.tool(name))
+def tool(
+    name: str,
+    arguments: Annotated[
+        list[str] | None, typer.Option(help="Arguments in key=value format")
+    ] = None,
+):
+    """Get tool by name with optional arguments"""
+    args = {}
+    if arguments:
+        for arg in arguments:
+            key, value = arg.split("=", 1)
+            args[key] = value
+    console.print(MCPServer.tool(name, args))
 
 
 @cli.command()
@@ -59,6 +68,22 @@ def resource(uri: str):
 def prompts():
     """Prompts exposed by modules"""
     console.print(MCPServer.prompts())
+
+
+@cli.command()
+def prompt(
+    name: str,
+    arguments: Annotated[
+        list[str] | None, typer.Option(help="Arguments in key=value format")
+    ] = None,
+):
+    """Get a prompt by name with optional arguments"""
+    args = {}
+    if arguments:
+        for arg in arguments:
+            key, value = arg.split("=", 1)
+            args[key] = value
+    console.print(MCPServer.prompt(name, args))
 
 
 @cli.command()
@@ -87,6 +112,13 @@ def serve(
             help="Debug mode",
         ),
     ] = True,
+    env: Annotated[  # Parsed in bootstrap.py
+        list[str] | None,
+        typer.Option(
+            "--env",
+            help='Environment variables in key=value format. Can be used multiple times in one call. Only STARBRIDGE_ prefixed vars are used. Example --env STARBRIDGE_ATLASSIAN_URL="https://your-domain.atlassian.net" --env STARBRIDGE_ATLASSIAN_EMAIL="YOUR_EMAIL"',
+        ),
+    ] = None,
 ):
     """Run MCP server."""
     MCPServer().serve(host, port, debug)
@@ -95,23 +127,32 @@ def serve(
 @cli.command()
 def inspect():
     """Run inspector."""
-    project_root = str(pathlib.Path(__file__).parent.parent.parent.parent)
+    process_info = get_process_info()
     console.print(
-        f"Starbridge project root: {project_root}\nStarbridge environment:\n{os.environ}"
+        f"⭐ Starbridge controller: v{__version__} (project root {process_info.project_root}, pid {process_info.pid}), parent '{process_info.parent.name}' (pid {process_info.parent.pid})"
     )
+    env_args = []
+    for key, value in os.environ.items():
+        if key.startswith("STARBRIDGE_"):
+            env_args.extend(["--env", f'{key}="{value}"'])
+    cmd = [
+        "npx",
+        "@modelcontextprotocol/inspector",
+        "uv",
+        "--directory",
+        process_info.project_root,
+        "run",
+        "--no-dev",
+        __project_name__,
+    ] + env_args
+    console.print(f"Executing: {' '.join(cmd)}")
+
     process = subprocess.Popen(
-        [
-            "npx",
-            "@modelcontextprotocol/inspector",
-            "uv",
-            "--directory",
-            project_root,
-            "run",
-            __project_name__,
-        ],
+        cmd,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,
+        env=os.environ,
     )
 
     url_pattern = r"MCP Inspector is up and running at (http://[^\s]+)"
@@ -127,6 +168,7 @@ def inspect():
         match = re.search(url_pattern, line)
         if match:
             url = match.group(1)
+            console.print(f"Opened browser pointing to MCP Inspector at {url}")
             webbrowser.open(url)
 
     process.wait()

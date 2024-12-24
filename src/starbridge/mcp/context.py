@@ -54,7 +54,7 @@ class MCPContext(BaseModel):
     """
 
     _request_context: RequestContext | None
-    _mcp: Any | None  # Avoid circular import by using Any
+    _mcp: Any  # Avoid circular import by using Any
 
     def __init__(
         self,
@@ -70,15 +70,13 @@ class MCPContext(BaseModel):
     @property
     def mcp(self) -> Any:
         """Access to the MCP server."""
-        if self._mcp is None:
-            raise ValueError("Context is not available outside of a request")
         return self._mcp
 
     @property
     def request_context(self) -> RequestContext:
         """Access to the underlying request context."""
         if self._request_context is None:
-            raise ValueError("Context is not available outside of a request")
+            raise RuntimeError("Context is not available outside of a request")
         return self._request_context
 
     async def report_progress(
@@ -111,9 +109,8 @@ class MCPContext(BaseModel):
             uri: Resource URI to read
 
         Returns:
-            The resource content as either text or bytes
+            (str | bytes): The resource content as either text or bytes
         """
-        assert self._mcp is not None, "Context is not available outside of a request"
         return await self._mcp.read_resource(uri)
 
     async def log(

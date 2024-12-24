@@ -2,6 +2,7 @@
 CLI to interact with Confluence
 """
 
+import json
 from typing import Annotated
 
 import typer
@@ -10,13 +11,13 @@ from starbridge.utils.console import console
 
 from .service import Service
 
-cli = typer.Typer(no_args_is_help=True)
+cli = typer.Typer()
 
 
 @cli.command()
 def health():
     """Health of Confluence"""
-    console.print(Service().health())
+    console.print(Service().health().model_dump_json())
 
 
 @cli.command()
@@ -25,7 +26,7 @@ def info():
     console.print(Service().info())
 
 
-cli_mcp = typer.Typer(no_args_is_help=True)
+cli_mcp = typer.Typer()
 cli.add_typer(cli_mcp, name="mcp")
 
 
@@ -76,7 +77,7 @@ def prompt_space_summary(
     console.print(Service().space_summary(style))
 
 
-cli_space = typer.Typer(no_args_is_help=True)
+cli_space = typer.Typer()
 cli.add_typer(cli_space, name="space")
 
 
@@ -88,10 +89,10 @@ def space():
 @cli_space.command(name="list")
 def space_list():
     """Get info about all space"""
-    console.print(Service().space_list())
+    console.print_json(json.dumps(Service().space_list()))
 
 
-cli_page = typer.Typer(no_args_is_help=True)
+cli_page = typer.Typer()
 cli.add_typer(cli_page, name="page")
 
 
@@ -119,7 +120,7 @@ def page_create(
 
 @cli_page.command(name="read")
 def page_get(
-    page_id: str = typer.Option(None, help="Parent page id"),
+    page_id: str = typer.Option(None, help="Page id"),
 ):
     """Read a page"""
     console.print(Service().page_get(page_id))

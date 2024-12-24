@@ -1,14 +1,9 @@
 FROM mcr.microsoft.com/devcontainers/python:0-3.11-bullseye
 
-# Install system dependencies
-RUN apk add \
-    curl \
-    jq \
-    libxml2-utils \
-    libcairo2 \
-    gnupg2 \
-    && rm -rf /var/lib/apt/lists/*
+RUN curl --proto '=https' --tlsv1.2 -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
+    apt update -y && \
+    apt install -y --no-install-recommends curl gnupg2 jq less libcairo2 nano nodejs procps psmisc && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Install Node.js
-RUN apk add nodejs npm
-
+RUN npm install --ignore-scripts -g @modelcontextprotocol/inspector@0.3.0

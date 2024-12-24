@@ -1,10 +1,9 @@
 name: Build and publish Docker image
 
 on:
-  release:
-    types: [published]
-  repository_dispatch:
-    types: [release_created_programatically]
+  push:
+    tags:
+      - "v*.*.*"
 
 env:
   REGISTRY: docker.io
@@ -19,7 +18,7 @@ jobs:
       attestations: write
       id-token: write
     steps:
-      - name: Check out the repo
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up QEMU
@@ -40,9 +39,12 @@ jobs:
         with:
           images: ${{ env.IMAGE_NAME }}
           tags: |
-            # set latest tag for main branch
-            type=raw,value=latest,enable=${{ github.ref == format('refs/heads/{0}', 'main') }}
-
+            # set latest tag for releases
+            type=raw,value=latest
+            # set semver tags from git tags (v1.2.3 -> 1.2.3, 1.2, 1)
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
 
       - name: Build and push Docker image
         id: push

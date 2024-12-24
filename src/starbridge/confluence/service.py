@@ -1,6 +1,7 @@
 """Handles Confluence operations."""
 
 import json
+import os
 
 import mcp.types as types
 import typer
@@ -16,7 +17,7 @@ from starbridge.mcp import (
     mcp_resource_iterator,
     mcp_tool,
 )
-from starbridge.utils import get_logger
+from starbridge.utils import Health, get_logger
 from starbridge.utils.settings import load_settings
 
 from . import cli
@@ -42,19 +43,19 @@ class Service(MCPBaseService):
         return "confluence", cli.cli  # type: ignore
 
     @mcp_tool()
-    def health(self, context: MCPContext | None = None) -> str:
+    def health(self, context: MCPContext | None = None) -> Health:
         try:
             spaces = self.space_list()
         except Exception as e:
-            return f"DOWN: {str(e)}"
+            return Health(status=Health.Status.DOWN, reason=str(e))
         if (
             isinstance(spaces, dict)
             and "results" in spaces
             and isinstance(spaces["results"], list)
+            and len(spaces["results"]) > 0
         ):
-            if len(spaces["results"]) > 0:
-                return "UP"
-        return "DOWN: No spaces found"
+            return Health(status=Health.Status.UP)
+        return Health(status=Health.Status.DOWN, reason="No spaces found")
 
     @mcp_tool()
     def info(self, context: MCPContext | None = None):
@@ -82,6 +83,10 @@ class Service(MCPBaseService):
     @mcp_resource(type="space")
     def space_get(self, space_key: str, context: MCPContext | None = None) -> str:
         """Get specific Confluence space by key."""
+        # Mock response if requested
+        if "atlassian.Confluence.get_space" in os.environ.get("MOCKS", "").split(","):
+            with open("tests/fixtures/get_space.json") as f:
+                return json.dumps(json.load(f), indent=2)
         return json.dumps(self._api.get_space(space_key), indent=2)
 
     @mcp_prompt(type="space_summary")
@@ -135,8 +140,14 @@ class Service(MCPBaseService):
             context: MCP context for the operation
 
         Returns:
-            dict: JSON response containing the spaces list under 'results' key
+            (dict): JSON response containing the spaces list under 'results' key
         """
+        # Mock response if requested
+        if "atlassian.Confluence.get_all_spaces" in os.environ.get("MOCKS", "").split(
+            ","
+        ):
+            with open("tests/fixtures/get_all_spaces.json") as f:
+                return json.load(f)
         return self._api.get_all_spaces(
             start,
             limit,
@@ -203,7 +214,7 @@ class Service(MCPBaseService):
             context: MCP context for the operation
 
         Returns:
-            dict: JSON response containing the page details
+            (Any): JSON response containing the page details
         """
         return self._api.get_page_by_id(page_id, status, expand, version)
 
@@ -236,7 +247,7 @@ class Service(MCPBaseService):
             full_width: If to use full width layout (defaults to False)
 
         Returns:
-            dict: JSON response containing the updated page details
+            (Any): JSON response containing the updated page details
 
         Notes:
             The 'storage' representation is the default Confluence storage format.
@@ -283,7 +294,7 @@ class Service(MCPBaseService):
         expand: str | None = None,
         content_type: str = "page",
         context: MCPContext | None = None,
-    ):
+    ):  # -> Any | Any:# -> Any | Any:
         """List pages in a Confluence space.
 
         Args:
@@ -296,7 +307,7 @@ class Service(MCPBaseService):
             context: MCP context for the operation
 
         Returns:
-            list: List of pages in the specified space
+            (Any): List of pages in the specified space
         """
         return self._api.get_all_pages_from_space(
             space_key,

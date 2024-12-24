@@ -1,0 +1,42 @@
+services:
+  starbridge:
+    build: .
+    env_file:
+      - path: .env
+        required: true
+    develop:
+      watch:
+        - path: src
+          action: rebuild
+    restart: no
+    tty: true
+    stdin_open: true
+    healthcheck:
+      test: [ "CMD-SHELL", "pgrep -x uv || exit 1" ]
+      interval: 5s
+      timeout: 1s
+      retries: 0
+      start_period: 5s
+      start_interval: 1s
+
+  starbridge_inspector:
+    build: .
+    env_file:
+      - path: .env
+        required: true
+    develop:
+      watch:
+        - path: src
+          action: rebuild
+    command: mcp inspect
+    restart: always
+    ports:
+      - "5173:5173"
+      - "3000:3000"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:5173" ]
+      interval: 5s
+      timeout: 2s
+      retries: 3
+      start_period: 5s
+      start_interval: 1s

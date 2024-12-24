@@ -12,10 +12,11 @@
         "--ignore=F401"
     ],
     "python.testing.pytestArgs": [
-        "__pycache__"
+        "tests"
     ],
     "python.testing.unittestEnabled": false,
     "python.testing.pytestEnabled": true,
+    "python.testing.autoTestDiscoverOnSaveEnabled": true,
     "files.exclude": {
         "**/__pycache__ ": true
     },
@@ -29,4 +30,15 @@
         "**/site-packages/**",
         "**/dist-packages/**"
     ],
+    "python.analysis.ignore": [
+        "**/typing.py"
+    ],
+    "sonarlint.connectedMode.project": {
+        "connectionId": "helmut-hoffer-von-ankershoffen",
+        "projectKey": "helmut-hoffer-von-ankershoffen_starbridge"
+    },
+    "python.experiments.optOutFrom": [
+        "pythonTerminalEnvVarActivation"
+    ],
+    "terminal.integrated.scrollback": 100000
 }

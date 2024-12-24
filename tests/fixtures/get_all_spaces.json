@@ -1,0 +1,85 @@
+{
+    "results": [
+        {
+            "id": 1426260309,
+            "key": "~7120201709026d2b41448e93bb58d5fa301026",
+            "alias": "~7120201709026d2b41448e93bb58d5fa301026",
+            "name": "helmut",
+            "icon": {
+                "path": "/aa-avatar/712020:1709026d-2b41-448e-93bb-58d5fa301026",
+                "width": 48,
+                "height": 48,
+                "isDefault": false
+            },
+            "description": {
+                "_expandable": {
+                    "view": "",
+                    "plain": ""
+                }
+            },
+            "homepage": {
+                "id": "1426260788",
+                "type": "page",
+                "status": "current",
+                "title": "Helmut Rudolf (Oertel) Hoffer von Ankershoffen",
+                "macroRenderedOutput": {},
+                "extensions": {
+                    "position": 602
+                },
+                "_expandable": {
+                    "container": "/rest/api/space/~7120201709026d2b41448e93bb58d5fa301026",
+                    "metadata": "",
+                    "restrictions": "/rest/api/content/1426260788/restriction/byOperation",
+                    "history": "/rest/api/content/1426260788/history",
+                    "body": "",
+                    "version": "",
+                    "descendants": "/rest/api/content/1426260788/descendant",
+                    "space": "/rest/api/space/~7120201709026d2b41448e93bb58d5fa301026",
+                    "childTypes": "",
+                    "schedulePublishInfo": "",
+                    "operations": "",
+                    "schedulePublishDate": "",
+                    "children": "/rest/api/content/1426260788/child",
+                    "ancestors": ""
+                },
+                "_links": {
+                    "self": "https://helmuthva.atlassian.net/wiki/rest/api/content/1426260788",
+                    "tinyui": "/x/NAMDVQ",
+                    "editui": "/pages/resumedraft.action?draftId=1426260788",
+                    "webui": "/spaces/~7120201709026d2b41448e93bb58d5fa301026/overview",
+                    "edituiv2": "/spaces/~7120201709026d2b41448e93bb58d5fa301026/pages/edit-v2/1426260788"
+                }
+            },
+            "type": "personal",
+            "metadata": {
+                "_expandable": {
+                    "labels": ""
+                }
+            },
+            "status": "current",
+            "_expandable": {
+                "settings": "/rest/api/space/~7120201709026d2b41448e93bb58d5fa301026/settings",
+                "operations": "",
+                "lookAndFeel": "/rest/api/settings/lookandfeel?spaceKey=~7120201709026d2b41448e93bb58d5fa301026",
+                "identifiers": "",
+                "permissions": "",
+                "roles": "",
+                "theme": "/rest/api/space/~7120201709026d2b41448e93bb58d5fa301026/theme",
+                "history": ""
+            },
+            "_links": {
+                "webui": "/spaces/~7120201709026d2b41448e93bb58d5fa301026",
+                "self": "https://helmuthva.atlassian.net/wiki/rest/api/space/~7120201709026d2b41448e93bb58d5fa301026"
+            }
+        }
+    ],
+    "start": 0,
+    "limit": 100,
+    "size": 100,
+    "_links": {
+        "base": "https://helmuthva.atlassian.net/wiki",
+        "context": "/wiki",
+        "next": "/rest/api/space?next=true&expand=metadata%2Cicon%2Cdescription%2Chomepage&limit=100&start=100&status=current",
+        "self": "https://helmuthva.atlassian.net/wiki/rest/api/space?expand=metadata%2Cicon%2Cdescription%2Chomepage&status=current"
+    }
+}

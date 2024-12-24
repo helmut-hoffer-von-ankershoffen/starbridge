@@ -1,4 +1,11 @@
 # The project virtual environment is dependent on the local platform and must be created from scratch in the image.
 .venv
+venv/
+# Nothing local to platform or specific to archh
+**/__pycache__/
+**/*.py[cod]
+*.so
+# No secrets
 .env
 .env.backup
+sitecustomize.py

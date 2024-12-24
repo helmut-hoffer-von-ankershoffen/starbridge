@@ -1,3 +1,1 @@
-from .cli import cli
-
-__all__ = ["cli"]
+from . import bootstrap as bootstrap  # Must be first import

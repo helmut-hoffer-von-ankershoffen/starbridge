@@ -5,10 +5,12 @@ import sys
 import time
 from pathlib import Path
 
+import psutil
 import typer
 
 from starbridge.base import __project_name__
 from starbridge.mcp import MCPBaseService, MCPContext, mcp_tool
+from starbridge.utils import Health
 
 from . import cli
 
@@ -25,13 +27,13 @@ class Service(MCPBaseService):
         return "claude", cli.cli  # type: ignore
 
     @mcp_tool()
-    def health(self, context: MCPContext | None = None) -> str:
+    def health(self, context: MCPContext | None = None) -> Health:
         """Check if Claude Desktop application is installed and is running."""
         if not self.is_installed():
-            return "DOWN: Not installed"
+            return Health(status=Health.Status.DOWN, reason="not installed")
         if not self.is_running():
-            return "DOWN: Not running"
-        return "UP"
+            return Health(status=Health.Status.DOWN, reason="not running")
+        return Health(status=Health.Status.UP)
 
     @mcp_tool()
     def info(self, context: MCPContext | None = None):
@@ -42,6 +44,7 @@ class Service(MCPBaseService):
             "config_path": None,
             "log_path": None,
             "config": None,
+            "processes": [],
         }
         if self.is_installed():
             data["application_directory"] = str(self.application_directory())
@@ -49,6 +52,10 @@ class Service(MCPBaseService):
                 data["config_path"] = str(self.config_path())
                 data["config"] = self.config_read()
                 data["log_path"] = str(self.log_path())
+        # Add list of running node processes
+        data["processes"] = [
+            proc.info for proc in psutil.process_iter(attrs=["pid", "name"])
+        ]
         return data
 
     @mcp_tool()
@@ -92,9 +99,17 @@ class Service(MCPBaseService):
         """Check if Claude Desktop application is running."""
         if platform.system() != "Darwin":
             raise RuntimeError("This command only works on macOS")
-        ps_check = subprocess.run(
-            ["pgrep", "-x", "Claude"], capture_output=True, text=True, check=False
+
+        class Result:
+            def __init__(self, returncode):
+                self.returncode = returncode
+
+        process_found = any(
+            proc.info["name"] == "Claude"
+            for proc in psutil.process_iter(attrs=["name"])
         )
+
+        ps_check = Result(0 if process_found else 1)
         return ps_check.returncode == 0
 
     @staticmethod
@@ -176,6 +191,8 @@ class Service(MCPBaseService):
             mcp_server_name in config["mcpServers"]
             and config["mcpServers"][mcp_server_name] == mcp_server_config
         ):
+            if restart:
+                Service._restart()
             return False
 
         config["mcpServers"][mcp_server_name] = mcp_server_config
@@ -197,7 +214,7 @@ class Service(MCPBaseService):
             config = Service.config_read()
         except FileNotFoundError:
             config = {"mcpServers": {}}
-        if "name" not in config["mcpServers"]:
+        if mcp_server_name not in config["mcpServers"]:
             return False
         del config["mcpServers"][mcp_server_name]
         Service.config_write(config)

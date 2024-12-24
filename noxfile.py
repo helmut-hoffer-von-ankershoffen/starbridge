@@ -6,24 +6,40 @@ import nox
 nox.options.reuse_existing_virtualenvs = True
 nox.options.default_venv_backend = "uv"
 
+_INSTALL_ARGS = "-e .[dev]"
 
-@nox.session(python=["3.11", "3.12", "3.13", "3.14"])
+
+@nox.session(python=["3.11", "3.12", "3.13"])
 def test(session: nox.Session):
-    session.install("-e .[dev]")
+    session.install(_INSTALL_ARGS)
+    session.run("rm", "-rf", ".coverage", external=True)
     session.run(
         "pytest",
         "--disable-warnings",
         "--junitxml=junit.xml",
-        "--cov=starbridge",
-        "--cov-report=term-missing",
-        "--cov-report=html:coverage_html",
-        "--cov-report=xml:coverage.xml",
+        "-n",
+        "auto",
+        "--dist",
+        "loadgroup",
+        "-m",
+        "not sequential",
+    )
+    session.run(
+        "pytest",
+        "--disable-warnings",
+        "--junitxml=junit.xml",
+        "-n",
+        "auto",
+        "--dist",
+        "loadgroup",
+        "-m",
+        "sequential",
     )
 
 
 @nox.session(python=["3.11"])
 def lint(session: nox.Session):
-    session.install("-e .[dev]")
+    session.install(_INSTALL_ARGS)
     session.run("ruff", "check", ".")
     session.run(
         "ruff",
@@ -35,7 +51,7 @@ def lint(session: nox.Session):
 
 @nox.session(python=["3.11"])
 def audit(session: nox.Session):
-    session.install("-e .[dev]")
+    session.install(_INSTALL_ARGS)
     session.run("pip-audit", "-f", "json", "-o", "vulnerabilities.json")
     session.run("jq", ".", "vulnerabilities.json", external=True)
     session.run("pip-licenses", "--format=json", "--output-file=licenses.json")

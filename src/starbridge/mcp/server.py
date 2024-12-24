@@ -2,6 +2,8 @@ import asyncio
 import base64
 import json
 import os
+import signal
+from io import BytesIO
 from typing import Any
 from urllib.parse import urlparse
 
@@ -27,12 +29,12 @@ from starbridge.mcp.context import MCPContext
 from starbridge.mcp.decorators import mcp_tool
 from starbridge.mcp.models import ResourceMetadata
 from starbridge.mcp.service import MCPBaseService
-from starbridge.utils import get_logger
+from starbridge.utils import AggregatedHealth, get_logger
 
 logger = get_logger(__name__)
 
 
-class MCPServer(MCPBaseService):
+class MCPServer:
     """MCP Server for Starbridge."""
 
     def __init__(self):
@@ -49,7 +51,7 @@ class MCPServer(MCPBaseService):
         self._server.call_tool()(self.tool_call)
 
     @mcp_tool()
-    def health(self, context: MCPContext | None = None):
+    def health(self, context: MCPContext | None = None) -> AggregatedHealth:
         """Health of services and their dependencies"""
         dependencies = {}
         for service_class in MCPBaseService.get_services():
@@ -57,8 +59,7 @@ class MCPServer(MCPBaseService):
             service_name = service.__class__.__module__.split(".")[1]
             dependencies[service_name] = service.health()
 
-        healthy = all(status == "UP" for status in dependencies.values())
-        return {"healthy": healthy, "dependencies": dependencies}
+        return AggregatedHealth(dependencies=dependencies)
 
     def get_context(self) -> MCPContext:
         """
@@ -77,31 +78,36 @@ class MCPServer(MCPBaseService):
             resources.extend(service.resource_list(context=self.get_context()))
         return resources
 
+    def _find_resource_handler(self, parsed_uri):
+        """Find the appropriate resource handler for a parsed URI."""
+        for service in self._services:
+            for method_name in dir(service.__class__):
+                method = getattr(service.__class__, method_name)
+                if not hasattr(method, "__mcp_resource__"):
+                    continue
+
+                meta = method.__mcp_resource__
+                if (
+                    meta.server == parsed_uri.scheme
+                    and meta.service == parsed_uri.netloc
+                    and parsed_uri.path.startswith(f"/{meta.type}/")
+                ):
+                    return service, method
+        return None, None
+
     async def resource_get(self, uri: AnyUrl) -> str:
         """Get a resource from any service that can handle it."""
         parsed = urlparse(str(uri))
+        service, handler = self._find_resource_handler(parsed)
 
-        # Try each service's resource handlers
-        for service in self._services:
-            # Find all resource handlers in the service
-            for method_name in dir(service.__class__):
-                method = getattr(service.__class__, method_name)
-                if hasattr(method, "__mcp_resource__"):
-                    meta = method.__mcp_resource__
-                    # Check if this handler matches the URI pattern
-                    if (
-                        meta.server == parsed.scheme
-                        and meta.service == parsed.netloc
-                        and parsed.path.startswith(f"/{meta.type}/")
-                    ):  # renamed from prefix
-                        # Call the handler with the resource ID (last part of path)
-                        result = method(
-                            service,
-                            parsed.path.split("/")[-1],
-                            context=self.get_context(),
-                        )
-                        if result is not None:
-                            return result
+        if handler:
+            result = handler(
+                service,
+                parsed.path.split("/")[-1],
+                context=self.get_context(),
+            )
+            if result is not None:
+                return result
 
         raise ValueError(f"No service found for URI: {uri}")
 
@@ -113,32 +119,37 @@ class MCPServer(MCPBaseService):
             prompts.extend(service.prompt_list(context=self.get_context()))
         return prompts
 
-    async def prompt_get(
-        self, name: str, arguments: dict[str, str] | None
-    ) -> types.GetPromptResult:
-        """Get a prompt by its full name (server_service_type)."""
+    def _find_prompt_handler(self, name: str):
+        """Find the appropriate prompt handler for a given name."""
         server, service, prompt_type = name.split("_", 2)
 
         for service_instance in self._services:
             for method_name in dir(service_instance.__class__):
                 method = getattr(service_instance.__class__, method_name)
-                if hasattr(method, "__mcp_prompt__"):
-                    meta = method.__mcp_prompt__
-                    if (
-                        meta.server == server
-                        and meta.service == service
-                        and meta.type == prompt_type
-                    ):
-                        # Found matching prompt handler
-                        if arguments:
-                            arguments = arguments.copy()
-                            arguments.pop("context", None)
-                            return method(
-                                service_instance,
-                                **arguments,
-                                context=self.get_context(),
-                            )
-                        return method(service_instance, context=self.get_context())
+                if not hasattr(method, "__mcp_prompt__"):
+                    continue
+
+                meta = method.__mcp_prompt__
+                if (
+                    meta.server == server
+                    and meta.service == service
+                    and meta.type == prompt_type
+                ):
+                    return service_instance, method
+        return None, None
+
+    async def prompt_get(
+        self, name: str, arguments: dict[str, str] | None
+    ) -> types.GetPromptResult:
+        """Get a prompt by its full name (server_service_type)."""
+        service_instance, method = self._find_prompt_handler(name)
+
+        if method:
+            if arguments:
+                arguments = arguments.copy()
+                arguments.pop("context", None)
+                return method(service_instance, **arguments, context=self.get_context())
+            return method(service_instance, context=self.get_context())
 
         return types.GetPromptResult(description=None, messages=[])
 
@@ -150,34 +161,40 @@ class MCPServer(MCPBaseService):
             tools.extend(service.tool_list(context=self.get_context()))
         return tools
 
-    async def tool_call(
-        self, name: str, arguments: dict | None
-    ) -> list[types.TextContent | types.ImageContent | types.EmbeddedResource]:
+    def _find_tool_handler(self, name: str):
+        """Find the appropriate tool handler for a given name."""
         server, service, tool_name = name.split("_", 2)
 
         for service_instance in self._services:
             for method_name in dir(service_instance.__class__):
                 method = getattr(service_instance.__class__, method_name)
-                if hasattr(method, "__mcp_tool__"):
-                    meta = method.__mcp_tool__
-                    if (
-                        meta.server == server
-                        and meta.service == service
-                        and meta.name == tool_name
-                    ):
-                        if arguments:
-                            arguments = arguments.copy()
-                            arguments.pop("context", None)
-                            return MCPServer._marshal_result(
-                                method(
-                                    service_instance,
-                                    **arguments,
-                                    context=self.get_context(),
-                                )
-                            )
-                        return MCPServer._marshal_result(
-                            method(service_instance, context=self.get_context())
-                        )
+                if not hasattr(method, "__mcp_tool__"):
+                    continue
+
+                meta = method.__mcp_tool__
+                if (
+                    meta.server == server
+                    and meta.service == service
+                    and meta.name == tool_name
+                ):
+                    return service_instance, method
+        return None, None
+
+    async def tool_call(
+        self, name: str, arguments: dict | None
+    ) -> list[types.TextContent | types.ImageContent | types.EmbeddedResource]:
+        service_instance, method = self._find_tool_handler(name)
+
+        if method:
+            if arguments:
+                arguments = arguments.copy()
+                arguments.pop("context", None)
+                return MCPServer._marshal_result(
+                    method(service_instance, **arguments, context=self.get_context())
+                )
+            return MCPServer._marshal_result(
+                method(service_instance, context=self.get_context())
+            )
 
         raise ValueError(f"Unknown tool: {name}")
 
@@ -210,13 +227,20 @@ class MCPServer(MCPBaseService):
         async def handle_health(request):
             return PlainTextResponse(
                 headers={"content-type": "application/json"},
-                content=json.dumps(self.health()),
+                content=json.dumps(
+                    self.health().model_dump()
+                ),  # Use json.dumps instead of model_dump_json
             )
+
+        async def handle_terminate(request):
+            os.kill(os.getpid(), signal.SIGINT)
+            os.kill(os.getpid(), signal.SIGINT)
 
         return Starlette(
             debug=debug,
             routes=[
                 Route("/health", endpoint=handle_health, methods=["GET"]),
+                Route("/terminate", endpoint=handle_terminate, methods=["GET"]),
                 Route("/sse", endpoint=handle_sse),
                 Route("/messages", endpoint=handle_messages, methods=["POST"]),
             ],
@@ -249,12 +273,16 @@ class MCPServer(MCPBaseService):
         return asyncio.run(MCPServer().resource_list())
 
     @staticmethod
+    def resource(uri: str) -> str:
+        return asyncio.run(MCPServer().resource_get(AnyUrl(uri)))
+
+    @staticmethod
     def prompts() -> list[types.Prompt]:
         return asyncio.run(MCPServer().prompt_list())
 
     @staticmethod
-    def resource(uri: str) -> str:
-        return asyncio.run(MCPServer().resource_get(AnyUrl(uri)))
+    def prompt(name: str, arguments: dict | None = None) -> types.GetPromptResult:
+        return asyncio.run(MCPServer().prompt_get(name, arguments))
 
     @staticmethod
     def serve(host: str | None = None, port: int | None = None, debug: bool = True):
@@ -305,11 +333,12 @@ class MCPServer(MCPBaseService):
                 if result.format
                 else "application/octet-stream"
             )
-            result.load()
+            data = BytesIO()
+            result.save(data, format=result.format)
             return [
                 ImageContent(
                     type="image",
-                    data=base64.b64encode(result.tobytes()).decode("utf-8"),
+                    data=base64.b64encode(data.getvalue()).decode("utf-8"),
                     mimeType=mime_type,
                 )
             ]

@@ -1,16 +1,18 @@
+import importlib
+import pkgutil
 from collections import defaultdict
 from dataclasses import dataclass
 from importlib.metadata import entry_points
 from inspect import signature
-from typing import Any
 from urllib.parse import urlparse
 
 import mcp.types as types
 import typer
 
+from starbridge.base import __project_name__
 from starbridge.mcp.context import MCPContext
 from starbridge.mcp.models import ResourceMetadata
-from starbridge.utils.signature import description_and_params
+from starbridge.utils import Health, description_and_params
 
 
 @dataclass(frozen=True)
@@ -43,15 +45,24 @@ class MCPBaseService:
 
     @staticmethod
     def get_services() -> list[type["MCPBaseService"]]:
-        """Discover all registered MCP services."""
+        """Dynamically discover all Service classes in starbridge packages."""
         services = []
-        for entry_point in entry_points(group="starbridge.services"):
+        package = importlib.import_module("starbridge")
+
+        for _, name, _ in pkgutil.iter_modules(package.__path__):
             try:
-                service_class = entry_point.load()
-                if issubclass(service_class, MCPBaseService):
-                    services.append(service_class)
-            except Exception as e:
-                print(f"Error loading service {entry_point.name}: {e}")
+                module = importlib.import_module(f"{__project_name__}.{name}")
+                if hasattr(module, "Service"):
+                    service_class = module.Service
+                    if (
+                        isinstance(service_class, type)
+                        and issubclass(service_class, MCPBaseService)
+                        and service_class != MCPBaseService
+                    ):
+                        services.append(service_class)
+            except ImportError:
+                continue
+
         return services
 
     @staticmethod
@@ -64,7 +75,7 @@ class MCPBaseService:
         """Get info about configuration of this service. Override in subclass."""
         raise NotImplementedError
 
-    def health(self, context: MCPContext | None = None) -> str:
+    def health(self, context: MCPContext | None = None) -> Health:
         """Get health of this service. Override in subclass."""
         raise NotImplementedError
 
@@ -89,49 +100,47 @@ class MCPBaseService:
                 )
         return tools
 
+    def _validate_resource_uri(self, resource, meta):
+        """Validate resource URI against metadata."""
+        parsed = urlparse(str(resource.uri))
+        if parsed.scheme != meta.server:
+            raise ValueError(
+                f"Resource URI scheme '{parsed.scheme}' doesn't match decorator scheme '{meta.server}'"
+            )
+        if parsed.netloc != meta.service:
+            raise ValueError(
+                f"Resource URI service '{parsed.netloc}' doesn't match decorator service '{meta.service}'"
+            )
+        if not parsed.path.startswith(f"/{meta.type}/"):
+            raise ValueError(f"Resource URI path doesn't start with '/{meta.type}/'")
+
+    def _check_type_uniqueness(self, type_map, meta, method_name):
+        """Ensure resource type is unique."""
+        type_map[meta.type].append(method_name)
+        if len(type_map[meta.type]) > 1:
+            raise ValueError(
+                f"Multiple resource iterators found for type '{meta.type}': {type_map[meta.type]}"
+            )
+
     def resource_list(self, context: MCPContext | None = None) -> list[types.Resource]:
         """Get available resources by discovering and calling all resource iterators."""
         resources = []
-        type_map = defaultdict(list)  # renamed from prefix_map
+        type_map = defaultdict(list)
 
-        # Find all resource iterators
         for method_name in dir(self.__class__):
             method = getattr(self.__class__, method_name)
             if hasattr(method, "__mcp_resource_iterator__"):
                 meta = method.__mcp_resource_iterator__
-                if not meta.type:  # renamed from prefix
+                if not meta.type:
                     raise ValueError(
                         f"Resource iterator {method_name} missing required type"
                     )
 
-                # Check type uniqueness
-                type_map[meta.type].append(method_name)
-                if len(type_map[meta.type]) > 1:
-                    raise ValueError(
-                        f"Multiple resource iterators found for type '{meta.type}': {type_map[meta.type]}"
-                    )
-
-                # Get resources from iterator
+                self._check_type_uniqueness(type_map, meta, method_name)
                 iterator_resources = method(self, context)
 
-                # Validate each resource URI
                 for resource in iterator_resources:
-                    parsed = urlparse(str(resource.uri))
-                    if parsed.scheme != meta.server:
-                        raise ValueError(
-                            f"Resource URI scheme '{parsed.scheme}' doesn't match decorator scheme '{meta.server}'"
-                        )
-                    if parsed.netloc != meta.service:
-                        raise ValueError(
-                            f"Resource URI service '{parsed.netloc}' doesn't match decorator service '{meta.service}'"
-                        )
-                    if not parsed.path.startswith(
-                        f"/{meta.type}/"
-                    ):  # renamed from prefix
-                        raise ValueError(
-                            f"Resource URI path doesn't start with '/{meta.type}/'"
-                        )
-
+                    self._validate_resource_uri(resource, meta)
                 resources.extend(iterator_resources)
 
         return resources
@@ -184,12 +193,3 @@ class MCPBaseService:
                     )
                 )
         return prompts
-
-    def get_prompt(
-        self,
-        name: str,
-        arguments: dict[str, Any] | None,
-        context: MCPContext | None = None,
-    ) -> types.GetPromptResult:
-        """Get prompt content. Override in subclass."""
-        return types.GetPromptResult(description=None, messages=[])

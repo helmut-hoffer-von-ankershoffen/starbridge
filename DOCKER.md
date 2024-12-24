@@ -11,7 +11,7 @@ case "$OSTYPE" in
   win32*|cygwin*|msys*) SRC="%APPDATA%/Claude" ;;
   *) echo "Unsupported OS"; exit 1 ;;
 esac
-docker run -it --mount type=bind,src="$SRC",dst="/Claude" helmuthva/starbridge install
+docker run -it --pull always --mount type=bind,src="$SRC",dst="/Claude" helmuthva/starbridge install
 ```
 
 Note:
@@ -25,31 +25,47 @@ Note:
 Show commands and their help
 
 ```bash
+docker run helmuthva/starbridge --help
+```
+
+Determine health 
+
+```bash
+docker run helmuthva/starbridge health
+```
+
+This will indicate which environment variables to set.
+
+```bash
 docker run \
   -e STARBRIDGE_ATLASSIAN_URL=https://your-domain.atlassian.net \
   -e STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS=your-email@domain.com \
   -e STARBRIDGE_ATLASSIAN_API_TOKEN=your-api-token \
-  helmuthva/starbridge --help
+  helmuthva/starbridge health
+```
+
+Alternatively manage the settings via an .env file on the host
+
+```bash
+# cp .env.example .env && nano .env
+docker run --env-file=.env helmuthva/starbridge health
+```
+
+Run inspector to interact with the server via the MCP protocol - point your browser to https://127.0.0.1:5173.
+```bash
+docker run --env-file=.env -it  -p 127.0.0.1:5173:5173 -p 127.0.0.1:3000:3000 helmuthva/starbridge mcp inspect
 ```
 
 List Confluence spaces:
 
 ```bash
-docker run \
-  -e STARBRIDGE_ATLASSIAN_URL=https://your-domain.atlassian.net \
-  -e STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS=your-email@domain.com \
-  -e STARBRIDGE_ATLASSIAN_API_TOKEN=your-api-token \
-  helmuthva/starbridge confluence space list
+docker run --env-file=.env helmuthva/starbridge confluence space list
 ```
 
 Start the MCP Server on given host and port
 
 ```bash
-docker run \
-  -e STARBRIDGE_ATLASSIAN_URL=https://your-domain.atlassian.net \
-  -e STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS=your-email@domain.com \
-  -e STARBRIDGE_ATLASSIAN_API_TOKEN=your-api-token \
-  helmuthva/starbridge mcp serve --host=localhost --port=8080
+docker run --env-file=.env helmuthva/starbridge mcp serve --host=localhost --port=8080
 ```
 
 ## Build and install Docker image from source
@@ -72,16 +88,33 @@ docker run -it --mount type=bind,src="$SRC",dst="/Claude" starbridge install --i
 
 Enter starbridge container via bash for inspection:
 ```bash
-docker run -it --entrypoint bash starbridge
+docker run --env-file=.env -it --entrypoint bash starbridge
 ```
 
 Enter running starbridge container:
 
 ```bash
-docker exec -it $(docker ps | grep starbridge | awk '{print $1}') bash
+docker exec -it $(docker ps | awk '$2 ~ /starbridge/ {print $1}') bash
 ```
 
 Check logs:
 ```bash
-docker logs -f $(docker ps | grep starbridge | awk '{print $1}')
+docker logs -f $(docker ps | awk '$2 ~ /starbridge/ {print $1}')
+```
+
+Run MCP Inspector connected to Starbridge MCP Server
+```bash
+docker run --env-file=.env -it  -p 127.0.0.1:5173:5173 -p 127.0.0.1:3000:3000 starbridge mcp inspect
+```
+
+Or use docker compose
+
+File .env is passed through
+
+```bash
+docker compose up # starts inspector
+docker compose run starbridge --help
+docker compose run starbridge health
+docker compose run starbridge info
+docker compose run starbridge mcp tools
 ```
