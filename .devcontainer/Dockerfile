@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/devcontainers/python:0-3.11-bullseye
+FROM mcr.microsoft.com/devcontainers/python:1-3.11-bullseye
 
 RUN curl --proto '=https' --tlsv1.2 -fsSL https://deb.nodesource.com/setup_22.x | bash - && \
     apt update -y && \
