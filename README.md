@@ -2,7 +2,7 @@
 
 [![GitHub License](https://img.shields.io/github/license/helmut-hoffer-von-ankershoffen/starbridge?logo=opensourceinitiative&logoColor=3DA639&labelColor=414042&color=A41831)
 ](LICENSE) 
-[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/starbridge.svg?logo=python&color=204361&labelColor=1E2933)](https://pypi.python.org/pypi/starbridge)
+[![PyPI - Python Version](https://img.shields.io/pypi/pyversions/starbridge.svg?logo=python&color=204361&labelColor=1E2933)](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/noxfile.py)
 [![CI](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/actions/workflows/test.yml/badge.svg)](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/actions/workflows/test.yml) 
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=helmut-hoffer-von-ankershoffen_starbridge&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=helmut-hoffer-von-ankershoffen_starbridge)
 [![Security](https://sonarcloud.io/api/project_badges/measure?project=helmut-hoffer-von-ankershoffen_starbridge&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=helmut-hoffer-von-ankershoffen_starbridge)

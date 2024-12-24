@@ -27,7 +27,7 @@ repos:
         args: [--allow-multiple-documents]
       - id: debug-statements
       - id: end-of-file-fixer
-        exclude: "^tests/fixtures/"
+        exclude: "^tests/fixtures/|settings.json$"
       - id: fix-byte-order-marker
       - id: fix-encoding-pragma
         args: ["--remove"]

@@ -1,8 +1,11 @@
 import os
 import shutil
+import sys
 from pathlib import Path
+from unittest.mock import patch
 
 import pytest
+import typer
 from typer.testing import CliRunner
 
 from starbridge.cli import cli
@@ -23,6 +26,30 @@ def backup_env():
     yield
     if bak_path.is_file():
         shutil.move(bak_path, env_path)
+
+
+def test_env_args(runner):
+    """Check missing entry in .env leads to validation error."""
+
+    def mock_asyncio_run(x):
+        print("testing")
+        raise typer.Exit(42)
+
+    with patch("asyncio.run", side_effect=mock_asyncio_run):
+        result = runner.invoke(
+            cli,
+            ["mcp", "serve", "--env", 'STARBRIDGE_ATLASSIAN_URL="https://test.com"'],
+        )
+    assert "testing" in result.output
+    assert result.exit_code == 42
+
+    with patch("asyncio.run", side_effect=mock_asyncio_run):
+        result = runner.invoke(
+            cli,
+            ["--env", 'STARBRIDGE_ATLASSIAN_URL="https://test.com"'],
+        )
+    assert "testing" in result.output
+    assert result.exit_code == 42
 
 
 def test_dot_env(runner):
