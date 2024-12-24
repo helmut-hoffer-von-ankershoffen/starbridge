@@ -28,7 +28,7 @@ def backup_env():
 
 
 def test_env_args(runner):
-    """Check missing entry in .env leads to validation error."""
+    """Check --env can override environment for some commands."""
 
     def mock_asyncio_run(x):
         print("testing")
@@ -49,6 +49,17 @@ def test_env_args(runner):
         )
     assert "testing" in result.output
     assert result.exit_code == 42
+
+
+def test_env_args_fail(runner):
+    """Check --env not supported for all commands."""
+
+    result = runner.invoke(
+        cli,
+        ["info", "--env", 'STARBRIDGE_LOG_LEVEL="DEBUG"'],
+    )
+    assert "No such option: --env" in result.output
+    assert result.exit_code == 2
 
 
 @pytest.mark.sequential
