@@ -15,6 +15,20 @@ def runner():
     return CliRunner()
 
 
+@patch("platform.system", return_value="Darwin")
+@patch("psutil.process_iter")
+@patch("starbridge.claude.service.Service.has_config", return_value=True)
+def test_claude_health(mock_has_config, mock_process_iter, mock_platform, runner):
+    """Check health"""
+    mock_process = Mock()
+    mock_process.info = {"name": "Claude"}
+    mock_process_iter.return_value = [mock_process]
+
+    result = runner.invoke(cli, ["claude", "health"])
+    assert '"UP"' in result.stdout
+    assert result.exit_code == 0
+
+
 def test_claude_info(runner):
     """Check info spots running process uv"""
     result = runner.invoke(cli, ["claude", "info"])
