@@ -21,7 +21,6 @@
 
 Integrates Claude Desktop with Google and Atlassian workspaces.
 
-This integration serves two main purposes:
 1. **Make Claude a team member**: Makes Claude an informed member of your organisation by accessing your organization's key knowledge resources.
 2. **Integrate research and knowlege management**: Enables your teams to contribute, refine, and maintain your organisation's knowledge resources within Claude - seamlessly integrating research and sharing knowledge.
 3. **Improve efficiency**: Automate repetitive workflows such as generating Confluence pages from Google Docs.
