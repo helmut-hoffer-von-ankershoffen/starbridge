@@ -2,6 +2,13 @@
 
 ## [unreleased]
 
+### ⚙️ Miscellaneous Tasks
+
+- *(docker)* Set docker tags from semver tags - ([7d236c2](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/7d236c24fff1d52c5bc7a8804e1245608ce00eab))
+
+
+## [0.0.42](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.41..v0.0.42) - 2024-12-24
+
 ### 📚 Documentation
 
 - *(CHANGELOG.md)* Introduce in repo - ([78e11aa](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/78e11aa5400fba9803dbbc1793b4eadba6271976))
