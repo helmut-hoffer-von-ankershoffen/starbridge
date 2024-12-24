@@ -337,10 +337,5 @@ Changelog = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/releas
 Documentation = "https://helmuthva.gitbook.io/starbridge"
 Issues = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/issues"
 
-[project.entry-points."starbridge.services"]
-confluence = "starbridge.confluence.service:Service"
-claude = "starbridge.claude.service:Service"
-hello = "starbridge.hello.service:Service"
-
 [project.scripts]
 starbridge = "starbridge.cli:cli"
