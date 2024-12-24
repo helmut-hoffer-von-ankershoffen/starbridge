@@ -2,6 +2,24 @@
 
 ## [unreleased]
 
+### 🚜 Refactor
+
+- *(mcp)* Auto-discover services, instead of having to enumerate them in pyproject.toml - ([fcd09a8](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/fcd09a860c7a73e18846bec0d88af7b05b11f745))
+
+### 🧪 Testing
+
+- *(Claude)* Health - ([799b818](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/799b8183de6e0c89fccd8a0c400f580dba7dbc44))
+- *(confluence)* Cli commands - ([b2f086e](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/b2f086eb29b04660cbaef4886c2dd4a131aa2935))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(bump)* Enable to specify version part to bump, default being patch - ([56709d7](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/56709d75ce6176cb5fc1fe2c52df6183153ac0ac))
+- *(codecov)* Coverage > 80% now required - ([2b4d18c](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/2b4d18c1d23192171a39c58a83ba464dda1f3c7e))
+- *(codecov)* Sensible green range - ([a754964](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/a754964ca7f95245974287c013e95b2dccdae8bf))
+
+
+## [0.0.45](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.44..v0.0.45) - 2024-12-24
+
 ### 🧪 Testing
 
 - *(docker)* Use docker-compose and pytest-docker plugin to test e2e from docker buildx to inspector started by starbridge controller - ([0fe9c49](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/0fe9c49f4b3a39312d1a83e20b2775e515d3b8d8))
