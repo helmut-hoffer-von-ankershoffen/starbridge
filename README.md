@@ -1,16 +1,18 @@
 # [PRE-ALPHA] starbridge MCP server for Claude Desktop
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE) 
+[![GitHub License](https://img.shields.io/github/license/helmut-hoffer-von-ankershoffen/starbridge)
+](LICENSE) 
 [![CI](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/actions/workflows/test.yml/badge.svg)](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/actions/workflows/test.yml) 
 [![Quality Gate](https://sonarcloud.io/api/project_badges/measure?project=helmut-hoffer-von-ankershoffen_starbridge&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=helmut-hoffer-von-ankershoffen_starbridge)
 [![Security](https://sonarcloud.io/api/project_badges/measure?project=helmut-hoffer-von-ankershoffen_starbridge&metric=security_rating)](https://sonarcloud.io/summary/new_code?id=helmut-hoffer-von-ankershoffen_starbridge)
 [![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=helmut-hoffer-von-ankershoffen_starbridge&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=helmut-hoffer-von-ankershoffen_starbridge)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=helmut-hoffer-von-ankershoffen_starbridge&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=helmut-hoffer-von-ankershoffen_starbridge)
 [![Coverage](https://codecov.io/gh/helmut-hoffer-von-ankershoffen/starbridge/graph/badge.svg?token=SX34YRP30E)](https://codecov.io/gh/helmut-hoffer-von-ankershoffen/starbridge)
-[![GitHub](https://img.shields.io/github/v/release/helmut-hoffer-von-ankershoffen/starbridge?style=flat&labelColor=1C2C2E&color=C96329&logo=GitHub&logoColor=white)](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/releases)
-[![PyPI](https://img.shields.io/pypi/v/starbridge.svg?logo=pypi)](https://pypi.python.org/pypi/starbridge)
-[![Docker](https://badgen.net/docker/size/helmuthva/starbridge?icon=docker&label=image%20size)](https://hub.docker.com/r/helmuthva/starbridge/)
-![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/m/helmut-hoffer-von-ankershoffen/starbridge/main?logo=GitHub&logoColor=white)
+[![GitHub](https://img.shields.io/github/v/release/helmut-hoffer-von-ankershoffen/starbridge?style=flat&labelColor=1C2C2E&color=blue&logo=GitHub&logoColor=white)](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/releases)
+![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/m/helmut-hoffer-von-ankershoffen/starbridge/main?logo=GitHub&logoColor=white&color=white)
+[![PyPI](https://img.shields.io/pypi/v/starbridge.svg?logo=pypi&labelColor=1C2C2E&color=blue)](https://pypi.python.org/pypi/starbridge)
+[![Docker Image Version](https://img.shields.io/docker/v/helmuthva/starbridge?sort=semver&logo=docker&labelColor=1C2C2E&color=blue)](https://hub.docker.com/r/helmuthva/starbridge/tags)
+[![Docker Image Size](https://img.shields.io/docker/image-size/helmuthva/starbridge?sort=semver&arch=arm64&logo=docker&labelColor=1C2C2&color=white)](https://hub.docker.com/r/helmuthva/starbridge/)
 
 
 > ⚠️ **WARNING**: This project is currently in pre-alpha phase, i.e. partly functional. Feel free to watch or star the repository to stay updated on its progress.
