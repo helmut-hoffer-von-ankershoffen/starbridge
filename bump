@@ -1,2 +1,3 @@
 #!/bin/sh
-bump-my-version bump patch && git push
+VERSION_PART=${1:-patch}
+bump-my-version bump "$VERSION_PART" && git push
