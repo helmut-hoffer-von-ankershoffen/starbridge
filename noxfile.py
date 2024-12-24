@@ -12,7 +12,7 @@ _INSTALL_ARGS = "-e .[dev]"
 @nox.session(python=["3.11", "3.12", "3.13"])
 def test(session: nox.Session):
     session.install(_INSTALL_ARGS)
-    session.run("rm", "-rf", ".coverage")
+    session.run("rm", "-rf", ".coverage", external=True)
     session.run(
         "pytest",
         "--disable-warnings",
@@ -21,6 +21,19 @@ def test(session: nox.Session):
         "auto",
         "--dist",
         "loadgroup",
+        "-m",
+        "not sequential",
+    )
+    session.run(
+        "pytest",
+        "--disable-warnings",
+        "--junitxml=junit.xml",
+        "-n",
+        "auto",
+        "--dist",
+        "loadgroup",
+        "-m",
+        "sequential",
     )
 
 

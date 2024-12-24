@@ -51,6 +51,7 @@ def test_env_args(runner):
     assert result.exit_code == 42
 
 
+@pytest.mark.sequential
 def test_dot_env(runner):
     """Check missing entry in .env leads to validation error."""
 
