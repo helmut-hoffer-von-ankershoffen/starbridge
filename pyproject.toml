@@ -183,7 +183,12 @@ commit = true
 message = "Bump version: {current_version} → {new_version}"
 commit_args = "--no-verify"
 setup_hooks = []
-pre_commit_hooks = ["uv sync", "git add uv.lock"]
+pre_commit_hooks = [
+    "uv sync",
+    "git add uv.lock",
+    "git-cliff",
+    "git add CHANGELOG.md",
+]
 post_commit_hooks = []
 
 [[tool.bumpversion.files]]
@@ -197,6 +202,8 @@ owner = "helmut-hoffer-von-ankershoffen"
 repo = "starbridge"
 
 [tool.git-cliff.changelog]
+output = "CHANGELOG.md"
+render = true
 # template for the changelog header
 header = """
 [![starbridge](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/tests/fixtures/starbridge.png?raw=true)](https://helmuthva.gitbook.io/starbridge) Starbridge\n 
