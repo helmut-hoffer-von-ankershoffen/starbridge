@@ -13,7 +13,15 @@ _INSTALL_ARGS = "-e .[dev]"
 def test(session: nox.Session):
     session.install(_INSTALL_ARGS)
     session.run("rm", "-rf", ".coverage")
-    session.run("pytest", "--disable-warnings", "--junitxml=junit.xml", "-n", "auto")
+    session.run(
+        "pytest",
+        "--disable-warnings",
+        "--junitxml=junit.xml",
+        "-n",
+        "auto",
+        "--dist",
+        "loadgroup",
+    )
 
 
 @nox.session(python=["3.11"])

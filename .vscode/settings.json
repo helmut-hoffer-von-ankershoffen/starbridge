@@ -39,5 +39,6 @@
     },
     "python.experiments.optOutFrom": [
         "pythonTerminalEnvVarActivation"
-    ]
+    ],
+    "terminal.integrated.scrollback": 100000
 }

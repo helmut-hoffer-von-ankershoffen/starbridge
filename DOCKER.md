@@ -106,3 +106,15 @@ Run MCP Inspector connected to Starbridge MCP Server
 ```bash
 docker run --env-file=.env -it  -p 127.0.0.1:5173:5173 -p 127.0.0.1:3000:3000 starbridge mcp inspect
 ```
+
+Or use docker compose
+
+File .env is passed through
+
+```bash
+docker compose up # starts inspector
+docker compose run starbridge --help
+docker compose run starbridge health
+docker compose run starbridge info
+docker compose run starbridge mcp tools
+```

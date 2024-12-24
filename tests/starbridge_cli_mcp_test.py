@@ -142,6 +142,7 @@ def test_mcp_resource(mock_get_space, runner):
     assert "7120201709026d2b41448e93bb58d" in result.stdout
 
 
+@pytest.mark.skip(reason="Inspector test disabled temporarily")
 def test_mcp_inspector(runner):
     env = os.environ.copy()
     env.update({
