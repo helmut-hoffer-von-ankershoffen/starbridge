@@ -166,7 +166,7 @@ source = ["src/"]
 
 
 [tool.bumpversion]
-current_version = "0.0.39"
+current_version = "0.0.40"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
 serialize = ["{major}.{minor}.{patch}"]
 search = "{current_version}"
@@ -183,7 +183,7 @@ commit = true
 message = "Bump version: {current_version} → {new_version}"
 commit_args = "--no-verify"
 setup_hooks = []
-pre_commit_hooks = []
+pre_commit_hooks = ["uv sync", "git add uv.lock"]
 post_commit_hooks = []
 
 [[tool.bumpversion.files]]
