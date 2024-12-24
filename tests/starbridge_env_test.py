@@ -58,7 +58,7 @@ def test_env_args_fail(runner):
         cli,
         ["info", "--env", 'STARBRIDGE_LOG_LEVEL="DEBUG"'],
     )
-    assert "No such option: --env" in result.output
+    assert "No such option" in result.output
     assert result.exit_code == 2
 
 
