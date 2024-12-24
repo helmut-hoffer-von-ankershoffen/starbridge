@@ -2,6 +2,21 @@
 
 ## [unreleased]
 
+### 🧪 Testing
+
+- *(docker)* Use docker-compose and pytest-docker plugin to test e2e from docker buildx to inspector started by starbridge controller - ([0fe9c49](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/0fe9c49f4b3a39312d1a83e20b2775e515d3b8d8))
+- *(env)* Test --env not supported by all commands - ([9d30e64](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/9d30e64aaa0782f90d83c2b503262f584e6d667c))
+- *(env)* Setting env via args - ([6b4f75f](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/6b4f75fbfd60bd7a27b0cba54f86d5362137eb3d))
+- *(mcp)* Inspector reactivated - ([753ced8](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/753ced80587b5786cb42ca4f98479493e7b1c0ad))
+- *(parallel)* Enable that tests marked as sequential can run as such, use for one that changes the environment on disk - ([22c1b53](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/22c1b531b5df94f9612f72481c303bc62e101115))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(test)* Superfluous checkout - ([88534f3](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/88534f3b86c507eb61a4c92315add12c2c1d148c))
+
+
+## [0.0.44](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.43..v0.0.44) - 2024-12-24
+
 ### 📚 Documentation
 
 - *(badges)* Consolidate to shields.io - ([a237a46](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/a237a46f476e378ec5d0dadfded69f20ad8646a0))
