@@ -1,6 +1,6 @@
 [project]
 name = "starbridge"
-version = "0.0.40"
+version = "0.0.41"
 description = "Integrates Claude Desktop with Google workspace and Atlassian workspaces"
 readme = "README.md"
 authors = [
@@ -166,7 +166,7 @@ source = ["src/"]
 
 
 [tool.bumpversion]
-current_version = "0.0.40"
+current_version = "0.0.41"
 parse = "(?P<major>\\d+)\\.(?P<minor>\\d+)\\.(?P<patch>\\d+)"
 serialize = ["{major}.{minor}.{patch}"]
 search = "{current_version}"
