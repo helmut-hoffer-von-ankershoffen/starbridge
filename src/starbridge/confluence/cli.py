@@ -120,7 +120,7 @@ def page_create(
 
 @cli_page.command(name="read")
 def page_get(
-    page_id: str = typer.Option(None, help="Parent page id"),
+    page_id: str = typer.Option(None, help="Page id"),
 ):
     """Read a page"""
     console.print(Service().page_get(page_id))
