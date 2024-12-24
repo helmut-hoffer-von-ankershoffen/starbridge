@@ -2,7 +2,6 @@ import importlib
 import pkgutil
 from collections import defaultdict
 from dataclasses import dataclass
-from importlib.metadata import entry_points
 from inspect import signature
 from urllib.parse import urlparse
 

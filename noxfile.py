@@ -35,6 +35,12 @@ def test(session: nox.Session):
         "-m",
         "sequential",
     )
+    session.run(
+        "bash",
+        "-c",
+        "docker compose ls --format json | jq -r '.[].Name' | grep ^pytest | xargs -I {} docker compose -p {} down --remove-orphans",
+        external=True,
+    )
 
 
 @nox.session(python=["3.11"])

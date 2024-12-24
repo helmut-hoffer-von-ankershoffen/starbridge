@@ -12,12 +12,15 @@ repos:
       - id: check-added-large-files
       - id: check-case-conflict
       - id: check-executables-have-shebangs
+      - id: check-illegal-windows-names
       - id: check-json
         exclude: test.*
       - id: check-merge-conflict
+        args: ["--assume-in-merge"]
       - id: check-shebang-scripts-are-executable
       - id: check-symlinks
       - id: check-toml
+      - id: check-xml
       - id: check-yaml
         exclude: |
           (?x)^(
@@ -26,12 +29,17 @@ repos:
           )$
         args: [--allow-multiple-documents]
       - id: debug-statements
+      - id: destroyed-symlinks
+      - id: detect-private-key
       - id: end-of-file-fixer
         exclude: "^tests/fixtures/|settings.json$"
       - id: fix-byte-order-marker
       - id: fix-encoding-pragma
         args: ["--remove"]
+      - id: mixed-line-ending
+      - id: name-tests-test
       - id: requirements-txt-fixer
+      - id: trailing-whitespace
   - repo: https://github.com/Yelp/detect-secrets
     rev: v1.5.0
     hooks:
