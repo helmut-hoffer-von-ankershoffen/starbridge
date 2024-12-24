@@ -8,11 +8,12 @@
 [![Maintainability](https://sonarcloud.io/api/project_badges/measure?project=helmut-hoffer-von-ankershoffen_starbridge&metric=sqale_rating)](https://sonarcloud.io/summary/new_code?id=helmut-hoffer-von-ankershoffen_starbridge)
 [![Technical Debt](https://sonarcloud.io/api/project_badges/measure?project=helmut-hoffer-von-ankershoffen_starbridge&metric=sqale_index)](https://sonarcloud.io/summary/new_code?id=helmut-hoffer-von-ankershoffen_starbridge)
 [![Coverage](https://codecov.io/gh/helmut-hoffer-von-ankershoffen/starbridge/graph/badge.svg?token=SX34YRP30E)](https://codecov.io/gh/helmut-hoffer-von-ankershoffen/starbridge)
-[![GitHub](https://img.shields.io/github/v/release/helmut-hoffer-von-ankershoffen/starbridge?style=flat&labelColor=1C2C2E&color=blue&logo=GitHub&logoColor=white)](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/releases)
-![GitHub commit activity (branch)](https://img.shields.io/github/commit-activity/m/helmut-hoffer-von-ankershoffen/starbridge/main?logo=GitHub&logoColor=white&color=white)
-[![PyPI](https://img.shields.io/pypi/v/starbridge.svg?logo=pypi&labelColor=1C2C2E&color=blue)](https://pypi.python.org/pypi/starbridge)
-[![Docker Image Version](https://img.shields.io/docker/v/helmuthva/starbridge?sort=semver&logo=docker&labelColor=1C2C2E&color=blue)](https://hub.docker.com/r/helmuthva/starbridge/tags)
-[![Docker Image Size](https://img.shields.io/docker/image-size/helmuthva/starbridge?sort=semver&arch=arm64&logo=docker&labelColor=1C2C2&color=white)](https://hub.docker.com/r/helmuthva/starbridge/)
+[![GitHub - Version](https://img.shields.io/github/v/release/helmut-hoffer-von-ankershoffen/starbridge?style=flat&labelColor=1C2C2E&color=blue&logo=GitHub&logoColor=white)](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/releases)
+![GitHub - Commits](https://img.shields.io/github/commit-activity/m/helmut-hoffer-von-ankershoffen/starbridge/main?style=flat&labelColor=1C2C2E&color=blue&logo=GitHub&logoColor=white)
+[![PyPI - Version](https://img.shields.io/pypi/v/starbridge.svg?logo=pypi&logoColor=%23FFD243&labelColor=%230073B7&color=FDFDFD)](https://pypi.python.org/pypi/starbridge)
+[![PyPI - Status](https://img.shields.io/pypi/status/starbridge?logo=pypi&logoColor=%23FFD243&labelColor=%230073B7&color=FDFDFD)](https://pypi.python.org/pypi/starbridge)
+[![Docker - Version](https://img.shields.io/docker/v/helmuthva/starbridge?sort=semver&logo=docker&logoColor=white&labelColor=1354D4&color=10151B)](https://hub.docker.com/r/helmuthva/starbridge/tags)
+[![Docker - Size](https://img.shields.io/docker/image-size/helmuthva/starbridge?sort=semver&arch=arm64&logo=docker&logoColor=white&labelColor=1354D4&color=10151B)](https://hub.docker.com/r/helmuthva/starbridge/)
 
 
 > ⚠️ **WARNING**: This project is currently in pre-alpha phase, i.e. partly functional. Feel free to watch or star the repository to stay updated on its progress.
