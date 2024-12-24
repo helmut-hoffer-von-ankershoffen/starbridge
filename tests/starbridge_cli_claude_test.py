@@ -17,7 +17,7 @@ def runner():
 
 @patch("platform.system", return_value="Darwin")
 @patch("psutil.process_iter")
-@patch("starbridge.claude.service.Service.has_config", return_value=True)
+@patch("starbridge.claude.service.Service.is_installed", return_value=True)
 def test_claude_health(mock_has_config, mock_process_iter, mock_platform, runner):
     """Check health"""
     mock_process = Mock()
