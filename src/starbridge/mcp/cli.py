@@ -152,6 +152,7 @@ def inspect():
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
         text=True,
+        env=os.environ,
     )
 
     url_pattern = r"MCP Inspector is up and running at (http://[^\s]+)"
