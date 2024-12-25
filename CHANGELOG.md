@@ -1,5 +1,20 @@
 [![starbridge](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/tests/fixtures/starbridge.png?raw=true)](https://helmuthva.gitbook.io/starbridge) Starbridge
 
+## [unreleased]
+
+### 📚 Documentation
+
+- *(badges)* Adapt to change of workflow name - ([92be681](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/92be681aa2e81300b0d17ddf9a473eda7b9063a7))
+- *(badges)* Style Ruff - ([60178b7](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/60178b759b1f7c041c6bffb301c96e0fd2e83348))
+- *(readme)* Intro - ([c1966fb](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/c1966fbe4ae3d2d3c141ca75e61aed7680f61816))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(pre-commit)* Additional hooks - ([dea9820](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/dea9820bf47ea93ad5d73b35c156a9be5dc7b769))
+- *(sonarqube)* Metas - ([26b6e8a](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/26b6e8af3677c15cbc223ac75d7b8f303660049d))
+- *(sonarqube)* Tags - ([b08d11b](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/b08d11b593acf295b0a0fd004f130a63d32a331a))
+
+
 ## [0.0.46](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.45..v0.0.46) - 2024-12-24
 
 ### 🚜 Refactor
