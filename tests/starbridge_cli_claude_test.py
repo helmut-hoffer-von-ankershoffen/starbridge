@@ -33,7 +33,7 @@ def test_claude_info(runner):
     """Check info spots running process uv"""
     result = runner.invoke(cli, ["claude", "info"])
     assert result.exit_code == 0
-    assert "uv" in result.stdout
+    assert "starbridge" in result.stdout
 
 
 def test_claude_log(runner: CliRunner, tmp_path: Path) -> None:

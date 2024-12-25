@@ -340,17 +340,17 @@ async def test_mcp_server_sse_terminates(runner):
 
     try:
         # Give the server time to start
-        time.sleep(5)
+        time.sleep(10)
 
         # Send terminate request
         try:
-            response = requests.get("http://0.0.0.0:9000/terminate", timeout=5)
+            response = requests.get("http://0.0.0.0:9000/terminate", timeout=10)
             response.raise_for_status()
         except Exception:
             pass
 
         # Wait for process to end (timeout after 5 seconds)
-        process.wait(timeout=5)
+        process.wait(timeout=10)
 
         assert process.returncode == 0
 

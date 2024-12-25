@@ -155,6 +155,7 @@ indent-style = "space"
 line-ending = "lf"
 skip-magic-trailing-comma = false
 
+
 [tool.pytest.ini_options]
 addopts = "-v --cov=starbridge --cov-append --cov-report=term-missing --cov-report=xml:coverage.xml --cov-report=html:coverage_html"
 testpaths = ["tests"]
@@ -220,7 +221,7 @@ output = "CHANGELOG.md"
 render = true
 # template for the changelog header
 header = """
-[![starbridge](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/tests/fixtures/starbridge.png?raw=true)](https://helmuthva.gitbook.io/starbridge) Starbridge\n 
+[![starbridge](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/tests/fixtures/starbridge.png?raw=true)](https://helmuthva.gitbook.io/starbridge) Starbridge\n
 """
 # template for the changelog body
 # https://keats.github.io/tera/docs/#introduction

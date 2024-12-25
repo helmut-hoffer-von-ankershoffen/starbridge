@@ -11,11 +11,13 @@
     "ruff.lint.args": [
         "--ignore=F401"
     ],
+    "python.testing.promptToConfigure": false,
+    "python.testing.unittestEnabled": false,
+    "python.testing.pytestEnabled": true,
+    "python.testing.pytestPath": "tests",
     "python.testing.pytestArgs": [
         "tests"
     ],
-    "python.testing.unittestEnabled": false,
-    "python.testing.pytestEnabled": true,
     "python.testing.autoTestDiscoverOnSaveEnabled": true,
     "files.exclude": {
         "**/__pycache__ ": true

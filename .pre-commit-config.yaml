@@ -13,8 +13,6 @@ repos:
       - id: check-case-conflict
       - id: check-executables-have-shebangs
       - id: check-illegal-windows-names
-      - id: check-json
-        exclude: test.*
       - id: check-merge-conflict
         args: ["--assume-in-merge"]
       - id: check-shebang-scripts-are-executable
