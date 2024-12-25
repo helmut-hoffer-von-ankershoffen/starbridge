@@ -209,6 +209,9 @@ filename = "pyproject.toml"
 [[tool.bumpversion.files]]
 filename = "VERSION"
 
+[[tool.bumpversion.files]]
+filename = "sonar-project.properties"
+
 [tool.git-cliff.remote.github]
 owner = "helmut-hoffer-von-ankershoffen"
 repo = "starbridge"
