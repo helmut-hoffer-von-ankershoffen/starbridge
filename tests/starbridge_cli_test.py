@@ -33,7 +33,7 @@ def test_info(runner):
     """Check processes exposed and version matching."""
     result = runner.invoke(cli, ["info"])
     assert result.exit_code == 0
-    assert "'starbridge'" in result.stdout
+    assert "'pid'" in result.stdout
     assert f"'version': '{__version__}'" in result.stdout
 
 

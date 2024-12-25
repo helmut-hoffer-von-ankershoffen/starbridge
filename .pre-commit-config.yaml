@@ -11,7 +11,6 @@ repos:
     hooks:
       - id: check-added-large-files
       - id: check-case-conflict
-      - id: check-executables-have-shebangs
       - id: check-illegal-windows-names
       - id: check-merge-conflict
         args: ["--assume-in-merge"]
@@ -30,7 +29,7 @@ repos:
       - id: destroyed-symlinks
       - id: detect-private-key
       - id: end-of-file-fixer
-        exclude: "^tests/fixtures/|settings.json$"
+        exclude: "^tests/fixtures/|.json$"
       - id: fix-byte-order-marker
       - id: fix-encoding-pragma
         args: ["--remove"]

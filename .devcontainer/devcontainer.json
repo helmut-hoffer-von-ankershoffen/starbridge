@@ -10,7 +10,7 @@
 		"ghcr.io/devcontainers/features/java:1": {},
 		"ghcr.io/devcontainers/features/node:1": {}
 	},
-	"postCreateCommand": "npm install --ignore-scripts -g @modelcontextprotocol/inspector@0.3.0 && rm -rf .nox && rm -rf .venv && uv sync --frozen && uv venv && source .venv/bin/activate && git config --global --add safe.directory /workspaces/starbridge && uv run pre-commit install",
+	"postCreateCommand": ".devcontainer/postCreateCommand",
 	"customizations": {
 		// Configure properties specific to VS Code.
 		"vscode": {
@@ -19,6 +19,7 @@
 				"charliermarsh.ruff",
 				"codecov.codecov",
 				"donjayamanne.python-environment-manager",
+				"fill-labs.dependi",
 				"github.vscode-github-actions",
 				"gruntfuggly.todo-tree",
 				"kaih2o.python-resource-monitor",

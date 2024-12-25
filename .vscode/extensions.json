@@ -1,20 +1,21 @@
 {
     "recommendations": [
+        "charliermarsh.ruff",
+        "codecov.codecov",
+        "donjayamanne.python-environment-manager",
+        "fill-labs.dependi",
+        "github.vscode-github-actions",
+        "gruntfuggly.todo-tree",
+        "kaih2o.python-resource-monitor",
+        "mikestead.dotenv",
+        "ms-azuretools.vscode-docker",
+        "ms-python.debugpy",
         "ms-python.python",
         "ms-python.vscode-pylance",
-        "ms-python.debugpy",
-        "donjayamanne.python-environment-manager",
-        "kaih2o.python-resource-monitor",
-        "charliermarsh.ruff",
-        "tamasfe.even-better-toml",
-        "mikestead.dotenv",
-        "wayou.vscode-todo-highlight",
-        "gruntfuggly.todo-tree",
-        "github.vscode-github-actions",
-        "codecov.codecov",
         "oderwat.indent-rainbow",
-        "ms-azuretools.vscode-docker",
+        "sonarsource.sonarlint-vscode",
+        "tamasfe.even-better-toml",
         "tomoki1207.pdf",
-        "sonarsource.sonarlint-vscode"
+        "wayou.vscode-todo-highlight"
     ]
 }
