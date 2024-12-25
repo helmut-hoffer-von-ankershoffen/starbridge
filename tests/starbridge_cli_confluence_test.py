@@ -18,7 +18,19 @@ def runner():
     return CliRunner()
 
 
-def test_mcp_info(runner):
+@patch(MOCK_GET_ALL_SPACES)
+def test_confluence_health(mock_get_all_spaces, runner):
+    """Check health."""
+    # Mock the response data that would come from get_all_spaces
+    with Path("tests/fixtures/get_all_spaces.json").open() as f:
+        mock_get_all_spaces.return_value = json.loads(f.read())
+
+    result = runner.invoke(cli, ["confluence", "health"])
+    assert '"UP"' in result.output
+    assert result.exit_code == 0
+
+
+def test_confluence_info(runner):
     """Check info."""
     result = runner.invoke(cli, ["confluence", "info"])
     assert result.exit_code == 0
@@ -61,6 +73,20 @@ def test_confluence_mcp_prompts(runner):
     """Check prompts."""
     result = runner.invoke(cli, ["confluence", "mcp", "prompts"])
     assert "summary" in result.output
+    assert result.exit_code == 0
+
+
+@patch(MOCK_GET_ALL_SPACES)
+def test_confluence_mcp_space_summary(mock_get_all_spaces, runner):
+    """Check space list."""
+    # Mock the response data that would come from get_all_spaces
+    with Path("tests/fixtures/get_all_spaces.json").open() as f:
+        mock_get_all_spaces.return_value = json.loads(f.read())
+
+    result = runner.invoke(
+        cli, ["confluence", "mcp", "space-summary", "--style", "detailed"]
+    )
+    assert "helmut" in result.output
     assert result.exit_code == 0
 
 

@@ -313,7 +313,8 @@ async def test_mcp_server_tool_call_with_pdf():
             ).decode("utf-8")
 
 
-def test_mcp_server_sse_terminates(runner):
+async def test_mcp_server_sse_terminates(runner):
+    """Test if SSE server terminates correctly"""
     env = os.environ.copy()
     env.update({
         "COVERAGE_PROCESS_START": PYPROJECT_TOML,
@@ -343,7 +344,7 @@ def test_mcp_server_sse_terminates(runner):
 
         # Send terminate request
         try:
-            response = requests.get("http://0.0.0.0:9000/terminate")
+            response = requests.get("http://0.0.0.0:9000/terminate", timeout=5)
             response.raise_for_status()
         except Exception:
             pass
@@ -354,6 +355,5 @@ def test_mcp_server_sse_terminates(runner):
         assert process.returncode == 0
 
     finally:
-        # Ensure process is terminated even if test fails
-        if process.poll() is None:
-            process.kill()
+        process.terminate()
+        process.kill()

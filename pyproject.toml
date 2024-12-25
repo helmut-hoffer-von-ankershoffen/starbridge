@@ -93,7 +93,6 @@ dev = [
     "cyclonedx-py>=1.0.1",
     "detect-secrets>=1.5.0",
     "git-cliff>=2.7.0",
-    "greenlet>=3.1.1",
     "pip-audit>=2.7.3",
     "pip-licenses>=5.0.0",
     "pre-commit>=4.0.1",
@@ -116,7 +115,6 @@ dev = [
     "cyclonedx-py>=1.0.1",
     "detect-secrets>=1.5.0",
     "git-cliff>=2.7.0",
-    "greenlet>=3.1.1",
     "pip-audit>=2.7.3",
     "pip-licenses>=5.0.0",
     "pre-commit>=4.0.1",
@@ -165,10 +163,11 @@ asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 env = ["COVERAGE_FILE=.coverage", "COVERAGE_PROCESS_START=pyproject.toml"]
 
+
 [tool.coverage.run]
 parallel = true
 branch = true
-concurrency = ["greenlet", "thread", "multiprocessing"]
+concurrency = ["thread", "multiprocessing"]
 relative_files = true
 source = ["src"]
 omit = ["src/starbridge/instrumentation/*"]
