@@ -10,6 +10,7 @@
 		"ghcr.io/devcontainers/features/java:1": {},
 		"ghcr.io/devcontainers/features/node:1": {}
 	},
+	"onCreateCommand": ".devcontainer/onCreateCommand",
 	"postCreateCommand": ".devcontainer/postCreateCommand",
 	"customizations": {
 		// Configure properties specific to VS Code.

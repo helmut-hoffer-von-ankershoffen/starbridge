@@ -1,7 +1,4 @@
 #!/bin/sh
 
-git config --global --add safe.directory /workspaces/starbridge
-rm -rf .nox
-rm -rf .venv
-uv sync --frozen
-uv run pre-commit install
+echo "postCreateCommand:start"
+echo "postCreateCommand:end"
