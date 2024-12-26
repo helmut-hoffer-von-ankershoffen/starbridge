@@ -27,9 +27,9 @@ def test(session: nox.Session):
     )
     session.run(
         "pytest",
+        "--cov-append",
         "--disable-warnings",
         "--junitxml=junit.xml",
-        "--cov-append",
         "-n",
         "auto",
         "--dist",
@@ -50,6 +50,7 @@ def test_no_extras(session: nox.Session):
     session.install(_INSTALL_NO_EXTRAS_ARGS)
     session.run(
         "pytest",
+        "--cov-append",
         "--disable-warnings",
         "--junitxml=junit.xml",
         "-n",
