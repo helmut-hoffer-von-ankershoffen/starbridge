@@ -2,6 +2,18 @@
 
 ## [unreleased]
 
+### 🧪 Testing
+
+- *(confluence)* More cli commands - ([758f980](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/758f980bf9caf9881170df7b0164e7cf98408af1))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(devcontainer)* Polish - ([cda9326](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/cda932604f2871fdbb84fb9b73f324ee02376a2e))
+- *(devcontainer)* Enable docker in docker for docker tests in devcontainer - ([6f5554e](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/6f5554e1ac8d3b2a8b8e76de4b2671f12d3f3a06))
+
+
+## [0.0.48](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.47..v0.0.48) - 2024-12-25
+
 ### 📚 Documentation
 
 - *(badges)* Adapt to change of workflow name - ([92be681](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/92be681aa2e81300b0d17ddf9a473eda7b9063a7))
