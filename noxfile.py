@@ -28,6 +28,7 @@ def test(session: nox.Session):
         "pytest",
         "--disable-warnings",
         "--junitxml=junit.xml",
+        "--cov-append",
         "-n",
         "auto",
         "--dist",

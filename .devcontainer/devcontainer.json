@@ -12,6 +12,7 @@
 	},
 	"onCreateCommand": ".devcontainer/onCreateCommand",
 	"postCreateCommand": ".devcontainer/postCreateCommand",
+	"postAttachCommand": ".devcontainer/postAttachCommand",
 	"customizations": {
 		// Configure properties specific to VS Code.
 		"vscode": {

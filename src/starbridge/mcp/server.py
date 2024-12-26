@@ -297,7 +297,7 @@ class MCPServer:
                 log_config=None,
             )
         else:
-            asyncio.run(MCPServer().run_stdio())
+            return asyncio.run(MCPServer().run_stdio())
 
     def _create_initialization_options(self) -> InitializationOptions:
         return InitializationOptions(

@@ -313,7 +313,7 @@ async def test_mcp_server_tool_call_with_pdf():
             ).decode("utf-8")
 
 
-async def test_mcp_server_sse_terminates(runner):
+def test_mcp_server_sse_terminates(runner):
     """Test if SSE server terminates correctly"""
     env = os.environ.copy()
     env.update({

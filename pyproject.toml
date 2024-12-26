@@ -157,21 +157,22 @@ skip-magic-trailing-comma = false
 
 
 [tool.pytest.ini_options]
-addopts = "-v --cov=starbridge --cov-append --cov-report=term-missing --cov-report=xml:coverage.xml --cov-report=html:coverage_html"
+addopts = "-v --cov=starbridge --cov-report=term-missing --cov-report=xml:coverage.xml --cov-report=html:coverage_html"
 testpaths = ["tests"]
 python_files = ["*_test.py"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 env = ["COVERAGE_FILE=.coverage", "COVERAGE_PROCESS_START=pyproject.toml"]
-
+markers = ["sequential: exclude from parallel test execution"]
 
 [tool.coverage.run]
-parallel = true
-branch = true
-concurrency = ["thread", "multiprocessing"]
 relative_files = true
 source = ["src"]
 omit = ["src/starbridge/instrumentation/*"]
+branch = true
+parallel = true
+concurrency = ["thread", "multiprocessing"]
+sigterm = true
 
 [tool.coverage.paths]
 source = ["src/"]
