@@ -18,7 +18,14 @@ from mcp.types import (
     ImageContent,
     TextContent,
 )
-from PIL import Image
+
+try:
+    from PIL import Image
+
+    _has_imaging = True
+except ImportError:
+    _has_imaging = False
+
 from pydantic import AnyUrl
 from starlette.applications import Starlette
 from starlette.responses import PlainTextResponse
@@ -327,7 +334,7 @@ class MCPServer:
         if isinstance(result, str):
             return [TextContent(type="text", text=result)]
 
-        if isinstance(result, Image.Image):
+        if _has_imaging and isinstance(result, Image.Image):
             mime_type = (
                 Image.MIME.get(result.format, "application/octet-stream")
                 if result.format

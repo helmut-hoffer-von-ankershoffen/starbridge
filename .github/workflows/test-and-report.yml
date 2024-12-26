@@ -39,7 +39,7 @@ jobs:
 
       - name: Install Python, venv and dependencies
         run: |
-          uv sync --frozen --link-mode=copy
+          uv sync --all-extras --frozen --link-mode=copy
 
       - name: Release version check
         if: startsWith(github.ref, 'refs/tags/v')
@@ -110,7 +110,7 @@ jobs:
         uses: codecov/test-results-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-      
+
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v4
         env:

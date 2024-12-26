@@ -6,19 +6,32 @@ from typer.testing import CliRunner
 
 from starbridge.cli import cli
 
+try:
+    from starbridge.hello.cli import bridge
+except ImportError:
+    bridge = None
+
 
 @pytest.fixture
 def runner():
     return CliRunner()
 
 
-def test_hello_bridge(runner):
-    """Check we dump the image."""
-    with runner.isolated_filesystem():
-        result = runner.invoke(cli, ["hello", "bridge", "--dump"])
-        assert result.exit_code == 0
-        assert Path("starbridge.png").is_file()
-        assert Path("starbridge.png").stat().st_size == 6235
+if bridge:  # if extra imaging
+
+    def test_hello_bridge(runner):
+        """Check we dump the image."""
+        with runner.isolated_filesystem():
+            result = runner.invoke(cli, ["hello", "bridge", "--dump"])
+            assert result.exit_code == 0
+            assert Path("starbridge.png").is_file()
+            assert Path("starbridge.png").stat().st_size == 6235
+
+    @patch("cairosvg.svg2png", side_effect=OSError)
+    def test_hello_bridge_error(mock_svg2png, runner):
+        """Check we handle cairo missing."""
+        result = runner.invoke(cli, ["hello", "bridge"])
+        assert result.exit_code == 78
 
 
 def test_hello_pdf(runner):
@@ -44,10 +57,3 @@ def test_hello_pdf_open(mock_run, runner):
         assert args[0][0] == "xdg-open"
         assert str(args[0][1]).endswith(".pdf")
         assert kwargs["check"] is True
-
-
-@patch("cairosvg.svg2png", side_effect=OSError)
-def test_hello_bridge_error(mock_svg2png, runner):
-    """Check we handle cairo missing."""
-    result = runner.invoke(cli, ["hello", "bridge"])
-    assert result.exit_code == 78

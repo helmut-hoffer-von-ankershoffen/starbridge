@@ -38,34 +38,40 @@ def hello(locale: Annotated[str, typer.Option(help="Locale to use")] = "en_US") 
     console.print(Service().hello(locale))
 
 
-@cli.command()
-def bridge(
-    dump: Annotated[
-        bool,
-        typer.Option(
-            help="If set, will dump to file starbridge.png in current working directory. Defaults to opening viewer to show the image."
-        ),
-    ] = False,
-) -> None:
-    """Show image of starbridge"""
-    try:
-        image = Service().bridge()
-        if dump:
-            image.save("starbridge.png")
-        else:
-            image.show()
-    except OSError:
-        text = Text()
-        text.append("Please follow setup instructions for starbridge ")
-        text.append("Install the library needed for image manipulation using:\n")
-        text.append("• macOS: ", style="yellow")
-        text.append("brew install cairo\n")
-        text.append("• Linux: ", style="yellow")
-        text.append("sudo apt-get install libcairo2")
-        console.print(
-            Panel(text, title="Setup Required: Cairo not found", border_style="red")
-        )
-        sys.exit(78)
+if hasattr(Service, "bridge"):
+
+    @cli.command()
+    def bridge(
+        dump: Annotated[
+            bool,
+            typer.Option(
+                help="If set, will dump to file starbridge.png in current working directory. Defaults to opening viewer to show the image."
+            ),
+        ] = False,
+    ) -> None:
+        """Show image of starbridge"""
+        try:
+            image = Service().bridge()
+            if dump:
+                image.save("starbridge.png")
+            else:
+                image.show()
+        except OSError:
+            text = Text()
+            text.append("Please follow setup instructions for starbridge ")
+            text.append("Install the library needed for image manipulation using:\n")
+            text.append("• macOS: ", style="yellow")
+            text.append("brew install cairo\n")
+            text.append("• Linux: ", style="yellow")
+            text.append("sudo apt-get install libcairo2")
+            console.print(
+                Panel(
+                    text,
+                    title="Setup Required: Cairo not found",
+                    border_style="red",
+                )
+            )
+            sys.exit(78)
 
 
 @cli.command()

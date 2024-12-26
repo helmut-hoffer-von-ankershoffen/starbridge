@@ -307,7 +307,7 @@ name = "click"
 version = "8.1.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
-    { name = "colorama", marker = "sys_platform == 'win32'" },
+    { name = "colorama", marker = "platform_system == 'Windows'" },
 ]
 sdist = { url = "https://files.pythonhosted.org/packages/96/d3/f04c7bfcf5c1862a2a5b845c6b2b360488cf47af55dfa79c98f6a6bf98b5/click-8.1.7.tar.gz", hash = "sha256:ca9853ad459e787e2192211578cc907e7594e294c7ccc834310722b41b9ca6de", size = 336121 }
 wheels = [
@@ -1930,7 +1930,6 @@ version = "0.0.49"
 source = { editable = "." }
 dependencies = [
     { name = "atlassian-python-api" },
-    { name = "cairosvg" },
     { name = "griffe" },
     { name = "logfire", extra = ["system-metrics"] },
     { name = "mcp" },
@@ -1945,7 +1944,6 @@ dependencies = [
     { name = "pydantic" },
     { name = "pydantic-settings" },
     { name = "python-dotenv" },
-    { name = "svglib" },
     { name = "typer" },
 ]
 
@@ -1968,6 +1966,10 @@ dev = [
     { name = "pytest-xdist", extra = ["psutil"] },
     { name = "ruff" },
     { name = "tomli" },
+]
+imaging = [
+    { name = "cairosvg" },
+    { name = "svglib" },
 ]
 
 [package.dev-dependencies]
@@ -1995,7 +1997,7 @@ dev = [
 requires-dist = [
     { name = "atlassian-python-api", specifier = ">=3.41.16" },
     { name = "bump-my-version", marker = "extra == 'dev'", specifier = ">=0.29.0" },
-    { name = "cairosvg", specifier = ">=2.7.1" },
+    { name = "cairosvg", marker = "extra == 'imaging'", specifier = ">=2.7.1" },
     { name = "cyclonedx-py", marker = "extra == 'dev'", specifier = ">=1.0.1" },
     { name = "detect-secrets", marker = "extra == 'dev'", specifier = ">=1.5.0" },
     { name = "git-cliff", marker = "extra == 'dev'", specifier = ">=2.7.0" },
@@ -2025,7 +2027,7 @@ requires-dist = [
     { name = "pytest-xdist", extras = ["psutil"], marker = "extra == 'dev'", specifier = ">=3.6.1" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.3.0" },
-    { name = "svglib", specifier = ">=1.5.1" },
+    { name = "svglib", marker = "extra == 'imaging'", specifier = ">=1.5.1" },
     { name = "tomli", marker = "extra == 'dev'", specifier = ">=2.1.0" },
     { name = "typer", specifier = ">=0.15.1" },
 ]

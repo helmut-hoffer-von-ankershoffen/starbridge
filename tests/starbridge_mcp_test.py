@@ -22,6 +22,13 @@ from mcp.types import (
 from pydantic import AnyUrl
 from typer.testing import CliRunner
 
+from starbridge.hello import Service as HelloService
+
+try:
+    from starbridge.hello.cli import bridge
+except ImportError:
+    bridge = None
+
 MOCK_GET_ALL_SPACES = "atlassian.Confluence.get_all_spaces"
 MOCK_GET_SPACE = "atlassian.Confluence.get_space"
 PYPROJECT_TOML = "pyproject.toml"
@@ -68,12 +75,13 @@ async def test_mcp_server_list_tools():
         "starbridge_confluence_page_list",
         "starbridge_confluence_page_update",
         "starbridge_confluence_space_list",
-        "starbridge_hello_bridge",
         "starbridge_hello_health",
         "starbridge_hello_hello",
         "starbridge_hello_info",
         "starbridge_hello_pdf",
     ]
+    if bridge:
+        expected_tools.append("starbridge_hello_bridge")
 
     async with stdio_client(_server_parameters()) as (read, write):
         async with ClientSession(read, write) as session:
@@ -275,22 +283,24 @@ async def test_mcp_server_tool_call():
             assert content.text == "Hallo Welt!"
 
 
-@pytest.mark.asyncio
-async def test_mcp_server_tool_call_with_image():
-    """Test listing of prompts from the server"""
-    async with stdio_client(_server_parameters()) as (read, write):
-        async with ClientSession(read, write) as session:
-            # Initialize the connection
-            await session.initialize()
+if hasattr(HelloService, "bridge"):  # if extra imaging
 
-            # List available prompts
-            result = await session.call_tool("starbridge_hello_bridge", {})
-            assert len(result.content) == 1
-            content = result.content[0]
-            assert type(content) is ImageContent
-            assert content.data == base64.b64encode(
-                Path("tests/fixtures/starbridge.png").read_bytes()
-            ).decode("utf-8")
+    @pytest.mark.asyncio
+    async def test_mcp_server_tool_call_with_image():
+        """Test listing of prompts from the server"""
+        async with stdio_client(_server_parameters()) as (read, write):
+            async with ClientSession(read, write) as session:
+                # Initialize the connection
+                await session.initialize()
+
+                # List available prompts
+                result = await session.call_tool("starbridge_hello_bridge", {})
+                assert len(result.content) == 1
+                content = result.content[0]
+                assert type(content) is ImageContent
+                assert content.data == base64.b64encode(
+                    Path("tests/fixtures/starbridge.png").read_bytes()
+                ).decode("utf-8")
 
 
 @pytest.mark.asyncio
