@@ -162,7 +162,10 @@ python_files = ["*_test.py"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
 env = ["COVERAGE_FILE=.coverage", "COVERAGE_PROCESS_START=pyproject.toml"]
-markers = ["sequential: exclude from parallel test execution"]
+markers = [
+    "sequential: exclude from parallel test execution",
+    "no_extras: tests that do require no extras installed",
+]
 
 [tool.coverage.run]
 relative_files = true

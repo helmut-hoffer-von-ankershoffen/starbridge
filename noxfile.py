@@ -7,6 +7,7 @@ nox.options.reuse_existing_virtualenvs = True
 nox.options.default_venv_backend = "uv"
 
 _INSTALL_ARGS = "-e .[dev,imaging]"
+_INSTALL_NO_EXTRAS_ARGS = "-e .[dev]"
 
 
 @nox.session(python=["3.11", "3.12", "3.13"])
@@ -35,6 +36,26 @@ def test(session: nox.Session):
         "loadgroup",
         "-m",
         "sequential",
+    )
+    session.run(
+        "bash",
+        "-c",
+        "docker compose ls --format json | jq -r '.[].Name' | grep ^pytest | xargs -I {} docker compose -p {} down --remove-orphans",
+        external=True,
+    )
+
+
+@nox.session(python=["3.11", "3.12", "3.13"])
+def test_no_extras(session: nox.Session):
+    session.install(_INSTALL_NO_EXTRAS_ARGS)
+    session.run(
+        "pytest",
+        "--disable-warnings",
+        "--junitxml=junit.xml",
+        "-n",
+        "1",
+        "-m",
+        "no_extras",
     )
     session.run(
         "bash",

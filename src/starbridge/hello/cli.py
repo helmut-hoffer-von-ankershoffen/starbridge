@@ -83,7 +83,7 @@ def pdf(
         ),
     ] = False,
 ) -> None:
-    """Show image of starbridge"""
+    """Show pdf of starbridge"""
     pdf = Service().pdf_bytes()
 
     if dump:

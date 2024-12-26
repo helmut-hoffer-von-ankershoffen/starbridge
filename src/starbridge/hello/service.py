@@ -83,12 +83,6 @@ class Service(MCPBaseService):
         return base64.b64decode(Service._starbridge_pdf_base64())
 
     @staticmethod
-    def _import_cairo():
-        os.environ["DYLD_FALLBACK_LIBRARY_PATH"] = (
-            f"{os.getenv('HOMEBREW_PREFIX', '/opt/homebrew')}/lib/"
-        )
-
-    @staticmethod
     def _starbridge_svg() -> str:
         """Image of starbridge, generated with Claude (Sonnet 3.5 new)"""
         return """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">

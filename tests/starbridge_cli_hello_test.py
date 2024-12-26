@@ -17,6 +17,22 @@ def runner():
     return CliRunner()
 
 
+def test_hello_info(runner):
+    """Check health."""
+
+    result = runner.invoke(cli, ["hello", "info"])
+    assert "en_US" in result.output
+    assert result.exit_code == 0
+
+
+def test_hello_health(runner):
+    """Check health."""
+
+    result = runner.invoke(cli, ["hello", "health"])
+    assert '"UP"' in result.output
+    assert result.exit_code == 0
+
+
 if bridge:  # if extra imaging
 
     def test_hello_bridge(runner):
@@ -32,6 +48,15 @@ if bridge:  # if extra imaging
         """Check we handle cairo missing."""
         result = runner.invoke(cli, ["hello", "bridge"])
         assert result.exit_code == 78
+
+else:
+
+    @pytest.mark.no_extras
+    def test_hello_no_imaging_extra_no_bridge(runner):
+        """Check we handle missing PIL."""
+        result = runner.invoke(cli, ["hello"])
+        assert "Show image" not in result.output
+        assert result.exit_code == 0
 
 
 def test_hello_pdf(runner):
