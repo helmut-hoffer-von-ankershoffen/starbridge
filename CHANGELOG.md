@@ -4,6 +4,17 @@
 
 ### 🧪 Testing
 
+- *(extras)* Test for imaging extra not activated - ([dd5b4bb](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/dd5b4bbd8fa9510a04bb7aba840fb39d9e7c482c))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(imaging)* Make imaging an extra - ([ffac1da](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/ffac1dae615724a10aa48522ab653168d434209a))
+
+
+## [0.0.49](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.48..v0.0.49) - 2024-12-26
+
+### 🧪 Testing
+
 - *(confluence)* More cli commands - ([758f980](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/758f980bf9caf9881170df7b0164e7cf98408af1))
 
 ### ⚙️ Miscellaneous Tasks
