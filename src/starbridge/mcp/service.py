@@ -1,3 +1,4 @@
+from abc import ABC, abstractmethod
 from collections import defaultdict
 from dataclasses import dataclass
 from inspect import signature
@@ -23,29 +24,16 @@ class ResourceType:
         return f"{self.server}://{self.service}/{self.type}"
 
 
-class MCPBaseService:
+class MCPBaseService(ABC):
     """Base class for MCP services."""
 
-    @property
-    def service_prefix(self) -> str:
-        """
-        Automatically generate service prefix from the module path.
-        Example: 'starbridge.confluence.service.Service' becomes 'starbridge-confluence-'
-        """
-        # Get full module path of the actual service class
-        module_path = self.__class__.__module__
-        # Take the first three parts (e.g., 'starbridge.confluence.service')
-        # and convert dots to dashes
-        prefix = "_".join(module_path.split(".")[:2]) + "_"
-        return prefix
-
+    @abstractmethod
     def info(self) -> dict:
         """Get info about configuration of this service. Override in subclass."""
-        raise NotImplementedError
 
+    @abstractmethod
     def health(self, context: MCPContext | None = None) -> Health:
         """Get health of this service. Override in subclass."""
-        raise NotImplementedError
 
     def tool_list(self, context: MCPContext | None = None) -> list[types.Tool]:
         """Get available tools. Discovers tools by looking for methods decorated with @mcp_tool."""
@@ -67,28 +55,6 @@ class MCPBaseService:
                     )
                 )
         return tools
-
-    def _validate_resource_uri(self, resource, meta):
-        """Validate resource URI against metadata."""
-        parsed = urlparse(str(resource.uri))
-        if parsed.scheme != meta.server:
-            raise ValueError(
-                f"Resource URI scheme '{parsed.scheme}' doesn't match decorator scheme '{meta.server}'"
-            )
-        if parsed.netloc != meta.service:
-            raise ValueError(
-                f"Resource URI service '{parsed.netloc}' doesn't match decorator service '{meta.service}'"
-            )
-        if not parsed.path.startswith(f"/{meta.type}/"):
-            raise ValueError(f"Resource URI path doesn't start with '/{meta.type}/'")
-
-    def _check_type_uniqueness(self, type_map, meta, method_name):
-        """Ensure resource type is unique."""
-        type_map[meta.type].append(method_name)
-        if len(type_map[meta.type]) > 1:
-            raise ValueError(
-                f"Multiple resource iterators found for type '{meta.type}': {type_map[meta.type]}"
-            )
 
     def resource_list(self, context: MCPContext | None = None) -> list[types.Resource]:
         """Get available resources by discovering and calling all resource iterators."""
@@ -161,3 +127,25 @@ class MCPBaseService:
                     )
                 )
         return prompts
+
+    def _validate_resource_uri(self, resource, meta):
+        """Validate resource URI against metadata."""
+        parsed = urlparse(str(resource.uri))
+        if parsed.scheme != meta.server:
+            raise ValueError(
+                f"Resource URI scheme '{parsed.scheme}' doesn't match decorator scheme '{meta.server}'"
+            )
+        if parsed.netloc != meta.service:
+            raise ValueError(
+                f"Resource URI service '{parsed.netloc}' doesn't match decorator service '{meta.service}'"
+            )
+        if not parsed.path.startswith(f"/{meta.type}/"):
+            raise ValueError(f"Resource URI path doesn't start with '/{meta.type}/'")
+
+    def _check_type_uniqueness(self, type_map, meta, method_name):
+        """Ensure resource type is unique."""
+        type_map[meta.type].append(method_name)
+        if len(type_map[meta.type]) > 1:
+            raise ValueError(
+                f"Multiple resource iterators found for type '{meta.type}': {type_map[meta.type]}"
+            )
