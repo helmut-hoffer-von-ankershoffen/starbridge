@@ -1,18 +1,16 @@
 import importlib
 import pkgutil
 from inspect import isclass
-from re import sub
 from typing import Any
 
 from starbridge.base import __project_name__
 
-_implementation_cache = {}  # Cache to store discovered implementations
-_subclass_cache = {}  # Cache to store discovered subclasses
+_implementation_cache = {}
+_subclass_cache = {}
 
 
 def locate_implementations(_class: Any) -> list[Any]:
     """Dynamically discover all Service classes in starbridge packages."""
-    # Return cached results if available
     if _class in _implementation_cache:
         return _implementation_cache[_class]
 
@@ -30,14 +28,12 @@ def locate_implementations(_class: Any) -> list[Any]:
         except ImportError:
             continue
 
-    # Cache the results before returning
     _implementation_cache[_class] = implementations
     return implementations
 
 
 def locate_subclasses(_class: Any) -> list[Any]:
     """Dynamically discover all Service classes in starbridge packages."""
-    # Return cached results if available
     if _class in _subclass_cache:
         return _subclass_cache[_class]
 
@@ -55,6 +51,5 @@ def locate_subclasses(_class: Any) -> list[Any]:
         except ImportError:
             continue
 
-    # Cache the results before returning
     _subclass_cache[_class] = subclasses
     return subclasses
