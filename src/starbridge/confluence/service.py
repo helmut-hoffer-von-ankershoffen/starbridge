@@ -19,8 +19,6 @@ from starbridge.mcp import (
 from starbridge.utils import Health, get_logger
 from starbridge.utils.settings import load_settings
 
-from . import cli
-
 logger = get_logger(__name__)
 
 

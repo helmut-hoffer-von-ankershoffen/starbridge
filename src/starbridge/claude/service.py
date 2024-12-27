@@ -11,8 +11,6 @@ from starbridge.base import __project_name__
 from starbridge.mcp import MCPBaseService, MCPContext, mcp_tool
 from starbridge.utils import Health
 
-from . import cli
-
 
 class Service(MCPBaseService):
     """Service class for Claude operations."""

@@ -18,8 +18,6 @@ from pydantic import AnyUrl
 from starbridge.mcp import MCPBaseService, MCPContext, mcp_tool
 from starbridge.utils import Health, get_logger
 
-from . import cli
-
 logger = get_logger(__name__)
 
 
