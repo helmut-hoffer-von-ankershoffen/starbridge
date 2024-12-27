@@ -1,16 +1,14 @@
 import os
 import pathlib
 import sys
-from pydoc import locate
 from typing import Annotated, Any
 
 import typer
 from dotenv import dotenv_values
 from rich.prompt import Prompt
 
-import starbridge.claude
-import starbridge.mcp
 from starbridge.base import __project_name__, __version__
+from starbridge.claude import Service as ClaudeService
 from starbridge.mcp import MCPServer
 from starbridge.utils import (
     add_epilog_recursively,
@@ -163,7 +161,7 @@ def install(
         typer.Option(
             help="Restart Claude Desktop application post installation",
         ),
-    ] = starbridge.claude.Service.platform_supports_restart(),
+    ] = ClaudeService.platform_supports_restart(),
     image: Annotated[
         str,
         typer.Option(
@@ -172,7 +170,7 @@ def install(
     ] = "helmuthva/starbridge:latest",
 ):
     """Install starbridge within Claude Desktop application by adding to configuration and restarting Claude Desktop app"""
-    if starbridge.claude.Service.install_mcp_server(
+    if ClaudeService.install_mcp_server(
         _generate_mcp_server_config(
             atlassian_url, atlassian_email_address, atlassian_api_token, image
         ),
@@ -195,10 +193,10 @@ def uninstall(
         typer.Option(
             help="Restart Claude Desktop application post installation",
         ),
-    ] = starbridge.claude.Service.platform_supports_restart(),
+    ] = ClaudeService.platform_supports_restart(),
 ):
     """Install starbridge from Claude Desktop application by removing from configuration and restarting Claude Desktop app"""
-    if starbridge.claude.Service.uninstall_mcp_server(restart=restart_claude):
+    if ClaudeService.uninstall_mcp_server(restart=restart_claude):
         console.print("Starbridge uninstalled from Claude Destkop application.")
     else:
         console.print("Starbridge was no installed", style="warning")
@@ -229,7 +227,7 @@ def _generate_mcp_server_config(
         "STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS": atlassian_email_address,
         "STARBRIDGE_ATLASSIAN_API_TOKEN": atlassian_api_token,
     }
-    if starbridge.claude.Service.is_running_in_starbridge_container():
+    if ClaudeService.is_running_in_starbridge_container():
         return {
             "command": "docker",
             "args": [
