@@ -1,6 +1,6 @@
 import typer
 
-from starbridge.utils import (
+from .di import (
     locate_implementations,
 )
 
