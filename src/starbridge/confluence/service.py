@@ -4,7 +4,6 @@ import json
 import os
 
 import mcp.types as types
-import typer
 from atlassian import Confluence
 from pydantic import AnyUrl
 

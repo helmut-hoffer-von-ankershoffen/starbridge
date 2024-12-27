@@ -4,7 +4,6 @@ import base64
 import io
 import os
 
-import typer
 from mcp.types import BlobResourceContents, EmbeddedResource
 
 try:

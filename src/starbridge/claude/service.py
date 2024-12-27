@@ -6,7 +6,6 @@ import time
 from pathlib import Path
 
 import psutil
-import typer
 
 from starbridge.base import __project_name__
 from starbridge.mcp import MCPBaseService, MCPContext, mcp_tool
@@ -20,11 +19,6 @@ class Service(MCPBaseService):
 
     def __init__(self):
         super().__init__()
-
-    @staticmethod
-    def get_cli() -> tuple[str | None, typer.Typer | None]:
-        """Get CLI for Claude service."""
-        return "claude", cli.cli  # type: ignore
 
     @mcp_tool()
     def health(self, context: MCPContext | None = None) -> Health:
