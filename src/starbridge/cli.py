@@ -152,7 +152,7 @@ def uninstall(
         console.print("Starbridge was no installed", style="warning")
 
 
-prepare_cli(cli, f"⭐ Starbridge v{__version__}: built with love in Berlin 🐻")
+prepare_cli(cli, f"⭐ Starbridge v{__version__} - built with love in Berlin 🐻")
 
 if __name__ == "__main__":
     try:
