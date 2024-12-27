@@ -8,7 +8,7 @@ import mcp.types as types
 from starbridge.base import __project_name__
 from starbridge.mcp.context import MCPContext
 from starbridge.mcp.models import ResourceMetadata
-from starbridge.utils import Health, description_and_params, locate_subclasses
+from starbridge.utils import Health, description_and_params
 
 
 @dataclass(frozen=True)
@@ -38,11 +38,6 @@ class MCPBaseService:
         # and convert dots to dashes
         prefix = "_".join(module_path.split(".")[:2]) + "_"
         return prefix
-
-    @staticmethod
-    def get_services() -> list[type["MCPBaseService"]]:
-        """Dynamically discover all Service classes in starbridge packages."""
-        return locate_subclasses(MCPBaseService)
 
     def info(self) -> dict:
         """Get info about configuration of this service. Override in subclass."""

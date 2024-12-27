@@ -36,7 +36,7 @@ from starbridge.mcp.context import MCPContext
 from starbridge.mcp.decorators import mcp_tool
 from starbridge.mcp.models import ResourceMetadata
 from starbridge.mcp.service import MCPBaseService
-from starbridge.utils import AggregatedHealth, get_logger
+from starbridge.utils import AggregatedHealth, get_logger, locate_subclasses
 
 logger = get_logger(__name__)
 
@@ -46,7 +46,7 @@ class MCPServer:
 
     def __init__(self):
         self._services = []
-        for service_class in MCPBaseService.get_services():
+        for service_class in MCPServer.services():
             self._services.append(service_class())
 
         self._server = Server(__project_name__)
@@ -61,7 +61,7 @@ class MCPServer:
     def health(self, context: MCPContext | None = None) -> AggregatedHealth:
         """Health of services and their dependencies"""
         dependencies = {}
-        for service_class in MCPBaseService.get_services():
+        for service_class in MCPServer.services():
             service = service_class()
             service_name = service.__class__.__module__.split(".")[1]
             dependencies[service_name] = service.health()
@@ -262,8 +262,8 @@ class MCPServer:
             )
 
     @staticmethod
-    def services() -> list[MCPBaseService]:
-        return MCPBaseService.get_services()  # type: ignore
+    def services() -> list[type["MCPBaseService"]]:
+        return locate_subclasses(MCPBaseService)  # type: ignore
 
     @staticmethod
     def tools() -> list[types.Tool]:
