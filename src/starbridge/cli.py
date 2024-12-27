@@ -157,7 +157,6 @@ prepare_cli(cli, f"‚≠ê Starbridge v{__version__} - built with love in Berlin üê
 if __name__ == "__main__":
     try:
         cli()
-        sys.exit(0)
     except Exception as e:
         logger.critical(f"Fatal error occurred: {e}")
         console.print(f"Fatal error occurred: {e}", style="error")
