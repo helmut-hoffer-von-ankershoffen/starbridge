@@ -19,28 +19,16 @@ class MCPContext(BaseModel):
         ctx: Context,
     ) -> str:
         # Log messages to the client
-        ctx.info(
-            f"Processing {x}"
-        )
-        ctx.debug(
-            "Debug info"
-        )
-        ctx.warning(
-            "Warning message"
-        )
-        ctx.error(
-            "Error message"
-        )
+        ctx.info(f"Processing {x}")
+        ctx.debug("Debug info")
+        ctx.warning("Warning message")
+        ctx.error("Error message")
 
         # Report progress
-        ctx.report_progress(
-            50, 100
-        )
+        ctx.report_progress(50, 100)
 
         # Access resources
-        data = ctx.read_resource(
-            "resource://data"
-        )
+        data = ctx.read_resource("resource://data")
 
         # Get request info
         request_id = ctx.request_id

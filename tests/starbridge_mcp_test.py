@@ -44,10 +44,12 @@ def _server_parameters(mocks: list[str] | None = None) -> StdioServerParameters:
     """Create server parameters with coverage enabled"""
     env = dict(get_default_environment())
     # Add coverage config to subprocess
-    env.update({
-        "COVERAGE_PROCESS_START": PYPROJECT_TOML,
-        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
-    })
+    env.update(
+        {
+            "COVERAGE_PROCESS_START": PYPROJECT_TOML,
+            "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
+        }
+    )
     if (mocks is not None) and mocks:
         env.update({"MOCKS": ",".join(mocks)})
 
@@ -122,11 +124,13 @@ async def test_mcp_server_list_tools_sse():
 
     # Start the server in SSE mode
     env = os.environ.copy()
-    env.update({
-        "COVERAGE_PROCESS_START": PYPROJECT_TOML,
-        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
-        "PYTHONPATH": ".",
-    })
+    env.update(
+        {
+            "COVERAGE_PROCESS_START": PYPROJECT_TOML,
+            "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
+            "PYTHONPATH": ".",
+        }
+    )
 
     process = await asyncio.create_subprocess_exec(
         "uv",
@@ -152,10 +156,8 @@ async def test_mcp_server_list_tools_sse():
             "http://0.0.0.0:8002/sse", timeout=1, sse_read_timeout=1
         ) as (read, write):
             async with ClientSession(read, write) as session:
-                # Initialize the connection
                 await session.initialize()
 
-                # List available tools
                 result = await session.list_tools()
 
                 # Verify each expected tool is present
@@ -177,10 +179,8 @@ async def test_mcp_server_list_tools_sse():
 async def test_mcp_server_list_resources():
     async with stdio_client(_server_parameters([MOCK_GET_ALL_SPACES])) as (read, write):
         async with ClientSession(read, write) as session:
-            # Initialize the connection
             await session.initialize()
 
-            # List available resources
             result = await session.list_resources()
 
             assert result.resources is not None
@@ -197,19 +197,19 @@ async def test_mcp_server_list_resources():
 async def test_mcp_server_read_resource():
     """Test getting prompt from server"""
     async with stdio_client(
-        _server_parameters([
-            MOCK_GET_ALL_SPACES,
-            MOCK_GET_SPACE,
-        ])
+        _server_parameters(
+            [
+                MOCK_GET_ALL_SPACES,
+                MOCK_GET_SPACE,
+            ]
+        )
     ) as (
         read,
         write,
     ):
         async with ClientSession(read, write) as session:
-            # Initialize the connection
             await session.initialize()
 
-            # List available prompts
             result = await session.read_resource(
                 AnyUrl(
                     "starbridge://confluence/space/~7120201709026d2b41448e93bb58d5fa301026"
@@ -226,10 +226,8 @@ async def test_mcp_server_list_prompts():
     """Test listing of prompts from the server"""
     async with stdio_client(_server_parameters()) as (read, write):
         async with ClientSession(read, write) as session:
-            # Initialize the connection
             await session.initialize()
 
-            # List available prompts
             result = await session.list_prompts()
 
             assert result.prompts is not None
@@ -240,10 +238,8 @@ async def test_mcp_server_prompt_get():
     """Test getting prompt from server"""
     async with stdio_client(_server_parameters([MOCK_GET_ALL_SPACES])) as (read, write):
         async with ClientSession(read, write) as session:
-            # Initialize the connection
             await session.initialize()
 
-            # List available prompts
             result = await session.get_prompt(
                 "starbridge_confluence_space_summary", {"style": "detailed"}
             )
@@ -263,17 +259,14 @@ async def test_mcp_server_tool_call():
     """Test listing of prompts from the server"""
     async with stdio_client(_server_parameters()) as (read, write):
         async with ClientSession(read, write) as session:
-            # Initialize the connection
             await session.initialize()
 
-            # List available prompts
             result = await session.call_tool("starbridge_hello_hello", {})
             assert len(result.content) == 1
             content = result.content[0]
             assert type(content) is TextContent
             assert content.text == "Hello World!"
 
-            # List available prompts
             result = await session.call_tool(
                 "starbridge_hello_hello", {"locale": "de_DE"}
             )
@@ -290,10 +283,8 @@ if hasattr(HelloService, "bridge"):  # if extra imaging
         """Test listing of prompts from the server"""
         async with stdio_client(_server_parameters()) as (read, write):
             async with ClientSession(read, write) as session:
-                # Initialize the connection
                 await session.initialize()
 
-                # List available prompts
                 result = await session.call_tool("starbridge_hello_bridge", {})
                 assert len(result.content) == 1
                 content = result.content[0]
@@ -308,10 +299,8 @@ async def test_mcp_server_tool_call_with_pdf():
     """Test listing of prompts from the server"""
     async with stdio_client(_server_parameters()) as (read, write):
         async with ClientSession(read, write) as session:
-            # Initialize the connection
             await session.initialize()
 
-            # List available prompts
             result = await session.call_tool("starbridge_hello_pdf", {})
             assert len(result.content) == 1
             content = result.content[0]
@@ -326,11 +315,13 @@ async def test_mcp_server_tool_call_with_pdf():
 def test_mcp_server_sse_terminates(runner):
     """Test if SSE server terminates correctly"""
     env = os.environ.copy()
-    env.update({
-        "COVERAGE_PROCESS_START": PYPROJECT_TOML,
-        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
-        "MOCKS": "webbrowser.open",
-    })
+    env.update(
+        {
+            "COVERAGE_PROCESS_START": PYPROJECT_TOML,
+            "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
+            "MOCKS": "webbrowser.open",
+        }
+    )
 
     process = subprocess.Popen(
         [

@@ -254,11 +254,13 @@ class Service(MCPBaseService):
             return False  # Already installed
 
         # Install Claude
-        returncode, _, stderr = Service._run_brew_command([
-            "install",
-            "--cask",
-            "claude",
-        ])
+        returncode, _, stderr = Service._run_brew_command(
+            [
+                "install",
+                "--cask",
+                "claude",
+            ]
+        )
         if returncode != 0:
             raise RuntimeError(f"Failed to install Claude: {stderr}")
 
@@ -276,11 +278,13 @@ class Service(MCPBaseService):
             return False  # Not installed
 
         # Uninstall Claude
-        returncode, _, stderr = Service._run_brew_command([
-            "uninstall",
-            "--cask",
-            "claude",
-        ])
+        returncode, _, stderr = Service._run_brew_command(
+            [
+                "uninstall",
+                "--cask",
+                "claude",
+            ]
+        )
         if returncode != 0:
             raise RuntimeError(f"Failed to uninstall Claude: {stderr}")
 

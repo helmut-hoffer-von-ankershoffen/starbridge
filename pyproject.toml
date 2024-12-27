@@ -133,9 +133,6 @@ dev = [
 
 [tool.ruff]
 target-version = "py311"
-line-length = 88
-fix = true
-preview = true
 
 [tool.ruff.lint]
 ignore = ["B008", "E501"]
@@ -150,11 +147,6 @@ select = [
 
 [tool.ruff.format]
 docstring-code-format = true
-docstring-code-line-length = 20
-quote-style = "double"
-indent-style = "space"
-line-ending = "lf"
-skip-magic-trailing-comma = false
 
 
 [tool.pytest.ini_options]
