@@ -1,11 +1,9 @@
-import sys
 from typing import Annotated, Any
 
 import typer
 
 from starbridge.base import (
     __is_development_mode__,
-    __project_name__,
     __project_path__,
     __version__,
 )
@@ -13,13 +11,11 @@ from starbridge.claude import Service as ClaudeService
 from starbridge.claude import generate_mcp_server_config
 from starbridge.mcp import MCPServer
 from starbridge.utils import (
-    add_epilog_recursively,
     console,
     get_logger,
     get_process_info,
     get_starbridge_env,
-    locate_implementations,
-    no_args_is_help_recursively,
+    prepare_cli,
     prompt_for_env,
 )
 
@@ -155,24 +151,13 @@ def uninstall(
         console.print("Starbridge was no installed", style="warning")
 
 
-# dynamically locate and register subcommands
-for _cli in locate_implementations(typer.Typer):
-    if _cli != cli:
-        cli.add_typer(_cli)
-
-# add epilog for all subcommands
-add_epilog_recursively(
-    cli, f"⭐ Starbridge v{__version__}: built with love in Berlin 🐻"
-)
-
-# add no_args_is_help for all subcommands
-no_args_is_help_recursively(cli)
+prepare_cli(cli, f"⭐ Starbridge v{__version__}: built with love in Berlin 🐻")
 
 if __name__ == "__main__":
     try:
         cli()
-        sys.exit(0)
+        typer.Exit(0)
     except Exception as e:
         logger.critical(f"Fatal error occurred: {e}")
         console.print(f"Fatal error occurred: {e}", style="error")
-        sys.exit(1)
+        typer.Exit(1)

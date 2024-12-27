@@ -6,7 +6,6 @@ from urllib.parse import urlparse
 
 import mcp.types as types
 
-from starbridge.base import __project_name__
 from starbridge.mcp.context import MCPContext
 from starbridge.mcp.models import ResourceMetadata
 from starbridge.utils import Health, description_and_params
