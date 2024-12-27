@@ -27,11 +27,6 @@ logger = get_logger(__name__)
 class Service(MCPBaseService):
     """Service class for Hello World operations."""
 
-    @staticmethod
-    def get_cli() -> tuple[str | None, typer.Typer | None]:
-        """Get CLI for Hello World service."""
-        return "hello", cli.cli  # type: ignore
-
     @mcp_tool()
     def health(self, context: MCPContext | None = None) -> Health:
         return Health(status=Health.Status.UP)

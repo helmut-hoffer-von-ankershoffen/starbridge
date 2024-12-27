@@ -1,17 +1,14 @@
-import importlib
-import pkgutil
 from collections import defaultdict
 from dataclasses import dataclass
 from inspect import signature
 from urllib.parse import urlparse
 
 import mcp.types as types
-import typer
 
 from starbridge.base import __project_name__
 from starbridge.mcp.context import MCPContext
 from starbridge.mcp.models import ResourceMetadata
-from starbridge.utils import Health, description_and_params
+from starbridge.utils import Health, description_and_params, locate_subclasses
 
 
 @dataclass(frozen=True)
@@ -45,30 +42,7 @@ class MCPBaseService:
     @staticmethod
     def get_services() -> list[type["MCPBaseService"]]:
         """Dynamically discover all Service classes in starbridge packages."""
-        services = []
-        package = importlib.import_module("starbridge")
-
-        for _, name, _ in pkgutil.iter_modules(package.__path__):
-            try:
-                module = importlib.import_module(f"{__project_name__}.{name}")
-                if hasattr(module, "Service"):
-                    service_class = module.Service
-                    if (
-                        isinstance(service_class, type)
-                        and issubclass(service_class, MCPBaseService)
-                        and service_class != MCPBaseService
-                    ):
-                        services.append(service_class)
-            except ImportError:
-                continue
-
-        return services
-
-    @staticmethod
-    def get_cli() -> tuple[str | None, typer.Typer | None]:
-        """Get CLI name and typer for this service if available.
-        Returns a tuple of (name, typer) or (None, None) if no CLI available."""
-        return None, None
+        return locate_subclasses(MCPBaseService)
 
     def info(self) -> dict:
         """Get info about configuration of this service. Override in subclass."""

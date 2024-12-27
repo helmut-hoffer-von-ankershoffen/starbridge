@@ -17,7 +17,7 @@ from starbridge.utils.console import console
 
 from .service import Service
 
-cli = typer.Typer()
+cli = typer.Typer(name="hello", help="Hello operations")
 
 
 @cli.command()

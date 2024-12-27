@@ -1,6 +1,7 @@
 import os
 import pathlib
 import sys
+from pydoc import locate
 from typing import Annotated, Any
 
 import typer
@@ -11,7 +12,14 @@ import starbridge.claude
 import starbridge.mcp
 from starbridge.base import __project_name__, __version__
 from starbridge.mcp import MCPBaseService, MCPServer
-from starbridge.utils import console, get_logger, get_process_info
+from starbridge.utils import (
+    add_epilog_recursively,
+    console,
+    get_logger,
+    get_process_info,
+    locate_implementations,
+    no_args_is_help_recursively,
+)
 
 # Initializes logging and instrumentation
 logger = get_logger(__name__)
@@ -259,50 +267,18 @@ def _generate_mcp_server_config(
     }
 
 
-cli.add_typer(
-    starbridge.mcp.cli,
-    name="mcp",
-    help="MCP operations",
+# locate sub cli's and register them
+for _cli in locate_implementations(typer.Typer):
+    if _cli != cli:
+        cli.add_typer(_cli)
+
+# add epilog for all subcommands
+add_epilog_recursively(
+    cli, f"⭐ Starbridge v{__version__}: built with love in Berlin 🐻"
 )
 
-for service_class in MCPBaseService.get_services():
-    name, typer_cli = service_class.get_cli()
-    if name and typer_cli:
-        cli.add_typer(
-            typer_cli,
-            name=name,
-            help=f"{name.title()} operations",
-        )
-
-
-def _add_epilog_recursively(cli: typer.Typer):
-    """Add epilog to all typers in the tree"""
-    cli.info.epilog = f"⭐ Starbridge v{__version__}: built with love in Berlin 🐻"
-    for group in cli.registered_groups:
-        if isinstance(group, typer.models.TyperInfo):
-            typer_instance = group.typer_instance
-            if (typer_instance is not cli) and typer_instance:
-                _add_epilog_recursively(typer_instance)
-    for command in cli.registered_commands:
-        if isinstance(command, typer.models.CommandInfo):
-            command.epilog = cli.info.epilog
-
-
-_add_epilog_recursively(cli)
-
-
-def _no_args_is_help_recursively(cli: typer.Typer):
-    """Add epilog to all typers in the tree"""
-    for group in cli.registered_groups:
-        if isinstance(group, typer.models.TyperInfo):
-            group.no_args_is_help = True
-            typer_instance = group.typer_instance
-            if (typer_instance is not cli) and typer_instance:
-                _no_args_is_help_recursively(typer_instance)
-
-
-_no_args_is_help_recursively(cli)
-
+# add no_args_is_help for all subcommands
+no_args_is_help_recursively(cli)
 
 if __name__ == "__main__":
     try:

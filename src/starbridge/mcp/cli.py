@@ -15,7 +15,7 @@ from starbridge.utils import console, get_process_info
 
 from .server import MCPServer
 
-cli = typer.Typer()
+cli = typer.Typer(name="mcp", help="MCP operations")
 
 
 @cli.command()

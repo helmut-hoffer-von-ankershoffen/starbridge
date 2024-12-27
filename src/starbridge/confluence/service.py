@@ -37,11 +37,6 @@ class Service(MCPBaseService):
             cloud=True,
         )
 
-    @staticmethod
-    def get_cli() -> tuple[str | None, typer.Typer | None]:
-        """Get CLI for Confluence service."""
-        return "confluence", cli.cli  # type: ignore
-
     @mcp_tool()
     def health(self, context: MCPContext | None = None) -> Health:
         try:

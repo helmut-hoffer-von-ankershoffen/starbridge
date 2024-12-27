@@ -11,7 +11,7 @@ from starbridge.utils.console import console
 
 from .service import Service
 
-cli = typer.Typer()
+cli = typer.Typer(name="confluence", help="Confluence operations")
 
 
 @cli.command()

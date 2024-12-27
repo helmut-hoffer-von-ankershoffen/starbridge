@@ -1,4 +1,6 @@
+from .cli import add_epilog_recursively, no_args_is_help_recursively
 from .console import console
+from .di import locate_implementations, locate_subclasses
 from .health import AggregatedHealth, Health
 from .logging import get_logger
 from .platform import get_process_info
@@ -13,4 +15,8 @@ __all__ = [
     "Health",
     "AggregatedHealth",
     "get_process_info",
+    "locate_implementations",
+    "locate_subclasses",
+    "add_epilog_recursively",
+    "no_args_is_help_recursively",
 ]

@@ -13,7 +13,7 @@ from starbridge.utils.console import console
 
 from .service import Service
 
-cli = typer.Typer()
+cli = typer.Typer(name="claude", help="Claude Desktop application operations")
 
 
 @cli.command()
