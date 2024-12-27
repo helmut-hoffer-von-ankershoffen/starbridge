@@ -1,10 +1,12 @@
 from pydantic import AnyUrl, Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+from starbridge.base import __project_name__
+
 
 class AtlassianSettings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_prefix="STARBRIDGE_ATLASSIAN_",
+        env_prefix=f"{__project_name__.upper()}_ATLASSIAN_",
         extra="ignore",
         env_file=".env",
         env_file_encoding="utf-8",

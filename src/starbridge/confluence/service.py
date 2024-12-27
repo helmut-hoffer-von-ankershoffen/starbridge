@@ -30,7 +30,7 @@ class Service(MCPBaseService):
         self._api = Confluence(
             url=str(self._atlassian_settings.url),
             username=self._atlassian_settings.email_address,
-            password=self._atlassian_settings.api_token,
+            password=self._atlassian_settings.api_token.get_secret_value(),
             cloud=True,
         )
 

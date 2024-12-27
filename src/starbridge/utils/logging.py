@@ -3,6 +3,7 @@ from typing import Literal
 
 import click
 import logfire
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from rich.console import Console
 from rich.logging import RichHandler
@@ -26,10 +27,16 @@ class LoggingSettings(BaseSettings):
         env_file_encoding="utf-8",
     )
 
-    loglevel: Literal["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"] = "INFO"
-    log_file_enabled: bool = True
-    log_file_name: str = "starbridge.log"
-    log_console_enabled: bool = False
+    loglevel: Literal["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"] = Field(
+        description="Logging level", default="INFO"
+    )
+    log_file_enabled: bool = Field(description="Enable logging to file", default=False)
+    log_file_name: str = Field(
+        description="Name of the log file", default="starbridge.log"
+    )
+    log_console_enabled: bool = Field(
+        description="Enable logging to console", default=False
+    )
 
 
 settings = load_settings(LoggingSettings)

@@ -1,4 +1,5 @@
 import logfire
+from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from starbridge.base import __project_name__, __version__
@@ -14,9 +15,17 @@ class LogfireSettings(BaseSettings):
         env_file_encoding="utf-8",
     )
 
-    token: str | None = None
-    environment: str = "default"
-    instrument_mcp_enabled: bool = False
+    token: SecretStr | None = Field(
+        description="Logfire token", examples=["YOUR_TOKEN"], default=None
+    )
+    environment: str = Field(
+        description="Environment name",
+        examples=["development", "production"],
+        default="production",
+    )
+    instrument_mcp_enabled: bool = Field(
+        description="Enable MCP instrumentation", default=True
+    )
 
 
 def logfire_initialize():
@@ -27,7 +36,7 @@ def logfire_initialize():
 
     logfire.configure(
         send_to_logfire="if-token-present",
-        token=settings.token,
+        token=settings.token.get_secret_value(),
         environment=settings.environment,
         service_name=__project_name__,
         console=False,

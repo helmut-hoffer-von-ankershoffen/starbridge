@@ -4,10 +4,6 @@ import sys
 from typing import Annotated, Any
 
 import typer
-from dotenv import dotenv_values
-from pydantic import SecretStr
-from pydantic_settings import BaseSettings
-from rich.prompt import Prompt
 
 from starbridge.base import __project_name__, __version__
 from starbridge.claude import Service as ClaudeService
@@ -18,8 +14,8 @@ from starbridge.utils import (
     get_logger,
     get_process_info,
     locate_implementations,
-    locate_subclasses,
     no_args_is_help_recursively,
+    prompt_for_env,
 )
 
 logger = get_logger(__name__)
@@ -98,61 +94,15 @@ def info():
 
 
 @cli.command()
-def configure():
-    """Generate .env file for Starbridge"""
+def create_dot_env():
+    """Create .env file for Starbridge. You will be prompted for settings."""
     if not _is_development_mode():
         raise RuntimeError("This command is only available in development mode")
 
-    starbridge_path = pathlib.Path(_get_starbridge_path())
-    env_example_path = starbridge_path / ".env.example"
-    env_path = starbridge_path / ".env"
-
-    if not env_example_path.exists():
-        raise FileNotFoundError(
-            f"Required .env.example file not found at {env_example_path}"
-        )
-
-    example_values = dotenv_values(env_example_path)
-    current_values = dotenv_values(env_path) if env_path.exists() else {}
-
-    new_values = {}
-    for key in example_values:
-        default_value = current_values.get(key, example_values[key])
-        value = Prompt.ask(
-            f"Enter value for {key}",
-            default=default_value if default_value else None,
-            password="TOKEN" in key or "SECRET" in key,
-        )
-        new_values[key] = value
-
-    with open(env_path, "w") as f:
-        for key, value in new_values.items():
-            # Try to convert to number, if it fails, it's not a number
-            try:
-                float(value)
-                f.write(f"{key}={value}\n")
-            except ValueError:
-                f.write(f'{key}="{value}"\n')
-
-
-def _collect_settings() -> dict[str, Any]:
-    """Collect settings from user input for all BaseSettings subclasses"""
-    prompted_settings = {}
-    for settings in locate_subclasses(BaseSettings):
-        settings_instance = settings()
-        for field_name, field in settings.model_fields.items():
-            description = field.description or field_name
-            example = field.examples[0] if field.examples else None
-            description = f"{description} (e.g. {example})" if example else description
-            default_value = getattr(settings_instance, field_name, None)
-            value = Prompt.ask(
-                description,
-                default=str(default_value) if default_value else None,
-                password=isinstance(field.annotation, type(SecretStr)),
-            )
-            field_prefix = settings.model_config.get("env_prefix", "")
-            prompted_settings[f"{field_prefix}{field_name.upper()}"] = value
-    return prompted_settings
+    env = prompt_for_env()
+    with open(pathlib.Path(_get_starbridge_path()) / ".env", "w") as f:
+        for key, value in iter(env.items()):
+            f.write(f"{key}={value}\n")
 
 
 @cli.command()
@@ -171,9 +121,8 @@ def install(
     ] = "helmuthva/starbridge:latest",
 ):
     """Install starbridge within Claude Desktop application by adding to configuration and restarting Claude Desktop app"""
-    prompted_settings = _collect_settings()
     if ClaudeService.install_mcp_server(
-        _generate_mcp_server_config(prompted_settings, image),
+        _generate_mcp_server_config(prompt_for_env(), image),
         restart=restart_claude,
     ):
         console.print("Starbridge installed with Claude Desktop application.")
@@ -215,11 +164,10 @@ def _get_starbridge_env():
 
 
 def _generate_mcp_server_config(
-    prompted_settings: dict[str, Any],
+    env: dict[str, Any],
     image: str = "helmuthva/starbridge:latest",
 ) -> dict:
     """Generate configuration file for Starbridge"""
-    env = {key: str(value) for key, value in prompted_settings.items()}
     if ClaudeService.is_running_in_starbridge_container():
         args = ["run", "-i", "--rm"]
         for env_key in env.keys():
