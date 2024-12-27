@@ -267,7 +267,7 @@ def _generate_mcp_server_config(
     }
 
 
-# locate sub cli's and register them
+# dynamically locate and register subcommands
 for _cli in locate_implementations(typer.Typer):
     if _cli != cli:
         cli.add_typer(_cli)

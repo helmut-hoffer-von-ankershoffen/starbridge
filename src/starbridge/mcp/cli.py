@@ -27,7 +27,7 @@ def health():
 @cli.command()
 def services():
     """Services exposed by modules"""
-    console.print(MCPServer.services())
+    console.print(MCPServer.service_classes())
 
 
 @cli.command()

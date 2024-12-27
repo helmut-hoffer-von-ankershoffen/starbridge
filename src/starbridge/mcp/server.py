@@ -45,8 +45,9 @@ class MCPServer:
     """MCP Server for Starbridge."""
 
     def __init__(self):
+        # dynamically locate and register services
         self._services = []
-        for service_class in MCPServer.services():
+        for service_class in MCPServer.service_classes():
             self._services.append(service_class())
 
         self._server = Server(__project_name__)
@@ -61,8 +62,7 @@ class MCPServer:
     def health(self, context: MCPContext | None = None) -> AggregatedHealth:
         """Health of services and their dependencies"""
         dependencies = {}
-        for service_class in MCPServer.services():
-            service = service_class()
+        for service in self._services:
             service_name = service.__class__.__module__.split(".")[1]
             dependencies[service_name] = service.health()
 
@@ -262,7 +262,7 @@ class MCPServer:
             )
 
     @staticmethod
-    def services() -> list[type["MCPBaseService"]]:
+    def service_classes() -> list[type["MCPBaseService"]]:
         return locate_subclasses(MCPBaseService)  # type: ignore
 
     @staticmethod
