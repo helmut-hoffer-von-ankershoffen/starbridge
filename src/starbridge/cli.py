@@ -11,7 +11,7 @@ from rich.prompt import Prompt
 import starbridge.claude
 import starbridge.mcp
 from starbridge.base import __project_name__, __version__
-from starbridge.mcp import MCPBaseService, MCPServer
+from starbridge.mcp import MCPServer
 from starbridge.utils import (
     add_epilog_recursively,
     console,
@@ -88,7 +88,7 @@ def info():
     }
 
     # Auto-discover and get info from all services
-    for service_class in MCPBaseService.get_services():
+    for service_class in MCPServer.service_classes():
         service = service_class()
         service_name = service.__class__.__module__.split(".")[1]
         data[service_name] = service.info()
