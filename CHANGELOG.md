@@ -2,6 +2,20 @@
 
 ## [unreleased]
 
+### 🚜 Refactor
+
+- *(MCPBaseService)* Annotate abstract methods - ([9192372](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/91923723ba803394228ee23a505aedf688bb3b77))
+- *(cli)* Dynamically discover settings to prompt for - ([7594f87](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/7594f87b34f57d69446015b6127fbcf1361892d9))
+- *(cli)* Simplify - ([446145f](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/446145f6b1349661d3575dbb23657671b6aaff6c))
+- *(di)* Introduce dependency injection (di) util, untie service->cli dependency - ([2b92828](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/2b92828fafd565fed43f034836919b83f43326db))
+
+### 🎨 Styling
+
+- *(ruff)* Pivot to defaults - ([ac35236](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/ac35236f8443ee1fa2f9fcd53d9e23b8a152e02e))
+
+
+## [0.0.50](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.49..v0.0.50) - 2024-12-26
+
 ### 🧪 Testing
 
 - *(extras)* Test for imaging extra not activated - ([dd5b4bb](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/dd5b4bbd8fa9510a04bb7aba840fb39d9e7c482c))
