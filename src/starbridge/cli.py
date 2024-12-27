@@ -1,3 +1,4 @@
+import sys
 from typing import Annotated, Any
 
 import typer
@@ -156,8 +157,8 @@ prepare_cli(cli, f"⭐ Starbridge v{__version__}: built with love in Berlin 🐻
 if __name__ == "__main__":
     try:
         cli()
-        typer.Exit(0)
+        sys.exit(0)
     except Exception as e:
         logger.critical(f"Fatal error occurred: {e}")
         console.print(f"Fatal error occurred: {e}", style="error")
-        typer.Exit(1)
+        sys.exit(1)
