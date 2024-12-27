@@ -2,6 +2,7 @@ import json
 import os
 import subprocess
 import sys
+from pathlib import Path
 from unittest.mock import patch
 
 import pytest
@@ -16,20 +17,20 @@ def runner():
     return CliRunner()
 
 
-def test_built_with_love(runner):
+def test_cli_built_with_love(runner):
     """Check epilog shown."""
     result = runner.invoke(cli, ["--help"])
     assert result.exit_code == 0
     assert "built with love in Berlin" in result.output
 
 
-def test_invalid_command(runner):
+def test_cli_invalid_command(runner):
     """Test invalid command returns error"""
     result = runner.invoke(cli, ["invalid"])
     assert result.exit_code != 0
 
 
-def test_info(runner):
+def test_cli_info(runner):
     """Check processes exposed and version matching."""
     result = runner.invoke(cli, ["info"])
     assert result.exit_code == 0
@@ -37,16 +38,52 @@ def test_info(runner):
     assert f"'version': '{__version__}'" in result.stdout
 
 
-def test_install(runner, tmp_path):
-    """Check processes exposed and version matching."""
+def test_cli_create_dot_env(runner, tmp_path):
+    """Check configuration injected in claude as expected."""
+    with runner.isolated_filesystem():
+        inputs = (
+            "https://test.atlassian.net\n"
+            "test@test.com\n"  # Atlassian email address
+            "TEST_CONFLUENCE_API_TOKEN\n"  # Atlassian token
+            "TEST_LOGFIRE_TOKEN\n"  # logfire token
+            "production\n"  # logfire environment
+            "1\n"  # instrument mcp server
+            "INFO\n"  # log level
+            "1\n"  # log to file
+            "test.log\n"  # log file
+            "0\n"  # log to console
+        )
+        result = runner.invoke(cli, ["create-dot-env"], input=inputs)
+        assert result.exit_code == 0
+        dot_env = Path(".env").read_text()
+        assert "STARBRIDGE_ATLASSIAN_URL=https://test.atlassian.net" in dot_env
+        assert "STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS=test@test.com" in dot_env
+        assert "STARBRIDGE_ATLASSIAN_API_TOKEN=TEST_CONFLUENCE_API_TOKEN" in dot_env
+        assert "STARBRIDGE_LOGFIRE_TOKEN=TEST_LOGFIRE_TOKEN" in dot_env
+        assert "STARBRIDGE_LOGFIRE_ENVIRONMENT=production" in dot_env
+        assert "STARBRIDGE_LOGFIRE_INSTRUMENT_MCP_ENABLED=1" in dot_env
+        assert "STARBRIDGE_LOGGING_LOGLEVEL=INFO" in dot_env
+        assert "STARBRIDGE_LOGGING_LOG_FILE_ENABLED=1" in dot_env
+        assert "STARBRIDGE_LOGGING_LOG_FILE_NAME=test.log" in dot_env
+        assert "STARBRIDGE_LOGGING_LOG_CONSOLE_ENABLED=0" in dot_env
+
+
+def test_cli_install(runner, tmp_path):
+    """Check configuration injected in claude as expected."""
     with patch(
         "starbridge.claude.service.Service.application_directory", return_value=tmp_path
     ):
         inputs = (
-            "https://your-domain.atlassian.net/test\n"
-            "you-test@your-domain.com\n"  # Atlassian email address
-            "YOUR_TEST_API_TOKEN\n"  # Atlassian token
-            "\n"  # Possibly other prompt input
+            "https://test.atlassian.net\n"
+            "test@test.com\n"  # Atlassian email address
+            "TEST_CONFLUENCE_API_TOKEN\n"  # Atlassian token
+            "TEST_LOGFIRE_TOKEN\n"  # logfire token
+            "production\n"  # logfire environment
+            "1\n"  # instrument mcp server
+            "INFO\n"  # log level
+            "1\n"  # log to file
+            "test.log\n"  # log file
+            "0\n"  # log to console
         )
         result = runner.invoke(cli, ["install", "--no-restart-claude"], input=inputs)
         assert result.exit_code == 0
@@ -59,15 +96,15 @@ def test_install(runner, tmp_path):
         server_config = output_json["mcpServers"]["starbridge"]
         assert (
             server_config["env"]["STARBRIDGE_ATLASSIAN_URL"]
-            == "https://your-domain.atlassian.net/test"
+            == "https://test.atlassian.net"
         )
         assert (
             server_config["env"]["STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS"]
-            == "you-test@your-domain.com"
+            == "test@test.com"
         )
         assert (
             server_config["env"]["STARBRIDGE_ATLASSIAN_API_TOKEN"]
-            == "YOUR_TEST_API_TOKEN"
+            == "TEST_CONFLUENCE_API_TOKEN"
         )
 
         result = runner.invoke(cli, ["uninstall", "--no-restart-claude"], input=inputs)

@@ -2,15 +2,18 @@
 
 import json
 import logging
+import os
 from pathlib import Path
 from typing import Any, TypeVar
 
+from dotenv.cli import get
 from pydantic import SecretStr, ValidationError
 from pydantic_settings import BaseSettings
 from rich.panel import Panel
 from rich.prompt import Prompt
 from rich.text import Text
 
+from starbridge.base import __project_name__
 from starbridge.utils.console import console
 from starbridge.utils.di import locate_subclasses
 
@@ -103,15 +106,19 @@ def prompt_for_env() -> dict[str, Any]:
             description = _get_field_description(field_name, field)
             default_value = getattr(settings, field_name, None)
             is_bool = field.annotation is bool
+            is_secret = field.annotation is SecretStr
             if is_bool:
                 prompt_default = "1" if default_value else "0"
             else:
-                prompt_default = str(default_value) if default_value else None
+                if (default_value) and hasattr(default_value, "get_secret_value"):
+                    prompt_default = default_value.get_secret_value()
+                else:
+                    prompt_default = str(default_value) if default_value else None
             while True:
                 value = Prompt.ask(
                     description,
                     default=prompt_default,
-                    password=isinstance(field.annotation, type(SecretStr)),
+                    password=False,
                     choices=["0", "1"] if is_bool else None,
                 )
                 try:
@@ -122,6 +129,13 @@ def prompt_for_env() -> dict[str, Any]:
                 except ValidationError as e:
                     console.print(f"[red]{e.errors()[0]['msg']}[/red]")
 
-            _input[f"{field_prefix}{field_name.upper()}"] = value
+            key = f"{field_prefix}{field_name.upper()}"
+            _input[key] = value
 
     return {key: _transform_value(value) for key, value in _input.items()}
+
+
+def get_starbridge_env():
+    return {
+        k: v for k, v in os.environ.items() if k.startswith(__project_name__.upper())
+    }

@@ -65,7 +65,7 @@ class TestClaudeService:
         with patch("platform.system", return_value="Darwin"):
             yield
 
-    def test_install_via_brew_already_installed(self, mock_darwin):
+    def test_claude_install_via_brew_already_installed(self, mock_darwin):
         with patch(SUBPROCESS_RUN) as mock_run:
             mock_run.return_value = Mock(returncode=0, stdout="", stderr="")
 
@@ -79,7 +79,7 @@ class TestClaudeService:
                 check=False,
             )
 
-    def test_install_via_brew_success(self, mock_darwin):
+    def test_claude_install_via_brew_success(self, mock_darwin):
         with patch(SUBPROCESS_RUN) as mock_run:
             # First call returns 1 (not installed), second call returns 0 (install success)
             mock_run.side_effect = [
@@ -104,7 +104,7 @@ class TestClaudeService:
                 check=False,
             )
 
-    def test_install_via_brew_error(self, mock_darwin):
+    def test_claude_install_via_brew_error(self, mock_darwin):
         with patch(SUBPROCESS_RUN) as mock_run:
             mock_run.side_effect = [
                 Mock(returncode=1, stdout="", stderr=""),
@@ -116,7 +116,7 @@ class TestClaudeService:
             ):
                 Service.install_via_brew()
 
-    def test_uninstall_via_brew_not_installed(self, mock_darwin):
+    def test_claude_uninstall_via_brew_not_installed(self, mock_darwin):
         with patch(SUBPROCESS_RUN) as mock_run:
             mock_run.return_value = Mock(returncode=1, stdout="", stderr="")
 
@@ -130,7 +130,7 @@ class TestClaudeService:
                 check=False,
             )
 
-    def test_uninstall_via_brew_success(self, mock_darwin):
+    def test_claude_uninstall_via_brew_success(self, mock_darwin):
         with patch(SUBPROCESS_RUN) as mock_run:
             # First call returns 0 (installed), second call returns 0 (uninstall success)
             mock_run.side_effect = [
@@ -155,7 +155,7 @@ class TestClaudeService:
                 check=False,
             )
 
-    def test_uninstall_via_brew_error(self, mock_darwin):
+    def test_claude_uninstall_via_brew_error(self, mock_darwin):
         with patch(SUBPROCESS_RUN) as mock_run:
             mock_run.side_effect = [
                 Mock(returncode=0, stdout="", stderr=""),

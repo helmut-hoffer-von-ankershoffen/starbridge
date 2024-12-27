@@ -24,6 +24,7 @@ dependencies = [
     "opentelemetry-instrumentation-sqlite3>=0.50b0",
     "opentelemetry-instrumentation-requests>=0.50b0",
     "opentelemetry-instrumentation-urllib3>=0.50b0",
+    "email-validator>=2.2.0",
 ]
 keywords = [
     "anthropic",
@@ -157,7 +158,7 @@ skip-magic-trailing-comma = false
 
 
 [tool.pytest.ini_options]
-addopts = "-v --cov=starbridge --cov-report=term-missing --cov-report=xml:coverage.xml --cov-report=html:coverage_html"
+addopts = "-vv --cov=starbridge --cov-report=term-missing --cov-report=xml:coverage.xml --cov-report=html:coverage_html"
 testpaths = ["tests"]
 python_files = ["*_test.py"]
 asyncio_mode = "auto"
@@ -169,13 +170,13 @@ markers = [
 ]
 
 [tool.coverage.run]
+sigterm = true
 relative_files = true
 source = ["src"]
 omit = ["src/starbridge/instrumentation/*"]
 branch = true
 parallel = true
 concurrency = ["thread", "multiprocessing"]
-sigterm = true
 
 [tool.coverage.paths]
 source = ["src/"]
