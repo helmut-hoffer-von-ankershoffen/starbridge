@@ -101,7 +101,10 @@ def _get_llms_txt_url(url: str, full: bool = True) -> str:
 
 
 async def get_additional_context(
-    url: str, user_agent: str, accept_language: str, full: bool = False
+    url: str,
+    user_agent: str,
+    accept_language: str = "en-US,en;q=0.9,de;q=0.8",
+    full: bool = False,
 ) -> dict[str, str]:
     """Get additional context for the url.
 

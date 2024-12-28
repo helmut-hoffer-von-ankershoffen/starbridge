@@ -30,7 +30,7 @@ class LogfireSettings(BaseSettings):
         ),
     ]
     instrument_mcp_enabled: Annotated[
-        bool, Field(description="Enable MCP instrumentation", default=True)
+        bool, Field(description="Enable MCP instrumentation", default=False)
     ]
 
 
