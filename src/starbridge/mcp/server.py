@@ -31,7 +31,7 @@ from starlette.applications import Starlette
 from starlette.responses import PlainTextResponse
 from starlette.routing import Route
 
-from starbridge.base import __project_name__, __version__
+from starbridge import __project_name__, __version__
 from starbridge.mcp.context import MCPContext
 from starbridge.mcp.decorators import mcp_tool
 from starbridge.mcp.models import ResourceMetadata

@@ -10,7 +10,7 @@ from typing import Annotated
 
 import typer
 
-from starbridge.base import __project_name__, __version__
+from starbridge import __project_name__, __version__
 from starbridge.utils import console, get_process_info
 
 from .server import MCPServer

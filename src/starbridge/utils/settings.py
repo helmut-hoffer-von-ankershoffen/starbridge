@@ -12,7 +12,7 @@ from rich.panel import Panel
 from rich.prompt import Prompt
 from rich.text import Text
 
-from starbridge.base import __project_name__
+from starbridge import __project_name__
 from starbridge.utils.console import console
 from starbridge.utils.di import locate_subclasses
 

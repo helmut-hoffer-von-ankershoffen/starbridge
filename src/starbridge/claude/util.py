@@ -1,6 +1,6 @@
 from typing import Any
 
-from starbridge.base import __is_development_mode__, __project_name__, __project_path__
+from starbridge import __is_development_mode__, __project_name__, __project_path__
 
 from .service import Service as ClaudeService
 

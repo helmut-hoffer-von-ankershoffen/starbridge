@@ -8,7 +8,7 @@ from unittest.mock import patch
 import pytest
 from typer.testing import CliRunner
 
-from starbridge.base import __version__
+from starbridge import __version__
 from starbridge.cli import cli
 
 

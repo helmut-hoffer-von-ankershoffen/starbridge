@@ -2,7 +2,7 @@ from collections.abc import Callable
 from functools import wraps
 from typing import ParamSpec, TypeVar
 
-from starbridge.base import __project_name__
+from starbridge import __project_name__
 
 from .models import PromptMetadata, ResourceMetadata, ToolMetadata
 

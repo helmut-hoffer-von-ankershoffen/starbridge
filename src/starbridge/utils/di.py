@@ -3,7 +3,7 @@ import pkgutil
 from inspect import isclass
 from typing import Any
 
-from starbridge.base import __project_name__
+from starbridge import __project_name__
 
 _implementation_cache = {}
 _subclass_cache = {}

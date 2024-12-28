@@ -8,7 +8,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from rich.console import Console
 from rich.logging import RichHandler
 
-from starbridge.base import __project_name__
+from starbridge import __project_name__
 from starbridge.instrumentation import logfire_initialize
 from starbridge.utils.settings import load_settings
 

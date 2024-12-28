@@ -2,7 +2,7 @@ import logfire
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from starbridge.base import __project_name__, __version__
+from starbridge import __project_name__, __version__
 from starbridge.instrumentation.otel_mcp_instrumentation import MCPInstrumentor
 from starbridge.utils.settings import load_settings
 

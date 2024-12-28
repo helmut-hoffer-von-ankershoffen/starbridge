@@ -7,7 +7,7 @@ from pathlib import Path
 
 import psutil
 
-from starbridge.base import __project_name__
+from starbridge import __project_name__
 from starbridge.mcp import MCPBaseService, MCPContext, mcp_tool
 from starbridge.utils import Health
 

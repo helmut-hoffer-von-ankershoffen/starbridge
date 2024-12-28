@@ -3,7 +3,7 @@ from typing import Annotated, Any
 
 import typer
 
-from starbridge.base import (
+from starbridge import (
     __is_development_mode__,
     __project_path__,
     __version__,
@@ -48,16 +48,16 @@ def main(
             help="Debug mode",
         ),
     ] = True,
-    env: Annotated[  # Parsed in bootstrap.py
+    env: Annotated[
         list[str] | None,
         typer.Option(
             "--env",
-            help='Environment variables in key=value format. Can be used multiple times in one call. Only STARBRIDGE_ prefixed vars are used. Example --env STARBRIDGE_ATLASSIAN_URL="https://your-domain.atlassian.net" --env STARBRIDGE_ATLASSIAN_EMAIL="YOUR_EMAIL"',
+            help='Environment variables in key=value format. Can be used multiple times in one call. Only STARBRIDGE_ prefixed vars are evaluated. Example --env STARBRIDGE_ATLASSIAN_URL="https://your-domain.atlassian.net" --env STARBRIDGE_ATLASSIAN_EMAIL="YOUR_EMAIL"',
         ),
     ] = None,
 ):
     """Run MCP Server - alias for 'mcp serve'"""
-    # Environment variables are handled in bootstrap
+    # --env parsed in main __init__.py
     if ctx.invoked_subcommand is None:
         MCPServer.serve(host, port, debug)
 
@@ -101,9 +101,8 @@ def create_dot_env():
     if not __is_development_mode__:
         raise RuntimeError("This command is only available in development mode")
 
-    env = prompt_for_env()
     with open(".env", "w") as f:
-        for key, value in iter(env.items()):
+        for key, value in iter(prompt_for_env().items()):
             f.write(f"{key}={value}\n")
 
 

@@ -1,7 +1,7 @@
 from pydantic import AnyHttpUrl, EmailStr, Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-from starbridge.base import __project_name__
+from starbridge import __project_name__
 
 
 class AtlassianSettings(BaseSettings):

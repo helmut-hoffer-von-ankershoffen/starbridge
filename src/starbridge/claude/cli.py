@@ -8,7 +8,7 @@ from typing import Annotated
 
 import typer
 
-from starbridge.base import __project_name__
+from starbridge import __project_name__
 from starbridge.utils.console import console
 
 from .service import Service
