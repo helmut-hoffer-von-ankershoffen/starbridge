@@ -16,7 +16,7 @@
 [![PyPI - Status](https://img.shields.io/pypi/status/starbridge?logo=pypi&logoColor=%23FFD243&labelColor=%230073B7&color=FDFDFD)](https://pypi.python.org/pypi/starbridge)
 [![Docker - Version](https://img.shields.io/docker/v/helmuthva/starbridge?sort=semver&label=Docker&logo=docker&logoColor=white&labelColor=1354D4&color=10151B)](https://hub.docker.com/r/helmuthva/starbridge/tags)
 [![Docker - Size](https://img.shields.io/docker/image-size/helmuthva/starbridge?sort=semver&arch=arm64&label=image&logo=docker&logoColor=white&labelColor=1354D4&color=10151B)](https://hub.docker.com/r/helmuthva/starbridge/)
-
+[![ghcr.io - Version](https://ghcr-badge.egpl.dev/helmut-hoffer-von-ankershoffen/starbridge/tags?color=%2344cc11&ignore=0.0%2C0%2Clatest&n=3&label=ghcr.io&trim=)](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/pkgs/container/starbridge)
 
 > ⚠️ **WARNING**: This project is currently in pre-alpha phase, i.e. partly functional. Feel free to already watch or star the repository to stay updated on its progress.
 
