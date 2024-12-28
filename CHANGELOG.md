@@ -2,6 +2,13 @@
 
 ## [unreleased]
 
+### ⚙️ Miscellaneous Tasks
+
+- *(ghcr.io)* Introduce publishing container image to ghcr.io - ([63d9437](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/63d943767a28ad7186ea4a2456fe1e17bd711664))
+
+
+## [0.0.53](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.52..v0.0.53) - 2024-12-28
+
 ### 🚜 Refactor
 
 - *(maintainability)* Dry - ([0ad3099](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/0ad3099198ff926c8a18984c46feb9c1a6fd44a3))
