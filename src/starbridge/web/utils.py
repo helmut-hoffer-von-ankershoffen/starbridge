@@ -75,7 +75,7 @@ async def ensure_allowed_to_crawl(url: str, user_agent: str) -> None:
         message = (
             f"The sites robots.txt ({robot_txt_url}), specifies that autonomous fetching of this page is not allowed, "
             f"<useragent>{user_agent}</useragent>\n"
-            f"<url>{url}</url>"
+            f"<url>{url}</url>\n"
             f"<robots>\n{robot_txt}\n</robots>\n"
             f"The assistant must let the user know that it failed to view the page. The assistant may provide further guidance based on the above information.\n"
             f"The assistant can tell the user that they can try manually fetching the page by using the fetch prompt within their UI.",
