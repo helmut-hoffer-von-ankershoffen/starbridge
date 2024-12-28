@@ -2338,7 +2338,7 @@ wheels = [
 
 [[package]]
 name = "starbridge"
-version = "0.0.51"
+version = "0.0.52"
 source = { editable = "." }
 dependencies = [
     { name = "atlassian-python-api" },

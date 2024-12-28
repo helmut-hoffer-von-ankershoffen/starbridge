@@ -2,6 +2,27 @@
 
 ## [unreleased]
 
+### ⛰️  Features
+
+- *(web)* Provide tool to fetch from the web, respecting robots.txt and getting additional context from llms.txt - ([fc3ffeb](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/fc3ffeb88ceb7be3bc6d212df35b867f48550606))
+
+### 🚜 Refactor
+
+- *(init)* Simplify - ([703c278](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/703c2781a8967203c0ae0e49b0a11b3b31de1577))
+
+### 🧪 Testing
+
+- *(env)* Use subprocess in test_env_args_fail as --env is parsed on boot - ([de0a1d9](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/de0a1d9d699ed1bfb4a665856da10a8633da2b78))
+- *(web)* More tests - ([91ab1d3](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/91ab1d33917fe3a5ad1e9740aba9ea59d8c2397f))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(ruff)* Auto-fix and use preview checks - ([5f360bc](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/5f360bc54cc16ed178d2ef3ec618a9116fbf4650))
+- *(style)* Formatting - ([bcc84ed](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/bcc84ed06e5033fa57b378d4fd65f8f630aede0f))
+
+
+## [0.0.51](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.50..v0.0.51) - 2024-12-27
+
 ### 🚜 Refactor
 
 - *(MCPBaseService)* Annotate abstract methods - ([9192372](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/91923723ba803394228ee23a505aedf688bb3b77))
