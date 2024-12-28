@@ -2,6 +2,17 @@
 
 ## [unreleased]
 
+### 🚜 Refactor
+
+- *(maintainability)* Dry - ([0ad3099](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/0ad3099198ff926c8a18984c46feb9c1a6fd44a3))
+
+### 📚 Documentation
+
+- *(fix)* Source bin/env on initial installation, and us --with on uvx given uv does not yet properly support --all-extras - ([3ddc9c1](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/3ddc9c1c59186d61736b9409b514c20447c452a9))
+
+
+## [0.0.52](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.51..v0.0.52) - 2024-12-28
+
 ### ⛰️  Features
 
 - *(web)* Provide tool to fetch from the web, respecting robots.txt and getting additional context from llms.txt - ([fc3ffeb](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/fc3ffeb88ceb7be3bc6d212df35b867f48550606))
