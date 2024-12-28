@@ -11,6 +11,7 @@ MOCK_GET_ALL_SPACES = "atlassian.Confluence.get_all_spaces"
 MOCK_GET_SPACE = "atlassian.Confluence.get_space"
 MOCK_GET_ALL_PAGES_FROM_SPACE = "atlassian.Confluence.get_all_pages_from_space"
 MOCK_GET_PAGE_BY_ID = "atlassian.Confluence.get_page_by_id"
+FIXTURE_GET_ALL_SPACES = "tests/fixtures/get_all_spaces.json"
 
 
 @pytest.fixture
@@ -22,7 +23,7 @@ def runner():
 def test_confluence_health(mock_get_all_spaces, runner):
     """Check health."""
     # Mock the response data that would come from get_all_spaces
-    with Path("tests/fixtures/get_all_spaces.json").open() as f:
+    with Path(FIXTURE_GET_ALL_SPACES).open() as f:
         mock_get_all_spaces.return_value = json.loads(f.read())
 
     result = runner.invoke(cli, ["confluence", "health"])
@@ -40,7 +41,7 @@ def test_confluence_info(runner):
 def test_confluence_mcp_resources(mock_get_all_spaces, runner):
     """Check fetching resources."""
     # Mock the response data that would come from get_all_spaces
-    with Path("tests/fixtures/get_all_spaces.json").open() as f:
+    with Path(FIXTURE_GET_ALL_SPACES).open() as f:
         mock_get_all_spaces.return_value = json.loads(f.read())
 
     result = runner.invoke(cli, ["confluence", "mcp", "resources"])
@@ -80,7 +81,7 @@ def test_confluence_mcp_prompts(runner):
 def test_confluence_mcp_space_summary(mock_get_all_spaces, runner):
     """Check space list."""
     # Mock the response data that would come from get_all_spaces
-    with Path("tests/fixtures/get_all_spaces.json").open() as f:
+    with Path(FIXTURE_GET_ALL_SPACES).open() as f:
         mock_get_all_spaces.return_value = json.loads(f.read())
 
     result = runner.invoke(
@@ -94,7 +95,7 @@ def test_confluence_mcp_space_summary(mock_get_all_spaces, runner):
 def test_confluence_space_list(mock_get_all_spaces, runner):
     """Check space list."""
     # Mock the response data that would come from get_all_spaces
-    with Path("tests/fixtures/get_all_spaces.json").open() as f:
+    with Path(FIXTURE_GET_ALL_SPACES).open() as f:
         mock_get_all_spaces.return_value = json.loads(f.read())
 
     result = runner.invoke(cli, ["confluence", "space", "list"])

@@ -8,6 +8,7 @@ nox.options.default_venv_backend = "uv"
 
 _INSTALL_ARGS = "-e .[dev,imaging]"
 _INSTALL_NO_EXTRAS_ARGS = "-e .[dev]"
+_JUNITXML_ARG = "--junitxml=junit.xml"
 
 
 @nox.session(python=["3.11", "3.12", "3.13"])
@@ -17,7 +18,7 @@ def test(session: nox.Session):
     session.run(
         "pytest",
         "--disable-warnings",
-        "--junitxml=junit.xml",
+        _JUNITXML_ARG,
         "-n",
         "auto",
         "--dist",
@@ -29,7 +30,7 @@ def test(session: nox.Session):
         "pytest",
         "--cov-append",
         "--disable-warnings",
-        "--junitxml=junit.xml",
+        _JUNITXML_ARG,
         "-n",
         "auto",
         "--dist",
@@ -52,7 +53,7 @@ def test_no_extras(session: nox.Session):
         "pytest",
         "--cov-append",
         "--disable-warnings",
-        "--junitxml=junit.xml",
+        _JUNITXML_ARG,
         "-n",
         "1",
         "-m",

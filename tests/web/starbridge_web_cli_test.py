@@ -8,6 +8,7 @@ from typer.testing import CliRunner
 from starbridge.cli import cli
 
 GET_TEST_URL = "https://helmuthva.gitbook.io/starbridge"
+GET_LLMS_TXT_URL = "https://docs.anthropic.com"
 
 
 @pytest.fixture
@@ -157,7 +158,7 @@ def test_web_cli_get_additional_context_llms_text(runner):
             "get",
             "--format",
             "text",
-            "https://docs.anthropic.com/",
+            GET_LLMS_TXT_URL,
         ],
     )
     assert "Get Api Key" in json.loads(result.output)["context"]["llms_txt"]
@@ -176,7 +177,7 @@ def test_web_cli_get_additional_context_llms_full_txt(runner):
             "--format",
             "text",
             "--llms-full-txt",
-            "https://docs.anthropic.com/",
+            GET_LLMS_TXT_URL,
         ],
     )
     assert "Get Api Key" in json.loads(result.output)["context"]["llms_txt"]
@@ -195,7 +196,7 @@ def test_web_cli_get_additional_context_not(runner):
             "--format",
             "text",
             "--no-additional-context",
-            "https://docs.anthropic.com/",
+            GET_LLMS_TXT_URL,
         ],
     )
     assert hasattr(json.loads(result.output), "context") is False
