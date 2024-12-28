@@ -34,6 +34,24 @@ MOCK_GET_SPACE = "atlassian.Confluence.get_space"
 PYPROJECT_TOML = "pyproject.toml"
 DOT_COVERAGE = ".coverage"
 
+EXPECTED_TOOLS = [
+    "starbridge_claude_health",
+    "starbridge_claude_info",
+    "starbridge_claude_restart",
+    "starbridge_confluence_health",
+    "starbridge_confluence_info",
+    "starbridge_confluence_page_create",
+    "starbridge_confluence_page_delete",
+    "starbridge_confluence_page_get",
+    "starbridge_confluence_page_list",
+    "starbridge_confluence_page_update",
+    "starbridge_confluence_space_list",
+    "starbridge_hello_health",
+    "starbridge_hello_hello",
+    "starbridge_hello_info",
+    "starbridge_hello_pdf",
+]
+
 
 @pytest.fixture
 def runner():
@@ -63,23 +81,7 @@ async def test_mcp_server_list_tools():
     """Test listing of tools from the server"""
 
     # Expected tool names that should be present
-    expected_tools = [
-        "starbridge_claude_health",
-        "starbridge_claude_info",
-        "starbridge_claude_restart",
-        "starbridge_confluence_health",
-        "starbridge_confluence_info",
-        "starbridge_confluence_page_create",
-        "starbridge_confluence_page_delete",
-        "starbridge_confluence_page_get",
-        "starbridge_confluence_page_list",
-        "starbridge_confluence_page_update",
-        "starbridge_confluence_space_list",
-        "starbridge_hello_health",
-        "starbridge_hello_hello",
-        "starbridge_hello_info",
-        "starbridge_hello_pdf",
-    ]
+    expected_tools = EXPECTED_TOOLS.copy()
     if bridge:
         expected_tools.append("starbridge_hello_bridge")
 
@@ -101,24 +103,7 @@ async def test_mcp_server_list_tools():
 @pytest.mark.asyncio
 async def test_mcp_server_list_tools_sse():
     """Test listing of tools from the server in sse mode"""
-    expected_tools = [
-        "starbridge_claude_health",
-        "starbridge_claude_info",
-        "starbridge_claude_restart",
-        "starbridge_confluence_health",
-        "starbridge_confluence_info",
-        "starbridge_confluence_page_create",
-        "starbridge_confluence_page_delete",
-        "starbridge_confluence_page_get",
-        "starbridge_confluence_page_list",
-        "starbridge_confluence_page_update",
-        "starbridge_confluence_space_list",
-        "starbridge_hello_bridge",
-        "starbridge_hello_health",
-        "starbridge_hello_hello",
-        "starbridge_hello_info",
-        "starbridge_hello_pdf",
-    ]
+    expected_tools = EXPECTED_TOOLS.copy()
 
     # Start the server in SSE mode
     env = os.environ.copy()

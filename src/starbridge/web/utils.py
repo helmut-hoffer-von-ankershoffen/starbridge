@@ -128,7 +128,7 @@ async def get_additional_context(
                 if response.status_code == 200:
                     llms_txt = response.text
             except HTTPError:
-                logger.warn(f"Failed to fetch llms-full.txt {llms_full_txt_url}")
+                logger.warning(f"Failed to fetch llms-full.txt {llms_full_txt_url}")
         if llms_txt is None:
             llms_txt_url = _get_llms_txt_url(url, False)
             try:
@@ -143,7 +143,7 @@ async def get_additional_context(
                 if response.status_code == 200:
                     llms_txt = response.text
             except HTTPError:
-                logger.warn(f"Failed to fetch llms.txt {llms_txt_url}")
+                logger.warning(f"Failed to fetch llms.txt {llms_txt_url}")
         if llms_txt:
             return {"llms_txt": llms_txt}
     return {}

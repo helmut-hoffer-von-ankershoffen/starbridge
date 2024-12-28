@@ -147,7 +147,7 @@ def test_web_cli_get_french(runner):
     assert result.exit_code == 0
 
 
-def test_web_cli_get_additional_context(runner):
+def test_web_cli_get_additional_context_llms_text(runner):
     """Check getting additional context."""
 
     result = runner.invoke(
@@ -161,10 +161,30 @@ def test_web_cli_get_additional_context(runner):
         ],
     )
     assert "Get Api Key" in json.loads(result.output)["context"]["llms_txt"]
+    assert len(json.loads(result.output)["context"]["llms_txt"]) < 400 * 1024
     assert result.exit_code == 0
 
 
-def test_web_cli_get_no_additional_context(runner):
+def test_web_cli_get_additional_context_llms_full_txt(runner):
+    """Check getting additional context."""
+
+    result = runner.invoke(
+        cli,
+        [
+            "web",
+            "get",
+            "--format",
+            "text",
+            "--llms-full-txt",
+            "https://docs.anthropic.com/",
+        ],
+    )
+    assert "Get Api Key" in json.loads(result.output)["context"]["llms_txt"]
+    assert len(json.loads(result.output)["context"]["llms_txt"]) > 400 * 1024
+    assert result.exit_code == 0
+
+
+def test_web_cli_get_additional_context_not(runner):
     """Check not getting additional content."""
 
     result = runner.invoke(

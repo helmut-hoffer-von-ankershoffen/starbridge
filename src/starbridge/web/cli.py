@@ -51,11 +51,23 @@ def get(
             help="include additional context in the response",
         ),
     ] = True,
+    llms_full_txt: Annotated[
+        bool,
+        typer.Option(
+            help="provide llms-full.txt in contexts",
+        ),
+    ] = False,
 ) -> None:
     """Fetch content from the world wide web via HTTP GET."""
     try:
         rtn = asyncio.run(
-            Service().get(url, format, accept_language, additional_context)
+            Service().get(
+                url=url,
+                format=format,
+                accept_language=accept_language,
+                additional_context=additional_context,
+                llms_full_txt=llms_full_txt,
+            )
         )
         if format is Format.bytes:
             console.print(rtn)

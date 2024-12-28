@@ -45,6 +45,7 @@ class Service(MCPBaseService):
         format: Format = Format.markdown,
         accept_language: str = "en-US,en;q=0.9,de;q=0.8",
         additional_context: bool = True,
+        llms_full_txt: bool = False,
         context: MCPContext | None = None,
     ) -> dict[str, str | bytes]:
         """Fetch page from the world wide web via HTTP GET.
@@ -63,6 +64,7 @@ class Service(MCPBaseService):
             accept_language (str, optional): Accept-Language header to send as part of the get request:
                 - The assistant can prompt the user for the language preferred, and set this header accordingly.
             additional_context (bool, optional): Whether to include additional context in the response. Defaults to True.
+            llms_full_txt (bool, optional): Whether to include llms-full.txt in additional context. Defaults to False.
             context (MCPContext | None, optional): Context object for request tracking. Defaults to None.
 
         Returns:
@@ -78,7 +80,7 @@ class Service(MCPBaseService):
             ValueError: If an invalid format was passed
         """
         async with httpx.AsyncClient() as client:
-            await ensure_allowed_to_crawl(url, self._settings.user_agent)
+            await ensure_allowed_to_crawl(url=url, user_agent=self._settings.user_agent)
             response = await client.get(
                 str(url),
                 headers={
@@ -108,7 +110,10 @@ class Service(MCPBaseService):
 
             if additional_context:
                 _context = await get_additional_context(
-                    url, self._settings.user_agent, accept_language
+                    url=url,
+                    user_agent=self._settings.user_agent,
+                    accept_language=accept_language,
+                    full=llms_full_txt,
                 )
                 if _context:
                     rtn["context"] = _context
