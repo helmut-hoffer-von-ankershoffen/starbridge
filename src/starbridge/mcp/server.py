@@ -196,12 +196,14 @@ class MCPServer:
             if arguments:
                 arguments = arguments.copy()
                 arguments.pop("context", None)
-                return MCPServer._marshal_result(
-                    method(service_instance, **arguments, context=self.get_context())
+                result = method(
+                    service_instance, **arguments, context=self.get_context()
                 )
-            return MCPServer._marshal_result(
-                method(service_instance, context=self.get_context())
-            )
+            else:
+                result = method(service_instance, context=self.get_context())
+            if asyncio.iscoroutine(result):
+                result = await result
+            return MCPServer._marshal_result(result)
 
         raise ValueError(f"Unknown tool: {name}")
 

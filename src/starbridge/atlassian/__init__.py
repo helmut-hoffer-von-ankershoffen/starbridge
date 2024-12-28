@@ -1,5 +1,5 @@
-from .models import AtlassianSettings
+from .settings import Settings
 
 __all__ = [
-    "AtlassianSettings",
+    "Settings",
 ]

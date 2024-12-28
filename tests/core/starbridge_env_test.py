@@ -72,7 +72,11 @@ def test_dot_env(runner):
     assert result.exit_code == 0
 
     # Read .env, remove STARBRIDGE_ATLASSIAN_URL line and write back
-    env_path = Path(__file__).parent.parent / ".env"
+    env_path = Path(__file__).parent.parent.parent / ".env"
+    # Backup .env using Pathlib
+    bak_path = Path(__file__).parent.parent.parent / ".env.bak"
+    Path(bak_path).write_text(Path(env_path).read_text())
+
     with open(env_path) as f:
         lines = f.readlines()
 
@@ -83,5 +87,6 @@ def test_dot_env(runner):
     os.environ.pop("STARBRIDGE_ATLASSIAN_URL", None)
 
     result = runner.invoke(cli, ["health"])
+    Path(env_path).write_text(Path(bak_path).read_text())
     assert result.exit_code == 78
     assert "STARBRIDGE_ATLASSIAN_URL: Field required" in result.output

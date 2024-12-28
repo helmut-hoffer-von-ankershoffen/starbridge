@@ -7,7 +7,7 @@ import mcp.types as types
 from atlassian import Confluence
 from pydantic import AnyUrl
 
-from starbridge.atlassian.models import AtlassianSettings
+from starbridge.atlassian.settings import Settings
 from starbridge.mcp import (
     MCPBaseService,
     MCPContext,
@@ -17,7 +17,6 @@ from starbridge.mcp import (
     mcp_tool,
 )
 from starbridge.utils import Health, get_logger
-from starbridge.utils.settings import load_settings
 
 logger = get_logger(__name__)
 
@@ -25,12 +24,14 @@ logger = get_logger(__name__)
 class Service(MCPBaseService):
     """Service class for Confluence operations."""
 
+    _settings: Settings
+
     def __init__(self):
-        self._atlassian_settings = load_settings(AtlassianSettings)
+        super().__init__(Settings)
         self._api = Confluence(
-            url=str(self._atlassian_settings.url),
-            username=self._atlassian_settings.email_address,
-            password=self._atlassian_settings.api_token.get_secret_value(),
+            url=str(self._settings.url),
+            username=self._settings.email_address,
+            password=self._settings.api_token.get_secret_value(),
             cloud=True,
         )
 
@@ -53,9 +54,9 @@ class Service(MCPBaseService):
     def info(self, context: MCPContext | None = None):
         """Info about Confluence environment"""
         return {
-            "url": self._atlassian_settings.url,
-            "email_address": self._atlassian_settings.email_address,
-            "api_token": f"MASKED ({len(self._atlassian_settings.api_token)} characters)",
+            "url": self._settings.url,
+            "email_address": self._settings.email_address,
+            "api_token": f"MASKED ({len(self._settings.api_token)} characters)",
         }
 
     @mcp_resource_iterator(type="space")

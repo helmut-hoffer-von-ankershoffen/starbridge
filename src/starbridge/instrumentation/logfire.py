@@ -1,3 +1,5 @@
+from typing import Annotated
+
 import logfire
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings, SettingsConfigDict
@@ -15,17 +17,21 @@ class LogfireSettings(BaseSettings):
         env_file_encoding="utf-8",
     )
 
-    token: SecretStr | None = Field(
-        description="Logfire token", examples=["YOUR_TOKEN"], default=None
-    )
-    environment: str = Field(
-        description="Environment name",
-        examples=["development", "production"],
-        default="production",
-    )
-    instrument_mcp_enabled: bool = Field(
-        description="Enable MCP instrumentation", default=True
-    )
+    token: Annotated[
+        SecretStr | None,
+        Field(description="Logfire token", examples=["YOUR_TOKEN"], default=None),
+    ]
+    environment: Annotated[
+        str,
+        Field(
+            description="Environment name",
+            examples=["development", "production"],
+            default="production",
+        ),
+    ]
+    instrument_mcp_enabled: Annotated[
+        bool, Field(description="Enable MCP instrumentation", default=True)
+    ]
 
 
 def logfire_initialize():

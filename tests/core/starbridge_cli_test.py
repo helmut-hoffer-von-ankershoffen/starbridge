@@ -52,6 +52,7 @@ def test_cli_create_dot_env(runner, tmp_path):
             "1\n"  # log to file
             "test.log\n"  # log file
             "0\n"  # log to console
+            "TEST_USER_AGENT\n"  # custom user agent
         )
         result = runner.invoke(cli, ["create-dot-env"], input=inputs)
         assert result.exit_code == 0
@@ -66,6 +67,7 @@ def test_cli_create_dot_env(runner, tmp_path):
         assert "STARBRIDGE_LOGGING_LOG_FILE_ENABLED=1" in dot_env
         assert "STARBRIDGE_LOGGING_LOG_FILE_NAME=test.log" in dot_env
         assert "STARBRIDGE_LOGGING_LOG_CONSOLE_ENABLED=0" in dot_env
+        assert "STARBRIDGE_WEB_USER_AGENT=TEST_USER_AGENT" in dot_env
 
 
 def test_cli_install(runner, tmp_path):
@@ -84,6 +86,7 @@ def test_cli_install(runner, tmp_path):
             "1\n"  # log to file
             "test.log\n"  # log file
             "0\n"  # log to console
+            "TEST_USER_AGENT\n"  # custom user agent
         )
         result = runner.invoke(cli, ["install", "--no-restart-claude"], input=inputs)
         assert result.exit_code == 0

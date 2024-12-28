@@ -1,5 +1,5 @@
 import logging
-from typing import Literal
+from typing import Annotated, Literal
 
 import click
 import logfire
@@ -27,16 +27,19 @@ class LoggingSettings(BaseSettings):
         env_file_encoding="utf-8",
     )
 
-    loglevel: Literal["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"] = Field(
-        description="Logging level", default="INFO"
-    )
-    log_file_enabled: bool = Field(description="Enable logging to file", default=False)
-    log_file_name: str = Field(
-        description="Name of the log file", default="starbridge.log"
-    )
-    log_console_enabled: bool = Field(
-        description="Enable logging to console", default=False
-    )
+    loglevel: Annotated[
+        Literal["CRITICAL", "ERROR", "WARNING", "INFO", "DEBUG"],
+        Field(description="Logging level", default="INFO"),
+    ]
+    log_file_enabled: Annotated[
+        bool, Field(description="Enable logging to file", default=False)
+    ]
+    log_file_name: Annotated[
+        str, Field(description="Name of the log file", default="starbridge.log")
+    ]
+    log_console_enabled: Annotated[
+        bool, Field(description="Enable logging to console", default=False)
+    ]
 
 
 settings = load_settings(LoggingSettings)

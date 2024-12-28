@@ -25,6 +25,9 @@ dependencies = [
     "opentelemetry-instrumentation-requests>=0.50b0",
     "opentelemetry-instrumentation-urllib3>=0.50b0",
     "email-validator>=2.2.0",
+    "beautifulsoup4>=4.12.3",
+    "markdownify>=0.14.1",
+    "protego>=0.3.1",
 ]
 keywords = [
     "anthropic",

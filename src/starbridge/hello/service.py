@@ -1,4 +1,4 @@
-"""Handles Confluence operations."""
+"""Handles Hello operations."""
 
 import base64
 import io

@@ -120,7 +120,7 @@ def test_mcp_resources(mock_get_all_spaces, runner):
 
     result = runner.invoke(cli, ["mcp", "resources"])
     assert result.exit_code == 0
-    assert "7120201709026d2b41448e93bb58d" in result.stdout
+    assert "7120201709026d2b41448e93bb58d" in result.stdout  # pragma: allowlist secret
 
 
 @patch(MOCK_GET_SPACE)
@@ -135,11 +135,11 @@ def test_mcp_resource(mock_get_space, runner):
         [
             "mcp",
             "resource",
-            "starbridge://confluence/space/~7120201709026d2b41448e93bb58d5fa301026",
+            "starbridge://confluence/space/~7120201709026d2b41448e93bb58d5fa301026",  # pragma: allowlist secret
         ],
     )
     assert result.exit_code == 0
-    assert "7120201709026d2b41448e93bb58d" in result.stdout
+    assert "7120201709026d2b41448e93bb58d" in result.stdout  # pragma: allowlist secret
 
 
 def test_mcp_inspector(runner):

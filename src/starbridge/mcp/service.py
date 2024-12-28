@@ -2,13 +2,17 @@ from abc import ABC, abstractmethod
 from collections import defaultdict
 from dataclasses import dataclass
 from inspect import signature
+from typing import TypeVar
 from urllib.parse import urlparse
 
 import mcp.types as types
+from pydantic_settings import BaseSettings
 
 from starbridge.mcp.context import MCPContext
 from starbridge.mcp.models import ResourceMetadata
-from starbridge.utils import Health, description_and_params
+from starbridge.utils import Health, description_and_params, load_settings
+
+T = TypeVar("T", bound=BaseSettings)
 
 
 @dataclass(frozen=True)
@@ -25,6 +29,12 @@ class ResourceType:
 
 class MCPBaseService(ABC):
     """Base class for MCP services."""
+
+    _settings: BaseSettings
+
+    def __init__(self, settings_class: type[T] | None = None):
+        if settings_class is not None:
+            self._settings = self._load_settings(settings_class)
 
     @abstractmethod
     def info(self) -> dict:
@@ -148,3 +158,7 @@ class MCPBaseService(ABC):
             raise ValueError(
                 f"Multiple resource iterators found for type '{meta.type}': {type_map[meta.type]}"
             )
+
+    def _load_settings(self, settings_class: type[T]) -> T:
+        """Load settings from context."""
+        return load_settings(settings_class)
