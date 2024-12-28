@@ -3,7 +3,6 @@ from unittest.mock import patch
 
 import pytest
 from httpx import TimeoutException
-from nox import project
 
 from starbridge import __project_name__
 from starbridge.web import RobotForbiddenException
