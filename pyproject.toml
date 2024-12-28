@@ -136,6 +136,7 @@ dev = [
 
 [tool.ruff]
 target-version = "py311"
+fix = true
 
 [tool.ruff.lint]
 ignore = ["B008", "E501"]

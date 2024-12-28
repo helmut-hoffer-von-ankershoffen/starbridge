@@ -20,7 +20,7 @@
 
 > ⚠️ **WARNING**: This project is currently in pre-alpha phase, i.e. partly functional. Feel free to already watch or star the repository to stay updated on its progress.
 
-Integrates Claude Desktop with Google and Atlassian workspaces.
+Integrates Claude Desktop with the WWW, Atlassian Confluence, and (later on) Google Workspace.
 
 1. **Make Claude a team member**: Makes Claude an informed member of your organisation by accessing your organization's key knowledge resources.
 2. **Integrate research and knowlege management**: Enables your teams to contribute, refine, and maintain your organisation's knowledge resources within Claude - seamlessly integrating research and sharing knowledge.
@@ -31,6 +31,16 @@ Integrates Claude Desktop with Google and Atlassian workspaces.
 * "Create a page about road cycling, focusing on Canyon bikes, in the personal confluence space of Helmut."
 
 ## Setup
+
+```uvx starbridge install``` - that's all.
+
+Prequisites:
+- You are running Mac OS X
+- You already have the uv package manager installed
+- You already have Claude Desktop for Mac OS X installed
+- You don't care for the imaging extra
+
+If you (possibly) need to install homebrew, uv, and care for all extras:
 
 ```shell
 if [[ "$OSTYPE" == "darwin"* ]]; then # Install dependencies for macOS X
@@ -44,10 +54,10 @@ fi
 if ! command -v uvx &> /dev/null; then # Install uv package manager if not present
   curl -LsSf https://astral.sh/uv/install.sh | sh
 fi
-uvx starbridge install # Install starbridge, including configuration and injection into Claude Desktop App
+uvx starbridge install --all-extras # Install starbridge, including configuration and injection into Claude Desktop App
 ```
 
-See [here](DOCKER.md) for running Starbridge in a Docker container.
+Starbridge can be [run within Docker](DOCKER.md).
 
 ## MCP Server
 

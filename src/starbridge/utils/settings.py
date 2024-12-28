@@ -7,7 +7,7 @@ from pathlib import Path
 from typing import Any, TypeVar
 
 from pydantic import SecretStr, ValidationError
-from pydantic_settings import BaseSettings, SettingsConfigDict
+from pydantic_settings import BaseSettings
 from rich.panel import Panel
 from rich.prompt import Prompt
 from rich.text import Text
