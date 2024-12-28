@@ -136,6 +136,7 @@ dev = [
 
 [tool.ruff]
 target-version = "py311"
+preview = true
 fix = true
 
 [tool.ruff.lint]
