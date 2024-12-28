@@ -122,12 +122,10 @@ def test_cli_install(runner, tmp_path):
 
 def test_cli_main_guard():
     env = os.environ.copy()
-    env.update(
-        {
-            "COVERAGE_PROCESS_START": "pyproject.toml",
-            "COVERAGE_FILE": os.getenv("COVERAGE_FILE", ".coverage"),
-        }
-    )
+    env.update({
+        "COVERAGE_PROCESS_START": "pyproject.toml",
+        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", ".coverage"),
+    })
     result = subprocess.run(
         [sys.executable, "-m", "starbridge.cli", "hello", "hello"],
         capture_output=True,
@@ -140,13 +138,11 @@ def test_cli_main_guard():
 
 def test_cli_main_guard_fail():
     env = os.environ.copy()
-    env.update(
-        {
-            "COVERAGE_PROCESS_START": "pyproject.toml",
-            "COVERAGE_FILE": os.getenv("COVERAGE_FILE", ".coverage"),
-            "MOCKS": "starbridge_hello_service_hello_fail",
-        }
-    )
+    env.update({
+        "COVERAGE_PROCESS_START": "pyproject.toml",
+        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", ".coverage"),
+        "MOCKS": "starbridge_hello_service_hello_fail",
+    })
     result = subprocess.run(
         [sys.executable, "-m", "starbridge.cli", "hello", "hello"],
         capture_output=True,

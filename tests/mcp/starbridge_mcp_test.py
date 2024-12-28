@@ -44,12 +44,10 @@ def _server_parameters(mocks: list[str] | None = None) -> StdioServerParameters:
     """Create server parameters with coverage enabled"""
     env = dict(get_default_environment())
     # Add coverage config to subprocess
-    env.update(
-        {
-            "COVERAGE_PROCESS_START": PYPROJECT_TOML,
-            "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
-        }
-    )
+    env.update({
+        "COVERAGE_PROCESS_START": PYPROJECT_TOML,
+        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
+    })
     if (mocks is not None) and mocks:
         env.update({"MOCKS": ",".join(mocks)})
 
@@ -124,13 +122,11 @@ async def test_mcp_server_list_tools_sse():
 
     # Start the server in SSE mode
     env = os.environ.copy()
-    env.update(
-        {
-            "COVERAGE_PROCESS_START": PYPROJECT_TOML,
-            "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
-            "PYTHONPATH": ".",
-        }
-    )
+    env.update({
+        "COVERAGE_PROCESS_START": PYPROJECT_TOML,
+        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
+        "PYTHONPATH": ".",
+    })
 
     process = await asyncio.create_subprocess_exec(
         "uv",
@@ -197,12 +193,10 @@ async def test_mcp_server_list_resources():
 async def test_mcp_server_read_resource():
     """Test getting prompt from server"""
     async with stdio_client(
-        _server_parameters(
-            [
-                MOCK_GET_ALL_SPACES,
-                MOCK_GET_SPACE,
-            ]
-        )
+        _server_parameters([
+            MOCK_GET_ALL_SPACES,
+            MOCK_GET_SPACE,
+        ])
     ) as (
         read,
         write,
@@ -315,13 +309,11 @@ async def test_mcp_server_tool_call_with_pdf():
 def test_mcp_server_sse_terminates(runner):
     """Test if SSE server terminates correctly"""
     env = os.environ.copy()
-    env.update(
-        {
-            "COVERAGE_PROCESS_START": PYPROJECT_TOML,
-            "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
-            "MOCKS": "webbrowser.open",
-        }
-    )
+    env.update({
+        "COVERAGE_PROCESS_START": PYPROJECT_TOML,
+        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
+        "MOCKS": "webbrowser.open",
+    })
 
     process = subprocess.Popen(
         [

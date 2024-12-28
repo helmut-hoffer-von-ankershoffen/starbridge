@@ -144,16 +144,14 @@ def test_mcp_resource(mock_get_space, runner):
 
 def test_mcp_inspector(runner):
     env = os.environ.copy()
-    env.update(
-        {
-            "COVERAGE_PROCESS_START": PYPROJECT_TOML,
-            "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
-            "MOCKS": "webbrowser.open",
-            "MOCK_WEBBROWSER_OPEN": "return_value=None",
-            "CLIENT_PORT": "5174",
-            "SERVER_PORT": "3001",
-        }
-    )
+    env.update({
+        "COVERAGE_PROCESS_START": PYPROJECT_TOML,
+        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
+        "MOCKS": "webbrowser.open",
+        "MOCK_WEBBROWSER_OPEN": "return_value=None",
+        "CLIENT_PORT": "5174",
+        "SERVER_PORT": "3001",
+    })
 
     process = None
     try:

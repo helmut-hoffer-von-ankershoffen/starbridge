@@ -1,7 +1,7 @@
-from enum import Enum
+from enum import StrEnum
 
 
-class Format(str, Enum):
+class Format(StrEnum):
     bytes = "bytes"
     unicode = "unicode"
     html = "html"
