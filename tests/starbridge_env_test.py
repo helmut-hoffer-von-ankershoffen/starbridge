@@ -1,5 +1,6 @@
 import os
 import shutil
+import subprocess
 from pathlib import Path
 from unittest.mock import patch
 
@@ -54,12 +55,13 @@ def test_env_args(runner):
 def test_env_args_fail(runner):
     """Check --env not supported for all commands."""
 
-    result = runner.invoke(
-        cli,
-        ["info", "--env", 'STARBRIDGE_LOG_LEVEL="DEBUG"'],
+    result = subprocess.run(
+        ["starbridge", "info", "--env", 'STARBRIDGE_LOG_LEVEL="DEBUG"'],
+        capture_output=True,
+        text=True,
     )
-    assert "No such option" in result.output
-    assert result.exit_code == 2
+    assert "No such option" in result.stderr
+    assert result.returncode == 2
 
 
 @pytest.mark.sequential
