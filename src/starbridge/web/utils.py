@@ -120,35 +120,22 @@ def _get_normalized_content_type(response: httpx.Response) -> str:
     content_type = response.headers.get("content-type", "").lower()
     url = str(response.url).lower()
 
-    if "html" in content_type:
+    if "html" in content_type or url.endswith(".html") or url.endswith(".htm"):
         return MimeType.TEXT_HTML
-    if (
-        "markdown" in content_type
-        or ("text" in content_type and url.endswith(".md")) in content_type
-    ):
+    if "markdown" in content_type or url.endswith(".md"):
         return MimeType.TEXT_MARKDWON
-    if "text" in content_type:
+    if "text" in content_type or url.endswith(".txt"):
         return MimeType.TEXT_PLAIN
-    if "pdf" in content_type or (
-        content_type == MimeType.OCTET_STREAM and url.endswith(".pdf")
-    ):
+    if "pdf" in content_type or url.endswith(".pdf"):
         return MimeType.APPLICATION_PDF
-    if MimeType.APPLICATION_MSEXCEL in content_type or (
-        content_type == MimeType.OCTET_STREAM and url.endswith(".xls")
-    ):
-        return MimeType.APPLICATION_MSEXCEL
-    if MimeType.APPLICATION_OPENXML_EXCEL in content_type or (
-        content_type == MimeType.OCTET_STREAM and url.endswith(".xlsx")
-    ):
-        return MimeType.APPLICATION_OPENXML_EXCEL
-    if MimeType.APPLICATION_MSWORD in content_type or (
-        content_type == MimeType.OCTET_STREAM and (url.endswith(".doc"))
-    ):
+    if MimeType.APPLICATION_MSWORD in content_type or url.endswith(".doc"):
         return MimeType.APPLICATION_MSWORD
-    if MimeType.APPLICATION_OPENXML_WORD in content_type or (
-        content_type == MimeType.OCTET_STREAM and (url.endswith(".docx"))
-    ):
+    if MimeType.APPLICATION_OPENXML_WORD in content_type or url.endswith(".docx"):
         return MimeType.APPLICATION_OPENXML_WORD
+    if MimeType.APPLICATION_MSEXCEL in content_type or url.endswith(".xls"):
+        return MimeType.APPLICATION_MSEXCEL
+    if MimeType.APPLICATION_OPENXML_EXCEL in content_type or url.endswith(".xlsx"):
+        return MimeType.APPLICATION_OPENXML_EXCEL
     return content_type
 
 

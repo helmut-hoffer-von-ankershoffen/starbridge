@@ -20,7 +20,7 @@ LLMS_FULL_TXT = "llms-full.txt"
 LLMS_DUMY_CONTENT = "llms content"
 
 
-def test_web_util_ensure_allowed_to_crawl_forbidden_on_timeout():
+def test_web_utils_ensure_allowed_to_crawl_forbidden_on_timeout():
     """Check web info."""
 
     with pytest.raises(RobotForbiddenException):
@@ -29,7 +29,7 @@ def test_web_util_ensure_allowed_to_crawl_forbidden_on_timeout():
             asyncio.run(_ensure_allowed_to_crawl(GET_TEST_URL, __project_name__))
 
 
-def test_web_util_ensure_allowed_to_crawl_forbidden_on_401():
+def test_web_utils_ensure_allowed_to_crawl_forbidden_on_401():
     """Check web info."""
 
     with pytest.raises(RobotForbiddenException):
@@ -38,7 +38,7 @@ def test_web_util_ensure_allowed_to_crawl_forbidden_on_401():
             asyncio.run(_ensure_allowed_to_crawl(GET_TEST_URL, __project_name__))
 
 
-def test_web_util_ensure_allowed_to_crawl_allowed_on_404():
+def test_web_utils_ensure_allowed_to_crawl_allowed_on_404():
     """Check web info."""
 
     with patch(HTTPX_ASYNC_CLIENT_GET) as mock_get:
@@ -47,7 +47,7 @@ def test_web_util_ensure_allowed_to_crawl_allowed_on_404():
         asyncio.run(_ensure_allowed_to_crawl(GET_TEST_URL, __project_name__))
 
 
-def test_web_get_additional_context_success():
+def test_web_utils_get_additional_context_success():
     """Check web info."""
 
     context = asyncio.run(
@@ -56,7 +56,7 @@ def test_web_get_additional_context_success():
     assert LLMS_TXT in context
 
 
-def test_web_get_additional_context_empty_on_404():
+def test_web_utils_get_additional_context_empty_on_404():
     """Check web info."""
 
     with patch(HTTPX_ASYNC_CLIENT_GET) as mock_get:
@@ -68,7 +68,7 @@ def test_web_get_additional_context_empty_on_404():
         assert LLMS_TXT not in context
 
 
-def test_web_get_additional_context_empty_on_timeout():
+def test_web_utils_get_additional_context_empty_on_timeout():
     """Check web info."""
 
     with patch(HTTPX_ASYNC_CLIENT_GET) as mock_get:
@@ -80,7 +80,7 @@ def test_web_get_additional_context_empty_on_timeout():
         assert LLMS_TXT not in context
 
 
-def test_web_get_additional_context_empty_on_full_timeout():
+def test_web_utils_get_additional_context_empty_on_full_timeout():
     """Check web info."""
 
     with patch(HTTPX_ASYNC_CLIENT_GET) as mock_get:
@@ -92,7 +92,7 @@ def test_web_get_additional_context_empty_on_full_timeout():
         assert LLMS_TXT not in context
 
 
-def test_web_get_additional_context_fallback_to_non_full():
+def test_web_utils_get_additional_context_fallback_to_non_full():
     """Check web info."""
 
     class MockResponse:
@@ -114,7 +114,7 @@ def test_web_get_additional_context_fallback_to_non_full():
         assert context[LLMS_TXT] == LLMS_DUMY_CONTENT
 
 
-def test_web_get_additional_context_empty_on():
+def test_web_utils_get_additional_context_empty_on():
     """Check web info."""
 
     class MockResponse:
