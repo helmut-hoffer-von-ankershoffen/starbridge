@@ -1,7 +1,7 @@
 """Handles Hello operations."""
 
 import base64
-import imp
+import importlib
 import io
 import os
 
@@ -37,7 +37,7 @@ class Service(MCPBaseService):
             return "Hallo Welt!"
         return "Hello World!"
 
-    if imp.find_module("cairosvg"):
+    if importlib.util.find_spec("cairosvg"):
 
         @mcp_tool()
         def bridge(self, context: MCPContext | None = None):
