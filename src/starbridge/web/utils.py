@@ -12,9 +12,7 @@ from readabilipy.simple_json import simple_json_from_html_string
 
 from starbridge.utils import get_logger
 
-from .types import RobotForbiddenException
-
-HTML_PARSER = "html.parser"
+from .types import HTML_PARSER, MimeType, RobotForbiddenException
 
 logger = get_logger(__name__)
 
@@ -123,37 +121,34 @@ def _get_normalized_content_type(response: httpx.Response) -> str:
     url = str(response.url).lower()
 
     if "html" in content_type:
-        return "text/html"
-    if "markdown" in content_type:
-        return "text/markdown"
-    if "text" in content_type and url.endswith(".md"):
-        return "text/markdown"
+        return MimeType.TEXT_HTML
+    if (
+        "markdown" in content_type
+        or ("text" in content_type and url.endswith(".md")) in content_type
+    ):
+        return MimeType.TEXT_MARKDWON
     if "text" in content_type:
-        return "text/plain"
+        return MimeType.TEXT_PLAIN
     if "pdf" in content_type or (
-        content_type == "application/octet-stream" and url.endswith(".pdf")
+        content_type == MimeType.OCTET_STREAM and url.endswith(".pdf")
     ):
-        return "application/pdf"
-    if "application/vnd.ms-excel" in content_type or (
-        content_type == "application/octet-stream" and url.endswith(".xls")
+        return MimeType.APPLICATION_PDF
+    if MimeType.APPLICATION_MSEXCEL in content_type or (
+        content_type == MimeType.OCTET_STREAM and url.endswith(".xls")
     ):
-        return "application/vnd.ms-excel"
-    if (
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-        in content_type
-        or (content_type == "application/octet-stream" and url.endswith(".xlsx"))
+        return MimeType.APPLICATION_MSEXCEL
+    if MimeType.APPLICATION_OPENXML_EXCEL in content_type or (
+        content_type == MimeType.OCTET_STREAM and url.endswith(".xlsx")
     ):
-        return "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    if "application/msword" in content_type or (
-        content_type == "application/octet-stream" and (url.endswith(".doc"))
+        return MimeType.APPLICATION_OPENXML_EXCEL
+    if MimeType.APPLICATION_MSWORD in content_type or (
+        content_type == MimeType.OCTET_STREAM and (url.endswith(".doc"))
     ):
-        return "application/msword"
-    if (
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-        in content_type
-        or (content_type == "application/octet-stream" and (url.endswith(".docx")))
+        return MimeType.APPLICATION_MSWORD
+    if MimeType.APPLICATION_OPENXML_WORD in content_type or (
+        content_type == MimeType.OCTET_STREAM and (url.endswith(".docx"))
     ):
-        return "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        return MimeType.APPLICATION_OPENXML_WORD
     return content_type
 
 
@@ -203,41 +198,45 @@ def transform_content(
 
     if transform_to_markdown:
         match content_type:
-            case "text/html":
+            case MimeType.TEXT_HTML:
                 return {
                     "url": str(response.url),
-                    "type": "text/markdown",
+                    "type": MimeType.TEXT_MARKDWON,
                     "content": _get_markdown_from_html(response.text),
                 }
-            case "application/pdf":
+            case MimeType.APPLICATION_PDF:
                 md = _get_markdown_from_pdf(response)
                 if md:
                     return {
                         "url": str(response.url),
-                        "type": "text/markdown",
+                        "type": MimeType.TEXT_MARKDWON,
                         "content": md,
                     }
-            case (
-                "application/msword"
-                | "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-            ):
+            case MimeType.APPLICATION_MSWORD | MimeType.APPLICATION_OPENXML_WORD:
                 md = _get_markdown_from_word(response)
                 if md:
                     return {
                         "url": str(response.url),
-                        "type": "text/markdown",
+                        "type": MimeType.TEXT_MARKDWON,
                         "content": md,
                     }
-            case "application/vnd.ms-excel":
+            case MimeType.APPLICATION_MSEXCEL | MimeType.APPLICATION_OPENXML_EXCEL:
                 md = _get_markdown_from_excel(response)
                 if md:
                     return {
                         "url": str(response.url),
-                        "type": "text/markdown",
+                        "type": MimeType.TEXT_MARKDWON,
                         "content": md,
                     }
 
-    if "text/plain" or "text/html" or "text/plain" in content_type:
+    if any(
+        mime_type in content_type
+        for mime_type in [
+            MimeType.TEXT_PLAIN,
+            MimeType.TEXT_MARKDWON,
+            MimeType.TEXT_HTML,
+        ]
+    ):
         return {
             "url": str(response.url),
             "type": content_type,
@@ -291,9 +290,9 @@ def extract_links_from_response(
     """Extract links from HTML content."""
 
     match _get_normalized_content_type(response):
-        case "text/html":
+        case MimeType.TEXT_HTML:
             return _extract_links_from_html(response.text, str(response.url))
-        case "text/markdown":
+        case MimeType.TEXT_MARKDWON:
             return _extract_links_from_html(
                 markdown.markdown(response.text), str(response.url)
             )

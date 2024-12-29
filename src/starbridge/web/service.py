@@ -14,8 +14,6 @@ from .utils import (
 
 logger = get_logger(__name__)
 
-HTML_PARSER = "html.parser"
-
 
 class Service(MCPBaseService):
     """Service class for web operations."""
