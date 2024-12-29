@@ -38,7 +38,7 @@ async def get_respectfully(
     respect_robots_txt: bool = True,
 ) -> httpx.Response:
     """Fetch URL with proper headers and robot.txt checking."""
-    async with httpx.AsyncClient() as client:
+    async with AsyncClient() as client:
         if respect_robots_txt:
             await _ensure_allowed_to_crawl(url=url, user_agent=user_agent)
 
@@ -117,25 +117,35 @@ async def _ensure_allowed_to_crawl(url: str, user_agent: str, timeout: int = 5) 
 
 def _get_normalized_content_type(response: httpx.Response) -> str:
     """Get the normalized content type from the response."""
-    content_type = response.headers.get("content-type", "").lower()
-    url = str(response.url).lower()
 
-    if "html" in content_type or url.endswith(".html") or url.endswith(".htm"):
-        return MimeType.TEXT_HTML
-    if "markdown" in content_type or url.endswith(".md"):
-        return MimeType.TEXT_MARKDWON
-    if "text" in content_type or url.endswith(".txt"):
-        return MimeType.TEXT_PLAIN
-    if "pdf" in content_type or url.endswith(".pdf"):
-        return MimeType.APPLICATION_PDF
-    if MimeType.APPLICATION_MSWORD in content_type or url.endswith(".doc"):
-        return MimeType.APPLICATION_MSWORD
-    if MimeType.APPLICATION_OPENXML_WORD in content_type or url.endswith(".docx"):
-        return MimeType.APPLICATION_OPENXML_WORD
-    if MimeType.APPLICATION_MSEXCEL in content_type or url.endswith(".xls"):
-        return MimeType.APPLICATION_MSEXCEL
-    if MimeType.APPLICATION_OPENXML_EXCEL in content_type or url.endswith(".xlsx"):
-        return MimeType.APPLICATION_OPENXML_EXCEL
+    content_type_mapping = {
+        "html": MimeType.TEXT_HTML,
+        "markdown": MimeType.TEXT_MARKDWON,
+        "text": MimeType.TEXT_PLAIN,
+        "pdf": MimeType.APPLICATION_PDF,
+        MimeType.APPLICATION_OPENXML_WORD: MimeType.APPLICATION_OPENXML_WORD,
+        MimeType.APPLICATION_OPENXML_EXCEL: MimeType.APPLICATION_OPENXML_EXCEL,
+    }
+
+    extension_mapping = {
+        (".html", ".htm"): MimeType.TEXT_HTML,
+        (".md",): MimeType.TEXT_MARKDWON,
+        (".txt",): MimeType.TEXT_PLAIN,
+        (".pdf",): MimeType.APPLICATION_PDF,
+        (".docx",): MimeType.APPLICATION_OPENXML_WORD,
+        (".xlsx",): MimeType.APPLICATION_OPENXML_EXCEL,
+    }
+
+    content_type = response.headers.get("content-type", "").lower()
+    for key, mime_type in content_type_mapping.items():
+        if key in content_type:
+            return mime_type
+
+    url = str(response.url).lower()
+    for extensions, mime_type in extension_mapping.items():
+        if any(url.endswith(ext) for ext in extensions):
+            return mime_type
+
     return content_type
 
 
@@ -199,7 +209,7 @@ def transform_content(
                         "type": MimeType.TEXT_MARKDWON,
                         "content": md,
                     }
-            case MimeType.APPLICATION_MSWORD | MimeType.APPLICATION_OPENXML_WORD:
+            case MimeType.APPLICATION_OPENXML_WORD:
                 md = _get_markdown_from_word(response)
                 if md:
                     return {
@@ -207,7 +217,7 @@ def transform_content(
                         "type": MimeType.TEXT_MARKDWON,
                         "content": md,
                     }
-            case MimeType.APPLICATION_MSEXCEL | MimeType.APPLICATION_OPENXML_EXCEL:
+            case MimeType.APPLICATION_OPENXML_EXCEL:
                 md = _get_markdown_from_excel(response)
                 if md:
                     return {

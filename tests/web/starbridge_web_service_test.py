@@ -1,8 +1,15 @@
 import asyncio
+from unittest.mock import patch
 
 import pytest
 
-from starbridge.web import RobotForbiddenException
+from starbridge.web import RobotForbiddenException, Service
+
+GET_TEST_TEXT_URL = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/raw/refs/heads/main/tests/fixtures/starbridge.txt"
+GET_TEST_MARKDOWN_URL = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/raw/refs/heads/main/tests/fixtures/starbridge.md"
+GET_TEST_PDF_URL = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/raw/refs/heads/main/tests/fixtures/starbridge.pdf"
+GET_TEST_WORD_URL = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/raw/refs/heads/main/tests/fixtures/starbridge.docx"
+GET_TEST_EXCEL_URL = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/raw/refs/heads/main/tests/fixtures/starbridge.xlsx"
 
 
 def test_web_service_get_forbidden() -> None:
@@ -12,3 +19,73 @@ def test_web_service_get_forbidden() -> None:
 
     with pytest.raises(RobotForbiddenException):
         asyncio.run(Service().get("https://github.com/search/advanced"))
+
+
+@patch(
+    "starbridge.web.utils._ensure_allowed_to_crawl",
+    return_value=None,
+)
+@pytest.mark.asyncio
+async def test_web_service_get_pdf(runner):
+    """Check getting content from the web as markdown."""
+
+    result = await Service().get(
+        url=GET_TEST_PDF_URL,
+    )
+    assert "Hello World" in result["resource"]["content"]
+
+
+@patch(
+    "starbridge.web.utils._ensure_allowed_to_crawl",
+    return_value=None,
+)
+@pytest.mark.asyncio
+async def test_web_service_get_word(runner):
+    """Check getting content from the web as markdown."""
+
+    result = await Service().get(
+        url=GET_TEST_WORD_URL,
+    )
+    assert "# Headline" in result["resource"]["content"]
+
+
+@patch(
+    "starbridge.web.utils._ensure_allowed_to_crawl",
+    return_value=None,
+)
+@pytest.mark.asyncio
+async def test_web_service_get_excel(runner):
+    """Check getting content from the web as markdown."""
+
+    result = await Service().get(
+        url=GET_TEST_EXCEL_URL,
+    )
+    assert "Starbridge" in result["resource"]["content"]
+
+
+@patch(
+    "starbridge.web.utils._ensure_allowed_to_crawl",
+    return_value=None,
+)
+@pytest.mark.asyncio
+async def test_web_service_get_text(runner):
+    """Check getting content from the web as markdown."""
+
+    result = await Service().get(
+        url=GET_TEST_TEXT_URL,
+    )
+    assert "Lorem Ipsum" in result["resource"]["content"]
+
+
+@patch(
+    "starbridge.web.utils._ensure_allowed_to_crawl",
+    return_value=None,
+)
+@pytest.mark.asyncio
+async def test_web_service_get_markdown(runner):
+    """Check getting content from the web as markdown."""
+
+    result = await Service().get(
+        url=GET_TEST_MARKDOWN_URL,
+    )
+    assert "Lorem Ipsum" in result["resource"]["content"]

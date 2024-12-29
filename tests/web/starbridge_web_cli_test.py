@@ -7,7 +7,7 @@ from typer.testing import CliRunner
 
 from starbridge.cli import cli
 
-GET_TEST_URL = "https://helmuthva.gitbook.io/starbridge"
+GET_TEST_HTML_URL = "https://helmuthva.gitbook.io/starbridge"
 GET_LLMS_TXT_URL = "https://docs.anthropic.com"
 
 
@@ -41,6 +41,23 @@ def test_web_cli_health_not_connected(mock_head, runner):
     assert result.exit_code == 0
 
 
+@patch("httpx.AsyncClient.get")
+def test_web_cli_get_timeouts(mock_get, runner):
+    """Check getting content fails."""
+    mock_get.side_effect = requests.exceptions.Timeout()
+
+    result = runner.invoke(
+        cli,
+        [
+            "web",
+            "get",
+            GET_TEST_HTML_URL,
+        ],
+    )
+    assert "Request failed" in result.output
+    assert result.exit_code == 1
+
+
 def test_web_cli_get_html(runner):
     """Check getting content from the web as html encoded in unicode."""
 
@@ -50,7 +67,7 @@ def test_web_cli_get_html(runner):
             "web",
             "get",
             "--no-transform-to-markdown",
-            GET_TEST_URL,
+            GET_TEST_HTML_URL,
         ],
     )
     assert json.loads(result.output)["resource"]["content"].startswith(
@@ -59,7 +76,7 @@ def test_web_cli_get_html(runner):
     assert result.exit_code == 0
 
 
-def test_web_cli_get_markdown(runner):
+def test_web_cli_get_html_to_markdown(runner):
     """Check getting content from the web as markdown."""
 
     result = runner.invoke(
@@ -67,7 +84,7 @@ def test_web_cli_get_markdown(runner):
         [
             "web",
             "get",
-            GET_TEST_URL,
+            GET_TEST_HTML_URL,
         ],
     )
     assert "README | Starbridge" in json.loads(result.output)["resource"]["content"]
@@ -152,21 +169,4 @@ def test_web_cli_get_forbidden(runner):
         ],
     )
     assert "robots.txt disallows crawling" in result.output
-    assert result.exit_code == 1
-
-
-@patch("httpx.AsyncClient.get")
-def test_web_cli_get_timeouts(mock_get, runner):
-    """Check getting content fails."""
-    mock_get.side_effect = requests.exceptions.Timeout()
-
-    result = runner.invoke(
-        cli,
-        [
-            "web",
-            "get",
-            GET_TEST_URL,
-        ],
-    )
-    assert "Request failed" in result.output
     assert result.exit_code == 1
