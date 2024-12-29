@@ -2,6 +2,6 @@
 from .cli import cli
 from .service import Service
 from .settings import Settings
-from .types import Format, RobotForbiddenException
+from .types import RobotForbiddenException
 
-__all__ = ["Service", "cli", "Settings", "Format", "RobotForbiddenException"]
+__all__ = ["Service", "cli", "Settings", "RobotForbiddenException"]

@@ -41,40 +41,6 @@ def test_web_cli_health_not_connected(mock_head, runner):
     assert result.exit_code == 0
 
 
-def test_web_cli_get_bytes(runner):
-    """Check getting content from the web as raw bytes."""
-
-    result = runner.invoke(
-        cli,
-        [
-            "web",
-            "get",
-            "--format",
-            "bytes",
-            GET_TEST_URL,
-        ],
-    )
-    assert "b'<!DOCTYPE html>" in result.output
-    assert result.exit_code == 0
-
-
-def test_web_cli_get_unicode(runner):
-    """Check getting content from the web as unicode encoded text."""
-
-    result = runner.invoke(
-        cli,
-        [
-            "web",
-            "get",
-            "--format",
-            "unicode",
-            GET_TEST_URL,
-        ],
-    )
-    assert json.loads(result.output)["content"].startswith("<!DOCTYPE html>")
-    assert result.exit_code == 0
-
-
 def test_web_cli_get_html(runner):
     """Check getting content from the web as html encoded in unicode."""
 
@@ -83,12 +49,13 @@ def test_web_cli_get_html(runner):
         [
             "web",
             "get",
-            "--format",
-            "html",
+            "--no-transform-to-markdown",
             GET_TEST_URL,
         ],
     )
-    assert json.loads(result.output)["content"].startswith("<!DOCTYPE html>")
+    assert json.loads(result.output)["resource"]["content"].startswith(
+        "<!DOCTYPE html>"
+    )
     assert result.exit_code == 0
 
 
@@ -100,32 +67,10 @@ def test_web_cli_get_markdown(runner):
         [
             "web",
             "get",
-            "--format",
-            "markdown",
             GET_TEST_URL,
         ],
     )
-    assert (
-        "Starbridge[![](https://helmuthva.gitbook.io"
-        in json.loads(result.output)["content"]
-    )
-    assert result.exit_code == 0
-
-
-def test_web_cli_get_text(runner):
-    """Check getting content from the web as plain text."""
-
-    result = runner.invoke(
-        cli,
-        [
-            "web",
-            "get",
-            "--format",
-            "text",
-            GET_TEST_URL,
-        ],
-    )
-    assert json.loads(result.output)["content"].startswith("README | Starbridge")
+    assert "README | Starbridge" in json.loads(result.output)["resource"]["content"]
     assert result.exit_code == 0
 
 
@@ -137,14 +82,12 @@ def test_web_cli_get_french(runner):
         [
             "web",
             "get",
-            "--format",
-            "text",
             "--accept-language",
             "fr_FR",
             "https://www.google.com",
         ],
     )
-    assert "Recherche" in json.loads(result.output)["content"]
+    assert "Recherche" in json.loads(result.output)["resource"]["content"]
     assert result.exit_code == 0
 
 
@@ -156,8 +99,6 @@ def test_web_cli_get_additional_context_llms_text(runner):
         [
             "web",
             "get",
-            "--format",
-            "text",
             GET_LLMS_TXT_URL,
         ],
     )
@@ -174,8 +115,6 @@ def test_web_cli_get_additional_context_llms_full_txt(runner):
         [
             "web",
             "get",
-            "--format",
-            "text",
             "--llms-full-txt",
             GET_LLMS_TXT_URL,
         ],
@@ -193,8 +132,6 @@ def test_web_cli_get_additional_context_not(runner):
         [
             "web",
             "get",
-            "--format",
-            "text",
             "--no-additional-context",
             GET_LLMS_TXT_URL,
         ],
@@ -211,8 +148,6 @@ def test_web_cli_get_forbidden(runner):
         [
             "web",
             "get",
-            "--format",
-            "text",
             "https://github.com/search/advanced",
         ],
     )
@@ -230,8 +165,6 @@ def test_web_cli_get_timeouts(mock_get, runner):
         [
             "web",
             "get",
-            "--format",
-            "bytes",
             GET_TEST_URL,
         ],
     )

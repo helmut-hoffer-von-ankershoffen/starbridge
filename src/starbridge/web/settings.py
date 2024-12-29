@@ -25,3 +25,13 @@ class Settings(BaseSettings):
             description="User agent to use when fetching URLs.",
         ),
     ]
+
+    respect_robots_txt: Annotated[
+        bool,
+        Field(
+            default=True,
+            description="Whether to respect robots.txt files when interacting with the web as an agent.",
+        ),
+    ]
+
+    timeout: Annotated[int, Field(default=5, description="Timeout for web requests.")]

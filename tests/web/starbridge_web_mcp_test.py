@@ -44,15 +44,21 @@ def _server_parameters(mocks: list[str] | None = None) -> StdioServerParameters:
 
 @pytest.mark.asyncio
 async def test_web_mcp_tool_get():
-    """Test listing of prompts from the server"""
+    """Test server tool get"""
     async with stdio_client(_server_parameters()) as (read, write):
         async with ClientSession(read, write) as session:
             await session.initialize()
 
             result = await session.call_tool(
-                "starbridge_web_get", {"url": GET_TEST_URL, "format": "markdown"}
+                "starbridge_web_get",
+                {
+                    "url": GET_TEST_URL,
+                    "transform_to_markdown": True,
+                    "extract_links": False,
+                    "additional_context": False,
+                },
             )
             assert len(result.content) == 1
             content = result.content[0]
             assert type(content) is TextContent
-            assert "Starbridge[![](https://helmuthva.gitbook.io" in content.text
+            assert "README | Starbridge" in content.text

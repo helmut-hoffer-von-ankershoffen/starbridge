@@ -28,7 +28,7 @@ def backup_env():
         shutil.move(bak_path, env_path)
 
 
-def test_env_args(runner):
+def test_core_env_args_passed(runner):
     """Check --env can override environment for some commands."""
 
     def mock_asyncio_run(x):
@@ -52,7 +52,7 @@ def test_env_args(runner):
     assert result.exit_code == 42
 
 
-def test_env_args_fail(runner):
+def test_core_env_args_fail(runner):
     """Check --env not supported for all commands."""
 
     result = subprocess.run(
@@ -65,7 +65,7 @@ def test_env_args_fail(runner):
 
 
 @pytest.mark.sequential
-def test_dot_env(runner):
+def test_core_dot_env_validated(runner):
     """Check missing entry in .env leads to validation error."""
 
     result = runner.invoke(cli, ["health"])

@@ -14,7 +14,7 @@ def runner():
 
 
 @patch("starbridge.hello.service.Service.health")
-def test_health_down(mock_health, runner):
+def test_core_cli_health_down(mock_health, runner):
     """Check health output when a service is down."""
     mock_health.return_value = Health(status=Health.Status.DOWN, reason="testing")
     result = runner.invoke(cli, ["health", "--json"])
@@ -30,7 +30,9 @@ def test_health_down(mock_health, runner):
 @patch("starbridge.claude.service.Service.is_installed")
 @patch("starbridge.claude.service.Service.is_running")
 @patch("starbridge.confluence.service.Service.space_list")
-def test_health_all_up(mock_space_list, mock_is_running, mock_is_installed, runner):
+def test_core_cli_health_all_up(
+    mock_space_list, mock_is_running, mock_is_installed, runner
+):
     """Check health when all services are up."""
     mock_is_installed.return_value = True
     mock_is_running.return_value = True

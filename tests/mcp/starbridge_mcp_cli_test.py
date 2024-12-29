@@ -20,7 +20,7 @@ def runner():
     return CliRunner()
 
 
-def test_mcp_services(runner):
+def test_mcp_cli_services(runner):
     """Check available services."""
     result = runner.invoke(cli, ["mcp", "services"])
     assert result.exit_code == 0
@@ -36,7 +36,7 @@ def test_mcp_services(runner):
         assert service in result.stdout
 
 
-def test_mcp_tools(runner):
+def test_mcp_cli_tools(runner):
     """Check available tools."""
     result = runner.invoke(cli, ["mcp", "tools"])
     assert result.exit_code == 0
@@ -66,7 +66,7 @@ def test_mcp_tools(runner):
         assert f"name='{tool}'" in output
 
 
-def test_mcp_tool(runner):
+def test_mcp_cli_tool(runner):
     """Check a tool."""
     result = runner.invoke(
         cli, ["mcp", "tool", "starbridge_hello_hello", "--arguments", "locale=de_DE"]
@@ -75,7 +75,7 @@ def test_mcp_tool(runner):
     assert "Hallo Welt!" in result.stdout
 
 
-def test_mcp_prompts(runner):
+def test_mcp_cli_prompts(runner):
     """Check available tools."""
     result = runner.invoke(cli, ["mcp", "prompts"])
     assert result.exit_code == 0
@@ -83,7 +83,7 @@ def test_mcp_prompts(runner):
 
 
 @patch(MOCK_GET_ALL_SPACES)
-def test_mcp_prompt(mock_get_all_spaces, runner):
+def test_mcp_cli_prompt(mock_get_all_spaces, runner):
     """Check available resources."""
     # Mock the response data that would come from get_all_spaces
     with Path("tests/fixtures/get_all_spaces.json").open() as f:
@@ -104,7 +104,7 @@ def test_mcp_prompt(mock_get_all_spaces, runner):
     assert "details" in result.stdout
 
 
-def test_mcp_resource_types(runner):
+def test_mcp_cli_resource_types(runner):
     """Check available resources."""
     result = runner.invoke(cli, ["mcp", "resource-types"])
     assert result.exit_code == 0
@@ -112,7 +112,7 @@ def test_mcp_resource_types(runner):
 
 
 @patch(MOCK_GET_ALL_SPACES)
-def test_mcp_resources(mock_get_all_spaces, runner):
+def test_mcp_cli_resources(mock_get_all_spaces, runner):
     """Check available resources."""
     # Mock the response data that would come from get_all_spaces
     with Path("tests/fixtures/get_all_spaces.json").open() as f:
@@ -124,7 +124,7 @@ def test_mcp_resources(mock_get_all_spaces, runner):
 
 
 @patch(MOCK_GET_SPACE)
-def test_mcp_resource(mock_get_space, runner):
+def test_mcp_cli_resource(mock_get_space, runner):
     """Read a resource."""
     # Mock the response data that would come from get_all_spaces
     with Path("tests/fixtures/get_space.json").open() as f:
@@ -142,7 +142,7 @@ def test_mcp_resource(mock_get_space, runner):
     assert "7120201709026d2b41448e93bb58d" in result.stdout  # pragma: allowlist secret
 
 
-def test_mcp_inspector(runner):
+def test_mcp_cli_inspector(runner):
     env = os.environ.copy()
     env.update({
         "COVERAGE_PROCESS_START": PYPROJECT_TOML,

@@ -28,6 +28,10 @@ dependencies = [
     "beautifulsoup4>=4.12.3",
     "markdownify>=0.14.1",
     "protego>=0.3.1",
+    "strip-markdown>=1.3",
+    "markdown>=3.7",
+    "readabilipy>=0.3.0",
+    "markitdown>=0.0.1a3",
 ]
 keywords = [
     "anthropic",
@@ -155,7 +159,7 @@ docstring-code-format = true
 
 
 [tool.pytest.ini_options]
-addopts = "-vv --cov=starbridge --cov-report=term-missing --cov-report=xml:coverage.xml --cov-report=html:coverage_html"
+addopts = "-v --cov=starbridge --cov-report=term-missing --cov-report=xml:coverage.xml --cov-report=html:coverage_html"
 testpaths = ["tests"]
 python_files = ["*_test.py"]
 asyncio_mode = "auto"

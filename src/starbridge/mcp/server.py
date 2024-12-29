@@ -82,7 +82,10 @@ class MCPServer:
     async def resource_list(self) -> list[types.Resource]:
         resources = []
         for service in self._services:
-            resources.extend(service.resource_list(context=self.get_context()))
+            result = service.resource_list(context=self.get_context())
+            if asyncio.iscoroutine(result):
+                result = await result
+            resources.extend(result)
         return resources
 
     def _find_resource_handler(self, parsed_uri):
@@ -113,17 +116,20 @@ class MCPServer:
                 parsed.path.split("/")[-1],
                 context=self.get_context(),
             )
+            if asyncio.iscoroutine(result):
+                result = await result
             if result is not None:
                 return result
 
         raise ValueError(f"No service found for URI: {uri}")
 
-    async def prompt_list(
-        self,
-    ) -> list[types.Prompt]:
+    async def prompt_list(self) -> list[types.Prompt]:
         prompts = []
         for service in self._services:
-            prompts.extend(service.prompt_list(context=self.get_context()))
+            result = service.prompt_list(context=self.get_context())
+            if asyncio.iscoroutine(result):
+                result = await result
+            prompts.extend(result)
         return prompts
 
     def _find_prompt_handler(self, name: str):
@@ -155,17 +161,24 @@ class MCPServer:
             if arguments:
                 arguments = arguments.copy()
                 arguments.pop("context", None)
-                return method(service_instance, **arguments, context=self.get_context())
-            return method(service_instance, context=self.get_context())
+                result = method(
+                    service_instance, **arguments, context=self.get_context()
+                )
+            else:
+                result = method(service_instance, context=self.get_context())
+            if asyncio.iscoroutine(result):
+                result = await result
+            return result
 
         return types.GetPromptResult(description=None, messages=[])
 
-    async def tool_list(
-        self,
-    ) -> list[types.Tool]:
+    async def tool_list(self) -> list[types.Tool]:
         tools = []
         for service in self._services:
-            tools.extend(service.tool_list(context=self.get_context()))
+            result = service.tool_list(context=self.get_context())
+            if asyncio.iscoroutine(result):
+                result = await result
+            tools.extend(result)
         return tools
 
     def _find_tool_handler(self, name: str):
@@ -211,7 +224,10 @@ class MCPServer:
         """Get all available resource types across all services."""
         types = set()
         for service in self._services:
-            types.update(service.resource_type_list(context=self.get_context()))
+            result = service.resource_type_list(context=self.get_context())
+            if asyncio.iscoroutine(result):
+                result = await result
+            types.update(result)
         return types
 
     @staticmethod

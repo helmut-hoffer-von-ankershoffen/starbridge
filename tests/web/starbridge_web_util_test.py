@@ -6,7 +6,10 @@ from httpx import TimeoutException
 
 from starbridge import __project_name__
 from starbridge.web import RobotForbiddenException
-from starbridge.web.utils import ensure_allowed_to_crawl, get_additional_context
+from starbridge.web.utils import (
+    _ensure_allowed_to_crawl,
+    get_additional_context_for_url,
+)
 
 GET_TEST_URL = "https://helmuthva.gitbook.io/starbridge"
 HTTPX_ASYNC_CLIENT_GET = "httpx.AsyncClient.get"
@@ -23,7 +26,7 @@ def test_web_util_ensure_allowed_to_crawl_forbidden_on_timeout():
     with pytest.raises(RobotForbiddenException):
         with patch(HTTPX_ASYNC_CLIENT_GET) as mock_get:
             mock_get.side_effect = TimeoutException(TIMEOUT_MESSAGE)
-            asyncio.run(ensure_allowed_to_crawl(GET_TEST_URL, __project_name__))
+            asyncio.run(_ensure_allowed_to_crawl(GET_TEST_URL, __project_name__))
 
 
 def test_web_util_ensure_allowed_to_crawl_forbidden_on_401():
@@ -32,7 +35,7 @@ def test_web_util_ensure_allowed_to_crawl_forbidden_on_401():
     with pytest.raises(RobotForbiddenException):
         with patch(HTTPX_ASYNC_CLIENT_GET) as mock_get:
             mock_get.return_value.status_code = 401
-            asyncio.run(ensure_allowed_to_crawl(GET_TEST_URL, __project_name__))
+            asyncio.run(_ensure_allowed_to_crawl(GET_TEST_URL, __project_name__))
 
 
 def test_web_util_ensure_allowed_to_crawl_allowed_on_404():
@@ -41,13 +44,15 @@ def test_web_util_ensure_allowed_to_crawl_allowed_on_404():
     with patch(HTTPX_ASYNC_CLIENT_GET) as mock_get:
         mock_get.return_value.status_code = 404
         # No exception should be raised
-        asyncio.run(ensure_allowed_to_crawl(GET_TEST_URL, __project_name__))
+        asyncio.run(_ensure_allowed_to_crawl(GET_TEST_URL, __project_name__))
 
 
 def test_web_get_additional_context_success():
     """Check web info."""
 
-    context = asyncio.run(get_additional_context(LLMS_TXT_URL, __project_name__))
+    context = asyncio.run(
+        get_additional_context_for_url(LLMS_TXT_URL, __project_name__)
+    )
     assert LLMS_TXT in context
 
 
@@ -57,7 +62,9 @@ def test_web_get_additional_context_empty_on_404():
     with patch(HTTPX_ASYNC_CLIENT_GET) as mock_get:
         mock_get.return_value.status_code = 404
         # No exception should be raised
-        context = asyncio.run(get_additional_context(LLMS_TXT_URL, __project_name__))
+        context = asyncio.run(
+            get_additional_context_for_url(LLMS_TXT_URL, __project_name__)
+        )
         assert LLMS_TXT not in context
 
 
@@ -67,7 +74,9 @@ def test_web_get_additional_context_empty_on_timeout():
     with patch(HTTPX_ASYNC_CLIENT_GET) as mock_get:
         mock_get.side_effect = TimeoutException(TIMEOUT_MESSAGE)
         # No exception should be raised
-        context = asyncio.run(get_additional_context(LLMS_TXT_URL, __project_name__))
+        context = asyncio.run(
+            get_additional_context_for_url(LLMS_TXT_URL, __project_name__)
+        )
         assert LLMS_TXT not in context
 
 
@@ -78,7 +87,7 @@ def test_web_get_additional_context_empty_on_full_timeout():
         mock_get.side_effect = TimeoutException(TIMEOUT_MESSAGE)
         # No exception should be raised
         context = asyncio.run(
-            get_additional_context(LLMS_TXT_URL, __project_name__, full=True)
+            get_additional_context_for_url(LLMS_TXT_URL, __project_name__, full=True)
         )
         assert LLMS_TXT not in context
 
@@ -99,7 +108,7 @@ def test_web_get_additional_context_fallback_to_non_full():
     with patch(HTTPX_ASYNC_CLIENT_GET) as mock_get:
         mock_get.side_effect = mock_get_side_effect
         context = asyncio.run(
-            get_additional_context(LLMS_TXT_URL, __project_name__, full=True)
+            get_additional_context_for_url(LLMS_TXT_URL, __project_name__, full=True)
         )
         assert LLMS_TXT in context
         assert context[LLMS_TXT] == LLMS_DUMY_CONTENT
@@ -121,7 +130,7 @@ def test_web_get_additional_context_empty_on():
     with patch(HTTPX_ASYNC_CLIENT_GET) as mock_get:
         mock_get.side_effect = mock_get_side_effect
         context = asyncio.run(
-            get_additional_context(LLMS_TXT_URL, __project_name__, full=True)
+            get_additional_context_for_url(LLMS_TXT_URL, __project_name__, full=True)
         )
         assert LLMS_TXT in context
         assert context[LLMS_TXT] == LLMS_DUMY_CONTENT

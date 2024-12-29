@@ -26,7 +26,7 @@ def inspector_service(docker_ip, docker_services):
 
 
 @pytest.mark.xdist_group(name="docker")
-def test_starbridge_docker_inspector_healthy(inspector_service):
+def test_core_docker_inspector_healthy(inspector_service):
     status = 200
     response = requests.get(inspector_service + "/")
 
@@ -35,14 +35,14 @@ def test_starbridge_docker_inspector_healthy(inspector_service):
 
 
 @pytest.mark.xdist_group(name="docker")
-def test_starbridge_docker_cli_help_with_love(docker_services):
+def test_core_docker_cli_help_with_love(docker_services):
     out = docker_services._docker_compose.execute("run starbridge --help ")
     out_str = out.decode("utf-8")
     assert "built with love in Berlin" in out_str
 
 
 @pytest.mark.xdist_group(name="docker")
-def test_starbridge_docker_cli_mcp_services(docker_services):
+def test_core_docker_cli_mcp_services(docker_services):
     out = docker_services._docker_compose.execute("run starbridge mcp services")
     out_str = out.decode("utf-8")
     assert "claude" in out_str
