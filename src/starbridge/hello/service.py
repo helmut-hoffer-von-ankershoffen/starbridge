@@ -1,18 +1,11 @@
 """Handles Hello operations."""
 
 import base64
+import imp
 import io
 import os
 
 from mcp.types import BlobResourceContents, EmbeddedResource
-
-try:
-    from PIL import Image
-
-    _has_imaging = True
-except ImportError:
-    _has_imaging = False
-
 from pydantic import AnyUrl
 
 from starbridge.mcp import MCPBaseService, MCPContext, mcp_tool
@@ -44,12 +37,13 @@ class Service(MCPBaseService):
             return "Hallo Welt!"
         return "Hello World!"
 
-    if _has_imaging:
+    if imp.find_module("cairosvg"):
 
         @mcp_tool()
         def bridge(self, context: MCPContext | None = None):
             """Show image of starbridge"""
             import cairosvg
+            from PIL import Image
 
             return Image.open(
                 io.BytesIO(

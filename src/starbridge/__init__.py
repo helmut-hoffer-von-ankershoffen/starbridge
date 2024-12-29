@@ -31,6 +31,7 @@ def _parse_env_args():
 
 def _amend_library_path():
     """Patch environment variables before any other imports"""
+
     if "DYLD_FALLBACK_LIBRARY_PATH" not in os.environ:
         os.environ["DYLD_FALLBACK_LIBRARY_PATH"] = (
             f"{os.getenv('HOMEBREW_PREFIX', '/opt/homebrew')}/lib/"
