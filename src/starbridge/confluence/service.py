@@ -54,7 +54,7 @@ class Service(MCPBaseService):
     def info(self, context: MCPContext | None = None):
         """Info about Confluence environment"""
         return {
-            "url": self._settings.url,
+            "url": str(self._settings.url),
             "email_address": self._settings.email_address,
             "api_token": f"MASKED ({len(self._settings.api_token)} characters)",
         }
