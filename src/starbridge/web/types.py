@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from pydantic import BaseModel, Field
+from pydantic import AnyHttpUrl, AnyUrl, BaseModel, Field, model_validator
 
 
 class RobotForbiddenException(Exception):
@@ -25,8 +25,8 @@ HTML_PARSER = "html.parser"
 
 
 class Resource(BaseModel):
-    url: Annotated[str, Field(description="Final URL of the resource")]
-    type: Annotated[str, Field(description="MIME type of the resource")]
+    url: Annotated[AnyHttpUrl, Field(description="Final URL of the resource")]
+    type: Annotated[str, Field(description="MIME type of the resource", min_length=4)]
     text: Annotated[
         str | None,
         Field(
@@ -40,24 +40,34 @@ class Resource(BaseModel):
         ),
     ] = None
 
+    @model_validator(mode="after")
+    def check_content_exists(self) -> "Resource":
+        if self.text is None and self.blob is None:
+            raise ValueError("Either text or blob must be provided")
+        if self.text is not None and self.blob is not None:
+            raise ValueError("Only one of text or blob must be provided")
+        return self
+
 
 class LinkTarget(BaseModel):
-    url: Annotated[str, Field(description="URL of the link target")]
+    url: Annotated[AnyUrl, Field(description="URL of the link target")]
     occurences: Annotated[
         int,
         Field(
-            description="Number of occurences of the url as a link target in the resource"
+            description="Number of occurences of the url as a link target in the resource",
+            ge=0,
         ),
     ]
+
     anchor_texts: Annotated[
         list[str],
-        Field(description="Anchor texts of the link target"),
+        Field(description="Anchor texts of the link target", min_length=1),
     ]
 
 
 class Context(BaseModel):
     type: Annotated[str, Field(description="Type of context")]
-    url: Annotated[str, Field(description="URL of the context")]
+    url: Annotated[AnyHttpUrl, Field(description="URL of the context")]
     text: Annotated[str, Field(description="Content of context in markdown format")]
 
 

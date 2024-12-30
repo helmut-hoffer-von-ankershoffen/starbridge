@@ -115,5 +115,5 @@ def test_web_utils_context_fallback_to_non_full():
             (ctx for ctx in context if ctx.type == "llms_txt"), None
         )
         assert llms_txt_context is not None
-        assert llms_txt_context.url == "https://docs.anthropic.com/llms.txt"
+        assert str(llms_txt_context.url) == "https://docs.anthropic.com/llms.txt"
         assert llms_txt_context.text == LLMS_DUMY_CONTENT

@@ -2,6 +2,15 @@
 from .cli import cli
 from .service import Service
 from .settings import Settings
-from .types import GetResult, RobotForbiddenException
+from .types import Context, GetResult, LinkTarget, Resource, RobotForbiddenException
 
-__all__ = ["Service", "cli", "Settings", "RobotForbiddenException", "GetResult"]
+__all__ = [
+    "Service",
+    "cli",
+    "Settings",
+    "RobotForbiddenException",
+    "GetResult",
+    "Resource",
+    "Context",
+    "LinkTarget",
+]
