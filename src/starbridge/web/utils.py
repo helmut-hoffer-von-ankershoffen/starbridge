@@ -12,7 +12,14 @@ from readabilipy.simple_json import simple_json_from_html_string
 
 from starbridge.utils import get_logger
 
-from .types import HTML_PARSER, MimeType, RobotForbiddenException
+from .types import (
+    HTML_PARSER,
+    Context,
+    LinkTarget,
+    MimeType,
+    Resource,
+    RobotForbiddenException,
+)
 
 logger = get_logger(__name__)
 
@@ -189,42 +196,42 @@ def _get_markdown_from_excel(response: httpx.Response) -> str | None:
 
 def transform_content(
     response: httpx.Response, transform_to_markdown: bool = True
-) -> dict[str, str | bytes]:
+) -> Resource:
     """Process response according to requested format."""
     content_type = _get_normalized_content_type(response)
 
     if transform_to_markdown:
         match content_type:
             case MimeType.TEXT_HTML:
-                return {
-                    "url": str(response.url),
-                    "type": MimeType.TEXT_MARKDWON,
-                    "content": _get_markdown_from_html(response.text),
-                }
+                return Resource(
+                    url=str(response.url),
+                    type=MimeType.TEXT_MARKDWON,
+                    text=_get_markdown_from_html(response.text),
+                )
             case MimeType.APPLICATION_PDF:
                 md = _get_markdown_from_pdf(response)
                 if md:
-                    return {
-                        "url": str(response.url),
-                        "type": MimeType.TEXT_MARKDWON,
-                        "content": md,
-                    }
+                    return Resource(
+                        url=str(response.url),
+                        type=MimeType.TEXT_MARKDWON,
+                        text=md,
+                    )
             case MimeType.APPLICATION_OPENXML_WORD:
                 md = _get_markdown_from_word(response)
                 if md:
-                    return {
-                        "url": str(response.url),
-                        "type": MimeType.TEXT_MARKDWON,
-                        "content": md,
-                    }
+                    return Resource(
+                        url=str(response.url),
+                        type=MimeType.TEXT_MARKDWON,
+                        text=md,
+                    )
             case MimeType.APPLICATION_OPENXML_EXCEL:
                 md = _get_markdown_from_excel(response)
                 if md:
-                    return {
-                        "url": str(response.url),
-                        "type": MimeType.TEXT_MARKDWON,
-                        "content": md,
-                    }
+                    return Resource(
+                        url=str(response.url),
+                        type=MimeType.TEXT_MARKDWON,
+                        text=md,
+                    )
 
     if any(
         mime_type in content_type
@@ -234,21 +241,19 @@ def transform_content(
             MimeType.TEXT_HTML,
         ]
     ):
-        return {
-            "url": str(response.url),
-            "type": content_type,
-            "content": response.text,
-        }
-    return {
-        "url": str(response.url),
-        "type": content_type,
-        "content": response.content,
-    }
+        return Resource(
+            url=str(response.url),
+            type=content_type,
+            text=response.text,
+        )
+    return Resource(
+        url=str(response.url),
+        type=content_type,
+        blob=response.content,
+    )
 
 
-def _extract_links_from_html(
-    html: str, url: str
-) -> dict[str, dict[str, list[str] | int]]:
+def _extract_links_from_html(html: str, url: str) -> list[LinkTarget]:
     """Extract links from HTML content."""
     soup = BeautifulSoup(html, HTML_PARSER)
     seen_urls = {}
@@ -278,12 +283,17 @@ def _extract_links_from_html(
         sorted(seen_urls.items(), key=lambda x: x[1]["occurrences"], reverse=True)
     )
 
-    return sorted_urls
+    return [
+        LinkTarget(
+            url=url, occurences=data["occurrences"], anchor_texts=data["anchor_texts"]
+        )
+        for url, data in sorted_urls.items()
+    ]
 
 
 def extract_links_from_response(
     response: httpx.Response,
-) -> dict[str, dict[str, list[str] | int]]:
+) -> list[LinkTarget]:
     """Extract links from HTML content."""
 
     match _get_normalized_content_type(response):
@@ -294,7 +304,7 @@ def extract_links_from_response(
                 markdown.markdown(response.text), str(response.url)
             )
         case _:
-            return {}
+            return []
 
 
 async def get_additional_context_for_url(
@@ -303,7 +313,7 @@ async def get_additional_context_for_url(
     accept_language: str = "en-US,en;q=0.9,de;q=0.8",
     timeout: int = 5,
     full: bool = False,
-) -> dict[str, str]:
+) -> list[Context]:
     """Get additional context for the url.
 
     Args:
@@ -312,9 +322,8 @@ async def get_additional_context_for_url(
     Returns:
         additional context.
     """
-
+    _rtn = []
     async with AsyncClient() as client:
-        llms_txt = None
         if full:
             llms_full_txt_url = _get_llms_txt_url(url, True)
             try:
@@ -328,10 +337,16 @@ async def get_additional_context_for_url(
                     timeout=timeout,
                 )
                 if response.status_code == 200:
-                    llms_txt = response.text
+                    _rtn.append(
+                        Context(
+                            type="llms_txt",
+                            url=llms_full_txt_url,
+                            text=response.text,
+                        )
+                    )
             except HTTPError:
                 logger.warning(f"Failed to fetch llms-full.txt {llms_full_txt_url}")
-        if llms_txt is None:
+        if len(_rtn) == 0:
             llms_txt_url = _get_llms_txt_url(url, False)
             try:
                 response = await client.get(
@@ -344,12 +359,16 @@ async def get_additional_context_for_url(
                     timeout=timeout,
                 )
                 if response.status_code == 200:
-                    llms_txt = response.text
+                    _rtn.append(
+                        Context(
+                            type="llms_txt",
+                            url=llms_txt_url,
+                            text=response.text,
+                        )
+                    )
             except HTTPError:
                 logger.warning(f"Failed to fetch llms.txt {llms_txt_url}")
-        if llms_txt:
-            return {"llms_txt": llms_txt}
-    return {}
+    return _rtn
 
 
 def _get_llms_txt_url(url: str, full: bool = True) -> str:

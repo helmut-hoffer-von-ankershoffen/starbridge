@@ -4,6 +4,7 @@ from starbridge.mcp import MCPBaseService, MCPContext, mcp_tool
 from starbridge.utils import Health, get_logger
 
 from .settings import Settings
+from .types import GetResult
 from .utils import (
     extract_links_from_response,
     get_additional_context_for_url,
@@ -47,19 +48,30 @@ class Service(MCPBaseService):
         additional_context: bool = True,
         llms_full_txt: bool = False,
         context: MCPContext | None = None,
-    ) -> dict[
-        str, str | bytes | dict[str, dict[str, list[str] | int]] | dict[str, str]
-    ]:
+    ) -> GetResult:
         """Fetch page from the world wide web via HTTP GET.
 
         Should be called by the assistant when the user asks to fetch/retrieve/load/download a page/content/document from the Internet / the world wide web
             - This includes the case when the user simply pastes a URL without further context
             - This includes asks about current news, or e.g. if the user simply prompts the assitant with "What's today on <some website>".
             - This includes asks to download a pdf
-
         Further tips:
             - The agent is to disable transform to markdown, extract links, and additional context in error cases only.
-            - The agent can use this tool to crawl multiple pages. I.e. when asked to crawl a URL use a get call, than look at the top links extracted, follow them, and in the end provide a summary
+            - The agent can use this tool to crawl multiple pages. I.e. when asked to crawl a URL use a get call, than look at the top links extracted, follow them, and in the end provide a summary.
+        Returns:
+            - 'resource': The retrieved and possibly transformed resource:
+                - 'url' (string) the final URL after redirects
+                - 'type' (content type indicator as defined in http): the type of transformed content, resp. the original content type if no transformation applied
+                - 'text' (string): the transformed textual content, resp. the original content if no transformation applied
+                - 'blob' (bytes): the binary content of the resource, if the resource has binary content
+            - 'extracted_links': Optional list of links extracted from the resource, if extract_links=True. Sorted by number of occurrences of a URL in the resource. Each item has:
+                - 'url' (string) the URL of the link
+                - 'occurrences' (int) the number of occurrences of the link in the resource
+                - 'anchor_texts' (list of strings) the anchor texts of the link
+            - 'additional_context': Optional list of with extra context (only if additional_context=True). Each item has:
+                - 'url' (string) the URL of the context
+                - 'type' (string) the type of context, e.g. llms_txt for text specifally prepared by a domain for an assistant to read
+                - 'text' (string) the content of the context in markdown format
 
         Args:
             url (str): The URL to fetch content from
@@ -73,17 +85,7 @@ class Service(MCPBaseService):
             llms_full_txt (bool, optional): Whether to include llms-full.txt in additional context. Defaults to False.
             context (MCPContext | None, optional): Context object for request tracking. Defaults to None.
 
-        Returns:
-            Dict[str, str | bytes | dict[str, dict[str, list[str] | int]] | dict[str, str]]: A dictionary containing:
-                - 'resource': The retrieved and possibly transformed resource:
-                    - 'url' (string) the final URL after redirects
-                    - 'type' (content type indicator as defined in http): the type of transformed content, resp. the original content type if no transformation applied
-                    - 'content' (string or bytes): the transformed content, resp. the original content if no transformation applied
-                - 'links': Optional list of links extracted from the resource, if extract_links=True. Sorted by number of occurrences of a URL in the resource
-                    - 'url' (string) the URL of the link
-                    - 'occurrences' (int) the number of occurrences of the link in the resource
-                    - 'anchors' (list of strings) the anchor texts of the link
-                - 'context': Optional dictionary with extra context (only if additional_context=True)
+
 
         Raises:
             starbridge.web.RobotForbiddenException: If we are not allowed to crawl the URL autonomously
@@ -97,22 +99,18 @@ class Service(MCPBaseService):
             accept_language=accept_language,
             timeout=self._settings.timeout,
         )
-        rtn = {"resource": transform_content(response, transform_to_markdown)}
+        _rtn = GetResult(resource=transform_content(response, transform_to_markdown))
 
         if extract_links:
-            _links = extract_links_from_response(response)
-            if _links:
-                rtn["links"] = _links
+            _rtn.extracted_links = extract_links_from_response(response)
 
         if additional_context:
-            _context = await get_additional_context_for_url(
+            _rtn.additional_context = await get_additional_context_for_url(
                 url=url,
                 user_agent=self._settings.user_agent,
                 accept_language=accept_language,
                 timeout=self._settings.timeout,
                 full=llms_full_txt,
             )
-            if _context:
-                rtn["context"] = _context
 
-        return rtn
+        return _rtn

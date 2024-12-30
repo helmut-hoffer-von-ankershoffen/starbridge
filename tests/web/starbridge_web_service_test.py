@@ -32,7 +32,7 @@ async def test_web_service_get_pdf(runner):
     result = await Service().get(
         url=GET_TEST_PDF_URL,
     )
-    assert "Hello World" in result["resource"]["content"]
+    assert "Hello World" in (result.resource.text or "")
 
 
 @patch(
@@ -46,7 +46,7 @@ async def test_web_service_get_word(runner):
     result = await Service().get(
         url=GET_TEST_WORD_URL,
     )
-    assert "# Headline" in result["resource"]["content"]
+    assert "# Headline" in (result.resource.text or "")
 
 
 @patch(
@@ -60,7 +60,7 @@ async def test_web_service_get_excel(runner):
     result = await Service().get(
         url=GET_TEST_EXCEL_URL,
     )
-    assert "Starbridge" in result["resource"]["content"]
+    assert "Starbridge" in (result.resource.text or "")
 
 
 @patch(
@@ -74,7 +74,7 @@ async def test_web_service_get_text(runner):
     result = await Service().get(
         url=GET_TEST_TEXT_URL,
     )
-    assert "Lorem Ipsum" in result["resource"]["content"]
+    assert "Lorem Ipsum" in (result.resource.text or "")
 
 
 @patch(
@@ -88,4 +88,4 @@ async def test_web_service_get_markdown(runner):
     result = await Service().get(
         url=GET_TEST_MARKDOWN_URL,
     )
-    assert "Lorem Ipsum" in result["resource"]["content"]
+    assert "Lorem Ipsum" in (result.resource.text or "")

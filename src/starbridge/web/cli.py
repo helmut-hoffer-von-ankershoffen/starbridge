@@ -77,10 +77,7 @@ def get(
                 llms_full_txt=llms_full_txt,
             )
         )
-        if rtn["resource"]["type"].startswith("text"):
-            console.print_json(data=rtn)
-        else:
-            console.print(rtn)
+        console.print_json(rtn.model_dump_json())
     except RequestException as e:
         text = Text()
         text.append(str(e))

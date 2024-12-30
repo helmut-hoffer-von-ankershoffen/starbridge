@@ -379,7 +379,7 @@ class MCPServer:
             return [
                 TextContent(
                     type="text",
-                    text=json.dumps(pydantic_core.to_jsonable_python(result)),
+                    text=json.dumps(pydantic_core.to_jsonable_python(result), indent=2),
                 )
             ]
         except Exception as e:
