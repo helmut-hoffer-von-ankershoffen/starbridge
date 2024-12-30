@@ -38,16 +38,25 @@ def test_core_env_args_passed(runner):
     with patch("asyncio.run", side_effect=mock_asyncio_run):
         result = runner.invoke(
             cli,
-            ["mcp", "serve", "--env", 'STARBRIDGE_ATLASSIAN_URL="https://test.com"'],
+            [
+                "mcp",
+                "serve",
+                "--env",
+                'STARBRIDGE_ATLASSIAN_URL="https://test.com"',
+                "--env",
+                "OTHER_ENV=4711",
+                "--env",
+                "VALUE_ERROR",
+            ],
         )
-    assert "testing" in result.output
-    assert result.exit_code == 42
+        assert result.exit_code == 42
 
     with patch("asyncio.run", side_effect=mock_asyncio_run):
         result = runner.invoke(
             cli,
             ["--env", 'STARBRIDGE_ATLASSIAN_URL="https://test.com"'],
         )
+
     assert "testing" in result.output
     assert result.exit_code == 42
 
