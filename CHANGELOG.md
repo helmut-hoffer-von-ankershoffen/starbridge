@@ -2,6 +2,33 @@
 
 ## [unreleased]
 
+### ⛰️  Features
+
+- *(web)* Smarter transformation, allow for mor formats; refactor(web, tests): major - ([09f0455](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/09f0455936a3e465e7f611d97dc3a2aec42ece13))
+
+### 🐛 Bug Fixes
+
+- *(imaging)* More reliable way to check if extra is installed - ([5177b0b](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/5177b0bd70fedcf82a16eaf8d7a27aa9fc0801c6))
+
+### 🚜 Refactor
+
+- *(web)* Dict to pydantic - ([79ae603](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/79ae603d749ac8bca08a54fb17c2e2d3207b0ecd))
+- *(web)* Simplify - ([55bb65c](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/55bb65cd51727a1a12278f7cf11bd6a054ba0a19))
+- *(web)* Dry on constants - ([39cd30a](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/39cd30a2f8d045c8e4c1016388e68b968eac8828))
+
+### 📚 Documentation
+
+- *(badge)* Ghcr badge using eggplants down, so commenting out - ([e1e306a](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/e1e306ae055ecf9520c89a0b7f39b1793aac4ec5))
+- *(ghcr.io)* Badge - ([5a2f92e](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/5a2f92e5ef15b6b85c24efca03945491c54713e5))
+
+### 🧪 Testing
+
+- *(claude)* Additional tests - ([b77fd54](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/b77fd54f84170f5d04597704ddf6be9d404e5a3c))
+- *(web)* Test formats - ([bd670ab](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/bd670abf4b96648d6cc4fd701f329125bd4e501c))
+
+
+## [0.0.54](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.53..v0.0.54) - 2024-12-28
+
 ### ⚙️ Miscellaneous Tasks
 
 - *(ghcr.io)* Introduce publishing container image to ghcr.io - ([63d9437](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/63d943767a28ad7186ea4a2456fe1e17bd711664))
