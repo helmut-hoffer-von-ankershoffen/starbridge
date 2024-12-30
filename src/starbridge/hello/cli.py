@@ -29,7 +29,7 @@ def health():
 @cli.command()
 def info():
     """Info about Hello World"""
-    console.print(Service().info())
+    console.print_json(data=Service().info())
 
 
 @cli.command()

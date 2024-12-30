@@ -1,8 +1,7 @@
 from typing import Any
 
 from starbridge import __is_development_mode__, __project_name__, __project_path__
-
-from .service import Service as ClaudeService
+from starbridge.utils import is_running_in_container
 
 
 def generate_mcp_server_config(
@@ -10,7 +9,7 @@ def generate_mcp_server_config(
     image: str = "helmuthva/starbridge:latest",
 ) -> dict:
     """Generate configuration file for Starbridge"""
-    if ClaudeService.is_running_in_starbridge_container():
+    if is_running_in_container():
         args = ["run", "-i", "--rm"]
         for env_key in env.keys():
             args.extend(["-e", env_key])

@@ -78,12 +78,12 @@ docker build -t starbridge .
 Install the locally built Docker image
 ```bash
 case "$OSTYPE" in
-  darwin*) SRC="$HOME/Library/Application Support/Claude" ;;
-  linux*) SRC="$HOME/.config/Claude" ;;
-  win32*|cygwin*|msys*) SRC="%APPDATA%/Claude" ;;
+  darwin*) CLAUDE_CONFIG_PATH="$HOME/Library/Application Support/Claude" ;;
+  linux*) CLAUDE_CONFIG_PATH="$HOME/.config/Claude" ;;
+  win32*|cygwin*|msys*) CLAUDE_CONFIG_PATH="%APPDATA%/Claude" ;;
   *) echo "Unsupported OS"; exit 1 ;;
 esac
-docker run -it --mount type=bind,src="$SRC",dst="/Claude" starbridge install --image starbridge
+docker run -it --mount type=bind,src="$CLAUDE_CONFIG_PATH",dst="/Claude/.config" starbridge install --image starbridge
 ```
 
 Enter starbridge container via bash for inspection:

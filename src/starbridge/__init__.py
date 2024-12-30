@@ -17,7 +17,7 @@ def _parse_env_args():
     args = sys.argv[1:]
     i = 0
     while i < len(args):
-        if args[i] == "--env" and i + 1 < len(args):
+        if (args[i] == "--env" or args[i] == "-e") and i + 1 < len(args):
             try:
                 key, value = args[i + 1].split("=", 1)
                 if key.startswith("STARBRIDGE_"):

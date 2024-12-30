@@ -9,7 +9,7 @@ import psutil
 
 from starbridge import __project_name__
 from starbridge.mcp import MCPBaseService, MCPContext, mcp_tool
-from starbridge.utils import Health
+from starbridge.utils import Health, is_running_in_container
 
 
 class Service(MCPBaseService):
@@ -21,6 +21,11 @@ class Service(MCPBaseService):
     @mcp_tool()
     def health(self, context: MCPContext | None = None) -> Health:
         """Check if Claude Desktop application is installed and is running."""
+        if is_running_in_container():
+            return Health(
+                status=Health.Status.DOWN,
+                reason="Checking health of Claude not supported in a container",
+            )
         if not self.is_installed():
             return Health(status=Health.Status.DOWN, reason="not installed")
         if not self.is_running():
@@ -32,6 +37,7 @@ class Service(MCPBaseService):
         """Get info about Claude Desktop application."""
         data = {
             "is_installed": self.is_installed(),
+            "is_running": self.is_running(),
             "application_directory": None,
             "config_path": None,
             "log_path": None,
@@ -44,43 +50,31 @@ class Service(MCPBaseService):
                 data["config_path"] = str(self.config_path())
                 data["config"] = self.config_read()
                 data["log_path"] = str(self.log_path())
-        # Add list of running node processes
         data["processes"] = [
             proc.info for proc in psutil.process_iter(attrs=["pid", "name"])
         ]
         return data
 
     @mcp_tool()
-    def restart(self, context: MCPContext | None = None):
+    def restart(self, context: MCPContext | None = None) -> str:
         """Restart Claude Desktop application."""
-        self._restart()
+        Service._restart()
         return "Claude Desktop application restarted"
-
-    @staticmethod
-    def _get_starbridge_container_claude_path() -> Path:
-        return Path("/Claude")
-
-    @staticmethod
-    def is_running_in_starbridge_container() -> bool:
-        return Service._get_starbridge_container_claude_path().is_dir()
 
     @staticmethod
     def application_directory() -> Path:
         """Get path of Claude config directory based on platform."""
-        # Check if running in starbridge container with mounted /Claude directory
-        if Service.is_running_in_starbridge_container():
-            return Service._get_starbridge_container_claude_path()
-
-        # Regular platform-specific paths
-        if sys.platform == "darwin":
-            return Path(Path.home(), "Library", "Application Support", "Claude")
-        elif sys.platform == "win32":
-            return Path(Path.home(), "AppData", "Roaming", "Claude")
-        elif sys.platform == "linux":
-            return Path(Path.home(), ".config", "Claude")
+        if is_running_in_container():
+            return Path("/Claude/.config")
+        match sys.platform:
+            case "darwin":
+                return Path(Path.home(), "Library", "Application Support", "Claude")
+            case "win32":
+                return Path(Path.home(), "AppData", "Roaming", "Claude")
+            case "linux":
+                return Path(Path.home(), ".config", "Claude")
         raise RuntimeError(f"Unsupported platform {sys.platform}")
 
-    # Move all the static methods from Application
     @staticmethod
     def is_installed() -> bool:
         """Check if Claude Desktop application is installed."""
@@ -89,20 +83,15 @@ class Service(MCPBaseService):
     @staticmethod
     def is_running() -> bool:
         """Check if Claude Desktop application is running."""
-        if platform.system() != "Darwin":
-            raise RuntimeError("This command only works on macOS")
+        if is_running_in_container():
+            raise RuntimeError(
+                "Checking if Claude is running is not supported in a container"
+            )
 
-        class Result:
-            def __init__(self, returncode):
-                self.returncode = returncode
-
-        process_found = any(
+        return any(
             proc.info["name"] == "Claude"
             for proc in psutil.process_iter(attrs=["name"])
         )
-
-        ps_check = Result(0 if process_found else 1)
-        return ps_check.returncode == 0
 
     @staticmethod
     def config_path() -> Path:
@@ -134,27 +123,13 @@ class Service(MCPBaseService):
     @staticmethod
     def log_directory() -> Path:
         """Get path of Claude log directory based on platform."""
-        if sys.platform == "darwin":
-            return Path(
-                Path.home(),
-                "Library",
-                "Logs",
-                "Claude",
-            )
-        elif sys.platform == "win32":
-            return Path(
-                Path.home(),
-                "AppData",
-                "Roaming",
-                "Claude",
-                "logs",
-            )
-        elif sys.platform == "linux":
-            return Path(
-                Path.home(),
-                ".logs",
-                "Claude",
-            )
+        match sys.platform:
+            case "darwin":
+                return Path(Path.home(), "Library", "Logs", "Claude")
+            case "win32":
+                return Path(Path.home(), "AppData", "Roaming", "Claude", "logs")
+            case "linux":
+                return Path(Path.home(), ".logs", "Claude")
         raise RuntimeError(f"Unsupported platform {sys.platform}")
 
     @staticmethod
@@ -216,72 +191,29 @@ class Service(MCPBaseService):
 
     @staticmethod
     def platform_supports_restart():
-        return platform.system() == "Darwin"
+        """Check if platform supports restarting Claude."""
+        return not is_running_in_container()
 
     @staticmethod
     def _restart():
         """Restarts the Claude desktop application on macOS."""
         if Service.platform_supports_restart() is False:
-            raise RuntimeError("Restart of Claude not supported on this platform")
+            raise RuntimeError("Restarting Claude is not supported in container")
 
-        ps_check = subprocess.run(
-            ["pgrep", "-x", "Claude"], capture_output=True, text=True, check=False
-        )
+        # Find and terminate all Claude processes
+        for proc in psutil.process_iter(attrs=["name"]):
+            if proc.info["name"] == "Claude":
+                proc.terminate()
 
-        if ps_check.returncode == 0:
-            subprocess.run(["pkill", "-x", "Claude"], check=False)
-            time.sleep(1)
+        # Wait for processes to terminate
+        time.sleep(2)
 
-        subprocess.run(["open", "-a", "Claude"], check=True)
+        match platform.system():
+            case "Darwin":
+                return subprocess.run(["open", "-a", "Claude"], shell=False, check=True)
+            case "win23":
+                return subprocess.run(["start", "Claude"], shell=True, check=True)
+            case "Linux":
+                return subprocess.run(["xdg-open", "Claude"], shell=False, check=True)
 
-    @staticmethod
-    def _run_brew_command(args: list) -> tuple[int, str, str]:
-        """Run a homebrew command and return (returncode, stdout, stderr)"""
-        process = subprocess.run(
-            ["brew"] + args, capture_output=True, text=True, check=False
-        )
-        return process.returncode, process.stdout, process.stderr
-
-    @staticmethod
-    def install_via_brew() -> bool:
-        """Install Claude via Homebrew if not already installed."""
-        if platform.system() != "Darwin":
-            raise RuntimeError("Homebrew installation only supported on macOS")
-
-        # Check if already installed
-        returncode, _, _ = Service._run_brew_command(["list", "--cask", "claude"])
-        if returncode == 0:
-            return False  # Already installed
-
-        # Install Claude
-        returncode, _, stderr = Service._run_brew_command([
-            "install",
-            "--cask",
-            "claude",
-        ])
-        if returncode != 0:
-            raise RuntimeError(f"Failed to install Claude: {stderr}")
-
-        return True
-
-    @staticmethod
-    def uninstall_via_brew() -> bool:
-        """Uninstall Claude via Homebrew."""
-        if platform.system() != "Darwin":
-            raise RuntimeError("Homebrew uninstallation only supported on macOS")
-
-        # Check if installed
-        returncode, _, _ = Service._run_brew_command(["list", "--cask", "claude"])
-        if returncode != 0:
-            return False  # Not installed
-
-        # Uninstall Claude
-        returncode, _, stderr = Service._run_brew_command([
-            "uninstall",
-            "--cask",
-            "claude",
-        ])
-        if returncode != 0:
-            raise RuntimeError(f"Failed to uninstall Claude: {stderr}")
-
-        return True
+        raise RuntimeError(f"Starting Claude not supported on {platform.system()}")

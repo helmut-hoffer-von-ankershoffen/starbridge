@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 
 import psutil
@@ -27,3 +28,7 @@ def get_process_info() -> ProcessInfo:
             name=parent.name() if parent else None, pid=parent.pid if parent else None
         ),
     )
+
+
+def is_running_in_container() -> bool:
+    return os.getenv("STARBRIDGE_RUNNING_IN_CONTAINER") is not None

@@ -21,7 +21,7 @@ cli = typer.Typer(name="mcp", help="MCP operations")
 @cli.command()
 def health():
     """Check health of the services and their dependencies."""
-    console.print(MCPServer().health().model_dump_json())
+    console.print_json(MCPServer().health().model_dump_json())
 
 
 @cli.command()

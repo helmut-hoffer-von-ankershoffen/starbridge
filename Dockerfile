@@ -35,7 +35,7 @@ ENV PATH="/app/.venv/bin:$PATH"
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=uv.lock,target=uv.lock \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
-    uv sync --frozen --no-install-project --no-dev
+    uv sync --frozen --no-install-project --no-dev --no-editable
 
 # Then, add the rest of the project source code and install it
 # Installing separately from its dependencies allows optimal layer caching
@@ -49,13 +49,15 @@ COPY *.md /app
 COPY .python-version /app
 
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-dev
+    uv sync --frozen --no-dev --no-editable
 
 # MCP Inspector
 EXPOSE 5173/tcp
 
 # MCP proxy server
 EXPOSE 3000/tcp
+
+ENV STARBRIDGE_RUNNING_IN_CONTAINER=1
 
 # When running the container, start the Starbridge MCP server
 # But feel free to add arguments and options as needed when doing a docker run

@@ -3,7 +3,6 @@ CLI to interact with the world wide web
 """
 
 import asyncio
-import json
 import sys
 from typing import Annotated
 
@@ -29,7 +28,7 @@ def health():
 @cli.command()
 def info():
     """Info about the web module"""
-    console.print(Service().info())
+    console.print_json(data=Service().info())
 
 
 @cli.command()
@@ -79,7 +78,7 @@ def get(
             )
         )
         if rtn["resource"]["type"].startswith("text"):
-            console.print_json(json.dumps(rtn))
+            console.print_json(data=rtn)
         else:
             console.print(rtn)
     except RequestException as e:

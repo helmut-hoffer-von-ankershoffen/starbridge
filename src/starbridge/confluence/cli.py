@@ -2,7 +2,6 @@
 CLI to interact with Confluence
 """
 
-import json
 from typing import Annotated
 
 import typer
@@ -17,13 +16,13 @@ cli = typer.Typer(name="confluence", help="Confluence operations")
 @cli.command()
 def health():
     """Health of Confluence"""
-    console.print(Service().health().model_dump_json())
+    console.print_json(Service().health().model_dump_json())
 
 
 @cli.command()
 def info():
     """Info about Confluence"""
-    console.print(Service().info())
+    console.print_json(data=Service().info())
 
 
 cli_mcp = typer.Typer()
@@ -89,7 +88,7 @@ def space():
 @cli_space.command(name="list")
 def space_list():
     """Get info about all space"""
-    console.print_json(json.dumps(Service().space_list()))
+    console.print_json(data=Service().space_list())
 
 
 cli_page = typer.Typer()
