@@ -51,10 +51,10 @@ class Resource(BaseModel):
 
 class LinkTarget(BaseModel):
     url: Annotated[AnyUrl, Field(description="URL of the link target")]
-    occurences: Annotated[
+    occurrences: Annotated[
         int,
         Field(
-            description="Number of occurences of the url as a link target in the resource",
+            description="Number of occurrences of the url as a link target in the resource",
             ge=0,
         ),
     ]

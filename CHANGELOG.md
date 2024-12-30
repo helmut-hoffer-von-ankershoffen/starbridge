@@ -1,6 +1,6 @@
 [![starbridge](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/tests/fixtures/starbridge.png?raw=true)](https://helmuthva.gitbook.io/starbridge) Starbridge
 
-## [unreleased]
+## [0.0.55](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.54..v0.0.55) - 2024-12-30
 
 ### ⛰️  Features
 

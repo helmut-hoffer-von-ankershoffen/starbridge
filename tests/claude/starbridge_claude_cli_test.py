@@ -152,9 +152,11 @@ def test_claude_cli_restart_works_if_installed(
 ):
     """Check restart works on supported platforms"""
 
-    mock_process = Mock()
-    mock_process.info = {"name": "Claude"}
-    mock_process_iter.return_value = [mock_process]
+    mock_process_claude = Mock()
+    mock_process_claude.info = {"name": "Claude"}
+    mock_process_other = Mock()
+    mock_process_other.info = {"name": "Other"}
+    mock_process_iter.return_value = [mock_process_other, mock_process_claude]
 
     platform_commands = {
         "Darwin": {"args": ["open", "-a", "Claude"], "shell": False},
@@ -165,13 +167,14 @@ def test_claude_cli_restart_works_if_installed(
     for platform_name, command in platform_commands.items():
         with patch("platform.system", return_value=platform_name):
             result = runner.invoke(cli, ["claude", "restart"])
-            mock_process.terminate.assert_called_once()
+            mock_process_claude.terminate.assert_called_once()
+            assert mock_process_other.terminate.call_count == 0
             mock_subprocess_run.assert_called_once_with(
                 command["args"], shell=command["shell"], check=True
             )
             assert result.exit_code == 0
             assert "was restarted" in result.stdout
-            mock_process.reset_mock()
+            mock_process_claude.reset_mock()
             mock_subprocess_run.reset_mock()
 
 

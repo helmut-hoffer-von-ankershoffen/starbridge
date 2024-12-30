@@ -81,9 +81,17 @@ def test_core_cli_install(runner, tmp_path):
     with patch(
         "starbridge.claude.service.Service.application_directory", return_value=tmp_path
     ):
+        mock_restart = patch(
+            "starbridge.claude.service.Service._restart", return_value=None
+        ).start()
         inputs = INSTALLATION_INPUT
-        result = runner.invoke(cli, ["install", "--no-restart-claude"], input=inputs)
+        result = runner.invoke(
+            cli,
+            ["install"],
+            input=inputs,
+        )
         assert result.exit_code == 0
+        assert mock_restart.call_count == 1
 
         result = runner.invoke(cli, ["claude", "config"], input=inputs)
         assert result.exit_code == 0
@@ -104,7 +112,9 @@ def test_core_cli_install(runner, tmp_path):
             == "TEST_CONFLUENCE_API_TOKEN"
         )
 
-        result = runner.invoke(cli, ["uninstall", "--no-restart-claude"], input=inputs)
+        mock_restart.reset_mock()
+        result = runner.invoke(cli, ["uninstall"], input=inputs)
+        assert mock_restart.call_count == 1
         assert result.exit_code == 0
 
         result = runner.invoke(cli, ["claude", "config"], input=inputs)
@@ -112,6 +122,40 @@ def test_core_cli_install(runner, tmp_path):
         json_start = result.output.find("{")
         output_json = json.loads(result.output[json_start:])
         assert output_json["mcpServers"].get("starbridge") is None
+
+        mock_restart.reset_mock()
+        inputs = INSTALLATION_INPUT
+        result = runner.invoke(cli, ["install", "--no-restart-claude"], input=inputs)
+        assert mock_restart.call_count == 0
+        assert result.exit_code == 0
+
+        mock_restart.reset_mock()
+        result = runner.invoke(cli, ["uninstall", "--no-restart-claude"], input=inputs)
+        assert mock_restart.call_count == 0
+        assert result.exit_code == 0
+
+        mock_restart.reset_mock()
+        result = runner.invoke(cli, ["uninstall"], input=inputs)
+        assert mock_restart.call_count == 0
+        assert result.exit_code == 0
+
+        mock_restart.reset_mock()
+        inputs = INSTALLATION_INPUT
+        result = runner.invoke(cli, ["install"], input=inputs)
+        assert mock_restart.call_count == 1
+        assert result.exit_code == 0
+
+        mock_restart.reset_mock()
+        inputs = INSTALLATION_INPUT
+        result = runner.invoke(cli, ["install"], input=inputs)
+        assert mock_restart.call_count == 1
+        assert result.exit_code == 0
+
+        mock_restart.reset_mock()
+        inputs = INSTALLATION_INPUT
+        result = runner.invoke(cli, ["install", "--no-restart-claude"], input=inputs)
+        assert mock_restart.call_count == 0
+        assert result.exit_code == 0
 
 
 def test_core_cli_main_guard():

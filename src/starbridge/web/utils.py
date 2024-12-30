@@ -8,6 +8,7 @@ from httpx import AsyncClient, HTTPError
 from markdownify import ATX, MarkdownConverter, markdownify
 from markitdown import MarkItDown
 from protego import Protego
+from pydantic import AnyHttpUrl
 from readabilipy.simple_json import simple_json_from_html_string
 
 from starbridge.utils import get_logger
@@ -204,7 +205,7 @@ def transform_content(
         match content_type:
             case MimeType.TEXT_HTML:
                 return Resource(
-                    url=str(response.url),
+                    url=AnyHttpUrl(str(response.url)),
                     type=MimeType.TEXT_MARKDWON,
                     text=_get_markdown_from_html(response.text),
                 )
@@ -212,7 +213,7 @@ def transform_content(
                 md = _get_markdown_from_pdf(response)
                 if md:
                     return Resource(
-                        url=str(response.url),
+                        url=AnyHttpUrl(str(response.url)),
                         type=MimeType.TEXT_MARKDWON,
                         text=md,
                     )
@@ -220,7 +221,7 @@ def transform_content(
                 md = _get_markdown_from_word(response)
                 if md:
                     return Resource(
-                        url=str(response.url),
+                        url=AnyHttpUrl(str(response.url)),
                         type=MimeType.TEXT_MARKDWON,
                         text=md,
                     )
@@ -228,7 +229,7 @@ def transform_content(
                 md = _get_markdown_from_excel(response)
                 if md:
                     return Resource(
-                        url=str(response.url),
+                        url=AnyHttpUrl(str(response.url)),
                         type=MimeType.TEXT_MARKDWON,
                         text=md,
                     )
@@ -242,12 +243,12 @@ def transform_content(
         ]
     ):
         return Resource(
-            url=str(response.url),
+            url=AnyHttpUrl(str(response.url)),
             type=content_type,
             text=response.text,
         )
     return Resource(
-        url=str(response.url),
+        url=AnyHttpUrl(str(response.url)),
         type=content_type,
         blob=response.content,
     )
@@ -256,39 +257,26 @@ def transform_content(
 def _extract_links_from_html(html: str, url: str) -> list[LinkTarget]:
     """Extract links from HTML content."""
     soup = BeautifulSoup(html, HTML_PARSER)
-    seen_urls = {}
+    seen_urls: dict[str, LinkTarget] = {}
 
     for link in soup.find_all("a", href=True):
         href = link.get("href")
         abs_url = urljoin(url, href)
-        if abs_url.startswith(("http://", "https://")):
+        if abs_url.startswith(("http://", "https://")):  # ignore non-http(s) links
             anchor_text = link.get_text().strip()
             if not anchor_text:
                 continue
             if abs_url in seen_urls:
-                seen_urls[abs_url]["anchor_texts"].append(anchor_text)
-                seen_urls[abs_url]["occurrences"] += 1
+                if anchor_text not in seen_urls[abs_url].anchor_texts:
+                    seen_urls[abs_url].anchor_texts.append(anchor_text)
+                seen_urls[abs_url].occurrences += 1
             else:
-                seen_urls[abs_url] = {
-                    "anchor_texts": [anchor_text],
-                    "occurrences": 1,
-                }
-
-    # Make anchor_texts unique for each URL
-    for url_data in seen_urls.values():
-        url_data["anchor_texts"] = list(dict.fromkeys(url_data["anchor_texts"]))
+                seen_urls[abs_url] = LinkTarget(
+                    url=AnyHttpUrl(abs_url), occurrences=1, anchor_texts=[anchor_text]
+                )
 
     # Sort by occurrences in descending order
-    sorted_urls = dict(
-        sorted(seen_urls.items(), key=lambda x: x[1]["occurrences"], reverse=True)
-    )
-
-    return [
-        LinkTarget(
-            url=url, occurences=data["occurrences"], anchor_texts=data["anchor_texts"]
-        )
-        for url, data in sorted_urls.items()
-    ]
+    return sorted(seen_urls.values(), key=lambda x: x.occurrences, reverse=True)
 
 
 def extract_links_from_response(
@@ -340,7 +328,7 @@ async def get_additional_context_for_url(
                     _rtn.append(
                         Context(
                             type="llms_txt",
-                            url=llms_full_txt_url,
+                            url=AnyHttpUrl(llms_full_txt_url),
                             text=response.text,
                         )
                     )
@@ -362,7 +350,7 @@ async def get_additional_context_for_url(
                     _rtn.append(
                         Context(
                             type="llms_txt",
-                            url=llms_txt_url,
+                            url=AnyHttpUrl(llms_txt_url),
                             text=response.text,
                         )
                     )
