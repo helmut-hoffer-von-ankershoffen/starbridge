@@ -8,7 +8,7 @@ from unittest.mock import patch
 import pytest
 from typer.testing import CliRunner
 
-from starbridge import __version__
+from starbridge import __project_name__, __version__
 from starbridge.cli import cli
 
 INSTALLATION_INPUT = (
@@ -50,8 +50,9 @@ def test_core_cli_info(runner):
     """Check processes exposed and version matching."""
     result = runner.invoke(cli, ["info"])
     assert result.exit_code == 0
-    assert "'pid'" in result.stdout
-    assert f"'version': '{__version__}'" in result.stdout
+    data = json.loads(result.stdout)
+    assert data["name"] == __project_name__
+    assert data["version"] == __version__
 
 
 def test_core_cli_create_dot_env(runner, tmp_path):
