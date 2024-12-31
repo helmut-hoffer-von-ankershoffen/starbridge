@@ -19,6 +19,7 @@ class Service(MCPBaseService):
 
     @mcp_tool()
     def health(self, context: MCPContext | None = None) -> Health:
+        """Check health of Hello World service."""
         return Health(status=Health.Status.UP)
 
     @mcp_tool()

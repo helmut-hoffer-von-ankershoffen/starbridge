@@ -3,7 +3,7 @@ from .console import console
 from .di import locate_implementations, locate_subclasses
 from .health import AggregatedHealth, Health
 from .logging import LoggingSettings, get_logger
-from .platform import get_process_info, is_running_in_container
+from .platform import get_process_info
 from .settings import get_starbridge_env, load_settings, prompt_for_env
 from .signature import description_and_params
 
@@ -18,7 +18,6 @@ __all__ = [
     "Health",
     "AggregatedHealth",
     "get_process_info",
-    "is_running_in_container",
     "locate_implementations",
     "locate_subclasses",
     "prepare_cli",

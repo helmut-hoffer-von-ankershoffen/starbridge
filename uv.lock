@@ -1088,7 +1088,7 @@ wheels = [
 
 [[package]]
 name = "logfire"
-version = "2.11.0"
+version = "2.11.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "executing" },
@@ -1099,9 +1099,9 @@ dependencies = [
     { name = "rich" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/45/d3/42dd774e2c426de334b7987057d258db6367ec43d7d6875ca924600f6897/logfire-2.11.0.tar.gz", hash = "sha256:ce95a4961a7b14d1ebc93bef7c056f3fb7bb42a3c95d2c053ef2acf2c9042bfb", size = 262275 }
+sdist = { url = "https://files.pythonhosted.org/packages/09/83/a60f21785ee9588ecc63e3a499944ac40c459ebbe63d272b2702ac7d4668/logfire-2.11.1.tar.gz", hash = "sha256:d41de01fb47038cbd62007262aca7856c58b51e0e20340e878755438b3505241", size = 255935 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/0f/c3/1a54982554cdbf11fe778fef2a47e2eb3f57cb6e84cb56dba842b71efbfb/logfire-2.11.0-py3-none-any.whl", hash = "sha256:011c1b049d87259b2d60d8df933988c23e8c5dd9ec98157abdaa96357a489d47", size = 178018 },
+    { url = "https://files.pythonhosted.org/packages/79/01/6ac4c7a9ba19c46c959c6ddc50f55d41d597d8d82934de17cc7ea00dc233/logfire-2.11.1-py3-none-any.whl", hash = "sha256:f15affa6b4d18035a47774782d02505b8217097fe45230fdb86a8f4c703d2d65", size = 172859 },
 ]
 
 [package.optional-dependencies]
@@ -2906,7 +2906,7 @@ requires-dist = [
     { name = "git-cliff", marker = "extra == 'dev'", specifier = ">=2.7.0" },
     { name = "griffe", specifier = ">=1.5.4" },
     { name = "ipykernel", marker = "extra == 'notebook'", specifier = ">=6.29.5" },
-    { name = "logfire", extras = ["system-metrics"], specifier = ">=2.11.0" },
+    { name = "logfire", extras = ["system-metrics"], specifier = ">=2.11.1" },
     { name = "marimo", marker = "extra == 'notebook'", specifier = ">=0.10.7" },
     { name = "markdown", specifier = ">=3.7" },
     { name = "markdownify", specifier = ">=0.14.1" },

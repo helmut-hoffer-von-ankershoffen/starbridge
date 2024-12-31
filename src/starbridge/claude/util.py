@@ -1,7 +1,11 @@
 from typing import Any
 
-from starbridge import __is_development_mode__, __project_name__, __project_path__
-from starbridge.utils import is_running_in_container
+from starbridge import (
+    __is_development_mode__,
+    __is_running_in_container__,
+    __project_name__,
+    __project_path__,
+)
 
 
 def generate_mcp_server_config(
@@ -9,7 +13,7 @@ def generate_mcp_server_config(
     image: str = "helmuthva/starbridge:latest",
 ) -> dict:
     """Generate configuration file for Starbridge"""
-    if is_running_in_container():
+    if __is_running_in_container__:
         args = ["run", "-i", "--rm"]
         for env_key in env.keys():
             args.extend(["-e", env_key])

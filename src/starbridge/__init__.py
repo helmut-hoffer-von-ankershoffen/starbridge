@@ -8,7 +8,7 @@ __project_name__ = __name__.split(".")[0]
 __project_path__ = str(pathlib.Path(__file__).parent.parent.parent)
 __version__ = importlib.metadata.version(__project_name__)
 __is_development_mode__ = "uvx" not in sys.argv[0].lower()
-
+__is_running_in_container__ = os.getenv("STARBRIDGE_RUNNING_IN_CONTAINER") is not None
 # helpers
 
 

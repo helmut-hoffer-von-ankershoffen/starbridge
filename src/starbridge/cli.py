@@ -1,11 +1,10 @@
 import sys
-from typing import Annotated, Any
+from typing import Annotated
 
 import typer
 
 from starbridge import (
     __is_development_mode__,
-    __project_path__,
     __version__,
 )
 from starbridge.claude import Service as ClaudeService
@@ -14,11 +13,11 @@ from starbridge.mcp import MCPServer
 from starbridge.utils import (
     console,
     get_logger,
-    get_process_info,
-    get_starbridge_env,
     prepare_cli,
     prompt_for_env,
 )
+
+from .service import Service
 
 logger = get_logger(__name__)
 
@@ -77,21 +76,8 @@ def health(json: Annotated[bool, typer.Option(help="Output health as JSON")] = F
 @cli.command()
 def info():
     """Info about Starbridge and it's environment"""
-    data: dict[str, Any] = {
-        "version": __version__,
-        "path": __project_path__,
-        "development_mode": __is_development_mode__,
-        "env": get_starbridge_env(),
-        "process": get_process_info().model_dump(),
-    }
-
-    # Auto-discover and get info from all services
-    for service_class in MCPServer.service_classes():
-        service = service_class()
-        service_name = service.__class__.__module__.split(".")[1]
-        data[service_name] = service.info()
-
-    console.print(data)
+    data = Service().info()
+    console.print_json(data=data)
     logger.debug(data)
 
 

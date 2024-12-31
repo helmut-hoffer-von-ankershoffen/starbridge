@@ -22,7 +22,7 @@
 -->
 > ⚠️ **WARNING**: This project is currently in pre-alpha phase, i.e. partly functional. Feel free to already watch or star the repository to stay updated on its progress.
 
-Integrates Claude Desktop with the WWW, Atlassian Confluence, and (later on) Google Workspace.
+Integrates Claude Desktop with the web, Atlassian Confluence, and (later on) Google Workspace.
 
 1. **Make Claude a team member**: Makes Claude an informed member of your organisation by accessing your organization's key knowledge resources.
 2. **Integrate research and knowlege management**: Enables your teams to contribute, refine, and maintain your organisation's knowledge resources within Claude - seamlessly integrating research and sharing knowledge.

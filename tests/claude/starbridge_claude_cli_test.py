@@ -31,8 +31,8 @@ def test_claude_cli_health(mock_has_config, mock_process_iter, mock_platform, ru
     assert result.exit_code == 0
 
 
-def test_claude_cli_info_in_container():
-    """Check info spots Claude not running in container"""
+def test_claude_cli_health_in_container():
+    """Check health spots Claude not running in container"""
     env = os.environ.copy()
     env.update({
         "COVERAGE_PROCESS_START": "pyproject.toml",
@@ -57,7 +57,15 @@ def test_claude_cli_info_works(
 ):
     """Check info spots spots installed and running Claude"""
     mock_process = Mock()
-    mock_process.info = {"pid": 1234, "name": "Claude"}
+    mock_process.info = {
+        "pid": 1234,
+        "ppid": 0,
+        "name": "Claude",
+    }
+    mock_process.cmdline = lambda: [
+        "/Applications/Claude.app/Contents/MacOS/Claude",
+        "--annotation=_productName=Claude",
+    ]
     mock_process_iter.return_value = [mock_process]
 
     result = runner.invoke(cli, ["claude", "info"])

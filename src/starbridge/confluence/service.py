@@ -37,6 +37,7 @@ class Service(MCPBaseService):
 
     @mcp_tool()
     def health(self, context: MCPContext | None = None) -> Health:
+        """Check health of the Confluence service."""
         try:
             spaces = self.space_list()
         except Exception as e:

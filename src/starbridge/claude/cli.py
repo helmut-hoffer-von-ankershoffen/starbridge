@@ -8,8 +8,8 @@ from typing import Annotated
 
 import typer
 
-from starbridge import __project_name__
-from starbridge.utils import console, is_running_in_container
+from starbridge import __is_running_in_container__, __project_name__
+from starbridge.utils import console
 
 from .service import Service
 
@@ -28,7 +28,7 @@ def info():
     console.print_json(data=Service().info())
 
 
-if is_running_in_container() is False:
+if not __is_running_in_container__:
 
     @cli.command()
     def config():

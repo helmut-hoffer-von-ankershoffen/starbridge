@@ -7,9 +7,11 @@ from pathlib import Path
 
 import psutil
 
-from starbridge import __project_name__
+from starbridge import __is_running_in_container__, __project_name__
 from starbridge.mcp import MCPBaseService, MCPContext, mcp_tool
-from starbridge.utils import Health, is_running_in_container
+from starbridge.utils import Health, get_logger
+
+logger = get_logger(__name__)
 
 
 class Service(MCPBaseService):
@@ -21,7 +23,7 @@ class Service(MCPBaseService):
     @mcp_tool()
     def health(self, context: MCPContext | None = None) -> Health:
         """Check if Claude Desktop application is installed and is running."""
-        if is_running_in_container():
+        if __is_running_in_container__:
             return Health(
                 status=Health.Status.DOWN,
                 reason="Checking health of Claude not supported in a container",
@@ -34,7 +36,7 @@ class Service(MCPBaseService):
 
     @mcp_tool()
     def info(self, context: MCPContext | None = None):
-        """Get info about Claude Desktop application."""
+        """Get info about Claude Desktop application. This includes if it is installed, running, config, and processes running next to Claude."""
         data = {
             "is_installed": self.is_installed(),
             "is_running": self.is_running(),
@@ -42,6 +44,7 @@ class Service(MCPBaseService):
             "config_path": None,
             "log_path": None,
             "config": None,
+            "pid": None,
             "processes": [],
         }
         if self.is_installed():
@@ -50,21 +53,32 @@ class Service(MCPBaseService):
                 data["config_path"] = str(self.config_path())
                 data["config"] = self.config_read()
                 data["log_path"] = str(self.log_path())
-        data["processes"] = [
-            proc.info for proc in psutil.process_iter(attrs=["pid", "name"])
-        ]
+        data["processes"] = []
+        for proc in psutil.process_iter(attrs=["pid", "ppid", "name"]):
+            try:
+                cmdline = proc.cmdline()
+            except (psutil.AccessDenied, psutil.NoSuchProcess):
+                cmdline = None
+            data["processes"].append({
+                "pid": proc.info["pid"],
+                "ppid": proc.info["ppid"],
+                "name": proc.info["name"],
+                "cmdline": cmdline,
+            })
+            if proc.info["name"] == "Claude":
+                data["pid"] = proc.info["pid"]
         return data
 
     @mcp_tool()
     def restart(self, context: MCPContext | None = None) -> str:
-        """Restart Claude Desktop application."""
+        """Restart Claude Desktop application. The agent should use this tool when asked to restart itself"""
         Service._restart()
         return "Claude Desktop application restarted"
 
     @staticmethod
     def application_directory() -> Path:
         """Get path of Claude config directory based on platform."""
-        if is_running_in_container():
+        if __is_running_in_container__:
             return Path("/Claude/.config")
         match sys.platform:
             case "darwin":
@@ -83,10 +97,11 @@ class Service(MCPBaseService):
     @staticmethod
     def is_running() -> bool:
         """Check if Claude Desktop application is running."""
-        if is_running_in_container():
-            raise RuntimeError(
-                "Checking if Claude is running is not supported in a container"
+        if __is_running_in_container__:
+            logger.warning(
+                "Checking if Claude is running is not supported in container"
             )
+            return False
 
         return any(
             proc.info["name"] == "Claude"
@@ -192,7 +207,7 @@ class Service(MCPBaseService):
     @staticmethod
     def platform_supports_restart():
         """Check if platform supports restarting Claude."""
-        return not is_running_in_container()
+        return not __is_running_in_container__
 
     @staticmethod
     def _restart():
