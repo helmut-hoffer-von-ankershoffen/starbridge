@@ -1,10 +1,10 @@
-import os
-
 import pytest
-from mcp import ClientSession, StdioServerParameters
-from mcp.client.stdio import get_default_environment, stdio_client
+from mcp import ClientSession
+from mcp.client.stdio import stdio_client
 from mcp.types import TextContent
 from typer.testing import CliRunner
+
+from ..utils_test import _server_parameters
 
 PYPROJECT_TOML = "pyproject.toml"
 DOT_COVERAGE = ".coverage"
@@ -15,27 +15,9 @@ def runner():
     return CliRunner()
 
 
-def _server_parameters(mocks: list[str] | None = None) -> StdioServerParameters:
-    """Create server parameters with coverage enabled"""
-    env = dict(get_default_environment())
-    # Add coverage config to subprocess
-    env.update({
-        "COVERAGE_PROCESS_START": PYPROJECT_TOML,
-        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
-    })
-    if (mocks is not None) and mocks:
-        env.update({"MOCKS": ",".join(mocks)})
-
-    return StdioServerParameters(
-        command="uv",
-        args=["run", "starbridge"],
-        env=env,
-    )
-
-
 @pytest.mark.asyncio
-async def test_web_mcp_tool_get():
-    """Test server tool get"""
+async def test_search_mcp_tool_web():
+    """Test server tool search"""
     async with stdio_client(_server_parameters()) as (read, write):
         async with ClientSession(read, write) as session:
             await session.initialize()

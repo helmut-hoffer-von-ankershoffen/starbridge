@@ -1,12 +1,12 @@
-import os
-
 import pytest
-from mcp import ClientSession, StdioServerParameters
-from mcp.client.stdio import get_default_environment, stdio_client
+from mcp import ClientSession
+from mcp.client.stdio import stdio_client
 from mcp.types import (
     TextContent,
 )
 from typer.testing import CliRunner
+
+from ..utils_test import _server_parameters
 
 GET_TEST_URL = "https://helmuthva.gitbook.io/starbridge"
 
@@ -17,24 +17,6 @@ DOT_COVERAGE = ".coverage"
 @pytest.fixture
 def runner():
     return CliRunner()
-
-
-def _server_parameters(mocks: list[str] | None = None) -> StdioServerParameters:
-    """Create server parameters with coverage enabled"""
-    env = dict(get_default_environment())
-    # Add coverage config to subprocess
-    env.update({
-        "COVERAGE_PROCESS_START": PYPROJECT_TOML,
-        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
-    })
-    if (mocks is not None) and mocks:
-        env.update({"MOCKS": ",".join(mocks)})
-
-    return StdioServerParameters(
-        command="uv",
-        args=["run", "starbridge"],
-        env=env,
-    )
 
 
 @pytest.mark.asyncio

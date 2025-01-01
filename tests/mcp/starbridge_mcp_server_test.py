@@ -8,9 +8,9 @@ from pathlib import Path
 
 import pytest
 import requests
-from mcp import ClientSession, StdioServerParameters
+from mcp import ClientSession
 from mcp.client.sse import sse_client
-from mcp.client.stdio import get_default_environment, stdio_client
+from mcp.client.stdio import stdio_client
 from mcp.types import (
     BlobResourceContents,
     EmbeddedResource,
@@ -23,6 +23,8 @@ from pydantic import AnyUrl
 from typer.testing import CliRunner
 
 from starbridge.hello import Service as HelloService
+
+from ..utils_test import _server_parameters
 
 try:
     from starbridge.hello.cli import bridge
@@ -56,24 +58,6 @@ EXPECTED_TOOLS = [
 @pytest.fixture
 def runner():
     return CliRunner()
-
-
-def _server_parameters(mocks: list[str] | None = None) -> StdioServerParameters:
-    """Create server parameters with coverage enabled"""
-    env = dict(get_default_environment())
-    # Add coverage config to subprocess
-    env.update({
-        "COVERAGE_PROCESS_START": PYPROJECT_TOML,
-        "COVERAGE_FILE": os.getenv("COVERAGE_FILE", DOT_COVERAGE),
-    })
-    if (mocks is not None) and mocks:
-        env.update({"MOCKS": ",".join(mocks)})
-
-    return StdioServerParameters(
-        command="uv",
-        args=["run", "starbridge"],
-        env=env,
-    )
 
 
 @pytest.mark.asyncio
