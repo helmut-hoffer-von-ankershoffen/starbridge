@@ -9,7 +9,7 @@ authors = [
 requires-python = ">=3.11,<4.0"
 dependencies = [
     "pydantic>=2.10.4",
-    "pydantic-settings>=2.7.0",
+    "pydantic-settings>=2.7.1",
     "mcp>=1.1.2",
     "griffe>=1.5.4",
     "typer>=0.15.1",
@@ -32,7 +32,7 @@ dependencies = [
     "markdown>=3.7",
     "readabilipy>=0.3.0",
     "markitdown>=0.0.1a3",
-    "brave-search-python-client>=0.1.0",
+    "brave-search-python-client>=0.1.5",
 ]
 keywords = [
     "anthropic",

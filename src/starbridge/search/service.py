@@ -1,5 +1,7 @@
 """Handles search interactions."""
 
+import asyncio
+
 from brave_search_python_client import (
     BraveSearch,
     WebSearchApiResponse,
@@ -10,9 +12,6 @@ from starbridge.mcp import MCPBaseService, MCPContext, mcp_tool
 from starbridge.utils import Health, get_logger
 
 from .settings import Settings
-from .utils import (
-    is_connected,
-)
 
 logger = get_logger(__name__)
 
@@ -30,10 +29,10 @@ class Service(MCPBaseService):
     @mcp_tool()
     def health(self, context: MCPContext | None = None) -> Health:
         """Check health of the search service"""
-        if not is_connected():
+        if not asyncio.run(self._bs.is_connected()):
             return Health(
                 status=Health.Status.DOWN,
-                reason="No connection to Brave Search API",
+                reason="Brave Search API not connected",
             )
         return Health(status=Health.Status.UP)
 

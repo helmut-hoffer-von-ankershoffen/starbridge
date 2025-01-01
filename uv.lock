@@ -201,7 +201,7 @@ wheels = [
 
 [[package]]
 name = "brave-search-python-client"
-version = "0.1.0"
+version = "0.1.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "httpx" },
@@ -211,9 +211,9 @@ dependencies = [
     { name = "tenacity" },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ff/7d/7938c4290f0c36f81d141396f694f3dc37ccd09e5747bf9930ff9fa157c7/brave_search_python_client-0.1.0.tar.gz", hash = "sha256:f4332256b7b87980c05883ff40fe4e18fc075f6b1b5dc303a1abd72392edf90d", size = 36626740 }
+sdist = { url = "https://files.pythonhosted.org/packages/6a/90/e66c2dbca36d5dcce1753555182ff7eece7587f531343e3cdbf977ed59f7/brave_search_python_client-0.1.5.tar.gz", hash = "sha256:81758d5c85fb1cd2e06d1d2cc1ce5da3941a0c5943395f585bb1180fca84332a", size = 36661546 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/72/16/8ff590551a70d6a091bab4746e09c2a8e71375430b366031b369a58a5ffc/brave_search_python_client-0.1.0-py3-none-any.whl", hash = "sha256:5a8813e17d76de26c2de9573f590d568783b8ca50c10961374c0ade1324c614c", size = 30649 },
+    { url = "https://files.pythonhosted.org/packages/6e/25/ddb477302388702e494bf94203ee935eb414ba438fc19363a10f2590a79a/brave_search_python_client-0.1.5-py3-none-any.whl", hash = "sha256:6f01c5ea5e2082eb837d7aed634112c3ef27dd47da9af420be84567b956d87ae", size = 64996 },
 ]
 
 [[package]]
@@ -2320,15 +2320,15 @@ wheels = [
 
 [[package]]
 name = "pydantic-settings"
-version = "2.7.0"
+version = "2.7.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pydantic" },
     { name = "python-dotenv" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/86/41/19b62b99e7530cfa1d6ccd16199afd9289a12929bef1a03aa4382b22e683/pydantic_settings-2.7.0.tar.gz", hash = "sha256:ac4bfd4a36831a48dbf8b2d9325425b549a0a6f18cea118436d728eb4f1c4d66", size = 79743 }
+sdist = { url = "https://files.pythonhosted.org/packages/73/7b/c58a586cd7d9ac66d2ee4ba60ca2d241fa837c02bca9bea80a9a8c3d22a9/pydantic_settings-2.7.1.tar.gz", hash = "sha256:10c9caad35e64bfb3c2fbf70a078c0e25cc92499782e5200747f942a065dec93", size = 79920 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f9/00/57b4540deb5c3a39ba689bb519a4e03124b24ab8589e618be4aac2c769bd/pydantic_settings-2.7.0-py3-none-any.whl", hash = "sha256:e00c05d5fa6cbbb227c84bd7487c5c1065084119b750df7c8c1a554aed236eb5", size = 29549 },
+    { url = "https://files.pythonhosted.org/packages/b4/46/93416fdae86d40879714f72956ac14df9c7b76f7d41a4d68aa9f71a0028b/pydantic_settings-2.7.1-py3-none-any.whl", hash = "sha256:590be9e6e24d06db33a4262829edef682500ef008565a969c73d39d5f8bfb3fd", size = 29718 },
 ]
 
 [[package]]
@@ -3090,7 +3090,7 @@ dev = [
 requires-dist = [
     { name = "atlassian-python-api", specifier = ">=3.41.16" },
     { name = "beautifulsoup4", specifier = ">=4.12.3" },
-    { name = "brave-search-python-client", specifier = ">=0.1.0" },
+    { name = "brave-search-python-client", specifier = ">=0.1.5" },
     { name = "bump-my-version", marker = "extra == 'dev'", specifier = ">=0.29.0" },
     { name = "cairosvg", marker = "extra == 'imaging'", specifier = ">=2.7.1" },
     { name = "cyclonedx-py", marker = "extra == 'dev'", specifier = ">=1.0.1" },
@@ -3119,7 +3119,7 @@ requires-dist = [
     { name = "pre-commit", marker = "extra == 'dev'", specifier = ">=4.0.1" },
     { name = "protego", specifier = ">=0.3.1" },
     { name = "pydantic", specifier = ">=2.10.4" },
-    { name = "pydantic-settings", specifier = ">=2.7.0" },
+    { name = "pydantic-settings", specifier = ">=2.7.1" },
     { name = "pyright", marker = "extra == 'dev'", specifier = ">=1.1.389" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.3.3" },
     { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.24.0" },
