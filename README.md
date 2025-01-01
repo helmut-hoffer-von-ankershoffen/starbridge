@@ -1,4 +1,4 @@
-# [PRE-ALPHA] starbridge MCP server for Claude Desktop
+# [PRE-ALPHA] ⭐ starbridge MCP server for Claude Desktop
 
 [![License](https://img.shields.io/github/license/helmut-hoffer-von-ankershoffen/starbridge?logo=opensourceinitiative&logoColor=3DA639&labelColor=414042&color=A41831)
 ](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/LICENSE)

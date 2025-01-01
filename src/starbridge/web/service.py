@@ -26,6 +26,7 @@ class Service(MCPBaseService):
 
     @mcp_tool()
     def health(self, context: MCPContext | None = None) -> Health:
+        """Check health of the web service"""
         if not is_connected():
             return Health(
                 status=Health.Status.DOWN,

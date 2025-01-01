@@ -3,12 +3,8 @@ import os
 import pytest
 from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import get_default_environment, stdio_client
-from mcp.types import (
-    TextContent,
-)
+from mcp.types import TextContent
 from typer.testing import CliRunner
-
-GET_TEST_URL = "https://helmuthva.gitbook.io/starbridge"
 
 PYPROJECT_TOML = "pyproject.toml"
 DOT_COVERAGE = ".coverage"
@@ -45,15 +41,10 @@ async def test_web_mcp_tool_get():
             await session.initialize()
 
             result = await session.call_tool(
-                "starbridge_web_get",
-                {
-                    "url": GET_TEST_URL,
-                    "transform_to_markdown": True,
-                    "extract_links": False,
-                    "additional_context": False,
-                },
+                "starbridge_search_web",
+                {"q": "hello world"},
             )
             assert len(result.content) == 1
             content = result.content[0]
             assert type(content) is TextContent
-            assert "README | Starbridge" in content.text
+            assert "hello" in content.text
