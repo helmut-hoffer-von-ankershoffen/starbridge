@@ -1,5 +1,23 @@
 [![starbridge](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/tests/fixtures/starbridge.png?raw=true)](https://helmuthva.gitbook.io/starbridge) Starbridge
 
+## [unreleased]
+
+### ⛰️  Features
+
+- *(search)* Minimal web search using Brave Search Python Client (built separately) - ([b39cdb9](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/b39cdb97894af174d868aa20f914339f9c89f47a))
+
+### 🚜 Refactor
+
+- *(core)* Introduce service for core; enh(claude): allow for better introspection - ([37d4f17](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/37d4f17f250f56b6cb820ddf2e330dff8c73d00b))
+- *(tests)* Introducing utils - ([186ce67](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/186ce67d6c458d0442883dfd969fe701d58b513d))
+- *(web)* Polish - ([52a07fe](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/52a07fe5b19bfe61d611d0e3064681565f07403d))
+
+### 🧪 Testing
+
+- *(env)* Conditions - ([c9d67a1](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/c9d67a197be3c282e6fc71a02cbb58d8dbfd2a4b))
+- *(search)* Adapt other tests given new setting - ([8dfbd0c](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/8dfbd0c940788fe49ca79c8a4cd84fa88290a29f))
+
+
 ## [0.0.55](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.54..v0.0.55) - 2024-12-30
 
 ### ⛰️  Features
