@@ -29,6 +29,17 @@ Integrates Claude Desktop with the web, Atlassian Confluence, and (later on) Goo
 2. **Integrate research and knowlege management**: Enables your teams to contribute, refine, and maintain your organisation's knowledge resources within Claude - seamlessly integrating research and sharing knowledge.
 3. **Improve efficiency**: Automate repetitive workflows such as generating Confluence pages from Google Docs.
 
+## Qualities
+
+* [Complete reference documenation](https://starbridge.readthedocs.io/en/latest/reference_index.html) on Read the Docs
+* [High test coverage](https://app.codecov.io/gh/helmut-hoffer-von-ankershoffen/starbridge) including unit and E2E tests (reported on Codecov)
+* Matrix tested with [Python 3.11, 3.12 and 3.13](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/noxfile.py) to ensure compatibility (powered by [Nox](https://nox.thea.codes/en/stable/))
+* 100% compliant with modern linting and formatting standards (powered by [Ruff](https://github.com/astral-sh/ruff))
+* 100% up-to-date dependencies (monitored by [Renovate](https://github.com/renovatebot/renovate))
+* [A-grade code quality](https://sonarcloud.io/summary/new_code?id=helmut-hoffer-von-ankershoffen_starbridge) in security, maintainability, and reliability (verified by SonarQube)
+* 1-liner for installation and execution of command line interface (CLI) via [uv(x)](https://github.com/astral-sh/uv) or [Docker](https://hub.docker.com/r/helmuthva/starbridge/tags)
+* Setup for developing inside a [devcontainer](https://code.visualstudio.com/docs/devcontainers/containers) included (supports VSCode and GitHub Codespaces)
+
 ## Example Prompts
 
 * "Create a page about road cycling, focusing on Canyon bikes, in the personal confluence space of Helmut."

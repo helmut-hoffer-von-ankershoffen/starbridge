@@ -11,7 +11,7 @@ from starbridge.web.utils import (
     get_additional_context_for_url,
 )
 
-GET_TEST_URL = "https://helmuthva.gitbook.io/starbridge"
+GET_TEST_URL = "https://starbridge.readthedocs.io/en/latest/"
 HTTPX_ASYNC_CLIENT_GET = "httpx.AsyncClient.get"
 TIMEOUT_MESSAGE = "Connection timed out"
 LLMS_TXT_URL = "https://docs.anthropic.com"

@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 
 from ..utils_test import _server_parameters
 
-GET_TEST_URL = "https://helmuthva.gitbook.io/starbridge"
+GET_TEST_URL = "https://starbridge.readthedocs.io/en/latest/"
 
 PYPROJECT_TOML = "pyproject.toml"
 DOT_COVERAGE = ".coverage"
@@ -38,4 +38,4 @@ async def test_web_mcp_tool_get():
             assert len(result.content) == 1
             content = result.content[0]
             assert type(content) is TextContent
-            assert "README | Starbridge" in content.text
+            assert "Get Starbridge" in content.text

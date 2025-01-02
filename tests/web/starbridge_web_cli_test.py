@@ -8,7 +8,7 @@ from typer.testing import CliRunner
 from starbridge.cli import cli
 from starbridge.web import GetResult
 
-GET_TEST_HTML_URL = "https://helmuthva.gitbook.io/starbridge"
+GET_TEST_HTML_URL = "https://starbridge.readthedocs.io/en/latest/"
 GET_LLMS_TXT_URL = "https://docs.anthropic.com"
 
 
@@ -59,7 +59,7 @@ def test_web_cli_get_timeouts(mock_get, runner):
     assert result.exit_code == 1
 
 
-def test_web_cli_get_html_no_transform(runner):
+def test_web_cli_get_html_no_transform_works(runner):
     """Check getting content from the web as html encoded in unicode."""
 
     result = runner.invoke(
@@ -72,7 +72,7 @@ def test_web_cli_get_html_no_transform(runner):
         ],
     )
     _rtn = GetResult.model_validate(json.loads(result.output))
-    assert (_rtn.resource.text or "").startswith("<!DOCTYPE html>")
+    assert (_rtn.resource.text or "").startswith("<!doctype html>")
     assert _rtn.get_link_count() > 0
     assert result.exit_code == 0
 
@@ -91,7 +91,7 @@ def test_web_cli_get_html_no_transform_no_links(runner):
         ],
     )
     _rtn = GetResult.model_validate(json.loads(result.output))
-    assert (_rtn.resource.text or "").startswith("<!DOCTYPE html>")
+    assert (_rtn.resource.text or "").startswith("<!doctype html>")
     assert _rtn.get_link_count() == 0
     assert result.exit_code == 0
 
@@ -108,7 +108,7 @@ def test_web_cli_get_html_to_markdown(runner):
         ],
     )
     _rtn = GetResult.model_validate(json.loads(result.output))
-    assert "README | Starbridge" in (_rtn.resource.text or "")
+    assert "\n\nstarbridge " in (_rtn.resource.text or "")
     assert result.exit_code == 0
 
 
