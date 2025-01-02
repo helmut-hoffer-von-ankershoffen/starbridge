@@ -206,12 +206,12 @@ filename = "VERSION"
 [[tool.bumpversion.files]]
 filename = "sonar-project.properties"
 
+[[tool.bumpversion.files]]
+filename = "docs/source/conf.py"
+
 [tool.git-cliff.remote.github]
 owner = "helmut-hoffer-von-ankershoffen"
 repo = "starbridge"
-
-[[tool.bumpversion.files]]
-filename = "docs/source/conf.py"
 
 [tool.git-cliff.changelog]
 output = "CHANGELOG.md"
