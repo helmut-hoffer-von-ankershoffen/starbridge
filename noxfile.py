@@ -118,3 +118,9 @@ def audit(session: nox.Session):
     session.run("jq", ".", "licenses-inverted.json", external=True)
     session.run("cyclonedx-py", "environment", "-o", "sbom.json")
     session.run("jq", ".", "sbom.json", external=True)
+
+
+@nox.session(python=["3.13"])
+def docs(session: nox.Session):
+    _setup_venv(session)
+    session.run("make", "-C", "docs", "html", external=True)
