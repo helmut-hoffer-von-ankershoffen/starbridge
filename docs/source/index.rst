@@ -11,9 +11,10 @@ Welcome to brave-search-python-client's documentation!
    :caption: Contents:
 
    readme
+   docker
    contributing
-   changelog
    reference_index
+   changelog
 
 
 Indices and tables
