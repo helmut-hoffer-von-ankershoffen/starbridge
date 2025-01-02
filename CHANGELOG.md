@@ -2,6 +2,17 @@
 
 ## [unreleased]
 
+### 🚜 Refactor
+
+- *(uv,nox,pyproject)* No longer expose dev dependencies as extra - ([39a39b1](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/39a39b1381fd8879208fca48dbfe2ffa75c8bbdb))
+
+### 📚 Documentation
+
+- *(sphinx,readthedocs)* Introduce - ([3375b7f](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/3375b7f7b2b7142d6cb6f24a90cbb06d896b1f44))
+
+
+## [0.0.56](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.55..v0.0.56) - 2025-01-01
+
 ### ⛰️  Features
 
 - *(search)* Minimal web search using Brave Search Python Client (built separately) - ([b39cdb9](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/b39cdb97894af174d868aa20f914339f9c89f47a))
