@@ -2,6 +2,13 @@
 
 ## [unreleased]
 
+### 📚 Documentation
+
+- *(sphinx,readthedocs)* Introduce - ([770fc06](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/770fc061c28ae5b4f8716b8d9c0032b0d6e69688))
+
+
+## [0.0.57](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.56..v0.0.57) - 2025-01-02
+
 ### 🚜 Refactor
 
 - *(uv,nox,pyproject)* No longer expose dev dependencies as extra - ([39a39b1](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/39a39b1381fd8879208fca48dbfe2ffa75c8bbdb))
