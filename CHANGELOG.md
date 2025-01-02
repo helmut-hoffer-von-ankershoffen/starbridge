@@ -2,6 +2,13 @@
 
 ## [unreleased]
 
+### 🚜 Refactor
+
+- *(docs)* Simplify sphinx setup - ([169069c](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/169069c8826157dda0155a0e2a4f33b9c18143af))
+
+
+## [0.0.62](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.61..v0.0.62) - 2025-01-02
+
 ### 📚 Documentation
 
 - Add reference documentation - ([8d26936](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/8d26936a9b540022b7e37cee920607066cf43e9e))
