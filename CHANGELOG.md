@@ -2,6 +2,13 @@
 
 ## [unreleased]
 
+### 📚 Documentation
+
+- Add reference documentation - ([8d26936](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/8d26936a9b540022b7e37cee920607066cf43e9e))
+
+
+## [0.0.61](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.60..v0.0.61) - 2025-01-02
+
 ### 🧪 Testing
 
 - *(web)* Adapt to pivot from gitbook to read-the-docs - ([a4bcb16](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/a4bcb16c0651dccbb687f0fb31263e00fd964155))
