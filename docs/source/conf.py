@@ -35,7 +35,6 @@ html_static_path = ["_static"]
 html_logo = "../../starbridge.png"
 html_theme_options = {
     "announcement": (
-        "Get Starbridge on "
         '<a target="_blank" href="https://github.com/helmut-hoffer-von-ankershoffen/starbridge">GitHub</a> - '
         '<a target="_blank" href="https://pypi.org/project/starbridge/">PyPI</a> - '
         '<a target="_blank" href="https://hub.docker.com/r/helmuthva/starbridge/tags">Docker</a> - '
