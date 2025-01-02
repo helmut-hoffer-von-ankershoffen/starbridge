@@ -195,7 +195,7 @@ setup_hooks = []
 pre_commit_hooks = [
     "uv sync",
     "git add uv.lock",
-    "git-cliff",
+    "git-cliff --tag $BVHOOK_NEW_VERSION",
     "git add CHANGELOG.md",
 ]
 post_commit_hooks = []
