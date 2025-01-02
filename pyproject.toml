@@ -122,6 +122,7 @@ dev = [
     "sphinx-copybutton==0.5.2",
     "sphinx-autobuild>=2024.10.3",
     "sphinx-mdinclude>=0.6.2",
+    "furo>=2024.8.6",
 ]
 
 
