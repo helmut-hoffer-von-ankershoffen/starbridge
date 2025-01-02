@@ -2,6 +2,13 @@
 
 ## [unreleased]
 
+### 🧪 Testing
+
+- *(web)* Adapt to pivot from gitbook to read-the-docs - ([a4bcb16](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/a4bcb16c0651dccbb687f0fb31263e00fd964155))
+
+
+## [0.0.60](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.59..v0.0.60) - 2025-01-02
+
 ### 📚 Documentation
 
 - *(sphinx,readthedocs)* Introduce - ([898cfbb](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/898cfbbb4bb565f282925a4f8089de55c5c55654))
