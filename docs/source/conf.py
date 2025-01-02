@@ -24,7 +24,6 @@ extensions = [
     "sphinx_copybutton",
     "sphinx.ext.coverage",
     "sphinx_mdinclude",
-    "sphinx_rtd_dark_mode",
 ]
 
 templates_path = ["_templates"]
