@@ -9,7 +9,7 @@
 project = "starbridge"
 copyright = "2025, Helmut Hoffer von Ankershoffen"
 author = "Helmut Hoffer von Ankershoffen"
-release = "0.0.65"
+release = "0.0.66"
 github_username = "helmut-hoffer-von-ankershoffen"
 github_repository = "starbridge"
 
