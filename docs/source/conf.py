@@ -10,17 +10,24 @@ project = "starbridge"
 copyright = "2025, Helmut Hoffer von Ankershoffen"
 author = "Helmut Hoffer von Ankershoffen"
 release = "0.0.65"
+github_username = "helmut-hoffer-von-ankershoffen"
+github_repository = "starbridge"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
     "sphinx.ext.autodoc",
+    "sphinx_autodoc_typehints",
+    "sphinx-pydantic",
+    "sphinxcontrib.autodoc_pydantic",
+    "enum_tools.autoenum",
     "sphinx_copybutton",
     "sphinx.ext.coverage",
     "sphinx_mdinclude",
     "sphinxext.opengraph",
     "sphinx_inline_tabs",
+    "sphinx_toolbox",
 ]
 
 templates_path = ["_templates"]
