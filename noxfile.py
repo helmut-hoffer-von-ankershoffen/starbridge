@@ -6,14 +6,26 @@ import nox
 nox.options.reuse_existing_virtualenvs = True
 nox.options.default_venv_backend = "uv"
 
-_INSTALL_ARGS = "-e .[dev,imaging]"
-_INSTALL_NO_EXTRAS_ARGS = "-e .[dev]"
 _JUNITXML_ARG = "--junitxml=junit.xml"
+
+
+def _setup_venv(session: nox.Session, all_extras=True) -> None:
+    """Install dependencies for the given session using uv."""
+    args = ["uv", "sync", "--frozen"]
+    if all_extras:
+        args.append("--all-extras")
+    session.run_install(
+        *args,
+        env={
+            "UV_PROJECT_ENVIRONMENT": session.virtualenv.location,
+            "UV_PYTHON": str(session.python),
+        },
+    )
 
 
 @nox.session(python=["3.11", "3.12", "3.13"])
 def test(session: nox.Session):
-    session.install(_INSTALL_ARGS)
+    _setup_venv(session)
     session.run("rm", "-rf", ".coverage", external=True)
     session.run(
         "pytest",
@@ -48,7 +60,7 @@ def test(session: nox.Session):
 
 @nox.session(python=["3.11", "3.12", "3.13"])
 def test_no_extras(session: nox.Session):
-    session.install(_INSTALL_NO_EXTRAS_ARGS)
+    _setup_venv(session, all_extras=False)
     session.run(
         "pytest",
         "--cov-append",
@@ -67,9 +79,9 @@ def test_no_extras(session: nox.Session):
     )
 
 
-@nox.session(python=["3.11"])
+@nox.session(python=["3.13"])
 def lint(session: nox.Session):
-    session.install(_INSTALL_ARGS)
+    _setup_venv(session)
     session.run("ruff", "check", ".")
     session.run(
         "ruff",
@@ -79,9 +91,9 @@ def lint(session: nox.Session):
     )
 
 
-@nox.session(python=["3.11"])
+@nox.session(python=["3.13"])
 def audit(session: nox.Session):
-    session.install(_INSTALL_ARGS)
+    _setup_venv(session)
     session.run("pip-audit", "-f", "json", "-o", "vulnerabilities.json")
     session.run("jq", ".", "vulnerabilities.json", external=True)
     session.run("pip-licenses", "--format=json", "--output-file=licenses.json")
