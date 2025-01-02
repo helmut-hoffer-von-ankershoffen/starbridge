@@ -4,6 +4,13 @@
 
 ### 📚 Documentation
 
+- *(sphinx,readthedocs)* Introduce - ([3d669bd](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/3d669bd6d16338d034f33d86b0c1f6e44f994a43))
+
+
+## [0.0.58](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.57..v0.0.58) - 2025-01-02
+
+### 📚 Documentation
+
 - *(sphinx,readthedocs)* Introduce - ([770fc06](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/770fc061c28ae5b4f8716b8d9c0032b0d6e69688))
 
 
