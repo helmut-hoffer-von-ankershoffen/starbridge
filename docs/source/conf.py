@@ -24,6 +24,8 @@ extensions = [
     "sphinx_copybutton",
     "sphinx.ext.coverage",
     "sphinx_mdinclude",
+    "sphinxext.opengraph",
+    "sphinx_inline_tabs",
 ]
 
 templates_path = ["_templates"]
@@ -35,3 +37,4 @@ exclude_patterns = []
 
 html_theme = "furo"
 html_static_path = ["_static"]
+html_logo = "../../starbridge.png"

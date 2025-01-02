@@ -49,5 +49,4 @@ sbom.json
 .env.bak
 
 # Application specific
-/starbridge.png
 /starbridge.pdf
