@@ -59,6 +59,20 @@ class Service(MCPBaseService):
         Further tips:
             - The agent is to disable transform to markdown, extract links, and additional context in error cases only.
             - The agent can use this tool to crawl multiple pages. I.e. when asked to crawl a URL use a get call, than look at the top links extracted, follow them, and in the end provide a summary.
+
+
+        Args:
+            - url (str): The URL to fetch content from
+            - accept_language (str, optional): Accept-Language header to send as part of the get request. Defaults to en-US,en;q=0.9,de;q=0.8.
+                - The assistant can prompt the user for the language preferred, and set this header accordingly.
+            - transform_to_markdown (bool, optional): If set will transform content to markdown if possible. Defaults to true.
+                - If the transformation is not supported, the content will be returned as is
+            - extract_links (bool, optional): If set will extract links from the content. Defaults to True.
+                - Supported for selected content types only
+            - additional_context (bool, optional): If set will include additional context about the URL or it's domain in the response. Defaults to True.
+            - llms_full_txt (bool, optional): Whether to include llms-full.txt in additional context. Defaults to False.
+            - context (MCPContext | None, optional): Context object for request tracking. Defaults to None.
+
         Returns:
             - 'resource': The retrieved and possibly transformed resource:
                 - 'url' (string) the final URL after redirects
@@ -74,24 +88,12 @@ class Service(MCPBaseService):
                 - 'type' (string) the type of context, e.g. llms_txt for text specifally prepared by a domain for an assistant to read
                 - 'text' (string) the content of the context in markdown format
 
-        Args:
-            url (str): The URL to fetch content from
-            accept_language (str, optional): Accept-Language header to send as part of the get request. Defaults to en-US,en;q=0.9,de;q=0.8.
-                - The assistant can prompt the user for the language preferred, and set this header accordingly.
-            transform_to_markdown (bool, optional): If set will transform content to markdown if possible. Defaults to true.
-                - If the transformation is not supported, the content will be returned as is
-            extract_links (bool, optional): If set will extract links from the content. Defaults to True.
-                - Supported for selected content types only
-            additional_context (bool, optional): If set will include additional context about the URL or it's domain in the response. Defaults to True.
-            llms_full_txt (bool, optional): Whether to include llms-full.txt in additional context. Defaults to False.
-            context (MCPContext | None, optional): Context object for request tracking. Defaults to None.
-
-
 
         Raises:
             starbridge.web.RobotForbiddenException: If we are not allowed to crawl the URL autonomously
             requests.exceptions.RequestException: If the HTTP get request failed
             ValueError: If an invalid format was passed
+
         """
         response = await get_respectfully(
             url=url,

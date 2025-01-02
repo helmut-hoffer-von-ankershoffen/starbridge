@@ -5,41 +5,7 @@ from pydantic import AnyUrl, BaseModel
 
 
 class MCPContext(BaseModel):
-    """Context object providing access to MCP capabilities.
-
-    This provides a cleaner interface to MCP's RequestContext functionality.
-    It gets injected into tool and resource functions that request it via type hints.
-
-    To use context in a tool function, add a parameter with the Context type annotation:
-
-    ```python
-    @server.tool()
-    def my_tool(
-        x: int,
-        ctx: Context,
-    ) -> str:
-        # Log messages to the client
-        ctx.info(f"Processing {x}")
-        ctx.debug("Debug info")
-        ctx.warning("Warning message")
-        ctx.error("Error message")
-
-        # Report progress
-        ctx.report_progress(50, 100)
-
-        # Access resources
-        data = ctx.read_resource("resource://data")
-
-        # Get request info
-        request_id = ctx.request_id
-        client_id = ctx.client_id
-
-        return str(x)
-    ```
-
-    The context parameter name can be anything as long as it's annotated with Context.
-    The context is optional - tools that don't need it can omit the parameter.
-    """
+    """Context object providing access to MCP capabilities."""
 
     _request_context: RequestContext | None
     _mcp: Any  # Avoid circular import by using Any
@@ -114,7 +80,7 @@ class MCPContext(BaseModel):
             level: Log level (debug, info, warning, error)
             message: Log message
             logger_name: Optional logger name
-            **extra: Additional structured data to include
+            \*\*extra: Additional structured data to include
         """
         await self.request_context.session.send_log_message(
             level=level, data=message, logger=logger_name
