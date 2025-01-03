@@ -1,6 +1,17 @@
 [![starbridge](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/tests/fixtures/starbridge.png?raw=true)](https://helmuthva.gitbook.io/starbridge) Starbridge
 
-## [0.0.66](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.65..0.0.66) - 2025-01-02
+## [0.0.67](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.66..0.0.67) - 2025-01-03
+
+### 📚 Documentation
+
+- *(reference)* Links to github source and more - ([6f16c3c](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/6f16c3c0180c2715134634ebbb556dcdcb9619bc))
+- *(reference)* Source code links and more - ([2657779](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/26577799f3b9044cc7955fa05fcdd47b687435c3))
+
+## New Contributors ❤️
+
+* @helmut-hoffer-von-ankershoffen made their first contribution
+
+## [0.0.66](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.65..v0.0.66) - 2025-01-02
 
 ### 📚 Documentation
 
