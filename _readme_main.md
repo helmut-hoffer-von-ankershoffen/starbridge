@@ -6,7 +6,7 @@ Integrates Claude Desktop with the web, Atlassian Confluence, and (later on) Goo
 
 ## Qualities
 
-* [Complete reference documenation](https://starbridge.readthedocs.io/en/latest/reference_index.html) on Read the Docs
+* [Complete reference documenation](https://starbridge.readthedocs.io/en/latest/reference.html) on Read the Docs
 * [High test coverage](https://app.codecov.io/gh/helmut-hoffer-von-ankershoffen/starbridge) including unit and E2E tests (reported on Codecov)
 * Matrix tested with [Python 3.11, 3.12 and 3.13](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/noxfile.py) to ensure compatibility (powered by [Nox](https://nox.thea.codes/en/stable/))
 * 100% compliant with modern linting and formatting standards (powered by [Ruff](https://github.com/astral-sh/ruff))

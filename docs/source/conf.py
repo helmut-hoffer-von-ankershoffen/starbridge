@@ -79,7 +79,6 @@ html_theme_options = {
         '<a target="_blank" href="https://hub.docker.com/r/helmuthva/starbridge/tags">Docker</a> - '
         '<a target="_blank" href="https://sonarcloud.io/summary/new_code?id=helmut-hoffer-von-ankershoffen_starbridge">SonarQube</a> - '
         '<a target="_blank" href="https://app.codecov.io/gh/helmut-hoffer-von-ankershoffen/starbridge">Codecov</a>'
-        '<a target="_blank" href="https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/LICENSE">License</a>'
     ),
 }
 

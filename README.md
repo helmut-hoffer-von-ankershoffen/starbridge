@@ -21,7 +21,12 @@
 [![ghcr.io - Version](https://ghcr-badge.egpl.dev/helmut-hoffer-von-ankershoffen/starbridge/tags?color=%2344cc11&ignore=0.0%2C0%2Clatest&n=3&label=ghcr.io&trim=)](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/pkgs/container/starbridge)
 [![ghcr.io - Sze](https://ghcr-badge.egpl.dev/helmut-hoffer-von-ankershoffen/starbridge/size?color=%2344cc11&tag=latest&label=size&trim=)](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/pkgs/container/starbridge)
 -->
-> ⚠️ **WARNING**: This project is currently in pre-alpha phase, i.e. partly functional. Feel free to already watch or star the repository to stay updated on its progress.
+> [!WARNING] 
+> This project is currently in pre-alpha phase, i.e. partly functional. Feel free to already watch or star the repository to stay updated on its progress.
+
+> [!TIP]
+> 📚 [Online documentation](https://starbridge.readthedocs.io/en/latest/) - 📖 [PDF Manual](https://starbridge.readthedocs.io/_/downloads/en/latest/pdf/)
+
 
 Integrates Claude Desktop with the web, Atlassian Confluence, and (later on) Google Workspace.
 
@@ -31,7 +36,7 @@ Integrates Claude Desktop with the web, Atlassian Confluence, and (later on) Goo
 
 ## Qualities
 
-* [Complete reference documenation](https://starbridge.readthedocs.io/en/latest/reference_index.html) on Read the Docs
+* [Complete reference documenation](https://starbridge.readthedocs.io/en/latest/reference.html) on Read the Docs
 * [High test coverage](https://app.codecov.io/gh/helmut-hoffer-von-ankershoffen/starbridge) including unit and E2E tests (reported on Codecov)
 * Matrix tested with [Python 3.11, 3.12 and 3.13](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/noxfile.py) to ensure compatibility (powered by [Nox](https://nox.thea.codes/en/stable/))
 * 100% compliant with modern linting and formatting standards (powered by [Ruff](https://github.com/astral-sh/ruff))
