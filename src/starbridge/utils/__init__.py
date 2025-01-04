@@ -8,17 +8,17 @@ from .settings import get_starbridge_env, load_settings, prompt_for_env
 from .signature import description_and_params
 
 __all__ = [
-    "console",
-    "LoggingSettings",
-    "get_logger",
-    "description_and_params",
-    "load_settings",
-    "prompt_for_env",
-    "get_starbridge_env",
-    "Health",
     "AggregatedHealth",
+    "Health",
+    "LoggingSettings",
+    "console",
+    "description_and_params",
+    "get_logger",
     "get_process_info",
+    "get_starbridge_env",
+    "load_settings",
     "locate_implementations",
     "locate_subclasses",
     "prepare_cli",
+    "prompt_for_env",
 ]

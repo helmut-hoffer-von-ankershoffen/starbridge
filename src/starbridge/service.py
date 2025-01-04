@@ -29,7 +29,7 @@ class Service(MCPBaseService):
     @mcp_tool()
     def info(self, context: MCPContext | None = None) -> dict:
         """Get info about the environment starbridge is running in and all services."""
-        _rtn = {
+        rtn = {
             "name": __project_name__,
             "version": __version__,
             "path": __project_path__,
@@ -45,6 +45,6 @@ class Service(MCPBaseService):
                 continue
             service = service_class()
             service_name = service.__class__.__module__.split(".")[1]
-            _rtn[service_name] = service.info()
+            rtn[service_name] = service.info()
 
-        return _rtn
+        return rtn

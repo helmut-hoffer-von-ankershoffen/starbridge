@@ -34,20 +34,20 @@ def runner():
     return CliRunner()
 
 
-def test_core_cli_built_with_love(runner):
+def test_core_cli_built_with_love(runner) -> None:
     """Check epilog shown."""
     result = runner.invoke(cli, ["--help"])
     assert result.exit_code == 0
     assert "built with love in Berlin" in result.output
 
 
-def test_core_cli_invalid_command(runner):
-    """Test invalid command returns error"""
+def test_core_cli_invalid_command(runner) -> None:
+    """Test invalid command returns error."""
     result = runner.invoke(cli, ["invalid"])
     assert result.exit_code != 0
 
 
-def test_core_cli_info(runner):
+def test_core_cli_info(runner) -> None:
     """Check processes exposed and version matching."""
     result = runner.invoke(cli, ["info"])
     assert result.exit_code == 0
@@ -56,13 +56,13 @@ def test_core_cli_info(runner):
     assert data["version"] == __version__
 
 
-def test_core_cli_create_dot_env(runner, tmp_path):
+def test_core_cli_create_dot_env(runner, tmp_path) -> None:
     """Check configuration injected in claude as expected."""
     with runner.isolated_filesystem():
         inputs = INSTALLATION_INPUT
         result = runner.invoke(cli, ["create-dot-env"], input=inputs)
         assert result.exit_code == 0
-        dot_env = Path(".env").read_text()
+        dot_env = Path(".env").read_text(encoding="utf-8")
         assert "STARBRIDGE_ATLASSIAN_URL=https://test.atlassian.net" in dot_env
         assert "STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS=test@test.com" in dot_env
         assert "STARBRIDGE_ATLASSIAN_API_TOKEN=TEST_CONFLUENCE_API_TOKEN" in dot_env
@@ -79,13 +79,15 @@ def test_core_cli_create_dot_env(runner, tmp_path):
         assert "STARBRIDGE_WEB_TIMEOUT=5" in dot_env
 
 
-def test_core_cli_install(runner, tmp_path):
+def test_core_cli_install(runner, tmp_path) -> None:
     """Check configuration injected in claude as expected."""
     with patch(
-        "starbridge.claude.service.Service.application_directory", return_value=tmp_path
+        "starbridge.claude.service.Service.application_directory",
+        return_value=tmp_path,
     ):
         mock_restart = patch(
-            "starbridge.claude.service.Service._restart", return_value=None
+            "starbridge.claude.service.Service._restart",
+            return_value=None,
         ).start()
         inputs = INSTALLATION_INPUT
         result = runner.invoke(
@@ -102,18 +104,9 @@ def test_core_cli_install(runner, tmp_path):
         json_start = result.output.find("{")
         output_json = json.loads(result.output[json_start:])
         server_config = output_json["mcpServers"]["starbridge"]
-        assert (
-            server_config["env"]["STARBRIDGE_ATLASSIAN_URL"]
-            == "https://test.atlassian.net"
-        )
-        assert (
-            server_config["env"]["STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS"]
-            == "test@test.com"
-        )
-        assert (
-            server_config["env"]["STARBRIDGE_ATLASSIAN_API_TOKEN"]
-            == "TEST_CONFLUENCE_API_TOKEN"
-        )
+        assert server_config["env"]["STARBRIDGE_ATLASSIAN_URL"] == "https://test.atlassian.net"
+        assert server_config["env"]["STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS"] == "test@test.com"
+        assert server_config["env"]["STARBRIDGE_ATLASSIAN_API_TOKEN"] == "TEST_CONFLUENCE_API_TOKEN"
 
         mock_restart.reset_mock()
         result = runner.invoke(cli, ["uninstall"], input=inputs)
@@ -161,7 +154,7 @@ def test_core_cli_install(runner, tmp_path):
         assert result.exit_code == 0
 
 
-def test_core_cli_main_guard():
+def test_core_cli_main_guard() -> None:
     env = os.environ.copy()
     env.update({
         "COVERAGE_PROCESS_START": "pyproject.toml",
@@ -172,12 +165,13 @@ def test_core_cli_main_guard():
         capture_output=True,
         text=True,  # Get string output instead of bytes
         env=env,
+        check=False,
     )
     assert result.returncode == 0
     assert "Hello World!" in result.stdout
 
 
-def test_core_cli_main_guard_fail():
+def test_core_cli_main_guard_fail() -> None:
     env = os.environ.copy()
     env.update({
         "COVERAGE_PROCESS_START": "pyproject.toml",
@@ -188,7 +182,8 @@ def test_core_cli_main_guard_fail():
         [sys.executable, "-m", "starbridge.cli", "hello", "hello"],
         capture_output=True,
         text=True,
-        env=env,  # Get string output instead of bytes
+        env=env,
+        check=False,  # Get string output instead of bytes
     )
     assert result.returncode == 1
     assert "Fatal error occurred: Hello World failed" in result.stdout

@@ -1,6 +1,4 @@
-"""
-CLI to search
-"""
+"""CLI to search."""
 
 import asyncio
 import sys
@@ -19,14 +17,14 @@ cli = typer.Typer(name="search", help="Search operations")
 
 
 @cli.command()
-def health():
-    """Health of the search module"""
+def health() -> None:
+    """Health of the search module."""
     console.print_json(Service().health().model_dump_json())
 
 
 @cli.command()
-def info():
-    """Info about the search module"""
+def info() -> None:
+    """Info about the search module."""
     console.print_json(data=Service().info())
 
 
@@ -46,6 +44,6 @@ def web(
                 text,
                 title="Request failed",
                 border_style="red",
-            )
+            ),
         )
         sys.exit(1)

@@ -1,6 +1,4 @@
-"""
-CLI to interact with the world wide web
-"""
+"""CLI to interact with the world wide web."""
 
 import asyncio
 import sys
@@ -20,14 +18,14 @@ cli = typer.Typer(name="web", help="Web operations")
 
 
 @cli.command()
-def health():
-    """Health of the web module"""
+def health() -> None:
+    """Health of the web module."""
     console.print_json(Service().health().model_dump_json())
 
 
 @cli.command()
-def info():
-    """Info about the web module"""
+def info() -> None:
+    """Info about the web module."""
     console.print_json(data=Service().info())
 
 
@@ -75,7 +73,7 @@ def get(
                 extract_links=extract_links,
                 additional_context=additional_context,
                 llms_full_txt=llms_full_txt,
-            )
+            ),
         )
         console.print_json(rtn.model_dump_json())
     except RequestException as e:
@@ -86,7 +84,7 @@ def get(
                 text,
                 title="Request failed",
                 border_style="red",
-            )
+            ),
         )
         sys.exit(1)
     except RobotForbiddenException as e:
@@ -97,6 +95,6 @@ def get(
                 text,
                 title="robots.txt disallows crawling",
                 border_style="red",
-            )
+            ),
         )
         sys.exit(1)

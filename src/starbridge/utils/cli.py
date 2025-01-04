@@ -5,8 +5,8 @@ from .di import (
 )
 
 
-def prepare_cli(cli: typer.Typer, epilog: str):
-    """Dynamically locate, register and prepare subcommands"""
+def prepare_cli(cli: typer.Typer, epilog: str) -> None:
+    """Dynamically locate, register and prepare subcommands."""
     for _cli in locate_implementations(typer.Typer):
         if _cli != cli:
             cli.add_typer(_cli)
@@ -18,8 +18,8 @@ def prepare_cli(cli: typer.Typer, epilog: str):
     _no_args_is_help_recursively(cli)
 
 
-def _add_epilog_recursively(cli: typer.Typer, epilog: str):
-    """Add epilog to all typers in the tree"""
+def _add_epilog_recursively(cli: typer.Typer, epilog: str) -> None:
+    """Add epilog to all typers in the tree."""
     cli.info.epilog = epilog
     for group in cli.registered_groups:
         if isinstance(group, typer.models.TyperInfo):
@@ -31,8 +31,8 @@ def _add_epilog_recursively(cli: typer.Typer, epilog: str):
             command.epilog = cli.info.epilog
 
 
-def _no_args_is_help_recursively(cli: typer.Typer):
-    """Add epilog to all typers in the tree"""
+def _no_args_is_help_recursively(cli: typer.Typer) -> None:
+    """Add epilog to all typers in the tree."""
     for group in cli.registered_groups:
         if isinstance(group, typer.models.TyperInfo):
             group.no_args_is_help = True

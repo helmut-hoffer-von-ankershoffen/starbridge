@@ -12,12 +12,8 @@ class MimeType:
     TEXT_MARKDWON = "text/markdown"
     TEXT_PLAIN = "text/plain"
     APPLICATION_PDF = "application/pdf"
-    APPLICATION_OPENXML_WORD = (
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    )
-    APPLICATION_OPENXML_EXCEL = (
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
-    )
+    APPLICATION_OPENXML_WORD = "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+    APPLICATION_OPENXML_EXCEL = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     OCTET_STREAM = "application/octet-stream"
 
 
@@ -30,22 +26,24 @@ class Resource(BaseModel):
     text: Annotated[
         str | None,
         Field(
-            description="Textual content of the resource. None if the resource is binary."
+            description="Textual content of the resource. None if the resource is binary.",
         ),
     ] = None
     blob: Annotated[
         bytes | None,
         Field(
-            description="Binary content of the resource. None if the resource has textual content."
+            description="Binary content of the resource. None if the resource has textual content.",
         ),
     ] = None
 
     @model_validator(mode="after")
     def check_content_exists(self) -> "Resource":
         if self.text is None and self.blob is None:
-            raise ValueError("Either text or blob must be provided")
+            msg = "Either text or blob must be provided"
+            raise ValueError(msg)
         if self.text is not None and self.blob is not None:
-            raise ValueError("Only one of text or blob must be provided")
+            msg = "Only one of text or blob must be provided"
+            raise ValueError(msg)
         return self
 
 
@@ -86,7 +84,8 @@ class GetResult(BaseModel):
         return len(self.extracted_links or [])
 
     resource: Annotated[
-        Resource, Field(description="The retrieved and possibly transformed resource")
+        Resource,
+        Field(description="The retrieved and possibly transformed resource"),
     ]
     extracted_links: Annotated[
         list[LinkTarget] | None,

@@ -17,7 +17,7 @@ logger = get_logger(__name__)
 class Service(MCPBaseService):
     """Service class for Claude operations."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     @mcp_tool()
@@ -71,7 +71,7 @@ class Service(MCPBaseService):
 
     @mcp_tool()
     def restart(self, context: MCPContext | None = None) -> str:
-        """Restart Claude Desktop application. The agent should use this tool when asked to restart itself"""
+        """Restart Claude Desktop application. The agent should use this tool when asked to restart itself."""
         Service._restart()
         return "Claude Desktop application restarted"
 
@@ -87,7 +87,8 @@ class Service(MCPBaseService):
                 return Path(Path.home(), "AppData", "Roaming", "Claude")
             case "linux":
                 return Path(Path.home(), ".config", "Claude")
-        raise RuntimeError(f"Unsupported platform {sys.platform}")
+        msg = f"Unsupported platform {sys.platform}"
+        raise RuntimeError(msg)
 
     @staticmethod
     def is_installed() -> bool:
@@ -99,14 +100,11 @@ class Service(MCPBaseService):
         """Check if Claude Desktop application is running."""
         if __is_running_in_container__:
             logger.warning(
-                "Checking if Claude is running is not supported in container"
+                "Checking if Claude is running is not supported in container",
             )
             return False
 
-        return any(
-            proc.info["name"] == "Claude"
-            for proc in psutil.process_iter(attrs=["name"])
-        )
+        return any(proc.info["name"] == "Claude" for proc in psutil.process_iter(attrs=["name"]))
 
     @staticmethod
     def config_path() -> Path:
@@ -125,7 +123,8 @@ class Service(MCPBaseService):
         if config_path.is_file():
             with open(config_path, encoding="utf8") as file:
                 return json.load(file)
-        raise FileNotFoundError(f"No config file found at '{config_path}'")
+        msg = f"No config file found at '{config_path}'"
+        raise FileNotFoundError(msg)
 
     @staticmethod
     def config_write(config: dict) -> dict:
@@ -145,7 +144,8 @@ class Service(MCPBaseService):
                 return Path(Path.home(), "AppData", "Roaming", "Claude", "logs")
             case "linux":
                 return Path(Path.home(), ".logs", "Claude")
-        raise RuntimeError(f"Unsupported platform {sys.platform}")
+        msg = f"Unsupported platform {sys.platform}"
+        raise RuntimeError(msg)
 
     @staticmethod
     def log_path(mcp_server_name: str | None = __project_name__) -> Path:
@@ -157,22 +157,22 @@ class Service(MCPBaseService):
 
     @staticmethod
     def install_mcp_server(
-        mcp_server_config: dict, mcp_server_name=__project_name__, restart=True
+        mcp_server_config: dict,
+        mcp_server_name=__project_name__,
+        restart=True,
     ) -> bool:
         """Install MCP server in Claude Desktop application."""
         if Service.is_installed() is False:
+            msg = f"Claude Desktop application is not installed at '{Service.application_directory()}'"
             raise RuntimeError(
-                f"Claude Desktop application is not installed at '{Service.application_directory()}'"
+                msg,
             )
         try:
             config = Service.config_read()
         except FileNotFoundError:
             config = {"mcpServers": {}}
 
-        if (
-            mcp_server_name in config["mcpServers"]
-            and config["mcpServers"][mcp_server_name] == mcp_server_config
-        ):
+        if mcp_server_name in config["mcpServers"] and config["mcpServers"][mcp_server_name] == mcp_server_config:
             if restart:
                 Service._restart()
             return False
@@ -185,12 +185,14 @@ class Service(MCPBaseService):
 
     @staticmethod
     def uninstall_mcp_server(
-        mcp_server_name: str = __project_name__, restart=True
+        mcp_server_name: str = __project_name__,
+        restart=True,
     ) -> bool:
         """Uninstall MCP server from Claude Desktop application."""
         if Service.is_installed() is False:
+            msg = f"Claude Desktop application is not installed at '{Service.application_directory()}'"
             raise RuntimeError(
-                f"Claude Desktop application is not installed at '{Service.application_directory()}'"
+                msg,
             )
         try:
             config = Service.config_read()
@@ -205,7 +207,7 @@ class Service(MCPBaseService):
         return True
 
     @staticmethod
-    def platform_supports_restart():
+    def platform_supports_restart() -> bool:
         """Check if platform supports restarting Claude."""
         return not __is_running_in_container__
 
@@ -213,7 +215,8 @@ class Service(MCPBaseService):
     def _restart():
         """Restarts the Claude desktop application on macOS."""
         if Service.platform_supports_restart() is False:
-            raise RuntimeError("Restarting Claude is not supported in container")
+            msg = "Restarting Claude is not supported in container"
+            raise RuntimeError(msg)
 
         # Find and terminate all Claude processes
         for proc in psutil.process_iter(attrs=["name"]):
@@ -231,4 +234,5 @@ class Service(MCPBaseService):
             case "Linux":
                 return subprocess.run(["xdg-open", "Claude"], shell=False, check=True)
 
-        raise RuntimeError(f"Starting Claude not supported on {platform.system()}")
+        msg = f"Starting Claude not supported on {platform.system()}"
+        raise RuntimeError(msg)

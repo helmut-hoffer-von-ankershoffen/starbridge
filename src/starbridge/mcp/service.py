@@ -5,7 +5,7 @@ from inspect import signature
 from typing import TypeVar
 from urllib.parse import urlparse
 
-import mcp.types as types
+from mcp import types
 from pydantic_settings import BaseSettings
 
 from starbridge.mcp.context import MCPContext
@@ -17,7 +17,7 @@ T = TypeVar("T", bound=BaseSettings)
 
 @dataclass(frozen=True)
 class ResourceType:
-    """A resource type is identified by a triple of (server, service, type)"""
+    """A resource type is identified by a triple of (server, service, type)."""
 
     server: str
     service: str
@@ -32,7 +32,7 @@ class MCPBaseService(ABC):
 
     _settings: BaseSettings
 
-    def __init__(self, settings_class: type[T] | None = None):
+    def __init__(self, settings_class: type[T] | None = None) -> None:
         if settings_class is not None:
             self._settings = self._load_settings(settings_class)
 
@@ -61,7 +61,7 @@ class MCPBaseService(ABC):
                             "required": required,
                             "properties": params,
                         },
-                    )
+                    ),
                 )
         return tools
 
@@ -75,8 +75,9 @@ class MCPBaseService(ABC):
             if hasattr(method, "__mcp_resource_iterator__"):
                 meta = method.__mcp_resource_iterator__
                 if not meta.type:
+                    msg = f"Resource iterator {method_name} missing required type"
                     raise ValueError(
-                        f"Resource iterator {method_name} missing required type"
+                        msg,
                     )
 
                 self._check_type_uniqueness(type_map, meta, method_name)
@@ -89,7 +90,8 @@ class MCPBaseService(ABC):
         return resources
 
     def resource_type_list(
-        self, context: MCPContext | None = None
+        self,
+        context: MCPContext | None = None,
     ) -> set[ResourceMetadata]:
         """Get available resource types by discovering all resource iterators."""
         types = set()
@@ -115,17 +117,18 @@ class MCPBaseService(ABC):
 
                 # Convert signature params to PromptArguments
                 arguments = []
-                for name, _param in sig.parameters.items():
-                    if name in ("self", "context"):
+                for name in sig.parameters:
+                    if name in {"self", "context"}:
                         continue
                     arguments.append(
                         types.PromptArgument(
                             name=name,
                             description=params.get(name, {}).get(
-                                "description", f"Parameter {name}"
+                                "description",
+                                f"Parameter {name}",
                             ),
                             required=name in required,
-                        )
+                        ),
                     )
 
                 prompts.append(
@@ -133,30 +136,34 @@ class MCPBaseService(ABC):
                         name=str(meta),
                         description=description,
                         arguments=arguments,
-                    )
+                    ),
                 )
         return prompts
 
-    def _validate_resource_uri(self, resource, meta):
+    def _validate_resource_uri(self, resource, meta) -> None:
         """Validate resource URI against metadata."""
         parsed = urlparse(str(resource.uri))
         if parsed.scheme != meta.server:
+            msg = f"Resource URI scheme '{parsed.scheme}' doesn't match decorator scheme '{meta.server}'"
             raise ValueError(
-                f"Resource URI scheme '{parsed.scheme}' doesn't match decorator scheme '{meta.server}'"
+                msg,
             )
         if parsed.netloc != meta.service:
+            msg = f"Resource URI service '{parsed.netloc}' doesn't match decorator service '{meta.service}'"
             raise ValueError(
-                f"Resource URI service '{parsed.netloc}' doesn't match decorator service '{meta.service}'"
+                msg,
             )
         if not parsed.path.startswith(f"/{meta.type}/"):
-            raise ValueError(f"Resource URI path doesn't start with '/{meta.type}/'")
+            msg = f"Resource URI path doesn't start with '/{meta.type}/'"
+            raise ValueError(msg)
 
-    def _check_type_uniqueness(self, type_map, meta, method_name):
+    def _check_type_uniqueness(self, type_map, meta, method_name) -> None:
         """Ensure resource type is unique."""
         type_map[meta.type].append(method_name)
         if len(type_map[meta.type]) > 1:
+            msg = f"Multiple resource iterators found for type '{meta.type}': {type_map[meta.type]}"
             raise ValueError(
-                f"Multiple resource iterators found for type '{meta.type}': {type_map[meta.type]}"
+                msg,
             )
 
     def _load_settings(self, settings_class: type[T]) -> T:

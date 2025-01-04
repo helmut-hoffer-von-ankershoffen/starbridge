@@ -10,7 +10,7 @@ requires-python = ">=3.11,<4.0"
 dependencies = [
     "pydantic>=2.10.4",
     "pydantic-settings>=2.7.1",
-    "mcp>=1.1.2",
+    "mcp>=1.2.0",
     "griffe>=1.5.4",
     "typer>=0.15.1",
     "atlassian-python-api>=3.41.16",
@@ -32,7 +32,7 @@ dependencies = [
     "markdown>=3.7",
     "readabilipy>=0.3.0",
     "markitdown>=0.0.1a3",
-    "brave-search-python-client>=0.2.12",
+    "brave-search-python-client>=0.2.17",
     "enum-tools>=0.12.0",
     "sphinx-toolbox>=3.8.1",
 ]
@@ -102,10 +102,14 @@ notebooks = ["ipykernel>=6.29.5", "marimo>=0.10.7"]
 
 [dependency-groups]
 dev = [
+    "autodoc-pydantic>=2.2.0",
     "bump-my-version>=0.29.0",
     "cyclonedx-py>=1.0.1",
     "detect-secrets>=1.5.0",
+    "enum-tools>=0.12.0",
+    "furo>=2024.8.6",
     "git-cliff>=2.7.0",
+    "nox[uv]>=2024.10.9",
     "pip-audit>=2.7.3",
     "pip-licenses>=5.0.0",
     "pre-commit>=4.0.1",
@@ -116,21 +120,21 @@ dev = [
     "pytest-docker>=3.1.1",
     "pytest-env>=1.1.5",
     "pytest-xdist[psutil]>=3.6.1",
-    "nox>=2024.10.9",
-    "ruff>=0.8.4",
-    "tomli>=2.1.0",
+    "ruff>=0.8.5",
     "sphinx>=8.1.3",
-    "sphinx-rtd-theme>=3.0.2",
-    "sphinx-copybutton==0.5.2",
     "sphinx-autobuild>=2024.10.3",
-    "sphinx-mdinclude>=0.6.2",
-    "furo>=2024.8.6",
+    "sphinx-copybutton>=0.5.2",
     "sphinx-inline-tabs>=2023.4.21",
-    "sphinxext-opengraph>=0.9.1",
-    "myst-parser>=4.0.0",
-    "sphinx-autodoc-typehints>=2.5.0",
+    "sphinx-mdinclude>=0.6.2",
+    "sphinxext.opengraph>=0.9.1",
     "sphinx-pydantic>=0.1.1",
-    "autodoc-pydantic>=2.2.0",
+    "sphinx-rtd-theme>=3.0.2",
+    "sphinx-toolbox>=3.8.1",
+    "sphinxext-opengraph>=0.9.1",
+    "tomli>=2.1.0",
+    "matplotlib>=3.10.0",
+    "sphinxemoji>=0.3.1",
+    "pytest-regressions>=2.6.0",
 ]
 
 
@@ -138,17 +142,59 @@ dev = [
 target-version = "py311"
 preview = true
 fix = true
+line-length = 120
+
 
 [tool.ruff.lint]
-ignore = ["B008", "E501"]
+# select = ["ALL"]
 select = [
-    "E",  # pycodestyle errors
+    #    "E",  # pycodestyle errors
     "F",  # pyflakes
     "I",  # isort
     "UP", # pyupgrade
     "B",  # flake8-bugbear
-    "C4", # flake8-comprehensions
+    "C",  # flake8-comprehensions
 ]
+
+# sekect= [
+ignore = [
+    "ANN002", # Missing type annotation for `*args`
+    "ANN003", # Missing type annotation for `**kwargs``
+    "CPY001", # missing copyright notice
+    "DOC502", # docstrings with exceptions not raised in the code of the function
+    "D203",   # incomptatible with D211
+    "D212",   # incompatible with #D213
+    "FBT001", # boolean positional arguments
+    "FBT002", # boolean defautl value positionl arguments
+    "PGH003", # Use specific rule codes when ignoring type issues
+    "TRY300", # else instead of return before except. Simply disagree this is more readable.
+    "COM812", # conflicts with ruff formatter
+    "ISC001", # conflicts with ruff formatter
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**/*.py" = [
+    # at least this three should be fine in tests:
+    "S101",     # asserts allowed in tests...
+    "ARG",      # Unused function args -> fixtures nevertheless are functionally relevant...
+    "FBT",      # Don't care about booleans as positional arguments in tests, e.g. via @pytest.mark.parametrize()
+    "PLR2004",  # Magic value used in comparison, ...
+    "PT011",    # Exception to broad
+    "PLC2701",  # private import, but required for unit testing
+    "PLC0415",  # local import
+    "PT012",    # Exception to broad
+    "S311",     # Standard pseudo-random generators are not suitable for cryptographic purposes
+    "SLF001",   # Private member access required for unit testing
+    "ANN001",   # Missing type annotation for function argument
+    "ANN002",   # Missing type annotation
+    "ANN003",   # Missing type annotation
+    "ANN202",   # Missing return type annotation
+    "PTH123",   # Use of open to be replaced with Path.open
+    "DOC201",   # `return` is not documented in docstring
+    "ASYNC230", # Async functions should not open files with blocking methods like `open`
+]
+
+[tool.ruff.lint.extend-per-file-ignores]
 
 [tool.ruff.format]
 docstring-code-format = true
@@ -279,8 +325,6 @@ body = """
     {%- endif %}
 {%- endfor -%}
 {%- endif %}
-
-
 """
 # template for the changelog footer
 footer = """

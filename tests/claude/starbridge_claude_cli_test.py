@@ -20,8 +20,8 @@ def runner():
 @patch("platform.system", return_value="Darwin")
 @patch("psutil.process_iter")
 @patch("starbridge.claude.service.Service.is_installed", return_value=True)
-def test_claude_cli_health(mock_has_config, mock_process_iter, mock_platform, runner):
-    """Check health spots Claude up and running"""
+def test_claude_cli_health(mock_has_config, mock_process_iter, mock_platform, runner) -> None:
+    """Check health spots Claude up and running."""
     mock_process = Mock()
     mock_process.info = {"pid": 1234, "name": "Claude"}
     mock_process_iter.return_value = [mock_process]
@@ -31,8 +31,8 @@ def test_claude_cli_health(mock_has_config, mock_process_iter, mock_platform, ru
     assert result.exit_code == 0
 
 
-def test_claude_cli_health_in_container():
-    """Check health spots Claude not running in container"""
+def test_claude_cli_health_in_container() -> None:
+    """Check health spots Claude not running in container."""
     env = os.environ.copy()
     env.update({
         "COVERAGE_PROCESS_START": "pyproject.toml",
@@ -44,6 +44,7 @@ def test_claude_cli_health_in_container():
         capture_output=True,
         text=True,  # Get string output instead of bytes
         env=env,
+        check=False,
     )
     assert result.returncode == 0
     assert '"DOWN"' in result.stdout
@@ -53,9 +54,12 @@ def test_claude_cli_health_in_container():
 @patch("psutil.process_iter")
 @patch("starbridge.claude.service.Service.is_installed", return_value=True)
 def test_claude_cli_info_works(
-    mock_has_config, mock_process_iter, mock_platform, runner
-):
-    """Check info spots spots installed and running Claude"""
+    mock_has_config,
+    mock_process_iter,
+    mock_platform,
+    runner,
+) -> None:
+    """Check info spots spots installed and running Claude."""
     mock_process = Mock()
     mock_process.info = {
         "pid": 1234,
@@ -75,8 +79,8 @@ def test_claude_cli_info_works(
     assert info["is_running"] is True
 
 
-def test_claude_cli_config_works(runner, tmp_path):
-    """Check config works"""
+def test_claude_cli_config_works(runner, tmp_path) -> None:
+    """Check config works."""
     # Set up test config file in isolated tmp directory
     config_dir = tmp_path / "Claude"
     config_dir.mkdir()
@@ -96,8 +100,8 @@ def test_claude_cli_config_works(runner, tmp_path):
 
 
 @patch("starbridge.claude.service.Service.is_installed", return_value=False)
-def test_claude_cli_config_fails_if_not_installed(mock_is_installed, runner):
-    """Check config fails when config path is not a file"""
+def test_claude_cli_config_fails_if_not_installed(mock_is_installed, runner) -> None:
+    """Check config fails when config path is not a file."""
     result = runner.invoke(cli, ["claude", "config"])
     assert result.exit_code == 0
     assert "not installed" in result.stdout
@@ -109,16 +113,18 @@ def test_claude_cli_config_fails_if_not_installed(mock_is_installed, runner):
     return_value=Path("/nonexistent/config.json"),
 )
 def test_claude_cli_config_fails_if_no_config(
-    mock_is_installed, mock_config_path, runner
-):
-    """Check config fails when no config file"""
+    mock_is_installed,
+    mock_config_path,
+    runner,
+) -> None:
+    """Check config fails when no config file."""
     result = runner.invoke(cli, ["claude", "config"])
     assert result.exit_code == 0
     assert "No config" in result.stdout
 
 
-def test_claude_cli_log_works(runner, tmp_path, capfd):
-    """Check showing log works"""
+def test_claude_cli_log_works(runner, tmp_path, capfd) -> None:
+    """Check showing log works."""
     # Set up test config file in isolated tmp directory
     log_dir = tmp_path / "Claude"
     log_dir.mkdir()
@@ -142,8 +148,8 @@ def test_claude_cli_log_works(runner, tmp_path, capfd):
 
 
 @patch("starbridge.claude.service.Service.is_installed", return_value=False)
-def test_claude_cli_restart_fails_if_not_installed(mock_is_installed, runner):
-    """Check restart fails if Claude not installed"""
+def test_claude_cli_restart_fails_if_not_installed(mock_is_installed, runner) -> None:
+    """Check restart fails if Claude not installed."""
     result = runner.invoke(cli, ["claude", "restart"])
     assert result.exit_code == 0
     assert "not installed" in result.stdout
@@ -157,9 +163,8 @@ def test_claude_cli_restart_works_if_installed(
     mock_process_iter,
     mock_is_installed,
     runner,
-):
-    """Check restart works on supported platforms"""
-
+) -> None:
+    """Check restart works on supported platforms."""
     mock_process_claude = Mock()
     mock_process_claude.info = {"name": "Claude"}
     mock_process_other = Mock()
@@ -178,7 +183,9 @@ def test_claude_cli_restart_works_if_installed(
             mock_process_claude.terminate.assert_called_once()
             assert mock_process_other.terminate.call_count == 0
             mock_subprocess_run.assert_called_once_with(
-                command["args"], shell=command["shell"], check=True
+                command["args"],
+                shell=command["shell"],
+                check=True,
             )
             assert result.exit_code == 0
             assert "was restarted" in result.stdout
@@ -194,9 +201,8 @@ def test_claude_cli_restart_fails_on_unknown_system(
     mock_process_iter,
     mock_is_installed,
     runner,
-):
-    """Check restart fails if Claude running on unknown platform"""
-
+) -> None:
+    """Check restart fails if Claude running on unknown platform."""
     mock_process = Mock()
     mock_process.info = {"name": "Claude"}
     mock_process_iter.return_value = [mock_process]
@@ -212,21 +218,21 @@ def test_claude_cli_restart_fails_on_unknown_system(
 
 @patch("starbridge.claude.service.Service.is_installed", return_value=True)
 @patch(
-    "starbridge.claude.service.Service.platform_supports_restart", return_value=False
+    "starbridge.claude.service.Service.platform_supports_restart",
+    return_value=False,
 )  # TODO: fin dout why we cannot patch is_running_in_container
 def test_claude_cli_restart_fails_in_container(
     mock_platform_supports_restart,
     mock_is_installed,
     runner,
-):
-    """Check restart fails if Claude running in container"""
+) -> None:
+    """Check restart fails if Claude running in container."""
     result = runner.invoke(cli, ["claude", "restart"])
     assert result.exit_code == 1
 
 
-def test_claude_cli_in_container_commands_not_available():
+def test_claude_cli_in_container_commands_not_available() -> None:
     """Check log command not available in container."""
-
     env = os.environ.copy()
     env.update({
         "COVERAGE_PROCESS_START": "pyproject.toml",
@@ -240,6 +246,7 @@ def test_claude_cli_in_container_commands_not_available():
             capture_output=True,
             text=True,
             env=env,
+            check=False,
         )
         assert result.returncode == 2
         assert "No such command" in result.stderr

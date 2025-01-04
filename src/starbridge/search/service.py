@@ -22,13 +22,13 @@ class Service(MCPBaseService):
     _settings: Settings
     _bs: BraveSearch
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(Settings)
         self._bs = BraveSearch(api_key=self._settings.brave_search_api_key)
 
     @mcp_tool()
     def health(self, context: MCPContext | None = None) -> Health:
-        """Check health of the search service"""
+        """Check health of the search service."""
         if not asyncio.run(self._bs.is_connected()):
             return Health(
                 status=Health.Status.DOWN,
@@ -38,7 +38,7 @@ class Service(MCPBaseService):
 
     @mcp_tool()
     def info(self, context: MCPContext | None = None) -> dict:
-        """Info about search environment"""
+        """Info about search environment."""
         return {}
 
     @mcp_tool()
@@ -47,7 +47,8 @@ class Service(MCPBaseService):
         q: str,
         context: MCPContext | None = None,
     ) -> WebSearchApiResponse:
-        """Search the world wide web via Brave Search.
+        """
+        Search the world wide web via Brave Search.
 
         Should be called by the assistant when the user asks to search the Internet / the world wide web
             - This includes the case when the user asks to find something in the web
@@ -61,5 +62,6 @@ class Service(MCPBaseService):
         Raises:
             (BraveSearchClientError): If the request was formulated wrong
             (BraveSearchApiError): If the Brave Search API was not reachable or had an internal server error
+
         """
         return await self._bs.web(WebSearchRequest(q=q))

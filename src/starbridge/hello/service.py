@@ -24,16 +24,17 @@ class Service(MCPBaseService):
 
     @mcp_tool()
     def info(self, context: MCPContext | None = None) -> dict:
-        """Info about Hello world environment"""
+        """Info about Hello world environment."""
         return {"locale": "en_US"}
 
     @mcp_tool()
-    def hello(self, locale: str = "en_US", context: MCPContext | None = None):
+    def hello(self, locale: str = "en_US", context: MCPContext | None = None) -> str:
         """Print hello world!"""
         if "starbridge_hello_service_hello_fail" in os.environ.get("MOCKS", "").split(
-            ","
+            ",",
         ):
-            raise RuntimeError("Hello World failed")
+            msg = "Hello World failed"
+            raise RuntimeError(msg)
         if locale == "de_DE":
             return "Hallo Welt!"
         return "Hello World!"
@@ -42,19 +43,19 @@ class Service(MCPBaseService):
 
         @mcp_tool()
         def bridge(self, context: MCPContext | None = None):
-            """Show image of starbridge"""
+            """Show image of starbridge."""
             import cairosvg
             from PIL import Image
 
             return Image.open(
                 io.BytesIO(
-                    cairosvg.svg2png(bytestring=Service._starbridge_svg()) or b""
-                )
+                    cairosvg.svg2png(bytestring=Service._starbridge_svg()) or b"",
+                ),
             )
 
     @mcp_tool()
     def pdf(self, context: MCPContext | None = None) -> EmbeddedResource:
-        """Show pdf document with Hello World"""
+        """Show pdf document with Hello World."""
         return EmbeddedResource(
             type="resource",
             resource=BlobResourceContents(
@@ -66,12 +67,12 @@ class Service(MCPBaseService):
 
     @staticmethod
     def pdf_bytes(context: MCPContext | None = None) -> bytes:
-        """Show pdf document with Hello World"""
+        """Show pdf document with Hello World."""
         return base64.b64decode(Service._starbridge_pdf_base64())
 
     @staticmethod
     def _starbridge_svg() -> str:
-        """Image of starbridge, generated with Claude (Sonnet 3.5 new)"""
+        """Image of starbridge, generated with Claude (Sonnet 3.5 new)."""
         return """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
     <!-- Background -->
     <rect width="256" height="256" fill="#1a1a2e"/>

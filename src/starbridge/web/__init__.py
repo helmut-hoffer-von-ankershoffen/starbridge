@@ -4,12 +4,12 @@ from .settings import Settings
 from .types import Context, GetResult, LinkTarget, Resource, RobotForbiddenException
 
 __all__ = [
-    "Service",
-    "cli",
-    "Settings",
-    "RobotForbiddenException",
-    "GetResult",
-    "Resource",
     "Context",
+    "GetResult",
     "LinkTarget",
+    "Resource",
+    "RobotForbiddenException",
+    "Service",
+    "Settings",
+    "cli",
 ]

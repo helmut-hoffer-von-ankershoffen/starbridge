@@ -30,11 +30,12 @@ class LogfireSettings(BaseSettings):
         ),
     ]
     instrument_mcp_enabled: Annotated[
-        bool, Field(description="Enable MCP instrumentation", default=False)
+        bool,
+        Field(description="Enable MCP instrumentation", default=False),
     ]
 
 
-def logfire_initialize():
+def logfire_initialize() -> bool | None:
     settings = load_settings(LogfireSettings)
 
     if settings.token is None:
@@ -56,3 +57,4 @@ def logfire_initialize():
 
     if settings.instrument_mcp_enabled:
         MCPInstrumentor().instrument()
+    return None

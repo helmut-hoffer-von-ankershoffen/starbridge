@@ -34,7 +34,7 @@ def is_connected():
         )
         return response.status_code == 200
     except requests.exceptions.RequestException as e:
-        logger.error("Failed to connect to www.google.com: %s", e)
+        logger.exception("Failed to connect to www.google.com: %s", e)
     return False
 
 
@@ -50,7 +50,7 @@ async def get_respectfully(
         if respect_robots_txt:
             await _ensure_allowed_to_crawl(url=url, user_agent=user_agent)
 
-        response = await client.get(
+        return await client.get(
             str(url),
             headers={
                 "User-Agent": user_agent,
@@ -59,17 +59,18 @@ async def get_respectfully(
             follow_redirects=True,
             timeout=timeout,
         )
-        return response
 
 
 def _get_robots_txt_url(url: str) -> str:
-    """Get the robots.txt URL for a given website URL.
+    """
+    Get the robots.txt URL for a given website URL.
 
     Args:
         url: Website URL to get robots.txt for
 
     Returns:
         URL of the robots.txt file
+
     """
     parsed = urlparse(url)
 
@@ -81,7 +82,6 @@ async def _ensure_allowed_to_crawl(url: str, user_agent: str, timeout: int = 5) 
     Ensure allowed to crawl the URL by the user agent according to the robots.txt file.
     Raises a RuntimeError if not.
     """
-
     logger.debug("Checking if allowed to crawl %s", url)
     robot_txt_url = _get_robots_txt_url(url)
 
@@ -95,20 +95,18 @@ async def _ensure_allowed_to_crawl(url: str, user_agent: str, timeout: int = 5) 
             )
         except HTTPError as e:
             message = f"Failed to fetch robots.txt {robot_txt_url} due to a connection issue, thereby defensively assuming we are not allowed to access the url we want."
-            logger.error(message)
+            logger.exception(message)
             raise RobotForbiddenException(message) from e
-        if response.status_code in (401, 403):
+        if response.status_code in {401, 403}:
             message = (
                 f"When fetching robots.txt ({robot_txt_url}), received status {response.status_code} so assuming that autonomous fetching is not allowed, the user can try manually fetching by using the fetch prompt",
             )
             logger.error(message)
             raise RobotForbiddenException(message)
-        elif 400 <= response.status_code < 500:
+        if 400 <= response.status_code < 500:
             return
         robot_txt = response.text
-    processed_robot_txt = "\n".join(
-        line for line in robot_txt.splitlines() if not line.strip().startswith("#")
-    )
+    processed_robot_txt = "\n".join(line for line in robot_txt.splitlines() if not line.strip().startswith("#"))
     robot_parser = Protego.parse(processed_robot_txt)
     if not robot_parser.can_fetch(str(url), user_agent):
         message = (
@@ -125,7 +123,6 @@ async def _ensure_allowed_to_crawl(url: str, user_agent: str, timeout: int = 5) 
 
 def _get_normalized_content_type(response: httpx.Response) -> str:
     """Get the normalized content type from the response."""
-
     content_type_mapping = {
         "html": MimeType.TEXT_HTML,
         "markdown": MimeType.TEXT_MARKDWON,
@@ -163,7 +160,7 @@ def _get_markdown_from_html(html: str) -> str:
     if simplified["content"]:
         return markdownify(simplified["content"], heading_style=ATX, strip=["img"])
     return MarkdownConverter(heading_style=ATX, strip=["img"]).convert_soup(
-        BeautifulSoup(html, HTML_PARSER)
+        BeautifulSoup(html, HTML_PARSER),
     )
 
 
@@ -196,7 +193,8 @@ def _get_markdown_from_excel(response: httpx.Response) -> str | None:
 
 
 def transform_content(
-    response: httpx.Response, transform_to_markdown: bool = True
+    response: httpx.Response,
+    transform_to_markdown: bool = True,
 ) -> Resource:
     """Process response according to requested format."""
     content_type = _get_normalized_content_type(response)
@@ -272,7 +270,9 @@ def _extract_links_from_html(html: str, url: str) -> list[LinkTarget]:
                 seen_urls[abs_url].occurrences += 1
             else:
                 seen_urls[abs_url] = LinkTarget(
-                    url=AnyHttpUrl(abs_url), occurrences=1, anchor_texts=[anchor_text]
+                    url=AnyHttpUrl(abs_url),
+                    occurrences=1,
+                    anchor_texts=[anchor_text],
                 )
 
     # Sort by occurrences in descending order
@@ -283,13 +283,13 @@ def extract_links_from_response(
     response: httpx.Response,
 ) -> list[LinkTarget]:
     """Extract links from HTML content."""
-
     match _get_normalized_content_type(response):
         case MimeType.TEXT_HTML:
             return _extract_links_from_html(response.text, str(response.url))
         case MimeType.TEXT_MARKDWON:
             return _extract_links_from_html(
-                markdown.markdown(response.text), str(response.url)
+                markdown.markdown(response.text),
+                str(response.url),
             )
         case _:
             return []
@@ -302,15 +302,17 @@ async def get_additional_context_for_url(
     timeout: int = 5,
     full: bool = False,
 ) -> list[Context]:
-    """Get additional context for the url.
+    """
+    Get additional context for the url.
 
     Args:
         url: The URL to get additional context for.
 
     Returns:
         additional context.
+
     """
-    _rtn = []
+    rtn = []
     async with AsyncClient() as client:
         if full:
             llms_full_txt_url = _get_llms_txt_url(url, True)
@@ -325,16 +327,16 @@ async def get_additional_context_for_url(
                     timeout=timeout,
                 )
                 if response.status_code == 200:
-                    _rtn.append(
+                    rtn.append(
                         Context(
                             type="llms_txt",
                             url=AnyHttpUrl(llms_full_txt_url),
                             text=response.text,
-                        )
+                        ),
                     )
             except HTTPError:
                 logger.warning(f"Failed to fetch llms-full.txt {llms_full_txt_url}")
-        if len(_rtn) == 0:
+        if len(rtn) == 0:
             llms_txt_url = _get_llms_txt_url(url, False)
             try:
                 response = await client.get(
@@ -347,26 +349,28 @@ async def get_additional_context_for_url(
                     timeout=timeout,
                 )
                 if response.status_code == 200:
-                    _rtn.append(
+                    rtn.append(
                         Context(
                             type="llms_txt",
                             url=AnyHttpUrl(llms_txt_url),
                             text=response.text,
-                        )
+                        ),
                     )
             except HTTPError:
                 logger.warning(f"Failed to fetch llms.txt {llms_txt_url}")
-    return _rtn
+    return rtn
 
 
 def _get_llms_txt_url(url: str, full: bool = True) -> str:
-    """Get the llms.txt resp. llms-full.txt URL for a given website URL.
+    """
+    Get the llms.txt resp. llms-full.txt URL for a given website URL.
 
     Args:
         url: Website URL to get robots.txt for
 
     Returns:
         URL of the robots.txt file
+
     """
     parsed = urlparse(url)
 

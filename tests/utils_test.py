@@ -8,7 +8,7 @@ DOT_COVERAGE = ".coverage"
 
 
 def _server_parameters(mocks: list[str] | None = None) -> StdioServerParameters:
-    """Create server parameters with coverage enabled"""
+    """Create server parameters with coverage enabled."""
     env = dict(get_default_environment())
     # Add coverage config to subprocess
     env.update({

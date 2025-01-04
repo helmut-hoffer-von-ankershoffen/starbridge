@@ -94,11 +94,15 @@ Starbridge implements the [MCP Server](https://modelcontextprotocol.io/docs/conc
 
 [TODO: Document CLI commands]
 
-## Contributing
 
-Please read our [Contributing Guidelines](https://starbridge.readthedocs.io/en/latest/contributing.html) for how to setup for development, and before making a pull request.
+## Further Reading
 
-## Resources
+* The [Docker manual](https://starbridge.readthedocs.io/en/latest/docker.html) explains how to run Starbridge within Docker.
+* Check out the [reference](https://starbridge.readthedocs.io/en/latest/reference.html) with detailed documentation of public classes and functions.
+* Our [release notes](https://starbridge.readthedocs.io/en/latest/release-notes.html) provide a complete log of recent improvements and changes.
+* In case you want to help us improve Starbridge: The [contribution guidelines](https://starbridge.readthedocs.io/en/latest/contributing.html) explain how to setup your development environment and create pull requests.
+
+## Additional Resources
 
 * [MCP Press release](https://www.anthropic.com/news/model-context-protocol)
 * [MCP Specification and SDKs](https://github.com/modelcontextprotocol)

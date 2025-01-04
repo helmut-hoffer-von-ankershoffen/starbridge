@@ -1,6 +1,4 @@
-"""
-CLI to interact with Confluence
-"""
+"""CLI to interact with Confluence."""
 
 from typing import Annotated
 
@@ -14,14 +12,14 @@ cli = typer.Typer(name="confluence", help="Confluence operations")
 
 
 @cli.command()
-def health():
-    """Health of Confluence"""
+def health() -> None:
+    """Health of Confluence."""
     console.print_json(Service().health().model_dump_json())
 
 
 @cli.command()
-def info():
-    """Info about Confluence"""
+def info() -> None:
+    """Info about Confluence."""
     console.print_json(data=Service().info())
 
 
@@ -30,49 +28,50 @@ cli.add_typer(cli_mcp, name="mcp")
 
 
 @cli_mcp.callback()
-def mcp():
-    """MCP endpoints"""
+def mcp() -> None:
+    """MCP endpoints."""
 
 
 @cli_mcp.command()
-def tools():
-    """List tools exposed via MCP"""
+def tools() -> None:
+    """List tools exposed via MCP."""
     console.print(Service().tool_list())
 
 
 @cli_mcp.command()
-def resources():
-    """List resources exposed via MCP"""
+def resources() -> None:
+    """List resources exposed via MCP."""
     console.print(Service().resource_list())
 
 
 @cli_mcp.command()
-def resource_types():
-    """List resources exposed via MCP"""
+def resource_types() -> None:
+    """List resources exposed via MCP."""
     console.print(Service().resource_type_list())
 
 
 @cli_mcp.command(name="space")
 def resource_space(
     key: Annotated[
-        str, typer.Argument(help="Key of the space to retrieve as resource")
+        str,
+        typer.Argument(help="Key of the space to retrieve as resource"),
     ],
-):
-    """Get space resource as exposed via MCP"""
+) -> None:
+    """Get space resource as exposed via MCP."""
     console.print(Service().space_get(key))
 
 
 @cli_mcp.command()
-def prompts():
-    """List prompts exposed via MCP"""
+def prompts() -> None:
+    """List prompts exposed via MCP."""
     console.print(Service().prompt_list())
 
 
 @cli_mcp.command(name="space-summary")
 def prompt_space_summary(
     style: Annotated[str, typer.Option(help="Style of summary")] = "brief",
-):
-    """Prompt to generate summary of spaces"""
+) -> None:
+    """Prompt to generate summary of spaces."""
     console.print(Service().space_summary(style))
 
 
@@ -81,13 +80,13 @@ cli.add_typer(cli_space, name="space")
 
 
 @cli_space.callback()
-def space():
-    """Operations on Confluence spaces"""
+def space() -> None:
+    """Operations on Confluence spaces."""
 
 
 @cli_space.command(name="list")
-def space_list():
-    """Get info about all space"""
+def space_list() -> None:
+    """Get info about all space."""
     console.print_json(data=Service().space_list())
 
 
@@ -96,13 +95,13 @@ cli.add_typer(cli_page, name="page")
 
 
 @cli_page.callback()
-def page():
-    """Operations on Confluence pages"""
+def page() -> None:
+    """Operations on Confluence pages."""
 
 
 @cli_page.command(name="list")
-def page_list(space_key: str = typer.Option(..., help="Space key")):
-    """List pages in a space"""
+def page_list(space_key: str = typer.Option(..., help="Space key")) -> None:
+    """List pages in a space."""
     console.print(Service().page_list(space_key))
 
 
@@ -112,16 +111,16 @@ def page_create(
     title: str = typer.Option(..., help="Title of the page"),
     body: str = typer.Option(..., help="Body of the page"),
     page_id: str = typer.Option(None, help="Parent page id"),
-):
-    """Create a new page"""
+) -> None:
+    """Create a new page."""
     console.print(Service().page_create(space_key, title, body, page_id))
 
 
 @cli_page.command(name="read")
 def page_get(
     page_id: str = typer.Option(None, help="Page id"),
-):
-    """Read a page"""
+) -> None:
+    """Read a page."""
     console.print(Service().page_get(page_id))
 
 
@@ -130,12 +129,12 @@ def page_update(
     page_id: str = typer.Option(..., help="Pager id"),
     title: str = typer.Option(..., help="Title of the page"),
     body: str = typer.Option(..., help="Body of the page"),
-):
-    """Update a page"""
+) -> None:
+    """Update a page."""
     console.print(Service().page_update(page_id, title, body))
 
 
 @cli_page.command(name="delete")
-def page_delete(page_id: str = typer.Option(..., help="Pager id")):
-    """Delete a page"""
+def page_delete(page_id: str = typer.Option(..., help="Pager id")) -> None:
+    """Delete a page."""
     console.print(Service().page_delete(page_id))

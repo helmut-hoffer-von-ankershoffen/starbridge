@@ -20,10 +20,10 @@ def runner():
 
 
 @patch(MOCK_GET_ALL_SPACES)
-def test_confluence_cli_health(mock_get_all_spaces, runner):
+def test_confluence_cli_health(mock_get_all_spaces, runner) -> None:
     """Check health."""
     # Mock the response data that would come from get_all_spaces
-    with Path(FIXTURE_GET_ALL_SPACES).open() as f:
+    with Path(FIXTURE_GET_ALL_SPACES).open(encoding="utf-8") as f:
         mock_get_all_spaces.return_value = json.loads(f.read())
 
     result = runner.invoke(cli, ["confluence", "health"])
@@ -31,17 +31,17 @@ def test_confluence_cli_health(mock_get_all_spaces, runner):
     assert result.exit_code == 0
 
 
-def test_confluence_cli_info(runner):
+def test_confluence_cli_info(runner) -> None:
     """Check info."""
     result = runner.invoke(cli, ["confluence", "info"])
     assert result.exit_code == 0
 
 
 @patch(MOCK_GET_ALL_SPACES)
-def test_confluence_cli_mcp_resources(mock_get_all_spaces, runner):
+def test_confluence_cli_mcp_resources(mock_get_all_spaces, runner) -> None:
     """Check fetching resources."""
     # Mock the response data that would come from get_all_spaces
-    with Path(FIXTURE_GET_ALL_SPACES).open() as f:
+    with Path(FIXTURE_GET_ALL_SPACES).open(encoding="utf-8") as f:
         mock_get_all_spaces.return_value = json.loads(f.read())
 
     result = runner.invoke(cli, ["confluence", "mcp", "resources"])
@@ -49,7 +49,7 @@ def test_confluence_cli_mcp_resources(mock_get_all_spaces, runner):
     assert result.exit_code == 0
 
 
-def test_confluence_mcp_resource_types(runner):
+def test_confluence_mcp_resource_types(runner) -> None:
     """Check resource types including space."""
     result = runner.invoke(cli, ["confluence", "mcp", "resource-types"])
     assert "space" in result.output
@@ -57,20 +57,21 @@ def test_confluence_mcp_resource_types(runner):
 
 
 @patch(MOCK_GET_SPACE)
-def test_confluence_cli_mcp_space(mock_get_space, runner):
+def test_confluence_cli_mcp_space(mock_get_space, runner) -> None:
     """Check getting space."""
     # Mock the response data that would come from get_all_spaces
-    with Path("tests/fixtures/get_space.json").open() as f:
+    with Path("tests/fixtures/get_space.json").open(encoding="utf-8") as f:
         mock_get_space.return_value = json.loads(f.read())
 
     result = runner.invoke(
-        cli, ["confluence", "mcp", "space", "~7120201709026d2b41448e93bb58d5fa301026"]
+        cli,
+        ["confluence", "mcp", "space", "~7120201709026d2b41448e93bb58d5fa301026"],
     )
     assert "helmut" in result.output
     assert result.exit_code == 0
 
 
-def test_confluence_cli_mcp_prompts(runner):
+def test_confluence_cli_mcp_prompts(runner) -> None:
     """Check prompts."""
     result = runner.invoke(cli, ["confluence", "mcp", "prompts"])
     assert "summary" in result.output
@@ -78,20 +79,21 @@ def test_confluence_cli_mcp_prompts(runner):
 
 
 @patch(MOCK_GET_ALL_SPACES)
-def test_confluence_cli_mcp_space_summary(mock_get_all_spaces, runner):
+def test_confluence_cli_mcp_space_summary(mock_get_all_spaces, runner) -> None:
     """Check space list."""
     # Mock the response data that would come from get_all_spaces
-    with Path(FIXTURE_GET_ALL_SPACES).open() as f:
+    with Path(FIXTURE_GET_ALL_SPACES).open(encoding="utf-8") as f:
         mock_get_all_spaces.return_value = json.loads(f.read())
 
     result = runner.invoke(
-        cli, ["confluence", "mcp", "space-summary", "--style", "detailed"]
+        cli,
+        ["confluence", "mcp", "space-summary", "--style", "detailed"],
     )
     assert "helmut" in result.output
     assert result.exit_code == 0
 
 
-def test_confluence_cli_mcp_tools(runner):
+def test_confluence_cli_mcp_tools(runner) -> None:
     """Check tools include listing spaces and creating pages."""
     result = runner.invoke(cli, ["confluence", "mcp", "tools"])
     assert result.exit_code == 0
@@ -101,10 +103,10 @@ def test_confluence_cli_mcp_tools(runner):
 
 
 @patch(MOCK_GET_ALL_SPACES)
-def test_confluence_space_list(mock_get_all_spaces, runner):
+def test_confluence_space_list(mock_get_all_spaces, runner) -> None:
     """Check space list."""
     # Mock the response data that would come from get_all_spaces
-    with Path(FIXTURE_GET_ALL_SPACES).open() as f:
+    with Path(FIXTURE_GET_ALL_SPACES).open(encoding="utf-8") as f:
         mock_get_all_spaces.return_value = json.loads(f.read())
 
     result = runner.invoke(cli, ["confluence", "space", "list"])
@@ -113,10 +115,10 @@ def test_confluence_space_list(mock_get_all_spaces, runner):
 
 
 @patch(MOCK_GET_PAGE_BY_ID)
-def test_confluence_cli_page_read(get_page_by_id, runner):
+def test_confluence_cli_page_read(get_page_by_id, runner) -> None:
     """Check page list."""
     # Mock the response data that would come from get_all_spaces
-    with Path("tests/fixtures/get_page_by_id.json").open() as f:
+    with Path("tests/fixtures/get_page_by_id.json").open(encoding="utf-8") as f:
         get_page_by_id.return_value = json.loads(f.read())
     result = runner.invoke(
         cli,
@@ -133,10 +135,10 @@ def test_confluence_cli_page_read(get_page_by_id, runner):
 
 
 @patch(MOCK_GET_ALL_PAGES_FROM_SPACE)
-def test_confluence_cli_page_list(mock_get_all_pages_from_space, runner):
+def test_confluence_cli_page_list(mock_get_all_pages_from_space, runner) -> None:
     """Check page list."""
     # Mock the response data that would come from get_all_spaces
-    with Path("tests/fixtures/get_all_pages_from_space.json").open() as f:
+    with Path("tests/fixtures/get_all_pages_from_space.json").open(encoding="utf-8") as f:
         mock_get_all_pages_from_space.return_value = json.loads(f.read())
     result = runner.invoke(
         cli,

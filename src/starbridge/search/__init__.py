@@ -4,6 +4,6 @@ from .settings import Settings
 
 __all__ = [
     "Service",
-    "cli",
     "Settings",
+    "cli",
 ]

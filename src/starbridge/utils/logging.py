@@ -32,13 +32,16 @@ class LoggingSettings(BaseSettings):
         Field(description="Logging level", default="INFO"),
     ]
     log_file_enabled: Annotated[
-        bool, Field(description="Enable logging to file", default=False)
+        bool,
+        Field(description="Enable logging to file", default=False),
     ]
     log_file_name: Annotated[
-        str, Field(description="Name of the log file", default="starbridge.log")
+        str,
+        Field(description="Name of the log file", default="starbridge.log"),
     ]
     log_console_enabled: Annotated[
-        bool, Field(description="Enable logging to console", default=False)
+        bool,
+        Field(description="Enable logging to console", default=False),
     ]
 
 
@@ -47,7 +50,7 @@ settings = load_settings(LoggingSettings)
 
 class CustomFilter(logging.Filter):
     # TODO: Define what log lines you want to filter here
-    def filter(self, record):
+    def filter(self, record) -> bool:
         return True
 
 

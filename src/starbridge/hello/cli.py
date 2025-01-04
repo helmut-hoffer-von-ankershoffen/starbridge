@@ -1,6 +1,4 @@
-"""
-CLI to interact with Hello World
-"""
+"""CLI to interact with Hello World."""
 
 import os
 import subprocess
@@ -21,14 +19,14 @@ cli = typer.Typer(name="hello", help="Hello operations")
 
 
 @cli.command()
-def health():
-    """Health of Hello World"""
+def health() -> None:
+    """Health of Hello World."""
     console.print_json(Service().health().model_dump_json())
 
 
 @cli.command()
-def info():
-    """Info about Hello World"""
+def info() -> None:
+    """Info about Hello World."""
     console.print_json(data=Service().info())
 
 
@@ -45,11 +43,11 @@ if hasattr(Service, "bridge"):
         dump: Annotated[
             bool,
             typer.Option(
-                help="If set, will dump to file starbridge.png in current working directory. Defaults to opening viewer to show the image."
+                help="If set, will dump to file starbridge.png in current working directory. Defaults to opening viewer to show the image.",
             ),
         ] = False,
     ) -> None:
-        """Show image of starbridge"""
+        """Show image of starbridge."""
         try:
             image = Service().bridge()
             if dump:
@@ -69,7 +67,7 @@ if hasattr(Service, "bridge"):
                     text,
                     title="Setup Required: Cairo not found",
                     border_style="red",
-                )
+                ),
             )
             sys.exit(78)
 
@@ -79,11 +77,11 @@ def pdf(
     dump: Annotated[
         bool,
         typer.Option(
-            help="If set, will dump to file starbridge.pdf in current working directory. Defaults to opening viewer to show the document."
+            help="If set, will dump to file starbridge.pdf in current working directory. Defaults to opening viewer to show the document.",
         ),
     ] = False,
 ) -> None:
-    """Show pdf of starbridge"""
+    """Show pdf of starbridge."""
     pdf = Service().pdf_bytes()
 
     if dump:

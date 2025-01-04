@@ -21,12 +21,12 @@ class Service(MCPBaseService):
 
     _settings: Settings
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(Settings)
 
     @mcp_tool()
     def health(self, context: MCPContext | None = None) -> Health:
-        """Check health of the web service"""
+        """Check health of the web service."""
         if not is_connected():
             return Health(
                 status=Health.Status.DOWN,
@@ -36,7 +36,13 @@ class Service(MCPBaseService):
 
     @mcp_tool()
     def info(self, context: MCPContext | None = None) -> dict:
-        """Info about web environment"""
+        """
+        Info about web environment.
+
+        Returns:
+            dict: Information about the web environment
+
+        """
         return {}
 
     @mcp_tool()
@@ -50,7 +56,8 @@ class Service(MCPBaseService):
         llms_full_txt: bool = False,
         context: MCPContext | None = None,
     ) -> GetResult:
-        """Fetch page from the world wide web via HTTP GET.
+        """
+        Fetch page from the world wide web via HTTP GET.
 
         Should be called by the assistant when the user asks to fetch/retrieve/load/download a page/content/document from the Internet / the world wide web
             - This includes the case when the user simply pastes a URL without further context
@@ -62,32 +69,31 @@ class Service(MCPBaseService):
 
 
         Args:
-            - url (str): The URL to fetch content from
-            - accept_language (str, optional): Accept-Language header to send as part of the get request. Defaults to en-US,en;q=0.9,de;q=0.8.
-                - The assistant can prompt the user for the language preferred, and set this header accordingly.
-            - transform_to_markdown (bool, optional): If set will transform content to markdown if possible. Defaults to true.
-                - If the transformation is not supported, the content will be returned as is
-            - extract_links (bool, optional): If set will extract links from the content. Defaults to True.
-                - Supported for selected content types only
-            - additional_context (bool, optional): If set will include additional context about the URL or it's domain in the response. Defaults to True.
-            - llms_full_txt (bool, optional): Whether to include llms-full.txt in additional context. Defaults to False.
-            - context (MCPContext | None, optional): Context object for request tracking. Defaults to None.
+            url (str): The URL to fetch content from
+            accept_language (str, optional): Accept-Language header to send as part of the get request. Defaults to en-US,en;q=0.9,de;q=0.8.
+                The assistant can prompt the user for the language preferred, and set this header accordingly.
+            transform_to_markdown (bool, optional): If set will transform content to markdown if possible. Defaults to true.
+                If the transformation is not supported, the content will be returned as is
+            extract_links (bool, optional): If set will extract links from the content. Defaults to True.
+                Supported for selected content types only
+            additional_context (bool, optional): If set will include additional context about the URL or it's domain in the response. Defaults to True.
+            llms_full_txt (bool, optional): Whether to include llms-full.txt in additional context. Defaults to False.
+            context (MCPContext | None, optional): Context object for request tracking. Defaults to None.
 
         Returns:
-            - 'resource': The retrieved and possibly transformed resource:
+            'resource': The retrieved and possibly transformed resource:
                 - 'url' (string) the final URL after redirects
                 - 'type' (content type indicator as defined in http): the type of transformed content, resp. the original content type if no transformation applied
                 - 'text' (string): the transformed textual content, resp. the original content if no transformation applied
                 - 'blob' (bytes): the binary content of the resource, if the resource has binary content
-            - 'extracted_links': Optional list of links extracted from the resource, if extract_links=True. Sorted by number of occurrences of a URL in the resource. Each item has:
+            'extracted_links': Optional list of links extracted from the resource, if extract_links=True. Sorted by number of occurrences of a URL in the resource. Each item has:
                 - 'url' (string) the URL of the link
                 - 'occurrences' (int) the number of occurrences of the link in the resource
                 - 'anchor_texts' (list of strings) the anchor texts of the link
-            - 'additional_context': Optional list of with extra context (only if additional_context=True). Each item has:
+            'additional_context': Optional list of with extra context (only if additional_context=True). Each item has:
                 - 'url' (string) the URL of the context
                 - 'type' (string) the type of context, e.g. llms_txt for text specifally prepared by a domain for an assistant to read
                 - 'text' (string) the content of the context in markdown format
-
 
         Raises:
             starbridge.web.RobotForbiddenException: If we are not allowed to crawl the URL autonomously
@@ -102,13 +108,13 @@ class Service(MCPBaseService):
             accept_language=accept_language,
             timeout=self._settings.timeout,
         )
-        _rtn = GetResult(resource=transform_content(response, transform_to_markdown))
+        rtn = GetResult(resource=transform_content(response, transform_to_markdown))
 
         if extract_links:
-            _rtn.extracted_links = extract_links_from_response(response)
+            rtn.extracted_links = extract_links_from_response(response)
 
         if additional_context:
-            _rtn.additional_context = await get_additional_context_for_url(
+            rtn.additional_context = await get_additional_context_for_url(
                 url=url,
                 user_agent=self._settings.user_agent,
                 accept_language=accept_language,
@@ -116,4 +122,4 @@ class Service(MCPBaseService):
                 full=llms_full_txt,
             )
 
-        return _rtn
+        return rtn

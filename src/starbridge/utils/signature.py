@@ -1,25 +1,30 @@
-"""Original source: https://github.com/pydantic/pydantic-ai/blob/main/pydantic_ai_slim/pydantic_ai/_griffe.py"""
+"""Original source: https://github.com/pydantic/pydantic-ai/blob/main/pydantic_ai_slim/pydantic_ai/_griffe.py."""
 
 from __future__ import annotations as _annotations
 
 import re
-from collections.abc import Callable
 from inspect import Parameter, signature
-from typing import Any, Literal, cast
+from typing import TYPE_CHECKING, Any, Literal, cast
 
 from griffe import Docstring, DocstringSectionKind
 from griffe import Object as GriffeObject
 
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
 DocstringStyle = Literal["google", "numpy", "sphinx"]
 
 
-def description_and_params(
-    func: Callable[..., Any], excluded_params=("self", "context")
+def description_and_params(  # noqa: C901
+    func: Callable[..., Any],
+    excluded_params=("self", "context"),
 ) -> tuple[str, list, dict[str, dict]]:
-    """Extract the function description and parameter descriptions from a function's docstring.
+    """
+    Extract the function description and parameter descriptions from a function's docstring.
 
     Returns:
         A tuple of (main function description, parameter properties dict).
+
     """
     doc = func.__doc__
     if doc is None:
@@ -28,17 +33,21 @@ def description_and_params(
     sig = signature(func)
 
     # see https://github.com/mkdocstrings/griffe/issues/293
-    parent = cast(GriffeObject, sig)
+    parent = cast("GriffeObject", sig)
 
     docstring = Docstring(
-        doc, lineno=1, parser=_infer_docstring_style(doc), parent=parent
+        doc,
+        lineno=1,
+        parser=_infer_docstring_style(doc),
+        parent=parent,
     )
     sections = docstring.parse()
 
     # Get parameter descriptions from docstring
     param_desc = {}
     if parameters := next(
-        (p for p in sections if p.kind == DocstringSectionKind.parameters), None
+        (p for p in sections if p.kind == DocstringSectionKind.parameters),
+        None,
     ):
         param_desc = {p.name: p.description for p in parameters.value}
 
@@ -77,8 +86,7 @@ def _infer_docstring_style(doc: str) -> DocstringStyle:
     """Simplistic docstring style inference."""
     for pattern, replacements, style in _docstring_style_patterns:
         matches = (
-            re.search(pattern.format(replacement), doc, re.IGNORECASE | re.MULTILINE)
-            for replacement in replacements
+            re.search(pattern.format(replacement), doc, re.IGNORECASE | re.MULTILINE) for replacement in replacements
         )
         if any(matches):
             return style

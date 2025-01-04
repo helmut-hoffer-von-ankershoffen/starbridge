@@ -3,8 +3,8 @@
 import json
 import os
 
-import mcp.types as types
 from atlassian import Confluence
+from mcp import types
 from pydantic import AnyUrl
 
 from starbridge.atlassian.settings import Settings
@@ -26,7 +26,7 @@ class Service(MCPBaseService):
 
     _settings: Settings
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__(Settings)
         self._api = Confluence(
             url=str(self._settings.url),
@@ -53,7 +53,7 @@ class Service(MCPBaseService):
 
     @mcp_tool()
     def info(self, context: MCPContext | None = None):
-        """Info about Confluence environment"""
+        """Info about Confluence environment."""
         return {
             "url": str(self._settings.url),
             "email_address": self._settings.email_address,
@@ -79,7 +79,7 @@ class Service(MCPBaseService):
         """Get specific Confluence space by key."""
         # Mock response if requested
         if "atlassian.Confluence.get_space" in os.environ.get("MOCKS", "").split(","):
-            with open("tests/fixtures/get_space.json") as f:
+            with open("tests/fixtures/get_space.json", encoding="utf-8") as f:
                 return json.dumps(json.load(f), indent=2)
         return json.dumps(self._api.get_space(space_key), indent=2)
 
@@ -89,10 +89,12 @@ class Service(MCPBaseService):
         style: str = "brief",
         context: MCPContext | None = None,
     ) -> types.GetPromptResult:
-        """Creates a summary of spaces in Confluence.
+        """
+        Creates a summary of spaces in Confluence.
 
         Args:
             style: Style of the summary {'brief', 'detailed'}, defaults to 'brief'
+
         """
         detail_prompt = " Give extensive details." if style == "detailed" else ""
         return types.GetPromptResult(
@@ -108,7 +110,7 @@ class Service(MCPBaseService):
                             for space in self.space_list()["results"]
                         ),
                     ),
-                )
+                ),
             ],
         )
 
@@ -122,7 +124,8 @@ class Service(MCPBaseService):
         space_status="current",
         context: MCPContext | None = None,
     ) -> dict:
-        """List spaces in Confluence.
+        """
+        List spaces in Confluence.
 
         Args:
             start: The starting index of the returned spaces
@@ -135,12 +138,13 @@ class Service(MCPBaseService):
 
         Returns:
             (dict): JSON response containing the spaces list under 'results' key
+
         """
         # Mock response if requested
         if "atlassian.Confluence.get_all_spaces" in os.environ.get("MOCKS", "").split(
-            ","
+            ",",
         ):
-            with open("tests/fixtures/get_all_spaces.json") as f:
+            with open("tests/fixtures/get_all_spaces.json", encoding="utf-8") as f:
                 return json.load(f)
         return self._api.get_all_spaces(
             start,
@@ -164,7 +168,8 @@ class Service(MCPBaseService):
         status: str = "current",
         context: MCPContext | None = None,
     ):  # -> Response | Any | None:# -> Response | Any | None:# -> Response | Any | None:  # -> Response | Any | bytes | Any | None | str:
-        """Create page in Confluence space.
+        """
+        Create page in Confluence space.
 
         Args:
             space: The identifier of the Confluence space
@@ -176,6 +181,7 @@ class Service(MCPBaseService):
             editor: The editor to use for the page (defaults to None, alternative is 'v2')
             full_width: If to use full width layout (defaults to False)
             status: The status of the page (defaults to None, i.e. 'current')
+
         """
         return self._api.create_page(
             space,
@@ -198,7 +204,8 @@ class Service(MCPBaseService):
         version: str | None = None,
         context: MCPContext | None = None,
     ):  # -> Response | Any | bytes | Any | None | str:
-        """Get a specific Confluence page by its ID.
+        """
+        Get a specific Confluence page by its ID.
 
         Args:
             page_id: The ID of the page to retrieve
@@ -209,6 +216,7 @@ class Service(MCPBaseService):
 
         Returns:
             (Any): JSON response containing the page details
+
         """
         return self._api.get_page_by_id(page_id, status, expand, version)
 
@@ -226,7 +234,8 @@ class Service(MCPBaseService):
         always_update: bool = False,
         full_width: bool = False,
     ):
-        """Update a Confluence page.
+        """
+        Update a Confluence page.
 
         Args:
             page_id: The ID of the page to update
@@ -246,6 +255,7 @@ class Service(MCPBaseService):
         Notes:
             The 'storage' representation is the default Confluence storage format.
             The 'wiki' representation allows using wiki markup syntax.
+
         """
         return self._api.update_page(
             page_id,
@@ -268,13 +278,15 @@ class Service(MCPBaseService):
         recursive: bool = False,
         context: MCPContext | None = None,
     ):
-        """Delete a Confluence page.
+        """
+        Delete a Confluence page.
 
         Args:
             page_id: The ID of the page to delete
             status: OPTIONAL: type of page
             recursive: if True - will recursively delete all children pages too (defaults to False)
             context: MCP context for the operation
+
         """
         return self._api.remove_page(page_id, status, recursive)
 
@@ -289,7 +301,8 @@ class Service(MCPBaseService):
         content_type: str = "page",
         context: MCPContext | None = None,
     ):  # -> Any | Any:# -> Any | Any:
-        """List pages in a Confluence space.
+        """
+        List pages in a Confluence space.
 
         Args:
             space_key: The key of the space to get pages from
@@ -302,6 +315,7 @@ class Service(MCPBaseService):
 
         Returns:
             (Any): List of pages in the specified space
+
         """
         return self._api.get_all_pages_from_space(
             space_key,

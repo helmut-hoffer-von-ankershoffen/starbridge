@@ -8,8 +8,8 @@ from typing import Any
 from urllib.parse import urlparse
 
 import mcp.server.stdio
-import mcp.types as types
 import pydantic_core
+from mcp import types
 from mcp.server import NotificationOptions, Server
 from mcp.server.models import InitializationOptions
 from mcp.server.sse import SseServerTransport
@@ -44,7 +44,7 @@ logger = get_logger(__name__)
 class MCPServer:
     """MCP Server for Starbridge."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         # dynamically locate and register services
         self._services = []
         for service_class in MCPServer.service_classes():
@@ -60,7 +60,7 @@ class MCPServer:
 
     @mcp_tool()
     def health(self, context: MCPContext | None = None) -> AggregatedHealth:
-        """Health of services and their dependencies"""
+        """Health of services and their dependencies."""
         dependencies = {}
         for service in self._services:
             service_name = service.__class__.__module__.split(".")[1]
@@ -121,7 +121,8 @@ class MCPServer:
             if result is not None:
                 return result
 
-        raise ValueError(f"No service found for URI: {uri}")
+        msg = f"No service found for URI: {uri}"
+        raise ValueError(msg)
 
     async def prompt_list(self) -> list[types.Prompt]:
         prompts = []
@@ -143,16 +144,14 @@ class MCPServer:
                     continue
 
                 meta = method.__mcp_prompt__
-                if (
-                    meta.server == server
-                    and meta.service == service
-                    and meta.type == prompt_type
-                ):
+                if meta.server == server and meta.service == service and meta.type == prompt_type:
                     return service_instance, method
         return None, None
 
     async def prompt_get(
-        self, name: str, arguments: dict[str, str] | None
+        self,
+        name: str,
+        arguments: dict[str, str] | None,
     ) -> types.GetPromptResult:
         """Get a prompt by its full name (server_service_type)."""
         service_instance, method = self._find_prompt_handler(name)
@@ -162,7 +161,9 @@ class MCPServer:
                 arguments = arguments.copy()
                 arguments.pop("context", None)
                 result = method(
-                    service_instance, **arguments, context=self.get_context()
+                    service_instance,
+                    **arguments,
+                    context=self.get_context(),
                 )
             else:
                 result = method(service_instance, context=self.get_context())
@@ -192,16 +193,14 @@ class MCPServer:
                     continue
 
                 meta = method.__mcp_tool__
-                if (
-                    meta.server == server
-                    and meta.service == service
-                    and meta.name == tool_name
-                ):
+                if meta.server == server and meta.service == service and meta.name == tool_name:
                     return service_instance, method
         return None, None
 
     async def tool_call(
-        self, name: str, arguments: dict | None
+        self,
+        name: str,
+        arguments: dict | None,
     ) -> list[types.TextContent | types.ImageContent | types.EmbeddedResource]:
         service_instance, method = self._find_tool_handler(name)
 
@@ -210,7 +209,9 @@ class MCPServer:
                 arguments = arguments.copy()
                 arguments.pop("context", None)
                 result = method(
-                    service_instance, **arguments, context=self.get_context()
+                    service_instance,
+                    **arguments,
+                    context=self.get_context(),
                 )
             else:
                 result = method(service_instance, context=self.get_context())
@@ -218,7 +219,8 @@ class MCPServer:
                 result = await result
             return MCPServer._marshal_result(result)
 
-        raise ValueError(f"Unknown tool: {name}")
+        msg = f"Unknown tool: {name}"
+        raise ValueError(msg)
 
     async def resource_type_list(self) -> set[ResourceMetadata]:
         """Get all available resource types across all services."""
@@ -238,26 +240,30 @@ class MCPServer:
     def starlette_app(self, debug: bool = True) -> Starlette:
         sse = SseServerTransport("/messages")
 
-        async def handle_sse(request):
+        async def handle_sse(request) -> None:
             async with sse.connect_sse(
-                request.scope, request.receive, request._send
+                request.scope,
+                request.receive,
+                request._send,
             ) as streams:
                 await self._server.run(
-                    streams[0], streams[1], self._create_initialization_options()
+                    streams[0],
+                    streams[1],
+                    self._create_initialization_options(),
                 )
 
-        async def handle_messages(request):
+        async def handle_messages(request) -> None:
             await sse.handle_post_message(request.scope, request.receive, request._send)
 
         async def handle_health(request):
             return PlainTextResponse(
                 headers={"content-type": "application/json"},
                 content=json.dumps(
-                    self.health().model_dump()
+                    self.health().model_dump(),
                 ),  # Use json.dumps instead of model_dump_json
             )
 
-        async def handle_terminate(request):
+        async def handle_terminate(request) -> None:
             os.kill(os.getpid(), signal.SIGINT)
             os.kill(os.getpid(), signal.SIGINT)
 
@@ -271,7 +277,7 @@ class MCPServer:
             ],
         )
 
-    async def run_stdio(self):
+    async def run_stdio(self) -> None:
         async with mcp.server.stdio.stdio_server() as (read_stream, write_stream):
             await self._server.run(
                 read_stream,
@@ -289,7 +295,8 @@ class MCPServer:
 
     @staticmethod
     def tool(
-        name: str, arguments: dict | None = None
+        name: str,
+        arguments: dict | None = None,
     ) -> list[types.TextContent | types.ImageContent | types.EmbeddedResource]:
         return asyncio.run(MCPServer().tool_call(name, arguments))
 
@@ -323,6 +330,7 @@ class MCPServer:
             )
         else:
             return asyncio.run(MCPServer().run_stdio())
+        return None
 
     def _create_initialization_options(self) -> InitializationOptions:
         return InitializationOptions(
@@ -365,24 +373,20 @@ class MCPServer:
                     type="image",
                     data=base64.b64encode(data.getvalue()).decode("utf-8"),
                     mimeType=mime_type,
-                )
+                ),
             ]
 
         if isinstance(result, list | tuple):
-            return [
-                item
-                for subresult in result
-                for item in MCPServer._marshal_result(subresult)
-            ]
+            return [item for subresult in result for item in MCPServer._marshal_result(subresult)]
 
         try:
             return [
                 TextContent(
                     type="text",
                     text=json.dumps(pydantic_core.to_jsonable_python(result), indent=2),
-                )
+                ),
             ]
         except Exception as e:
-            logger.error(f"Error converting result to JSON: {e}")
+            logger.exception(f"Error converting result to JSON: {e}")
 
         return [TextContent(type="text", text=str(result))]

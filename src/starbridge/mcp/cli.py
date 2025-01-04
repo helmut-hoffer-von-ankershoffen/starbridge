@@ -1,6 +1,4 @@
-"""
-CLI to interact with Confluence
-"""
+"""CLI to interact with Confluence."""
 
 import os
 import re
@@ -19,20 +17,20 @@ cli = typer.Typer(name="mcp", help="MCP operations")
 
 
 @cli.command()
-def health():
+def health() -> None:
     """Check health of the services and their dependencies."""
     console.print_json(MCPServer().health().model_dump_json())
 
 
 @cli.command()
-def services():
-    """Services exposed by modules"""
+def services() -> None:
+    """Services exposed by modules."""
     console.print(MCPServer.service_classes())
 
 
 @cli.command()
-def tools():
-    """Tools exposed by modules"""
+def tools() -> None:
+    """Tools exposed by modules."""
     console.print(MCPServer.tools())
 
 
@@ -40,10 +38,11 @@ def tools():
 def tool(
     name: str,
     arguments: Annotated[
-        list[str] | None, typer.Option(help="Arguments in key=value format")
+        list[str] | None,
+        typer.Option(help="Arguments in key=value format"),
     ] = None,
-):
-    """Get tool by name with optional arguments"""
+) -> None:
+    """Get tool by name with optional arguments."""
     args = {}
     if arguments:
         for arg in arguments:
@@ -53,20 +52,20 @@ def tool(
 
 
 @cli.command()
-def resources():
-    """Resources exposed by modules"""
+def resources() -> None:
+    """Resources exposed by modules."""
     console.print(MCPServer.resources())
 
 
 @cli.command()
-def resource(uri: str):
-    """Get resource by URI"""
+def resource(uri: str) -> None:
+    """Get resource by URI."""
     console.print(MCPServer.resource(uri))
 
 
 @cli.command()
-def prompts():
-    """Prompts exposed by modules"""
+def prompts() -> None:
+    """Prompts exposed by modules."""
     console.print(MCPServer.prompts())
 
 
@@ -74,10 +73,11 @@ def prompts():
 def prompt(
     name: str,
     arguments: Annotated[
-        list[str] | None, typer.Option(help="Arguments in key=value format")
+        list[str] | None,
+        typer.Option(help="Arguments in key=value format"),
     ] = None,
-):
-    """Get a prompt by name with optional arguments"""
+) -> None:
+    """Get a prompt by name with optional arguments."""
     args = {}
     if arguments:
         for arg in arguments:
@@ -87,8 +87,8 @@ def prompt(
 
 
 @cli.command()
-def resource_types():
-    """Resource types exposed by modules"""
+def resource_types() -> None:
+    """Resource types exposed by modules."""
     console.print(MCPServer.resource_types())
 
 
@@ -119,17 +119,17 @@ def serve(
             help='Environment variables in key=value format. Can be used multiple times in one call. Only STARBRIDGE_ prefixed vars are used. Example --env STARBRIDGE_ATLASSIAN_URL="https://your-domain.atlassian.net" --env STARBRIDGE_ATLASSIAN_EMAIL="YOUR_EMAIL"',
         ),
     ] = None,
-):
+) -> None:
     """Run MCP server."""
     MCPServer().serve(host, port, debug)
 
 
 @cli.command()
-def inspect():
+def inspect() -> None:
     """Run inspector."""
     process_info = get_process_info()
     console.print(
-        f"⭐ Starbridge controller: v{__version__} (project root {process_info.project_root}, pid {process_info.pid}), parent '{process_info.parent.name}' (pid {process_info.parent.pid})"
+        f"⭐ Starbridge controller: v{__version__} (project root {process_info.project_root}, pid {process_info.pid}), parent '{process_info.parent.name}' (pid {process_info.parent.pid})",
     )
     env_args = []
     for key, value in os.environ.items():
@@ -144,7 +144,8 @@ def inspect():
         "run",
         "--no-dev",
         __project_name__,
-    ] + env_args
+        *env_args,
+    ]
     console.print(f"Executing: {' '.join(cmd)}")
 
     process = subprocess.Popen(
@@ -158,13 +159,9 @@ def inspect():
     url_pattern = r"MCP Inspector is up and running at (http://[^\s]+)"
 
     while True:
-        if process.stdout is not None:
-            line = process.stdout.readline()
-        else:
-            line = ""
+        line = process.stdout.readline() if process.stdout is not None else ""
         if not line:
             break
-        print(line, end="")
         match = re.search(url_pattern, line)
         if match:
             url = match.group(1)

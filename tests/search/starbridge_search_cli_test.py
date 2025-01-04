@@ -14,23 +14,21 @@ def runner():
     return CliRunner()
 
 
-def test_search_cli_info(runner):
+def test_search_cli_info(runner) -> None:
     """Check search info."""
-
     result = runner.invoke(cli, ["search", "info"])
     assert result.exit_code == 0
 
 
-def test_search_cli_health(runner):
+def test_search_cli_health(runner) -> None:
     """Check search health."""
-
     result = runner.invoke(cli, ["search", "health"])
     assert '"UP"' in result.output
     assert result.exit_code == 0
 
 
 @patch("httpx.AsyncClient.head")
-def test_search_cli_health_not_connected(mock_head, runner):
+def test_search_cli_health_not_connected(mock_head, runner) -> None:
     """Check web health down when not connected."""
     mock_head.side_effect = requests.exceptions.Timeout()
 
@@ -39,11 +37,11 @@ def test_search_cli_health_not_connected(mock_head, runner):
     assert result.exit_code == 0
 
 
-def test_search_cli_web(runner):
+def test_search_cli_web(runner) -> None:
     """Check searching the web."""
-
     with patch.dict(
-        "os.environ", {"STARBRIDGE_SEARCH_BRAVE_SEARCH_API_KEY": MOCK_API_KEY}
+        "os.environ",
+        {"STARBRIDGE_SEARCH_BRAVE_SEARCH_API_KEY": MOCK_API_KEY},
     ):
         result = runner.invoke(
             cli,
@@ -54,14 +52,14 @@ def test_search_cli_web(runner):
             ],
         )
         assert result.exit_code == 0
-        _response = WebSearchApiResponse.model_validate(json.loads(result.output))
-        assert (
-            _response.web and _response.web.results and len(_response.web.results) > 0
-        )
+        response = WebSearchApiResponse.model_validate(json.loads(result.output))
+        assert response.web
+        assert response.web.results
+        assert len(response.web.results) > 0
 
 
 @patch("httpx.AsyncClient.get")
-def test_search_cli_get_timeouts(mock_get, runner):
+def test_search_cli_get_timeouts(mock_get, runner) -> None:
     """Check getting content fails."""
     mock_get.side_effect = requests.exceptions.Timeout()
 

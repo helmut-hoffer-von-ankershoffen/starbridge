@@ -54,15 +54,15 @@ def main(
             help='Environment variables in key=value format. Can be used multiple times in one call. Only STARBRIDGE_ prefixed vars are evaluated. Example --env STARBRIDGE_ATLASSIAN_URL="https://your-domain.atlassian.net" --env STARBRIDGE_ATLASSIAN_EMAIL="YOUR_EMAIL"',
         ),
     ] = None,
-):
-    """Run MCP Server - alias for 'mcp serve'"""
+) -> None:
+    """Run MCP Server - alias for 'mcp serve'."""
     # --env parsed in main __init__.py
     if ctx.invoked_subcommand is None:
         MCPServer.serve(host, port, debug)
 
 
 @cli.command()
-def health(json: Annotated[bool, typer.Option(help="Output health as JSON")] = False):
+def health(json: Annotated[bool, typer.Option(help="Output health as JSON")] = False) -> None:
     """Check health of services and their dependencies."""
     health = MCPServer().health()
     if not health.healthy:
@@ -74,20 +74,21 @@ def health(json: Annotated[bool, typer.Option(help="Output health as JSON")] = F
 
 
 @cli.command()
-def info():
-    """Info about Starbridge and it's environment"""
+def info() -> None:
+    """Info about Starbridge and it's environment."""
     data = Service().info()
     console.print_json(data=data)
     logger.debug(data)
 
 
 @cli.command()
-def create_dot_env():
+def create_dot_env() -> None:
     """Create .env file for Starbridge. You will be prompted for settings."""
     if not __is_development_mode__:
-        raise RuntimeError("This command is only available in development mode")
+        msg = "This command is only available in development mode"
+        raise RuntimeError(msg)
 
-    with open(".env", "w") as f:
+    with open(".env", "w", encoding="utf-8") as f:
         for key, value in iter(prompt_for_env().items()):
             f.write(f"{key}={value}\n")
 
@@ -106,8 +107,8 @@ def install(
             help="Docker image to use for Starbridge. Only applies if started as container.",
         ),
     ] = "helmuthva/starbridge:latest",
-):
-    """Install starbridge within Claude Desktop application by adding to configuration and restarting Claude Desktop app"""
+) -> None:
+    """Install starbridge within Claude Desktop application by adding to configuration and restarting Claude Desktop app."""
     if ClaudeService.install_mcp_server(
         generate_mcp_server_config(prompt_for_env(), image),
         restart=restart_claude,
@@ -115,7 +116,7 @@ def install(
         console.print("Starbridge installed with Claude Desktop application.")
         if not restart_claude:
             console.print(
-                "Please restart Claude Desktop application to complete the installation."
+                "Please restart Claude Desktop application to complete the installation.",
             )
     else:
         console.print("Starbridge was already installed", style="warning")
@@ -129,8 +130,8 @@ def uninstall(
             help="Restart Claude Desktop application post installation",
         ),
     ] = ClaudeService.platform_supports_restart(),
-):
-    """Install starbridge from Claude Desktop application by removing from configuration and restarting Claude Desktop app"""
+) -> None:
+    """Install starbridge from Claude Desktop application by removing from configuration and restarting Claude Desktop app."""
     if ClaudeService.uninstall_mcp_server(restart=restart_claude):
         console.print("Starbridge uninstalled from Claude Destkop application.")
     else:

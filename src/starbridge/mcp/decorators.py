@@ -11,14 +11,18 @@ R = TypeVar("R")
 
 
 def mcp_tool(
-    server: str = __project_name__, service: str | None = None, name: str | None = None
+    server: str = __project_name__,
+    service: str | None = None,
+    name: str | None = None,
 ) -> Callable[[Callable[P, R]], Callable[P, R]]:
-    """Decorator to mark a method as an MCP tool.
+    """
+    Decorator to mark a method as an MCP tool.
 
     Args:
         server (str, optional): The server name. Defaults to "starbridge".
         service (str, optional): The service name. If not provided, derived from module name.
         name (str, optional): The tool name. If not provided, derived from function name.
+
     """
 
     def decorator(func: Callable[P, R]) -> Callable[P, R]:
@@ -37,7 +41,9 @@ def mcp_tool(
 
 
 def mcp_resource_iterator(
-    server: str = __project_name__, service: str | None = None, type: str | None = None
+    server: str = __project_name__,
+    service: str | None = None,
+    type: str | None = None,
 ):
     """Decorator to mark a method as a resource iterator."""
 
@@ -57,7 +63,9 @@ def mcp_resource_iterator(
 
 
 def mcp_resource(
-    server: str = __project_name__, service: str | None = None, type: str | None = None
+    server: str = __project_name__,
+    service: str | None = None,
+    type: str | None = None,
 ):
     """Decorator to mark a method as a resource handler."""
 
@@ -77,7 +85,9 @@ def mcp_resource(
 
 
 def mcp_prompt(
-    server: str = __project_name__, service: str | None = None, type: str | None = None
+    server: str = __project_name__,
+    service: str | None = None,
+    type: str | None = None,
 ):
     """Decorator to mark a method as a prompt handler."""
 

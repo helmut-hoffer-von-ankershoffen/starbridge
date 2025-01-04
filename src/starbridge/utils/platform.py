@@ -24,6 +24,7 @@ def get_process_info() -> ProcessInfo:
         project_root=str(Path(__file__).parent.parent.parent.parent),
         pid=current_process.pid,
         parent=ParentProcessInfo(
-            name=parent.name() if parent else None, pid=parent.pid if parent else None
+            name=parent.name() if parent else None,
+            pid=parent.pid if parent else None,
         ),
     )

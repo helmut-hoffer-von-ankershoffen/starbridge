@@ -5,16 +5,25 @@ import pytest
 
 from starbridge.web import RobotForbiddenException, Service
 
-GET_TEST_TEXT_URL = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/raw/refs/heads/main/tests/fixtures/starbridge.txt"
-GET_TEST_MARKDOWN_URL = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/raw/refs/heads/main/tests/fixtures/starbridge.md"
-GET_TEST_PDF_URL = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/raw/refs/heads/main/tests/fixtures/starbridge.pdf"
-GET_TEST_WORD_URL = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/raw/refs/heads/main/tests/fixtures/starbridge.docx"
-GET_TEST_EXCEL_URL = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/raw/refs/heads/main/tests/fixtures/starbridge.xlsx"
+GET_TEST_TEXT_URL = (
+    "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/raw/refs/heads/main/tests/fixtures/starbridge.txt"
+)
+GET_TEST_MARKDOWN_URL = (
+    "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/raw/refs/heads/main/tests/fixtures/starbridge.md"
+)
+GET_TEST_PDF_URL = (
+    "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/raw/refs/heads/main/tests/fixtures/starbridge.pdf"
+)
+GET_TEST_WORD_URL = (
+    "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/raw/refs/heads/main/tests/fixtures/starbridge.docx"
+)
+GET_TEST_EXCEL_URL = (
+    "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/raw/refs/heads/main/tests/fixtures/starbridge.xlsx"
+)
 
 
 def test_web_service_get_forbidden() -> None:
     """Check getting content from the web fails if forbidden by robots.txt."""
-
     from starbridge.web import Service
 
     with pytest.raises(RobotForbiddenException):
@@ -26,9 +35,8 @@ def test_web_service_get_forbidden() -> None:
     return_value=None,
 )
 @pytest.mark.asyncio
-async def test_web_service_get_pdf(runner):
+async def test_web_service_get_pdf(runner) -> None:
     """Check getting content from the web as markdown."""
-
     result = await Service().get(
         url=GET_TEST_PDF_URL,
     )
@@ -40,9 +48,8 @@ async def test_web_service_get_pdf(runner):
     return_value=None,
 )
 @pytest.mark.asyncio
-async def test_web_service_get_word(runner):
+async def test_web_service_get_word(runner) -> None:
     """Check getting content from the web as markdown."""
-
     result = await Service().get(
         url=GET_TEST_WORD_URL,
     )
@@ -54,9 +61,8 @@ async def test_web_service_get_word(runner):
     return_value=None,
 )
 @pytest.mark.asyncio
-async def test_web_service_get_excel(runner):
+async def test_web_service_get_excel(runner) -> None:
     """Check getting content from the web as markdown."""
-
     result = await Service().get(
         url=GET_TEST_EXCEL_URL,
     )
@@ -68,9 +74,8 @@ async def test_web_service_get_excel(runner):
     return_value=None,
 )
 @pytest.mark.asyncio
-async def test_web_service_get_text(runner):
+async def test_web_service_get_text(runner) -> None:
     """Check getting content from the web as markdown."""
-
     result = await Service().get(
         url=GET_TEST_TEXT_URL,
     )
@@ -82,9 +87,8 @@ async def test_web_service_get_text(runner):
     return_value=None,
 )
 @pytest.mark.asyncio
-async def test_web_service_get_markdown(runner):
+async def test_web_service_get_markdown(runner) -> None:
     """Check getting content from the web as markdown."""
-
     result = await Service().get(
         url=GET_TEST_MARKDOWN_URL,
     )

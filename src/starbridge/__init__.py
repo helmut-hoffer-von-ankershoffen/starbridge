@@ -12,8 +12,8 @@ __is_running_in_container__ = os.getenv("STARBRIDGE_RUNNING_IN_CONTAINER") is no
 # helpers
 
 
-def _parse_env_args():
-    """Parse --env arguments from command line and add to environment if STARBRIDGE_ prefixed"""
+def _parse_env_args() -> None:
+    """Parse --env arguments from command line and add to environment if STARBRIDGE_ prefixed."""
     args = sys.argv[1:]
     i = 0
     while i < len(args):
@@ -29,16 +29,13 @@ def _parse_env_args():
         i += 1
 
 
-def _amend_library_path():
-    """Patch environment variables before any other imports"""
-
+def _amend_library_path() -> None:
+    """Patch environment variables before any other imports."""
     if "DYLD_FALLBACK_LIBRARY_PATH" not in os.environ:
-        os.environ["DYLD_FALLBACK_LIBRARY_PATH"] = (
-            f"{os.getenv('HOMEBREW_PREFIX', '/opt/homebrew')}/lib/"
-        )
+        os.environ["DYLD_FALLBACK_LIBRARY_PATH"] = f"{os.getenv('HOMEBREW_PREFIX', '/opt/homebrew')}/lib/"
 
 
-def _log_boot_message():
+def _log_boot_message() -> None:
     # Local import as this initializes logging and instrumentation
     # which might depend on environment arguments parsed from argv
     from starbridge.utils import get_logger, get_process_info
@@ -47,7 +44,7 @@ def _log_boot_message():
 
     process_info = get_process_info()
     logger.debug(
-        f"⭐ Booting Starbridge v{__version__} (project root {process_info.project_root}, pid {process_info.pid}), parent '{process_info.parent.name}' (pid {process_info.parent.pid})"
+        f"⭐ Booting Starbridge v{__version__} (project root {process_info.project_root}, pid {process_info.pid}), parent '{process_info.parent.name}' (pid {process_info.parent.pid})",
     )
 
 
@@ -60,8 +57,8 @@ _log_boot_message()
 # exports
 
 __all__ = [
-    "__version__",
+    "__is_development_mode__",
     "__project_name__",
     "__project_path__",
-    "__is_development_mode__",
+    "__version__",
 ]

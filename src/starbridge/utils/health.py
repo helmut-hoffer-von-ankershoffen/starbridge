@@ -17,10 +17,11 @@ class Health(BaseModel):
     @model_validator(mode="after")
     def up_has_no_reason(self) -> Self:
         if (self.status == _HealthStatus.UP) and self.reason:
-            raise ValueError(f"Health {self.status} must not have reason")
+            msg = f"Health {self.status} must not have reason"
+            raise ValueError(msg)
         return self
 
-    def __str__(self):
+    def __str__(self) -> str:
         if self.status == _HealthStatus.DOWN and self.reason:
             return f"{self.status.value}: {self.reason}"
         return self.status.value
@@ -32,14 +33,10 @@ class AggregatedHealth(BaseModel):
     @computed_field
     @property
     def healthy(self) -> bool:
-        """Computed from dependencies' status"""
-        return all(
-            health.status == Health.Status.UP for health in self.dependencies.values()
-        )
+        """Computed from dependencies' status."""
+        return all(health.status == Health.Status.UP for health in self.dependencies.values())
 
-    def __str__(self):
+    def __str__(self) -> str:
         status = "UP" if self.healthy else "DOWN"
-        details = [
-            f"{name}: {str(health)}" for name, health in self.dependencies.items()
-        ]
+        details = [f"{name}: {health!s}" for name, health in self.dependencies.items()]
         return f"{status} ({', '.join(details)})"

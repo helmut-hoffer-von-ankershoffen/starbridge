@@ -6,7 +6,7 @@ from mcp.types import (
 )
 from typer.testing import CliRunner
 
-from ..utils_test import _server_parameters
+from tests.utils_test import _server_parameters
 
 GET_TEST_URL = "https://starbridge.readthedocs.io/en/latest/"
 
@@ -20,8 +20,8 @@ def runner():
 
 
 @pytest.mark.asyncio
-async def test_web_mcp_tool_get():
-    """Test server tool get"""
+async def test_web_mcp_tool_get() -> None:
+    """Test server tool get."""
     async with stdio_client(_server_parameters()) as (read, write):
         async with ClientSession(read, write) as session:
             await session.initialize()

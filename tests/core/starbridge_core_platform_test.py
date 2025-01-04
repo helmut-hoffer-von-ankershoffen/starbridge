@@ -5,9 +5,8 @@ import subprocess
 from starbridge import __is_running_in_container__
 
 
-def test_container_running_in_platform():
+def test_container_running_in_platform() -> None:
     """Check behavior of container running in platform."""
-
     assert not __is_running_in_container__
 
     env = os.environ.copy()
@@ -18,6 +17,7 @@ def test_container_running_in_platform():
         capture_output=True,
         text=True,
         env=env,
+        check=False,
     )
 
     info = json.loads(result.stdout)

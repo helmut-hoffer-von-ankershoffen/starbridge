@@ -3,6 +3,7 @@
 import json
 import logging
 import os
+import sys
 from pathlib import Path
 from typing import Any, TypeVar
 
@@ -22,7 +23,8 @@ logger = logging.getLogger(__name__)
 
 
 def load_settings(settings_class: type[T]) -> T:
-    """Load settings with error handling and nice formatting.
+    """
+    Load settings with error handling and nice formatting.
 
     Args:
         settings_class: The Pydantic settings class to instantiate
@@ -32,6 +34,7 @@ def load_settings(settings_class: type[T]) -> T:
 
     Raises:
         SystemExit: If settings validation fails
+
     """
     try:
         return settings_class()
@@ -65,19 +68,17 @@ def load_settings(settings_class: type[T]) -> T:
                 text,
                 title="Configuration invalid!",
                 border_style="error",
-            )
+            ),
         )
-        exit(78)
+        sys.exit(78)
 
 
 def get_starbridge_env():
-    return {
-        k: v for k, v in os.environ.items() if k.startswith(__project_name__.upper())
-    }
+    return {k: v for k, v in os.environ.items() if k.startswith(__project_name__.upper())}
 
 
 def prompt_for_env() -> dict[str, Any]:
-    """Collect settings from user input for all BaseSettings subclasses"""
+    """Collect settings from user input for all BaseSettings subclasses."""
     all_values = {}
     for settings_set in locate_subclasses(BaseSettings):
         settings = _get_settings_instance(settings_set)
@@ -111,9 +112,11 @@ def _transform_value(value: Any) -> str:
 
 
 def _get_default_value(
-    field_name: str, settings: BaseSettings, is_bool: bool
+    field_name: str,
+    settings: BaseSettings,
+    is_bool: bool,
 ) -> str | None:
-    """Get the default value for a field"""
+    """Get the default value for a field."""
     default_value = getattr(settings, field_name, None)
     if is_bool:
         return "1" if default_value else "0"
@@ -129,7 +132,7 @@ def _prompt_for_field_value(
     prompt_default: str | None,
     is_bool: bool,
 ) -> str | None:
-    """Prompt for a field value with validation"""
+    """Prompt for a field value with validation."""
     while True:
         value = Prompt.ask(
             description,
@@ -139,7 +142,9 @@ def _prompt_for_field_value(
         )
         try:
             settings.__pydantic_validator__.validate_assignment(
-                settings.model_construct(), field_name, value
+                settings.model_construct(),
+                field_name,
+                value,
             )
             return value
         except ValidationError as e:
@@ -147,7 +152,7 @@ def _prompt_for_field_value(
 
 
 def _collect_settings_values(settings: BaseSettings) -> dict[str, Any]:
-    """Collect values for a single settings instance"""
+    """Collect values for a single settings instance."""
     field_prefix = settings.model_config.get("env_prefix", "")
     values = {}
 
@@ -156,7 +161,11 @@ def _collect_settings_values(settings: BaseSettings) -> dict[str, Any]:
         description = _get_field_description(field_name, field)
         prompt_default = _get_default_value(field_name, settings, is_bool)
         value = _prompt_for_field_value(
-            settings, field_name, description, prompt_default, is_bool
+            settings,
+            field_name,
+            description,
+            prompt_default,
+            is_bool,
         )
         key = f"{field_prefix}{field_name.upper()}"
         values[key] = value

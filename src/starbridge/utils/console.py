@@ -1,4 +1,4 @@
-"""Define styling for typer, overriding defaults"""
+"""Define styling for typer, overriding defaults."""
 
 from rich.console import Console
 from rich.theme import Theme
@@ -10,5 +10,5 @@ console = Console(
         "info": "purple4",
         "warning": "yellow1",
         "error": "red1",
-    })
+    }),
 )

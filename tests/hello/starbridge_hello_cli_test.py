@@ -17,17 +17,15 @@ def runner():
     return CliRunner()
 
 
-def test_hello_cli_info(runner):
+def test_hello_cli_info(runner) -> None:
     """Check hello info."""
-
     result = runner.invoke(cli, ["hello", "info"])
     assert "en_US" in result.output
     assert result.exit_code == 0
 
 
-def test_hello_cli_health(runner):
+def test_hello_cli_health(runner) -> None:
     """Check hello health."""
-
     result = runner.invoke(cli, ["hello", "health"])
     assert '"UP"' in result.output
     assert result.exit_code == 0
@@ -35,7 +33,7 @@ def test_hello_cli_health(runner):
 
 if bridge:  # if extra imaging
 
-    def test_hello_cli_bridge(runner):
+    def test_hello_cli_bridge(runner) -> None:
         """Check we dump the image."""
         with runner.isolated_filesystem():
             result = runner.invoke(cli, ["hello", "bridge", "--dump"])
@@ -44,7 +42,7 @@ if bridge:  # if extra imaging
             assert Path("starbridge.png").stat().st_size == 6235
 
     @patch("cairosvg.svg2png", side_effect=OSError)
-    def test_hello_cli_bridge_error(mock_svg2png, runner):
+    def test_hello_cli_bridge_error(mock_svg2png, runner) -> None:
         """Check we handle cairo missing."""
         result = runner.invoke(cli, ["hello", "bridge"])
         assert result.exit_code == 78
@@ -52,14 +50,14 @@ if bridge:  # if extra imaging
 else:
 
     @pytest.mark.no_extras
-    def test_hello_cli_no_imaging_extra_no_bridge(runner):
+    def test_hello_cli_no_imaging_extra_no_bridge(runner) -> None:
         """Check we handle missing PIL."""
         result = runner.invoke(cli, ["hello"])
         assert "Show image" not in result.output
         assert result.exit_code == 0
 
 
-def test_hello_cli_pdf(runner):
+def test_hello_cli_pdf(runner) -> None:
     """Check we dump the pdf."""
     with runner.isolated_filesystem():
         result = runner.invoke(cli, ["hello", "pdf", "--dump"])
@@ -70,7 +68,7 @@ def test_hello_cli_pdf(runner):
 
 @patch("sys.platform", new="linux")
 @patch("subprocess.run")
-def test_hello_cli_pdf_open(mock_run, runner):
+def test_hello_cli_pdf_open(mock_run, runner) -> None:
     """Check we open the pdf."""
     with runner.isolated_filesystem():
         result = runner.invoke(cli, ["hello", "pdf"])

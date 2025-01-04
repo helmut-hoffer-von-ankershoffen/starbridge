@@ -1,6 +1,7 @@
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from functools import wraps
+from typing import Never
 
 import mcp.server.stdio
 from mcp import JSONRPCError, JSONRPCRequest, JSONRPCResponse
@@ -16,7 +17,7 @@ class MCPInstrumentor(BaseInstrumentor):  # pragma: no cover
     def instrumentation_dependencies(self):
         return []
 
-    def _instrument(self, **kwargs):
+    def _instrument(self, **kwargs) -> None:
         self._transaction_spans = {}
         original_stdio_server = mcp.server.stdio.stdio_server
 
@@ -28,21 +29,26 @@ class MCPInstrumentor(BaseInstrumentor):  # pragma: no cover
                 write_stream,
             ):
                 traced_read = TracedReceiveStream(
-                    read_stream, tracer, self._transaction_spans
+                    read_stream,
+                    tracer,
+                    self._transaction_spans,
                 )
                 traced_write = TracedSendStream(
-                    write_stream, tracer, self._transaction_spans
+                    write_stream,
+                    tracer,
+                    self._transaction_spans,
                 )
                 yield traced_read, traced_write
 
         mcp.server.stdio.stdio_server = instrumented_stdio_server
 
-    def _uninstrument(self, **kwargs):
-        raise NotImplementedError("Uninstrumentation not supported")
+    def _uninstrument(self, **kwargs) -> Never:
+        msg = "Uninstrumentation not supported"
+        raise NotImplementedError(msg)
 
 
-def _handle_transaction(tracer, msg, span_kind, active_spans):
-    """Handle span lifecycle for a JSON-RPC request/response transaction"""
+def _handle_transaction(tracer, msg, span_kind, active_spans) -> None:
+    """Handle span lifecycle for a JSON-RPC request/response transaction."""
     root = msg.root
     msg_id = getattr(root, "id", None)
 
@@ -62,8 +68,8 @@ def _handle_transaction(tracer, msg, span_kind, active_spans):
             span.end()
 
 
-def _handle_notification(tracer, msg, span_kind):
-    """Handle span for a JSON-RPC notification"""
+def _handle_notification(tracer, msg, span_kind) -> None:
+    """Handle span for a JSON-RPC notification."""
     with tracer.start_span(
         f"mcp.{span_kind.lower()}.notification.{msg.root.method}",
         kind=getattr(trace.SpanKind, span_kind.upper()),
@@ -75,8 +81,8 @@ def _handle_notification(tracer, msg, span_kind):
             span.set_status(StatusCode.OK)
 
 
-def _set_request_attributes(span, msg):
-    """Set span attributes for a JSON-RPC request"""
+def _set_request_attributes(span, msg) -> None:
+    """Set span attributes for a JSON-RPC request."""
     root = msg.root
     if isinstance(root, JSONRPCRequest):
         span.set_attribute("jsonrpc.request.id", root.id)
@@ -85,8 +91,8 @@ def _set_request_attributes(span, msg):
             span.set_attribute("jsonrpc.request.params", str(root.params))
 
 
-def _set_response_attributes(span, msg):
-    """Set span attributes for a JSON-RPC response"""
+def _set_response_attributes(span, msg) -> None:
+    """Set span attributes for a JSON-RPC response."""
     root = msg.root
     if isinstance(root, JSONRPCResponse):
         span.set_attribute("jsonrpc.response.result", str(root.result))
@@ -98,7 +104,7 @@ def _set_response_attributes(span, msg):
 
 
 class TracedSendStream:
-    def __init__(self, stream, tracer, active_spans):
+    def __init__(self, stream, tracer, active_spans) -> None:
         self._stream = stream
         self._tracer = tracer
         self._active_spans = active_spans
@@ -110,16 +116,21 @@ class TracedSendStream:
     async def __aexit__(self, exc_type, exc_val, exc_tb):
         return await self._stream.__aexit__(exc_type, exc_val, exc_tb)
 
-    async def send(self, msg):
+    async def send(self, msg) -> None:
         root = getattr(msg, "root", None)
 
         if isinstance(root, JSONRPCNotification):
             _handle_notification(
-                self._tracer, msg, "CLIENT"
+                self._tracer,
+                msg,
+                "CLIENT",
             )  # We're sending a notification
         else:
             _handle_transaction(
-                self._tracer, msg, "CLIENT", self._active_spans
+                self._tracer,
+                msg,
+                "CLIENT",
+                self._active_spans,
             )  # We're sending a request/response
 
         await self._stream.send(msg)
@@ -129,7 +140,7 @@ class TracedSendStream:
 
 
 class TracedReceiveStream:
-    def __init__(self, stream, tracer, active_spans):
+    def __init__(self, stream, tracer, active_spans) -> None:
         self._stream = stream
         self._tracer = tracer
         self._active_spans = active_spans
@@ -148,18 +159,25 @@ class TracedReceiveStream:
 
         if isinstance(root, JSONRPCNotification):
             _handle_notification(
-                self._tracer, msg, "SERVER"
+                self._tracer,
+                msg,
+                "SERVER",
             )  # It's an incoming notification
         else:
             _handle_transaction(
-                self._tracer, msg, "SERVER", self._active_spans
+                self._tracer,
+                msg,
+                "SERVER",
+                self._active_spans,
             )  # It's an incoming request/response
 
         return msg
 
     def __aiter__(self) -> AsyncIterator:
         return TracedAsyncIterator(
-            self._stream.__aiter__(), self._tracer, self._active_spans
+            self._stream.__aiter__(),
+            self._tracer,
+            self._active_spans,
         )
 
     def __getattr__(self, attr):
@@ -167,7 +185,7 @@ class TracedReceiveStream:
 
 
 class TracedAsyncIterator:
-    def __init__(self, iterator: AsyncIterator, tracer, active_spans):
+    def __init__(self, iterator: AsyncIterator, tracer, active_spans) -> None:
         self._iterator = iterator
         self._tracer = tracer
         self._active_spans = active_spans

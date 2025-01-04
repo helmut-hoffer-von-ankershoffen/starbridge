@@ -6,7 +6,7 @@ from starbridge.web import Resource
 EXAMPLE_COM = "https://example.com"
 
 
-def test_web_types_resource_exactly_one():
+def test_web_types_resource_exactly_one() -> None:
     with pytest.raises(ValidationError):
         Resource(
             url=AnyHttpUrl(EXAMPLE_COM),

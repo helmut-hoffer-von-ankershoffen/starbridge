@@ -16,7 +16,7 @@ class MCPContext(BaseModel):
         request_context: RequestContext | None = None,
         mcp: Any | None = None,
         **kwargs: Any,
-    ):
+    ) -> None:
         super().__init__(**kwargs)
         self._request_context = request_context
         self._mcp = mcp
@@ -30,40 +30,44 @@ class MCPContext(BaseModel):
     def request_context(self) -> RequestContext:
         """Access to the underlying request context."""
         if self._request_context is None:
-            raise RuntimeError("Context is not available outside of a request")
+            msg = "Context is not available outside of a request"
+            raise RuntimeError(msg)
         return self._request_context
 
     async def report_progress(
-        self, progress: float, total: float | None = None
+        self,
+        progress: float,
+        total: float | None = None,
     ) -> None:
-        """Report progress for the current operation.
+        """
+        Report progress for the current operation.
 
         Args:
             progress: Current progress value e.g. 24
             total: Optional total value e.g. 100
-        """
 
-        progress_token = (
-            self.request_context.meta.progressToken
-            if self.request_context.meta
-            else None
-        )
+        """
+        progress_token = self.request_context.meta.progressToken if self.request_context.meta else None
 
         if not progress_token:
             return
 
         await self.request_context.session.send_progress_notification(
-            progress_token=progress_token, progress=progress, total=total
+            progress_token=progress_token,
+            progress=progress,
+            total=total,
         )
 
     async def read_resource(self, uri: str | AnyUrl) -> str | bytes:
-        """Read a resource by URI.
+        """
+        Read a resource by URI.
 
         Args:
             uri: Resource URI to read
 
         Returns:
             (str | bytes): The resource content as either text or bytes
+
         """
         return await self._mcp.read_resource(uri)
 
@@ -74,26 +78,26 @@ class MCPContext(BaseModel):
         *,
         logger_name: str | None = None,
     ) -> None:
-        """Send a log message to the client.
+        r"""
+        Send a log message to the client.
 
         Args:
             level: Log level (debug, info, warning, error)
             message: Log message
             logger_name: Optional logger name
             \*\*extra: Additional structured data to include
+
         """
         await self.request_context.session.send_log_message(
-            level=level, data=message, logger=logger_name
+            level=level,
+            data=message,
+            logger=logger_name,
         )
 
     @property
     def client_id(self) -> str | None:
         """Get the client ID if available."""
-        return (
-            getattr(self.request_context.meta, "client_id", None)
-            if self.request_context.meta
-            else None
-        )
+        return getattr(self.request_context.meta, "client_id", None) if self.request_context.meta else None
 
     @property
     def request_id(self) -> str:

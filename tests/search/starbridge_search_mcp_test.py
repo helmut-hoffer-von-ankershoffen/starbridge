@@ -4,7 +4,7 @@ from mcp.client.stdio import stdio_client
 from mcp.types import TextContent
 from typer.testing import CliRunner
 
-from ..utils_test import _server_parameters
+from tests.utils_test import _server_parameters
 
 PYPROJECT_TOML = "pyproject.toml"
 DOT_COVERAGE = ".coverage"
@@ -16,8 +16,8 @@ def runner():
 
 
 @pytest.mark.asyncio
-async def test_search_mcp_tool_web():
-    """Test server tool search"""
+async def test_search_mcp_tool_web() -> None:
+    """Test server tool search."""
     async with stdio_client(_server_parameters()) as (read, write):
         async with ClientSession(read, write) as session:
             await session.initialize()

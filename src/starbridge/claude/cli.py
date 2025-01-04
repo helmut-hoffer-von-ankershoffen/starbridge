@@ -1,6 +1,4 @@
-"""
-CLI to interact with Claude Desktop application
-"""
+"""CLI to interact with Claude Desktop application."""
 
 import pathlib
 import subprocess
@@ -17,25 +15,25 @@ cli = typer.Typer(name="claude", help="Claude Desktop application operations")
 
 
 @cli.command()
-def health():
-    """Health of Claude"""
+def health() -> None:
+    """Health of Claude."""
     console.print_json(Service().health().model_dump_json())
 
 
 @cli.command()
-def info():
-    """Info about Claude"""
+def info() -> None:
+    """Info about Claude."""
     console.print_json(data=Service().info())
 
 
 if not __is_running_in_container__:
 
     @cli.command()
-    def config():
-        """Print config of Claude Desktop application"""
+    def config() -> None:
+        """Print config of Claude Desktop application."""
         if not Service.is_installed():
             console.print(
-                f"Claude Desktop application is not installed at '{Service.application_directory()}' - you can install it from https://claude.ai/download"
+                f"Claude Desktop application is not installed at '{Service.application_directory()}' - you can install it from https://claude.ai/download",
             )
             return
         if not Service.config_path().is_file():
@@ -62,15 +60,11 @@ if not __is_running_in_container__:
                 help="Name of the MCP server - use 'main' for main mcp.log of Claude Desktop application",
             ),
         ] = __project_name__,
-    ):
+    ) -> None:
         """Show logs."""
         log_path = Service.log_path(name if name != "main" else None)
         size = pathlib.Path(log_path).stat().st_size
-        human_size = (
-            f"{size / 1024 / 1024:.1f}MB"
-            if size > 1024 * 1024
-            else f"{size / 1024:.1f}KB"
-        )
+        human_size = f"{size / 1024 / 1024:.1f}MB" if size > 1024 * 1024 else f"{size / 1024:.1f}KB"
         console.print(
             f"Showing max {last} lines of log at '{log_path}' ({human_size}{', tailing' if tail else ''})",
         )
@@ -97,11 +91,11 @@ if not __is_running_in_container__:
             )
 
     @cli.command()
-    def restart():
-        """Restart Claude Desktop application"""
+    def restart() -> None:
+        """Restart Claude Desktop application."""
         if not Service.is_installed():
             console.print(
-                f"Claude Desktop application is not installed at '{Service.application_directory()}' - you can install it from https://claude.ai/download"
+                f"Claude Desktop application is not installed at '{Service.application_directory()}' - you can install it from https://claude.ai/download",
             )
             return
         Service().restart()

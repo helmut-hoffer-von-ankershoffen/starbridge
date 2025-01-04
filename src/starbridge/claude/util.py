@@ -12,10 +12,10 @@ def generate_mcp_server_config(
     env: dict[str, Any],
     image: str = "helmuthva/starbridge:latest",
 ) -> dict:
-    """Generate configuration file for Starbridge"""
+    """Generate configuration file for Starbridge."""
     if __is_running_in_container__:
         args = ["run", "-i", "--rm"]
-        for env_key in env.keys():
+        for env_key in env:
             args.extend(["-e", env_key])
         args.append(image)
         return {
