@@ -1,6 +1,7 @@
 import json
 from unittest.mock import patch
 
+import httpx
 import pytest
 import requests
 from brave_search_python_client import MOCK_API_KEY, WebSearchApiResponse
@@ -30,7 +31,7 @@ def test_search_cli_health(runner) -> None:
 @patch("httpx.AsyncClient.head")
 def test_search_cli_health_not_connected(mock_head, runner) -> None:
     """Check web health down when not connected."""
-    mock_head.side_effect = requests.exceptions.Timeout()
+    mock_head.side_effect = httpx.ReadTimeout("Timeout")
 
     result = runner.invoke(cli, ["search", "health"])
     assert '"DOWN"' in result.output
