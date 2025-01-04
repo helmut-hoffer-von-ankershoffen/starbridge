@@ -27,3 +27,4 @@
 
 > [!TIP]
 > 📚 [Online documentation](https://starbridge.readthedocs.io/en/latest/) - 📖 [PDF Manual](https://starbridge.readthedocs.io/_/downloads/en/latest/pdf/)
+---
