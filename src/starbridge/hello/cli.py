@@ -4,6 +4,7 @@ import os
 import subprocess
 import sys
 import tempfile
+import time
 from pathlib import Path
 from typing import Annotated
 
@@ -32,7 +33,7 @@ def info() -> None:
 
 @cli.command()
 def hello(locale: Annotated[str, typer.Option(help="Locale to use")] = "en_US") -> None:
-    """Print Hello World!"""
+    """Print Hello World."""
     console.print(Service().hello(locale))
 
 
@@ -43,7 +44,8 @@ if hasattr(Service, "bridge"):
         dump: Annotated[
             bool,
             typer.Option(
-                help="If set, will dump to file starbridge.png in current working directory. Defaults to opening viewer to show the image.",
+                help="If set, will dump to file starbridge.png in current working directory. "
+                "Defaults to opening viewer to show the image.",
             ),
         ] = False,
     ) -> None:
@@ -77,7 +79,8 @@ def pdf(
     dump: Annotated[
         bool,
         typer.Option(
-            help="If set, will dump to file starbridge.pdf in current working directory. Defaults to opening viewer to show the document.",
+            help="If set, will dump to file starbridge.pdf in current working directory. "
+            "Defaults to opening viewer to show the document.",
         ),
     ] = False,
 ) -> None:
@@ -94,14 +97,13 @@ def pdf(
             tmp_path = Path(tmp.name)
             try:
                 if sys.platform == "darwin":  # macOS
-                    subprocess.run(["open", tmp_path], check=True)
+                    subprocess.run(["/usr/bin/open", tmp_path], check=True)  # noqa: S603
                 elif sys.platform == "win32":  # Windows
-                    os.startfile(tmp_path)  # type: ignore
+                    os.startfile(tmp_path)  # type: ignore  # noqa: S606
                 else:  # Linux and others
-                    subprocess.run(["xdg-open", tmp_path], check=True)
+                    subprocess.run(["xdg-open", tmp_path], check=True)  # noqa: S607, S603
 
                 # Give the viewer some time to open the file
-                import time
 
                 time.sleep(2)
             finally:

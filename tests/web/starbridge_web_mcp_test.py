@@ -22,20 +22,19 @@ def runner():
 @pytest.mark.asyncio
 async def test_web_mcp_tool_get() -> None:
     """Test server tool get."""
-    async with stdio_client(_server_parameters()) as (read, write):
-        async with ClientSession(read, write) as session:
-            await session.initialize()
+    async with stdio_client(_server_parameters()) as (read, write), ClientSession(read, write) as session:
+        await session.initialize()
 
-            result = await session.call_tool(
-                "starbridge_web_get",
-                {
-                    "url": GET_TEST_URL,
-                    "transform_to_markdown": True,
-                    "extract_links": False,
-                    "additional_context": False,
-                },
-            )
-            assert len(result.content) == 1
-            content = result.content[0]
-            assert type(content) is TextContent
-            assert "\\n\\nstarbridge" in content.text
+        result = await session.call_tool(
+            "starbridge_web_get",
+            {
+                "url": GET_TEST_URL,
+                "transform_to_markdown": True,
+                "extract_links": False,
+                "additional_context": False,
+            },
+        )
+        assert len(result.content) == 1
+        content = result.content[0]
+        assert type(content) is TextContent
+        assert "\\n\\nstarbridge" in content.text

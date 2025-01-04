@@ -11,8 +11,8 @@ from rich.text import Text
 
 from starbridge.utils.console import console
 
+from .models import RobotForbiddenError
 from .service import Service
-from .types import RobotForbiddenException
 
 cli = typer.Typer(name="web", help="Web operations")
 
@@ -30,7 +30,7 @@ def info() -> None:
 
 
 @cli.command()
-def get(
+def get(  # noqa: PLR0913, PLR0917
     url: Annotated[str, typer.Argument(help="URL to fetch")],
     accept_language: Annotated[
         str,
@@ -63,7 +63,11 @@ def get(
         ),
     ] = False,
 ) -> None:
-    """Fetch content from the world wide web via HTTP GET, convert to content type as a best effort, extract links, and provide additional context."""
+    """
+    Fetch content from the world wide web via HTTP GET.
+
+    Converts to content type as a best effort, extracts links, and provides additional context.
+    """
     try:
         rtn = asyncio.run(
             Service().get(
@@ -87,7 +91,7 @@ def get(
             ),
         )
         sys.exit(1)
-    except RobotForbiddenException as e:
+    except RobotForbiddenError as e:
         text = Text()
         text.append(str(e))
         console.print(

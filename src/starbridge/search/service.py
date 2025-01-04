@@ -23,12 +23,19 @@ class Service(MCPBaseService):
     _bs: BraveSearch
 
     def __init__(self) -> None:
+        """Initialize the search service with Brave Search client."""
         super().__init__(Settings)
         self._bs = BraveSearch(api_key=self._settings.brave_search_api_key)
 
     @mcp_tool()
-    def health(self, context: MCPContext | None = None) -> Health:
-        """Check health of the search service."""
+    def health(self, context: MCPContext | None = None) -> Health:  # noqa: ARG002
+        """
+        Check health of the search service.
+
+        Returns:
+            Health: The health status of the search service.
+
+        """
         if not asyncio.run(self._bs.is_connected()):
             return Health(
                 status=Health.Status.DOWN,
@@ -37,15 +44,21 @@ class Service(MCPBaseService):
         return Health(status=Health.Status.UP)
 
     @mcp_tool()
-    def info(self, context: MCPContext | None = None) -> dict:
-        """Info about search environment."""
+    def info(self, context: MCPContext | None = None) -> dict:  # noqa: ARG002, PLR6301
+        """
+        Info about search environment.
+
+        Returns:
+            dict: Information about the search environment configuration.
+
+        """
         return {}
 
     @mcp_tool()
-    async def web(
+    async def web(  # noqa: D417
         self,
         q: str,
-        context: MCPContext | None = None,
+        context: MCPContext | None = None,  # noqa: ARG002
     ) -> WebSearchApiResponse:
         """
         Search the world wide web via Brave Search.

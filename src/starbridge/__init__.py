@@ -1,3 +1,5 @@
+"""⭐ Integrates Claude Desktop with the web, Google and Atlassian workspaces."""
+
 import importlib.metadata
 import os
 import pathlib
@@ -38,13 +40,18 @@ def _amend_library_path() -> None:
 def _log_boot_message() -> None:
     # Local import as this initializes logging and instrumentation
     # which might depend on environment arguments parsed from argv
-    from starbridge.utils import get_logger, get_process_info
+    from starbridge.utils import get_logger, get_process_info  # noqa: PLC0415
 
     logger = get_logger(__name__)
 
     process_info = get_process_info()
     logger.debug(
-        f"⭐ Booting Starbridge v{__version__} (project root {process_info.project_root}, pid {process_info.pid}), parent '{process_info.parent.name}' (pid {process_info.parent.pid})",
+        "⭐ Booting Starbridge v%s (project root %s, pid %s), parent '%s' (pid %s)",
+        __version__,
+        process_info.project_root,
+        process_info.pid,
+        process_info.parent.name,
+        process_info.parent.pid,
     )
 
 

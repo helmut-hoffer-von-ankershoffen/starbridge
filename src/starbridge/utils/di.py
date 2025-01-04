@@ -1,3 +1,5 @@
+"""Module for dynamic import and discovery of implementations and subclasses."""
+
 import importlib
 import pkgutil
 from inspect import isclass
@@ -9,8 +11,14 @@ _implementation_cache = {}
 _subclass_cache = {}
 
 
-def locate_implementations(_class: Any) -> list[Any]:
-    """Dynamically discover all Service classes in starbridge packages."""
+def locate_implementations(_class: type[Any]) -> list[Any]:
+    """
+    Dynamically discover all Service classes in starbridge packages.
+
+    Returns:
+        list[Any]: List of discovered implementations of the given class.
+
+    """
     if _class in _implementation_cache:
         return _implementation_cache[_class]
 
@@ -32,8 +40,14 @@ def locate_implementations(_class: Any) -> list[Any]:
     return implementations
 
 
-def locate_subclasses(_class: Any) -> list[Any]:
-    """Dynamically discover all Service classes in starbridge packages."""
+def locate_subclasses(_class: type[Any]) -> list[type[Any]]:
+    """
+    Dynamically discover all Service classes in starbridge packages.
+
+    Returns:
+        list[type[Any]]: List of discovered subclasses of the given class.
+
+    """
     if _class in _subclass_cache:
         return _subclass_cache[_class]
 

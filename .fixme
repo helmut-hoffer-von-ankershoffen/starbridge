@@ -1,0 +1,14 @@
+============================= test session starts ==============================
+platform darwin -- Python 3.11.6, pytest-8.3.4, pluggy-1.5.0 -- /Users/helmut/Code/starbridge/.venv/bin/python
+cachedir: .pytest_cache
+rootdir: /Users/helmut/Code/starbridge
+configfile: pyproject.toml
+testpaths: tests
+plugins: datadir-1.5.0, cov-6.0.0, env-1.1.5, logfire-2.11.1, regressions-2.6.0, anyio-4.6.2.post1, xdist-3.6.1, asyncio-0.25.1, docker-3.1.1
+asyncio: mode=Mode.AUTO, asyncio_default_fixture_loop_scope=function
+collecting ... collected 0 items
+
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! KeyboardInterrupt !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+/Users/helmut/.local/share/uv/python/cpython-3.11.6-macos-aarch64-none/lib/python3.11/ast.py:273: KeyboardInterrupt
+(to show a full traceback on KeyboardInterrupt use --full-trace)
+============================ no tests ran in 1.22s =============================

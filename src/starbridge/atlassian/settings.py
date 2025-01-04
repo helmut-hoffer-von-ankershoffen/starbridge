@@ -1,3 +1,5 @@
+"""Module containing Atlassian-related settings and configuration."""
+
 from typing import Annotated
 
 from pydantic import AnyHttpUrl, EmailStr, Field, SecretStr
@@ -7,6 +9,8 @@ from starbridge import __project_name__
 
 
 class Settings(BaseSettings):
+    """Configuration settings for Atlassian services including Confluence and Jira authentication."""
+
     model_config = SettingsConfigDict(
         env_prefix=f"{__project_name__.upper()}_ATLASSIAN_",
         extra="ignore",
@@ -33,7 +37,8 @@ class Settings(BaseSettings):
     api_token: Annotated[
         SecretStr,
         Field(
-            description="API token of your Atlassian account. Go to https://id.atlassian.com/manage-profile/security/api-tokens to create a token.",
+            description="API token of your Atlassian account. "
+            "Go to https://id.atlassian.com/manage-profile/security/api-tokens to create a token.",
             examples=["YOUR_TOKEN"],
         ),
     ]

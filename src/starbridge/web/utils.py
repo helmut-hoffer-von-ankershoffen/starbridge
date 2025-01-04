@@ -1,3 +1,6 @@
+"""Utility functions for web-related operations like URL handling, content transformation, and link extraction."""
+
+from http import HTTPStatus
 from urllib.parse import urljoin, urlparse, urlunparse
 
 import httpx
@@ -13,28 +16,35 @@ from readabilipy.simple_json import simple_json_from_html_string
 
 from starbridge.utils import get_logger
 
-from .types import (
+from .models import (
     HTML_PARSER,
     Context,
     LinkTarget,
     MimeType,
     Resource,
-    RobotForbiddenException,
+    RobotForbiddenError,
 )
 
 logger = get_logger(__name__)
 
 
-def is_connected():
+def is_connected() -> bool:
+    """
+    Check if there is an active internet connection by making a HEAD request to Google.
+
+    Returns:
+        bool: True if connection is established, False otherwise
+
+    """
     try:
         response = requests.head("https://www.google.com", timeout=5)
         logger.info(
             "Called head on https://www.google.com/, got status_code: %s",
             response.status_code,
         )
-        return response.status_code == 200
-    except requests.exceptions.RequestException as e:
-        logger.exception("Failed to connect to www.google.com: %s", e)
+        return response.status_code == HTTPStatus.OK
+    except requests.exceptions.RequestException:
+        logger.exception("Failed to connect to www.google.com: %s")
     return False
 
 
@@ -45,7 +55,13 @@ async def get_respectfully(
     timeout: int,
     respect_robots_txt: bool = True,
 ) -> httpx.Response:
-    """Fetch URL with proper headers and robot.txt checking."""
+    """
+    Fetch URL with proper headers and robot.txt checking.
+
+    Returns:
+        httpx.Response: The HTTP response from the requested URL.
+
+    """
     async with AsyncClient() as client:
         if respect_robots_txt:
             await _ensure_allowed_to_crawl(url=url, user_agent=user_agent)
@@ -80,7 +96,15 @@ def _get_robots_txt_url(url: str) -> str:
 async def _ensure_allowed_to_crawl(url: str, user_agent: str, timeout: int = 5) -> None:
     """
     Ensure allowed to crawl the URL by the user agent according to the robots.txt file.
-    Raises a RuntimeError if not.
+
+    Args:
+        url: Website URL to check
+        user_agent: User agent string to check permissions for
+        timeout: Request timeout in seconds
+
+    Raises:
+        RobotForbiddenError: If crawling is not allowed according to the robots.txt file.
+
     """
     logger.debug("Checking if allowed to crawl %s", url)
     robot_txt_url = _get_robots_txt_url(url)
@@ -94,16 +118,22 @@ async def _ensure_allowed_to_crawl(url: str, user_agent: str, timeout: int = 5) 
                 timeout=timeout,
             )
         except HTTPError as e:
-            message = f"Failed to fetch robots.txt {robot_txt_url} due to a connection issue, thereby defensively assuming we are not allowed to access the url we want."
-            logger.exception(message)
-            raise RobotForbiddenException(message) from e
-        if response.status_code in {401, 403}:
             message = (
-                f"When fetching robots.txt ({robot_txt_url}), received status {response.status_code} so assuming that autonomous fetching is not allowed, the user can try manually fetching by using the fetch prompt",
+                f"Failed to fetch robots.txt {robot_txt_url} due to a connection issue, "
+                "thereby defensively assuming we are not allowed to access the url we "
+                "want."
+            )
+            logger.exception(message)
+            raise RobotForbiddenError(message) from e
+        if response.status_code in {HTTPStatus.UNAUTHORIZED, HTTPStatus.FORBIDDEN}:
+            message = (
+                f"When fetching robots.txt ({robot_txt_url}), received status {response.status_code} "
+                "so assuming that autonomous fetching is not allowed, the user can try manually "
+                "fetching by using the fetch prompt"
             )
             logger.error(message)
-            raise RobotForbiddenException(message)
-        if 400 <= response.status_code < 500:
+            raise RobotForbiddenError(message)
+        if HTTPStatus.BAD_REQUEST <= response.status_code < HTTPStatus.INTERNAL_SERVER_ERROR:
             return
         robot_txt = response.text
     processed_robot_txt = "\n".join(line for line in robot_txt.splitlines() if not line.strip().startswith("#"))
@@ -114,15 +144,26 @@ async def _ensure_allowed_to_crawl(url: str, user_agent: str, timeout: int = 5) 
             f"<useragent>{user_agent}</useragent>\n"
             f"<url>{url}</url>\n"
             f"<robots>\n{robot_txt}\n</robots>\n"
-            f"The assistant must let the user know that it failed to view the page. The assistant may provide further guidance based on the above information.\n"
-            f"The assistant can tell the user that they can try manually fetching the page by using the fetch prompt within their UI.",
+            f"The assistant must let the user know that it failed to view the page. "
+            "The assistant may provide further guidance based on the above information.\n"
+            f"The assistant can tell the user that they can try manually fetching the page "
+            "by using the fetch prompt within their UI."
         )
         logger.error(message)
-        raise RobotForbiddenException(message)
+        raise RobotForbiddenError(message)
 
 
 def _get_normalized_content_type(response: httpx.Response) -> str:
-    """Get the normalized content type from the response."""
+    """
+    Get the normalized content type from the response.
+
+    Args:
+        response: The HTTP response to get the content type from.
+
+    Returns:
+        str: The normalized MIME type of the response content.
+
+    """
     content_type_mapping = {
         "html": MimeType.TEXT_HTML,
         "markdown": MimeType.TEXT_MARKDWON,
@@ -155,7 +196,16 @@ def _get_normalized_content_type(response: httpx.Response) -> str:
 
 
 def _get_markdown_from_html(html: str) -> str:
-    """Get markdown from HTML content."""
+    """
+    Get markdown from HTML content.
+
+    Args:
+        html: The HTML content to convert
+
+    Returns:
+        str: The converted markdown content
+
+    """
     simplified = simple_json_from_html_string(html, use_readability=False)
     if simplified["content"]:
         return markdownify(simplified["content"], heading_style=ATX, strip=["img"])
@@ -165,38 +215,66 @@ def _get_markdown_from_html(html: str) -> str:
 
 
 def _get_markdown_from_pdf(response: httpx.Response) -> str | None:
-    """Get markdown from PDF content."""
+    """
+    Get markdown from PDF content.
+
+    Returns:
+        str | None: Markdown string if conversion is successful, None otherwise
+
+    """
     try:
         rtn = MarkItDown().convert(str(response.url))
         return rtn.text_content
-    except Exception as e:
-        logger.warning(f"Failed to convert PDF to markdown: {e}")
+    except Exception:
+        logger.exception("Failed to convert PDF to markdown")
         return None
 
 
 def _get_markdown_from_word(response: httpx.Response) -> str | None:
-    try:
-        rtn = MarkItDown().convert(str(response.url))
-        return rtn.text_content
-    except Exception as e:
-        logger.warning(f"Failed to convert PDF to markdown: {e}")
-        return None
+    """
+    Convert Word document content to markdown.
+
+    Args:
+        response: HTTP response containing Word document
+
+    Returns:
+        Markdown string if conversion successful, None otherwise
+
+    """
+    rtn = MarkItDown().convert(str(response.url))
+    return rtn.text_content
 
 
 def _get_markdown_from_excel(response: httpx.Response) -> str | None:
-    try:
-        rtn = MarkItDown().convert(str(response.url))
-        return rtn.text_content
-    except Exception as e:
-        logger.warning(f"Failed to convert PDF to markdown: {e}")
-        return None
+    """
+    Convert Excel document content to markdown.
+
+    Args:
+        response: HTTP response containing Excel document
+
+    Returns:
+        Markdown string if conversion successful, None otherwise
+
+    """
+    rtn = MarkItDown().convert(str(response.url))
+    return rtn.text_content
 
 
 def transform_content(
     response: httpx.Response,
     transform_to_markdown: bool = True,
 ) -> Resource:
-    """Process response according to requested format."""
+    """
+    Process response according to requested format.
+
+    Args:
+        response: The HTTP response to process
+        transform_to_markdown: Whether to attempt converting content to markdown
+
+    Returns:
+        Resource: Processed content as a Resource object
+
+    """
     content_type = _get_normalized_content_type(response)
 
     if transform_to_markdown:
@@ -253,7 +331,17 @@ def transform_content(
 
 
 def _extract_links_from_html(html: str, url: str) -> list[LinkTarget]:
-    """Extract links from HTML content."""
+    """
+    Extract links from HTML content.
+
+    Args:
+        html: The HTML content to extract links from
+        url: The base URL for resolving relative links
+
+    Returns:
+        list[LinkTarget]: List of extracted links with metadata
+
+    """
     soup = BeautifulSoup(html, HTML_PARSER)
     seen_urls: dict[str, LinkTarget] = {}
 
@@ -282,7 +370,16 @@ def _extract_links_from_html(html: str, url: str) -> list[LinkTarget]:
 def extract_links_from_response(
     response: httpx.Response,
 ) -> list[LinkTarget]:
-    """Extract links from HTML content."""
+    """
+    Extract links from HTML content.
+
+    Args:
+        response: The HTTP response to extract links from.
+
+    Returns:
+        list[LinkTarget]: List of extracted links with their metadata.
+
+    """
     match _get_normalized_content_type(response):
         case MimeType.TEXT_HTML:
             return _extract_links_from_html(response.text, str(response.url))
@@ -306,10 +403,14 @@ async def get_additional_context_for_url(
     Get additional context for the url.
 
     Args:
-        url: The URL to get additional context for.
+        url: The URL to get additional context for
+        user_agent: User agent string to use for requests
+        accept_language: Accept-Language header value
+        timeout: Request timeout in seconds
+        full: Whether to try fetching llms-full.txt first
 
     Returns:
-        additional context.
+        List of Context objects with additional information
 
     """
     rtn = []
@@ -326,7 +427,7 @@ async def get_additional_context_for_url(
                     follow_redirects=True,
                     timeout=timeout,
                 )
-                if response.status_code == 200:
+                if response.status_code == HTTPStatus.OK:
                     rtn.append(
                         Context(
                             type="llms_txt",
@@ -335,7 +436,7 @@ async def get_additional_context_for_url(
                         ),
                     )
             except HTTPError:
-                logger.warning(f"Failed to fetch llms-full.txt {llms_full_txt_url}")
+                logger.exception("Failed to fetch llms-full.txt %s", llms_full_txt_url)
         if len(rtn) == 0:
             llms_txt_url = _get_llms_txt_url(url, False)
             try:
@@ -348,7 +449,7 @@ async def get_additional_context_for_url(
                     follow_redirects=True,
                     timeout=timeout,
                 )
-                if response.status_code == 200:
+                if response.status_code == HTTPStatus.OK:
                     rtn.append(
                         Context(
                             type="llms_txt",
@@ -357,7 +458,7 @@ async def get_additional_context_for_url(
                         ),
                     )
             except HTTPError:
-                logger.warning(f"Failed to fetch llms.txt {llms_txt_url}")
+                logger.warning("Failed to fetch llms.txt %s", llms_txt_url)
     return rtn
 
 
@@ -367,6 +468,7 @@ def _get_llms_txt_url(url: str, full: bool = True) -> str:
 
     Args:
         url: Website URL to get robots.txt for
+        full: If True, returns llms-full.txt URL, otherwise returns llms.txt URL
 
     Returns:
         URL of the robots.txt file

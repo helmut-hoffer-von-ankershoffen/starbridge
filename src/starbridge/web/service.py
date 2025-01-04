@@ -3,8 +3,8 @@
 from starbridge.mcp import MCPBaseService, MCPContext, mcp_tool
 from starbridge.utils import Health, get_logger
 
+from .models import GetResult
 from .settings import Settings
-from .types import GetResult
 from .utils import (
     extract_links_from_response,
     get_additional_context_for_url,
@@ -22,11 +22,18 @@ class Service(MCPBaseService):
     _settings: Settings
 
     def __init__(self) -> None:
+        """Initialize the web service with default settings."""
         super().__init__(Settings)
 
     @mcp_tool()
-    def health(self, context: MCPContext | None = None) -> Health:
-        """Check health of the web service."""
+    def health(self, context: MCPContext | None = None) -> Health:  # noqa: PLR6301, ARG002
+        """
+        Check health of the web service.
+
+        Returns:
+            Health: The health status of the web service
+
+        """
         if not is_connected():
             return Health(
                 status=Health.Status.DOWN,
@@ -35,7 +42,7 @@ class Service(MCPBaseService):
         return Health(status=Health.Status.UP)
 
     @mcp_tool()
-    def info(self, context: MCPContext | None = None) -> dict:
+    def info(self, context: MCPContext | None = None) -> dict:  # noqa: PLR6301, ARG002
         """
         Info about web environment.
 
@@ -46,7 +53,7 @@ class Service(MCPBaseService):
         return {}
 
     @mcp_tool()
-    async def get(
+    async def get(  # noqa: PLR0913, PLR0917
         self,
         url: str,
         accept_language: str = "en-US,en;q=0.9,de;q=0.8",
@@ -54,49 +61,59 @@ class Service(MCPBaseService):
         extract_links: bool = True,
         additional_context: bool = True,
         llms_full_txt: bool = False,
-        context: MCPContext | None = None,
+        context: MCPContext | None = None,  # noqa: ARG002
     ) -> GetResult:
         """
         Fetch page from the world wide web via HTTP GET.
 
-        Should be called by the assistant when the user asks to fetch/retrieve/load/download a page/content/document from the Internet / the world wide web
+        Should be called by the assistant when the user asks to fetch/retrieve/load/download
+            a page/content/document from
+        the Internet / the world wide web
             - This includes the case when the user simply pastes a URL without further context
-            - This includes asks about current news, or e.g. if the user simply prompts the assitant with "What's today on <some website>".
+            - This includes asks about current news, or e.g. if the user simply prompts the assitant with
+              "What's today on <some website>".
             - This includes asks to download a pdf
         Further tips:
             - The agent is to disable transform to markdown, extract links, and additional context in error cases only.
-            - The agent can use this tool to crawl multiple pages. I.e. when asked to crawl a URL use a get call, than look at the top links extracted, follow them, and in the end provide a summary.
-
+            - The agent can use this tool to crawl multiple pages. I.e. when asked to crawl a URL use a get call, than
+              look at the top links extracted, follow them, and in the end provide a summary.
 
         Args:
             url (str): The URL to fetch content from
-            accept_language (str, optional): Accept-Language header to send as part of the get request. Defaults to en-US,en;q=0.9,de;q=0.8.
+            accept_language (str, optional): Accept-Language header to send as part of the get request.
+                Defaults to en-US,en;q=0.9,de;q=0.8.
                 The assistant can prompt the user for the language preferred, and set this header accordingly.
-            transform_to_markdown (bool, optional): If set will transform content to markdown if possible. Defaults to true.
-                If the transformation is not supported, the content will be returned as is
+            transform_to_markdown (bool, optional): If set will transform content to markdown if possible.
+                Defaults to true. If the transformation is not supported, the content will be returned as is
             extract_links (bool, optional): If set will extract links from the content. Defaults to True.
                 Supported for selected content types only
-            additional_context (bool, optional): If set will include additional context about the URL or it's domain in the response. Defaults to True.
+            additional_context (bool, optional): If set will include additional context about the URL
+                or it's domain in the response. Defaults to True.
             llms_full_txt (bool, optional): Whether to include llms-full.txt in additional context. Defaults to False.
             context (MCPContext | None, optional): Context object for request tracking. Defaults to None.
 
         Returns:
-            'resource': The retrieved and possibly transformed resource:
+            resource: The retrieved and possibly transformed resource:
                 - 'url' (string) the final URL after redirects
-                - 'type' (content type indicator as defined in http): the type of transformed content, resp. the original content type if no transformation applied
-                - 'text' (string): the transformed textual content, resp. the original content if no transformation applied
+                - 'type' (content type indicator as defined in http): the type of transformed content,
+                    resp. the original
+                  content type if no transformation applied
+                - 'text' (string): the transformed textual content, resp. the original content if no transformation
+                    applied
                 - 'blob' (bytes): the binary content of the resource, if the resource has binary content
-            'extracted_links': Optional list of links extracted from the resource, if extract_links=True. Sorted by number of occurrences of a URL in the resource. Each item has:
+            extracted_links: Optional list of links extracted from the resource, if extract_links=True.
+                Sorted by number of occurrences of a URL in the resource. Each item has:
                 - 'url' (string) the URL of the link
                 - 'occurrences' (int) the number of occurrences of the link in the resource
                 - 'anchor_texts' (list of strings) the anchor texts of the link
-            'additional_context': Optional list of with extra context (only if additional_context=True). Each item has:
+            additional_context: Optional list of with extra context (only if additional_context=True). Each item has:
                 - 'url' (string) the URL of the context
-                - 'type' (string) the type of context, e.g. llms_txt for text specifally prepared by a domain for an assistant to read
+                - 'type' (string) the type of context, e.g. llms_txt for text specifally prepared by a domain for an
+                  assistant to read
                 - 'text' (string) the content of the context in markdown format
 
         Raises:
-            starbridge.web.RobotForbiddenException: If we are not allowed to crawl the URL autonomously
+            starbridge.web.RobotForbiddenError: If we are not allowed to crawl the URL autonomously
             requests.exceptions.RequestException: If the HTTP get request failed
             ValueError: If an invalid format was passed
 

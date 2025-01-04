@@ -22,13 +22,25 @@ class Service(MCPBaseService):
     """Service class for core services if starbridge."""
 
     @mcp_tool()
-    def health(self, context: MCPContext | None = None) -> Health:
-        """Check the health of the core service of Starbridge."""
+    def health(self, context: MCPContext | None = None) -> Health:  # noqa: ARG002, PLR6301
+        """
+        Check the health of the core service of Starbridge.
+
+        Returns:
+            Health: The health status of the core service
+
+        """
         return Health(status=Health.Status.UP)  # We are up always
 
     @mcp_tool()
-    def info(self, context: MCPContext | None = None) -> dict:
-        """Get info about the environment starbridge is running in and all services."""
+    def info(self, context: MCPContext | None = None) -> dict:  # noqa: ARG002, PLR6301
+        """
+        Get info about the environment starbridge is running in and all services.
+
+        Returns:
+            dict: Information about the Starbridge environment and its services
+
+        """
         rtn = {
             "name": __project_name__,
             "version": __version__,

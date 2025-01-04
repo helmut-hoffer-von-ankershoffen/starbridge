@@ -1,4 +1,7 @@
+"""Command-line interface module for Starbridge, providing various commands for service management and configuration."""
+
 import sys
+from pathlib import Path
 from typing import Annotated
 
 import typer
@@ -47,11 +50,16 @@ def main(
             help="Debug mode",
         ),
     ] = True,
-    env: Annotated[
+    env: Annotated[  # noqa: ARG001
         list[str] | None,
         typer.Option(
             "--env",
-            help='Environment variables in key=value format. Can be used multiple times in one call. Only STARBRIDGE_ prefixed vars are evaluated. Example --env STARBRIDGE_ATLASSIAN_URL="https://your-domain.atlassian.net" --env STARBRIDGE_ATLASSIAN_EMAIL="YOUR_EMAIL"',
+            help=(
+                "Environment variables in key=value format. Can be used multiple times in one call. "
+                "Only STARBRIDGE_ prefixed vars are evaluated. Example --env "
+                'STARBRIDGE_ATLASSIAN_URL="https://your-domain.atlassian.net" --env '
+                'STARBRIDGE_ATLASSIAN_EMAIL="YOUR_EMAIL"'
+            ),
         ),
     ] = None,
 ) -> None:
@@ -66,7 +74,7 @@ def health(json: Annotated[bool, typer.Option(help="Output health as JSON")] = F
     """Check health of services and their dependencies."""
     health = MCPServer().health()
     if not health.healthy:
-        logger.warning(f"health: {health}")
+        logger.warning("health: %s", health)
     if json:
         console.print(health.model_dump_json())
     else:
@@ -83,13 +91,19 @@ def info() -> None:
 
 @cli.command()
 def create_dot_env() -> None:
-    """Create .env file for Starbridge. You will be prompted for settings."""
+    """
+    Create .env file for Starbridge. You will be prompted for settings.
+
+    Raises:
+        RuntimeError: If not running in development mode.
+
+    """
     if not __is_development_mode__:
         msg = "This command is only available in development mode"
         raise RuntimeError(msg)
-
-    with open(".env", "w", encoding="utf-8") as f:
+    with Path(".env").open("w", encoding="utf-8") as f:
         for key, value in iter(prompt_for_env().items()):
+            f.write(f"{key}={value}\n")
             f.write(f"{key}={value}\n")
 
 
@@ -108,7 +122,11 @@ def install(
         ),
     ] = "helmuthva/starbridge:latest",
 ) -> None:
-    """Install starbridge within Claude Desktop application by adding to configuration and restarting Claude Desktop app."""
+    """
+    Install starbridge within Claude Desktop application.
+
+    Adds starbridge configuration and restarts Claude Desktop app.
+    """
     if ClaudeService.install_mcp_server(
         generate_mcp_server_config(prompt_for_env(), image),
         restart=restart_claude,
@@ -131,7 +149,11 @@ def uninstall(
         ),
     ] = ClaudeService.platform_supports_restart(),
 ) -> None:
-    """Install starbridge from Claude Desktop application by removing from configuration and restarting Claude Desktop app."""
+    """
+    Uninstall starbridge from Claude Desktop application.
+
+    Removes starbridge configuration and restarts Claude Desktop app.
+    """
     if ClaudeService.uninstall_mcp_server(restart=restart_claude):
         console.print("Starbridge uninstalled from Claude Destkop application.")
     else:
@@ -143,7 +165,7 @@ prepare_cli(cli, f"‚≠ê Starbridge v{__version__} - built with love in Berlin üê
 if __name__ == "__main__":
     try:
         cli()
-    except Exception as e:
-        logger.critical(f"Fatal error occurred: {e}")
+    except Exception as e:  # noqa: BLE001
+        logger.critical("Fatal error occurred: %s", e)
         console.print(f"Fatal error occurred: {e}", style="error")
         sys.exit(1)

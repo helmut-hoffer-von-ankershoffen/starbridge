@@ -1,7 +1,7 @@
 [project]
 name = "starbridge"
 version = "0.0.67"
-description = "⭐ Integrates Claude Desktop with the web, Google workspace and Atlassian workspaces"
+description = "⭐ Integrates Claude Desktop with the web, Google and Atlassian workspaces."
 readme = "README.md"
 authors = [
     { name = "Helmut Hoffer von Ankershoffen", email = "helmuthva@googlemail.com" },
@@ -143,33 +143,29 @@ target-version = "py311"
 preview = true
 fix = true
 line-length = 120
+exclude = [".fixme"]
 
 
 [tool.ruff.lint]
-# select = ["ALL"]
-select = [
-    #    "E",  # pycodestyle errors
-    "F",  # pyflakes
-    "I",  # isort
-    "UP", # pyupgrade
-    "B",  # flake8-bugbear
-    "C",  # flake8-comprehensions
-]
+select = ["ALL"]
 
 # sekect= [
 ignore = [
-    "ANN002", # Missing type annotation for `*args`
-    "ANN003", # Missing type annotation for `**kwargs``
-    "CPY001", # missing copyright notice
-    "DOC502", # docstrings with exceptions not raised in the code of the function
-    "D203",   # incomptatible with D211
-    "D212",   # incompatible with #D213
-    "FBT001", # boolean positional arguments
-    "FBT002", # boolean defautl value positionl arguments
-    "PGH003", # Use specific rule codes when ignoring type issues
-    "TRY300", # else instead of return before except. Simply disagree this is more readable.
-    "COM812", # conflicts with ruff formatter
-    "ISC001", # conflicts with ruff formatter
+    "ANN002",   # Missing type annotation for `*args`
+    "ANN003",   # Missing type annotation for `**kwargs``
+    "ASYNC109", # Async function definition with a `timeout` parameter
+    "CPY001",   # missing copyright notice
+    "DOC502",   # docstrings with exceptions not raised in the code of the function
+    "D203",     # incomptatible with D211
+    "D212",     # incompatible with #D213
+    "FBT001",   # boolean positional arguments
+    "FBT002",   # boolean defautl value positionl arguments
+    "FBT003",   # Boolean positional value in function call
+    "PGH003",   # Use specific rule codes when ignoring type issues
+    "TRY300",   # else instead of return before except. Simply disagree this is more readable.
+    "COM812",   # conflicts with ruff formatter
+    "ISC001",   # conflicts with ruff formatter
+    "S404",     # preciew rule: subprocess` module is possibly insecure
 ]
 
 [tool.ruff.lint.per-file-ignores]

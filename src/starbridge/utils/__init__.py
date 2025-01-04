@@ -1,3 +1,5 @@
+"""Utility functions and classes for the starbridge package."""
+
 from .cli import prepare_cli
 from .console import console
 from .di import locate_implementations, locate_subclasses

@@ -5,7 +5,7 @@ import pytest
 from httpx import TimeoutException
 
 from starbridge import __project_name__
-from starbridge.web import RobotForbiddenException
+from starbridge.web import RobotForbiddenError
 from starbridge.web.utils import (
     _ensure_allowed_to_crawl,
     get_additional_context_for_url,
@@ -22,7 +22,7 @@ LLMS_DUMY_CONTENT = "llms content"
 
 def test_web_utils_robots_disallowed_on_timeout() -> None:
     """Check disallowing on robots.txt timing out."""
-    with pytest.raises(RobotForbiddenException):
+    with pytest.raises(RobotForbiddenError):
         with patch(HTTPX_ASYNC_CLIENT_GET) as mock_get:
             mock_get.side_effect = TimeoutException(TIMEOUT_MESSAGE)
             asyncio.run(_ensure_allowed_to_crawl(GET_TEST_URL, __project_name__))
@@ -30,7 +30,7 @@ def test_web_utils_robots_disallowed_on_timeout() -> None:
 
 def test_web_utils_robots_disallowed_on_401() -> None:
     """Check disallowing on robots.txt forbidden."""
-    with pytest.raises(RobotForbiddenException):
+    with pytest.raises(RobotForbiddenError):
         with patch(HTTPX_ASYNC_CLIENT_GET) as mock_get:
             mock_get.return_value.status_code = 401
             asyncio.run(_ensure_allowed_to_crawl(GET_TEST_URL, __project_name__))

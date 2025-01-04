@@ -3,7 +3,7 @@ from unittest.mock import patch
 
 import pytest
 
-from starbridge.web import RobotForbiddenException, Service
+from starbridge.web import RobotForbiddenError, Service
 
 GET_TEST_TEXT_URL = (
     "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/raw/refs/heads/main/tests/fixtures/starbridge.txt"
@@ -26,7 +26,7 @@ def test_web_service_get_forbidden() -> None:
     """Check getting content from the web fails if forbidden by robots.txt."""
     from starbridge.web import Service
 
-    with pytest.raises(RobotForbiddenException):
+    with pytest.raises(RobotForbiddenError):
         asyncio.run(Service().get("https://github.com/search/advanced"))
 
 
