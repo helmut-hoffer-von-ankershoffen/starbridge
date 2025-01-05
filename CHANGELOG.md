@@ -617,4 +617,4 @@
 ## New Contributors ❤️
 
 * @helmut-hoffer-von-ankershoffen made their first contribution
-* @renovate[bot] made their first contribution in [#5](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/pull/5)<!-- built with love in Berlin by Helmut Hoffer von Ankershoffen -->
+* @renovate[bot] made their first contribution in [#5](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/pull/5)
