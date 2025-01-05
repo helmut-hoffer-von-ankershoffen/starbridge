@@ -63,7 +63,7 @@ def runner() -> CliRunner:
 
 
 @pytest.mark.asyncio
-async def test_mcp_server_list_tools() -> None:
+async def test_mcp_server_list_tools_stdio() -> None:
     """Test listing of tools from the server."""
     # Expected tool names that should be present
     expected_tools = EXPECTED_TOOLS.copy()

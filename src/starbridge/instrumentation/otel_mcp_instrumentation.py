@@ -278,7 +278,7 @@ class TracedReceiveStream:
         """
         await self._stream.__aexit__(exc_type, exc_val, exc_tb)
 
-    async def receive(self) -> JSONRPCMessage:
+    async def receive(self) -> JSONRPCMessage | JSONRPCNotification | None:
         """
         Receive a message with tracing.
 
@@ -286,10 +286,9 @@ class TracedReceiveStream:
             JSONRPCMessage: The received message
 
         """
-        msg = await self._stream.receive()
-        root = getattr(msg, "root", None)
+        msg: JSONRPCMessage = await self._stream.receive()
 
-        if isinstance(root, JSONRPCNotification):
+        if isinstance(msg, JSONRPCNotification):
             _handle_notification(
                 self._tracer,
                 msg,
@@ -319,7 +318,7 @@ class TracedReceiveStream:
             self._active_spans,
         )
 
-    def __getattr__(self, attr: str) -> JSONRPCMessage:
+    def __getattr__(self, attr: str) -> type[Any]:
         """
         Get an attribute from the underlying stream.
 
@@ -327,7 +326,7 @@ class TracedReceiveStream:
             attr (str): Name of the attribute to get.
 
         Returns:
-            JSONRPCMessage: The attribute value from the underlying stream.
+            type[Any]: The attribute value from the underlying stream.
         """
         return getattr(self._stream, attr)
 
