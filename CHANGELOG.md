@@ -1,79 +1,79 @@
 [![starbridge](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/tests/fixtures/starbridge.png?raw=true)](https://helmuthva.gitbook.io/starbridge) Starbridge
 
-## [0.0.67](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.66..0.0.67) - 2025-01-03
+## [0.0.68](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.67..0.0.68) - 2025-01-05
+
+### 🐛 Bug Fixes
+
+- *(otel)* Mixup - ([f884de6](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/f884de6947edd572a8e658bc42dbd003848918de))
+
+### 📚 Documentation
+
+- Remove summary.md created by gitbook - ([48effe6](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/48effe64fce77f8f85ee925ee939142df234c28b))
+- Various - ([fe6083f](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/fe6083fe6995c4bdc9af55c203a5806aef25624b))
+
+### 🎨 Styling
+
+- Codestyle for mcp stdio instrumentor - ([50c4c99](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/50c4c997131410ccfb8a4b0a32e35fbf604aab69))
+- Improve codestyle - ([904b80c](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/904b80c063f3be086e8a02f8c505e67d6d1e77e5))
+
+### 🧪 Testing
+
+- Adapt - ([f55f737](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/f55f7377d5b738717e1996ba75ca0b7c0d0db157))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(nox)* Better order - ([c9185e4](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/c9185e4e54c7da41e9c045677126e091fe7a9676))
+## [0.0.67](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.66..v0.0.67) - 2025-01-03
 
 ### 📚 Documentation
 
 - *(reference)* Links to github source and more - ([6f16c3c](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/6f16c3c0180c2715134634ebbb556dcdcb9619bc))
 - *(reference)* Source code links and more - ([2657779](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/26577799f3b9044cc7955fa05fcdd47b687435c3))
-
-## New Contributors ❤️
-
-* @helmut-hoffer-von-ankershoffen made their first contribution
-
 ## [0.0.66](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.65..v0.0.66) - 2025-01-02
 
 ### 📚 Documentation
 
 - *(reference)* Source code links and more - ([a0a6745](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/a0a67455c02ddd1efc94609a2f0b7c61d10a5416))
-
-
 ## [0.0.65](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.64..v0.0.65) - 2025-01-02
 
 ### 📚 Documentation
 
 - *(read the docs)* Better index - ([70ee08d](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/70ee08d3ee8b0069cc29da15f0ac86b0beecc5cb))
-
-
 ## [0.0.64](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.63..v0.0.64) - 2025-01-02
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(bump-my-version,git-cliff)* Improve interplay - ([72b01ed](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/72b01ed6cab56be640a1257af3aecf468445e619))
-
-
 ## [0.0.63](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.62..v0.0.63) - 2025-01-02
 
 ### 🚜 Refactor
 
 - *(docs)* Simplify sphinx setup - ([169069c](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/169069c8826157dda0155a0e2a4f33b9c18143af))
-
-
 ## [0.0.62](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.61..v0.0.62) - 2025-01-02
 
 ### 📚 Documentation
 
 - Add reference documentation - ([8d26936](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/8d26936a9b540022b7e37cee920607066cf43e9e))
-
-
 ## [0.0.61](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.60..v0.0.61) - 2025-01-02
 
 ### 🧪 Testing
 
 - *(web)* Adapt to pivot from gitbook to read-the-docs - ([a4bcb16](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/a4bcb16c0651dccbb687f0fb31263e00fd964155))
-
-
 ## [0.0.60](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.59..v0.0.60) - 2025-01-02
 
 ### 📚 Documentation
 
 - *(sphinx,readthedocs)* Introduce - ([898cfbb](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/898cfbbb4bb565f282925a4f8089de55c5c55654))
-
-
 ## [0.0.59](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.58..v0.0.59) - 2025-01-02
 
 ### 📚 Documentation
 
 - *(sphinx,readthedocs)* Introduce - ([3d669bd](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/3d669bd6d16338d034f33d86b0c1f6e44f994a43))
-
-
 ## [0.0.58](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.57..v0.0.58) - 2025-01-02
 
 ### 📚 Documentation
 
 - *(sphinx,readthedocs)* Introduce - ([770fc06](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/770fc061c28ae5b4f8716b8d9c0032b0d6e69688))
-
-
 ## [0.0.57](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.56..v0.0.57) - 2025-01-02
 
 ### 🚜 Refactor
@@ -83,8 +83,6 @@
 ### 📚 Documentation
 
 - *(sphinx,readthedocs)* Introduce - ([3375b7f](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/3375b7f7b2b7142d6cb6f24a90cbb06d896b1f44))
-
-
 ## [0.0.56](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.55..v0.0.56) - 2025-01-01
 
 ### ⛰️  Features
@@ -101,8 +99,6 @@
 
 - *(env)* Conditions - ([c9d67a1](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/c9d67a197be3c282e6fc71a02cbb58d8dbfd2a4b))
 - *(search)* Adapt other tests given new setting - ([8dfbd0c](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/8dfbd0c940788fe49ca79c8a4cd84fa88290a29f))
-
-
 ## [0.0.55](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.54..v0.0.55) - 2024-12-30
 
 ### ⛰️  Features
@@ -128,15 +124,11 @@
 
 - *(claude)* Additional tests - ([b77fd54](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/b77fd54f84170f5d04597704ddf6be9d404e5a3c))
 - *(web)* Test formats - ([bd670ab](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/bd670abf4b96648d6cc4fd701f329125bd4e501c))
-
-
 ## [0.0.54](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.53..v0.0.54) - 2024-12-28
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(ghcr.io)* Introduce publishing container image to ghcr.io - ([63d9437](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/63d943767a28ad7186ea4a2456fe1e17bd711664))
-
-
 ## [0.0.53](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.52..v0.0.53) - 2024-12-28
 
 ### 🚜 Refactor
@@ -146,8 +138,6 @@
 ### 📚 Documentation
 
 - *(fix)* Source bin/env on initial installation, and us --with on uvx given uv does not yet properly support --all-extras - ([3ddc9c1](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/3ddc9c1c59186d61736b9409b514c20447c452a9))
-
-
 ## [0.0.52](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.51..v0.0.52) - 2024-12-28
 
 ### ⛰️  Features
@@ -167,8 +157,6 @@
 
 - *(ruff)* Auto-fix and use preview checks - ([5f360bc](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/5f360bc54cc16ed178d2ef3ec618a9116fbf4650))
 - *(style)* Formatting - ([bcc84ed](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/bcc84ed06e5033fa57b378d4fd65f8f630aede0f))
-
-
 ## [0.0.51](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.50..v0.0.51) - 2024-12-27
 
 ### 🚜 Refactor
@@ -181,8 +169,6 @@
 ### 🎨 Styling
 
 - *(ruff)* Pivot to defaults - ([ac35236](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/ac35236f8443ee1fa2f9fcd53d9e23b8a152e02e))
-
-
 ## [0.0.50](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.49..v0.0.50) - 2024-12-26
 
 ### 🧪 Testing
@@ -192,8 +178,6 @@
 ### ⚙️ Miscellaneous Tasks
 
 - *(imaging)* Make imaging an extra - ([ffac1da](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/ffac1dae615724a10aa48522ab653168d434209a))
-
-
 ## [0.0.49](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.48..v0.0.49) - 2024-12-26
 
 ### 🧪 Testing
@@ -204,8 +188,6 @@
 
 - *(devcontainer)* Polish - ([cda9326](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/cda932604f2871fdbb84fb9b73f324ee02376a2e))
 - *(devcontainer)* Enable docker in docker for docker tests in devcontainer - ([6f5554e](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/6f5554e1ac8d3b2a8b8e76de4b2671f12d3f3a06))
-
-
 ## [0.0.48](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.47..v0.0.48) - 2024-12-25
 
 ### 📚 Documentation
@@ -219,8 +201,6 @@
 - *(pre-commit)* Additional hooks - ([dea9820](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/dea9820bf47ea93ad5d73b35c156a9be5dc7b769))
 - *(sonarqube)* Metas - ([26b6e8a](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/26b6e8af3677c15cbc223ac75d7b8f303660049d))
 - *(sonarqube)* Tags - ([b08d11b](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/b08d11b593acf295b0a0fd004f130a63d32a331a))
-
-
 ## [0.0.46](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.45..v0.0.46) - 2024-12-24
 
 ### 🚜 Refactor
@@ -237,8 +217,6 @@
 - *(bump)* Enable to specify version part to bump, default being patch - ([56709d7](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/56709d75ce6176cb5fc1fe2c52df6183153ac0ac))
 - *(codecov)* Coverage > 80% now required - ([2b4d18c](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/2b4d18c1d23192171a39c58a83ba464dda1f3c7e))
 - *(codecov)* Sensible green range - ([a754964](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/a754964ca7f95245974287c013e95b2dccdae8bf))
-
-
 ## [0.0.45](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.44..v0.0.45) - 2024-12-24
 
 ### 🧪 Testing
@@ -252,8 +230,6 @@
 ### ⚙️ Miscellaneous Tasks
 
 - *(test)* Superfluous checkout - ([88534f3](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/88534f3b86c507eb61a4c92315add12c2c1d148c))
-
-
 ## [0.0.44](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.43..v0.0.44) - 2024-12-24
 
 ### 📚 Documentation
@@ -265,106 +241,76 @@
 
 - *(badges)* Consolidate labels - ([2630832](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/263083262830b4c1ceaebbbb3d2bfd75ef05a122))
 - *(badges)* Use CD for github, pypi and docker - ([a300b36](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/a300b36867da42b1eb2b5af59635c5ff849b692f))
-
-
 ## [0.0.43](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.42..v0.0.43) - 2024-12-24
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(docker)* Set docker tags from semver tags - ([7d236c2](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/7d236c24fff1d52c5bc7a8804e1245608ce00eab))
-
-
 ## [0.0.42](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.41..v0.0.42) - 2024-12-24
 
 ### 📚 Documentation
 
 - *(CHANGELOG.md)* Introduce in repo - ([78e11aa](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/78e11aa5400fba9803dbbc1793b4eadba6271976))
-
-
 ## [0.0.41](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.40..v0.0.41) - 2024-12-24
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(bump-my-version)* Update uv.lock on bumping - ([fa60f12](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/fa60f12ba5d6718d1b52ddd0852fcad0b1b2efed))
-
-
 ## [0.0.40](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.39..v0.0.40) - 2024-12-24
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(bump-my-version)* Update uv.lock on bumping - ([f1e2b52](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/f1e2b52ddf61d11ec3d7449fd42497e873891728))
-
-
 ## [0.0.39](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.38..v0.0.39) - 2024-12-24
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(docker)* Set docker tags from semver tags - ([1d1ae38](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/1d1ae38ef368edf177843b6e6a1d4ee9527818a9))
-
-
 ## [0.0.38](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.37..v0.0.38) - 2024-12-23
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(git-cliff)* Fix - ([7ab4ff7](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/7ab4ff7485ffe09bc9f089520b089115ae0167e1))
-
-
 ## [0.0.37](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.36..v0.0.37) - 2024-12-23
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(pytest)* Run tests in parallel - ([103b73e](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/103b73e609b2254f1cd1f7713ce70cee6c57c7e7))
-
-
 ## [0.0.36](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.35..v0.0.36) - 2024-12-23
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(git-cliff)* Unique - ([5badb97](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/5badb97d3452ec09fc6aae137cf0c3860f5da9e6))
-
-
 ## [0.0.35](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.34..v0.0.35) - 2024-12-23
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(bump)* Utility - ([4e9cb39](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/4e9cb3990fedd83b047636bc322736fa66539a64))
-
-
 ## [0.0.34](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.33..v0.0.34) - 2024-12-23
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(bump)* Utility - ([c931fe6](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/c931fe6aa6c326fcecbbda86824b5f0ca91b135b))
-
-
 ## [0.0.33](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.32..v0.0.33) - 2024-12-23
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(git-cliff)* Don't use typos - ([9fd5184](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/9fd5184609975633e884fb217f7ddaa2f89b5509))
-
-
 ## [0.0.32](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.31..v0.0.32) - 2024-12-23
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(git-cliff)* Test - ([737a9a3](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/737a9a32d68222b9070cd9090970f6ad42a9beff))
-
-
 ## [0.0.31](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.30..v0.0.31) - 2024-12-23
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(pre-commit)* Improve handling - ([9615aeb](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/9615aebdd7e062d2de054cd08b16e38969576651))
-
-
 ## [0.0.30](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.29..v0.0.30) - 2024-12-23
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(detect-secrets)* Introduce - ([b16bc64](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/b16bc647b95fa70a9066f66c0d31fa4a9bdaa654))
-
-
 ## [0.0.29](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.28..v0.0.29) - 2024-12-23
 
 ### 📚 Documentation
@@ -410,8 +356,6 @@
 ### Enh/doc
 
 - *(Docker)* Polish a bit - ([17551f5](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/17551f5bf564ecb0cba3b79f647f475da08b0720))
-
-
 ## [0.0.28](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.27..v0.0.28) - 2024-12-22
 
 ### 🐛 Bug Fixes
@@ -447,8 +391,6 @@
 
 - *(sonarqube)* Enforce SSL on nodejs setup - ([01b811d](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/01b811d607746eae6a927ed9fa324ccb894081df))
 - Do not silently install recommended packages - ([02e7ef1](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/02e7ef1c7fc1bd2f56eb2e690262fb4ea7b7b464))
-
-
 ## [0.0.27](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.26..v0.0.27) - 2024-12-21
 
 ### 🐛 Bug Fixes
@@ -468,15 +410,11 @@
 ### ⚙️ Miscellaneous Tasks
 
 - *(release)* V0.0.27 - ([5066b2b](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/5066b2bd99a9f700e70efca958ab51b5f3727077))
-
-
 ## [0.0.26](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.25..v0.0.26) - 2024-12-21
 
 ### 🧪 Testing
 
 - *(cli,mcp,env)* More - ([89eb328](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/89eb328bb5eb396b676f763ad53fbae72f1cb5e2))
-
-
 ## [0.0.25](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.24..v0.0.25) - 2024-12-21
 
 ### 🐛 Bug Fixes
@@ -512,8 +450,6 @@
 ### Enh
 
 - *(logging)* Fatal is an alias of critical - ([8105621](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/81056216958cc02ac4bc1554cd5cc446c11bd541))
-
-
 ## [0.0.24](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.23..v0.0.24) - 2024-12-21
 
 ### 🚜 Refactor
@@ -523,37 +459,27 @@
 ### GITBOOK-2
 
 - No subject - ([844301c](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/844301cf994b4e46be4bd4f82cfe6b62372dccea))
-
-
 ## [0.0.23](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.22..v0.0.23) - 2024-12-20
 
 ### ⚙️ Miscellaneous Tasks
 
 - Polish for otel instrumentation - ([05bcc12](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/05bcc12d1c727ca9b2f909e0eb150ceeff0735f9))
-
-
 ## [0.0.22](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.21..v0.0.22) - 2024-12-20
 
 ### 🐛 Bug Fixes
 
 - .env.example for Docker - ([059e16e](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/059e16ee3c8525c52336b7440e905ea3dbbc2b57))
-
-
 ## [0.0.21](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.20..v0.0.21) - 2024-12-20
 
 ### ⚙️ Miscellaneous Tasks
 
 - Release 0.0.21 - ([1155f73](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/1155f73e2cadcd34adeab966a5bb2c5a6ad6f877))
-
-
 ## [0.0.20](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.19..v0.0.20) - 2024-12-20
 
 ### 📚 Documentation
 
 - Keywords - ([b0668ef](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/b0668ef4807d18fc921b70c1d73b3ce7cedbf1f9))
 - Some - ([ced4f86](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/ced4f865f78df9499dc43463bce7c69154d7f2a1))
-
-
 ## [0.0.19](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.18..v0.0.19) - 2024-12-20
 
 ### 🐛 Bug Fixes
@@ -573,8 +499,6 @@
 ### Cont
 
 - *(instrumentation)* Some - ([89cb601](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/89cb6010c02231fbea8370b43ef1087226c4989c))
-
-
 ## [0.0.18](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.17..v0.0.18) - 2024-12-19
 
 ### 📚 Documentation
@@ -584,73 +508,53 @@
 ### V0.0.18
 
 - Docker polish - ([46e05ec](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/46e05ec2a7b310d380da9824a9f1ecb083c10ffb))
-
-
 ## [0.0.17](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.16..v0.0.17) - 2024-12-19
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(Docker)* Arm64 - ([ba6afda](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/ba6afda4e9a9831368a972e0ec26ca270d78a1b6))
-
-
 ## [0.0.16](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.15..v0.0.16) - 2024-12-19
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(docker)* Refine - ([ee749fc](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/ee749fceeb9df60bafdbc455950dfa14494ebb81))
-
-
 ## [0.0.15](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.14..v0.0.15) - 2024-12-19
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(workflows)* Test - ([f36e0ac](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/f36e0ac273ee95cb9d1b4c53160ce9d72cc0ad1d))
-
-
 ## [0.0.14](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.13..v0.0.14) - 2024-12-19
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(workflows)* Test - ([a3bb705](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/a3bb705bf8feb3f56b6a15c462566ad6b3a6c621))
-
-
 ## [0.0.13](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.12..v0.0.13) - 2024-12-19
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(workflows)* Test - ([113eb11](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/113eb11db86bb33d7839a316d8222236435f2c61))
-
-
 ## [0.0.12](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.11..v0.0.12) - 2024-12-19
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(workflow)* Test - ([63a476f](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/63a476f8627dcaaab49a9d0dd03756e98cde787d))
-
-
 ## [0.0.11](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.10..v0.0.11) - 2024-12-19
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(workflow)* Triggering - ([d502a12](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/d502a12213e95c507a506b5db8bb6a387a0ef078))
-
-
 ## [0.0.10](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.9..v0.0.10) - 2024-12-19
 
 ### ⚙️ Miscellaneous Tasks
 
 - *(docker)* Release environment - ([7ec9c40](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/7ec9c4014847639277a8da08a15884ea03148703))
 - *(release)* Prep - ([f7894f7](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/f7894f72f6288c613159d436f0faefedd7a842a7))
-
-
 ## [0.0.9](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.8..v0.0.9) - 2024-12-19
 
 ### ⛰️  Features
 
 - *(Docker)* Start; refactor(logging, settings): continue - ([ba3cc07](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/ba3cc070a329632bc394993e822162184e46d52a))
 - Run starbridge within Docker - ([cf8c1ac](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/cf8c1aca01e514c52e7e8d7809cf7440a2bc2a78))
-
-
 ## [0.0.8](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.7..v0.0.8) - 2024-12-18
 
 ### 🐛 Bug Fixes
@@ -661,8 +565,6 @@
 
 - *(devcontainer)* Complete - ([51489b6](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/51489b6f8a50081f6bcfeaa3cfa2d192f9baf191))
 - *(devcontainer)* Continue - ([81c2079](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/81c20791c4529442cd0a819b36324362f7fd4ee8))
-
-
 ## [0.0.7] - 2024-12-18
 
 ### ⛰️  Features
@@ -715,6 +617,4 @@
 ## New Contributors ❤️
 
 * @helmut-hoffer-von-ankershoffen made their first contribution
-* @renovate[bot] made their first contribution in [#5](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/pull/5)
-
-<!-- built with love in Berlin by Helmut Hoffer von Ankershoffen -->
+* @renovate[bot] made their first contribution in [#5](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/pull/5)<!-- built with love in Berlin by Helmut Hoffer von Ankershoffen -->
