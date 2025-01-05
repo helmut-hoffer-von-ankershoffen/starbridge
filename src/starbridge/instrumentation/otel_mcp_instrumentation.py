@@ -207,10 +207,11 @@ class TracedSendStream:
             msg (JSONRPCMessage): Message to send
 
         """
-        if isinstance(msg, JSONRPCNotification):
+        root = getattr(msg, "root", None)
+        if isinstance(root, JSONRPCNotification):
             _handle_notification(
                 self._tracer,
-                msg,
+                root,
                 "CLIENT",
             )  # We're sending a notification
         else:
@@ -287,11 +288,12 @@ class TracedReceiveStream:
 
         """
         msg: JSONRPCMessage = await self._stream.receive()
+        root = getattr(msg, "root", None)
 
-        if isinstance(msg, JSONRPCNotification):
+        if isinstance(root, JSONRPCNotification):
             _handle_notification(
                 self._tracer,
-                msg,
+                root,
                 "SERVER",
             )  # It's an incoming notification
         else:
@@ -373,7 +375,7 @@ class TracedAsyncIterator:
         root = getattr(msg, "root", None)
 
         if isinstance(root, JSONRPCNotification):
-            _handle_notification(self._tracer, msg, "CLIENT")
+            _handle_notification(self._tracer, root, "CLIENT")
         else:
             _handle_transaction(self._tracer, msg, "SERVER", self._active_spans)
 
