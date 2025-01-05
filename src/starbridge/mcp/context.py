@@ -6,7 +6,7 @@ from mcp.shared.context import RequestContext, SessionT
 from pydantic import AnyUrl, BaseModel
 
 
-class MCPContext(BaseModel):
+class MCPContext(BaseModel):  # pragma: no cover
     """Context object providing access to MCP capabilities."""
 
     _request_context: RequestContext | None
