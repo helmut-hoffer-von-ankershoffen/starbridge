@@ -1,6 +1,11 @@
 [![starbridge](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/tests/fixtures/starbridge.png?raw=true)](https://helmuthva.gitbook.io/starbridge) Starbridge
 
-## [0.0.70](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.69..0.0.70) - 2025-01-05
+## [0.0.71](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.70..0.0.71) - 2025-01-05
+
+### 📚 Documentation
+
+- Correction - ([9b2c05e](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/9b2c05ea95ca20d61af44e3cf77e82dec8ea1d82))
+## [0.0.70](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.69..v0.0.70) - 2025-01-05
 
 ### 📚 Documentation
 
