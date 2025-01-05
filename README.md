@@ -40,8 +40,8 @@ Integrates Claude Desktop with the web, Atlassian Confluence, and (later on) Goo
 * [Complete reference documenation](https://starbridge.readthedocs.io/en/latest/reference.html) on Read the Docs
 * [High test coverage](https://app.codecov.io/gh/helmut-hoffer-von-ankershoffen/starbridge) including unit and E2E tests (reported on Codecov)
 * Matrix tested with [Python 3.11, 3.12 and 3.13](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/noxfile.py) to ensure compatibility (powered by [Nox](https://nox.thea.codes/en/stable/))
-* 100% compliant with modern linting and formatting standards (powered by [Ruff](https://github.com/astral-sh/ruff))
-* 100% up-to-date dependencies (monitored by [Renovate](https://github.com/renovatebot/renovate))
+* Compliant with modern linting and formatting standards (powered by [Ruff](https://github.com/astral-sh/ruff))
+* Up-to-date dependencies (monitored by [Renovate](https://github.com/renovatebot/renovate))
 * [A-grade code quality](https://sonarcloud.io/summary/new_code?id=helmut-hoffer-von-ankershoffen_starbridge) in security, maintainability, and reliability (verified by SonarQube)
 * 1-liner for installation and execution of command line interface (CLI) via [uv(x)](https://github.com/astral-sh/uv) or [Docker](https://hub.docker.com/r/helmuthva/starbridge/tags)
 * Setup for developing inside a [devcontainer](https://code.visualstudio.com/docs/devcontainers/containers) included (supports VSCode and GitHub Codespaces)
@@ -60,7 +60,7 @@ Prequisites:
 - You already have Claude Desktop for Mac OS X installed
 - You don't care for the imaging extra
 
-If you (possibly) need to install homebrew, uv, and care for all extras:
+If you need to first install homebrew and uv - and care for all extras:
 
 ```shell
 if [[ "$OSTYPE" == "darwin"* ]]; then # Install dependencies for macOS X
