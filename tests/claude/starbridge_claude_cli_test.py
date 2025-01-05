@@ -1,3 +1,5 @@
+"""Tests for the Claude CLI functionality."""
+
 import json
 import os
 import subprocess
@@ -13,7 +15,8 @@ SUBPROCESS_RUN = "subprocess.run"
 
 
 @pytest.fixture
-def runner():
+def runner() -> CliRunner:
+    """Get a Click CLI test runner."""
     return CliRunner()
 
 
@@ -172,7 +175,7 @@ def test_claude_cli_restart_works_if_installed(
     mock_process_iter.return_value = [mock_process_other, mock_process_claude]
 
     platform_commands = {
-        "Darwin": {"args": ["open", "-a", "Claude"], "shell": False},
+        "Darwin": {"args": ["/usr/bin/open", "-a", "Claude"], "shell": False},
         "win23": {"args": ["start", "Claude"], "shell": True},
         "Linux": {"args": ["xdg-open", "Claude"], "shell": False},
     }
@@ -220,7 +223,7 @@ def test_claude_cli_restart_fails_on_unknown_system(
 @patch(
     "starbridge.claude.service.Service.platform_supports_restart",
     return_value=False,
-)  # TODO: fin dout why we cannot patch is_running_in_container
+)  # TODO(@helmut-hoffer-von-ankershoffen): find out why we cannot patch is_running_in_container
 def test_claude_cli_restart_fails_in_container(
     mock_platform_supports_restart,
     mock_is_installed,

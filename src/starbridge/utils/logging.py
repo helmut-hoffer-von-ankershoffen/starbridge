@@ -1,4 +1,6 @@
-import logging
+"""Logging configuration and utilities for the starbridge package."""  # noqa: A005
+
+import logging as python_logging
 from typing import Annotated, Literal
 
 import click
@@ -13,13 +15,25 @@ from starbridge.instrumentation import logfire_initialize
 from starbridge.utils.settings import load_settings
 
 
-def get_logger(name: str | None) -> logging.Logger:
+def get_logger(name: str | None) -> python_logging.Logger:
+    """
+    Get a logger instance with the given name or project name as default.
+
+    Args:
+        name: The name for the logger. If None, uses project name.
+
+    Returns:
+        Logger: Configured logger instance.
+
+    """
     if (name is None) or (name == __project_name__):
-        return logging.getLogger(__project_name__)
-    return logging.getLogger(name)
+        return python_logging.getLogger(__project_name__)
+    return python_logging.getLogger(f"{__project_name__}.{name}")
 
 
 class LoggingSettings(BaseSettings):
+    """Settings for configuring logging behavior."""
+
     model_config = SettingsConfigDict(
         env_prefix=f"{__project_name__.upper()}_LOGGING_",
         extra="ignore",
@@ -48,9 +62,21 @@ class LoggingSettings(BaseSettings):
 settings = load_settings(LoggingSettings)
 
 
-class CustomFilter(logging.Filter):
-    # TODO: Define what log lines you want to filter here
-    def filter(self, record) -> bool:
+class CustomFilter(python_logging.Filter):
+    """Custom filter for log records."""
+
+    @staticmethod
+    def filter(_record: python_logging.LogRecord) -> bool:
+        """
+        Filter log records based on custom criteria.
+
+        Args:
+            record: The log record to filter.
+
+        Returns:
+            bool: True if record should be logged, False otherwise.
+
+        """
         return True
 
 
@@ -59,8 +85,8 @@ log_filter = CustomFilter()
 handlers = []
 
 if settings.log_file_enabled:
-    file_handler = logging.FileHandler(settings.log_file_name)
-    file_formatter = logging.Formatter(
+    file_handler = python_logging.FileHandler(settings.log_file_name)
+    file_formatter = python_logging.Formatter(
         fmt="%(asctime)s %(process)d %(levelname)s %(name)s %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S",
     )
@@ -90,7 +116,7 @@ if logfire_initialized:
     handlers.append(logfire_handler)
 
 
-logging.basicConfig(
+python_logging.basicConfig(
     level=settings.loglevel,
     format="%(name)s %(message)s",
     datefmt="%Y-%m-%d %H:%M:%S",

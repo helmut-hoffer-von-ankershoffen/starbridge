@@ -272,7 +272,7 @@ wheels = [
 
 [[package]]
 name = "brave-search-python-client"
-version = "0.2.17"
+version = "0.2.19"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "httpx" },
@@ -282,9 +282,9 @@ dependencies = [
     { name = "tenacity" },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/70/95/6043dba7007e1b9318ec37c9d8fc9e235b48c790ebfeb2c158f5a97eb0a0/brave_search_python_client-0.2.17.tar.gz", hash = "sha256:a1f418f15c1a7219ab99a2f2cfeb3e2b92ca28566e2af4706edf1cb56deec022", size = 37329261 }
+sdist = { url = "https://files.pythonhosted.org/packages/d9/ef/b2f631bdede79f852cfaeee50516d7c12f3f1d3ec852ac1cc9f446e906a4/brave_search_python_client-0.2.19.tar.gz", hash = "sha256:d36cf79617de543b68af1c7317985756972008ab4d620a317bb497c0e58a5d86", size = 37331546 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/de/9f/d9ce4e90da1e46b4b6b628f51ac54a7d4a9379f590ca40b3d14d41a4195b/brave_search_python_client-0.2.17-py3-none-any.whl", hash = "sha256:8ba6ae772e9572e6045e33f3ccb79d1e9ce5af0144552a7b02e2e14d096c100c", size = 66562 },
+    { url = "https://files.pythonhosted.org/packages/c2/b2/1c66a092ae61522d52be097b7bd4f79fed3b63b2c6f7fd719cd3d9a32761/brave_search_python_client-0.2.19-py3-none-any.whl", hash = "sha256:f95efc9857e4e5b2764082c2426a6ffc7aa89ec4b1710cfd19e7648cfedafc2d", size = 66695 },
 ]
 
 [[package]]
@@ -3704,18 +3704,6 @@ wheels = [
 ]
 
 [[package]]
-name = "sphinxemoji"
-version = "0.3.1"
-source = { registry = "https://pypi.org/simple" }
-dependencies = [
-    { name = "sphinx" },
-]
-sdist = { url = "https://files.pythonhosted.org/packages/47/36/12a061ef2a2c2001c1b083d456db680f59074aef39f9cdd83a7937a4d626/sphinxemoji-0.3.1.tar.gz", hash = "sha256:23ecff1f1e765393e49083b45386b7da81ced97c9a18a1dfd191460a97da3b11", size = 46377 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/95/9f/c872bbf4a2588b700a972d48c6e39087e4d33b3e76c563b4902e5abfbf13/sphinxemoji-0.3.1-py3-none-any.whl", hash = "sha256:dae483695f8d1e90a28a6e9bbccc08d256202afcc1d0fbd33b51b3b4352d439e", size = 46074 },
-]
-
-[[package]]
 name = "sphinxext-opengraph"
 version = "0.9.1"
 source = { registry = "https://pypi.org/simple" }
@@ -3861,7 +3849,6 @@ dev = [
     { name = "sphinx-pydantic" },
     { name = "sphinx-rtd-theme" },
     { name = "sphinx-toolbox" },
-    { name = "sphinxemoji" },
     { name = "sphinxext-opengraph" },
     { name = "tomli" },
 ]
@@ -3870,7 +3857,7 @@ dev = [
 requires-dist = [
     { name = "atlassian-python-api", specifier = ">=3.41.16" },
     { name = "beautifulsoup4", specifier = ">=4.12.3" },
-    { name = "brave-search-python-client", specifier = ">=0.2.17" },
+    { name = "brave-search-python-client", specifier = ">=0.2.19" },
     { name = "cairosvg", marker = "extra == 'imaging'", specifier = ">=2.7.1" },
     { name = "email-validator", specifier = ">=2.2.0" },
     { name = "enum-tools", specifier = ">=0.12.0" },
@@ -3881,7 +3868,7 @@ requires-dist = [
     { name = "markdown", specifier = ">=3.7" },
     { name = "markdownify", specifier = ">=0.14.1" },
     { name = "markitdown", specifier = ">=0.0.1a3" },
-    { name = "mcp", specifier = ">=1.2" },
+    { name = "mcp", specifier = ">=1.2.0" },
     { name = "opentelemetry-api", specifier = ">=1.29.0" },
     { name = "opentelemetry-instrumentation", specifier = ">=0.50b0" },
     { name = "opentelemetry-instrumentation-httpx", specifier = ">=0.50b0" },
@@ -3932,7 +3919,6 @@ dev = [
     { name = "sphinx-pydantic", specifier = ">=0.1.1" },
     { name = "sphinx-rtd-theme", specifier = ">=3.0.2" },
     { name = "sphinx-toolbox", specifier = ">=3.8.1" },
-    { name = "sphinxemoji", specifier = ">=0.3.1" },
     { name = "sphinxext-opengraph", specifier = ">=0.9.1" },
     { name = "tomli", specifier = ">=2.1.0" },
 ]

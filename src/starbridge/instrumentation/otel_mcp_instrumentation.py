@@ -1,3 +1,5 @@
+"""OpenTelemetry instrumentation for MCP protocol."""
+
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from functools import wraps
@@ -14,10 +16,26 @@ tracer = trace.get_tracer("mcp.server")
 
 
 class MCPInstrumentor(BaseInstrumentor):  # pragma: no cover
-    def instrumentation_dependencies(self):
+    """Instrumentor for MCP protocol communications."""
+
+    def instrumentation_dependencies(self) -> list:
+        """
+        Get instrumentation dependencies.
+
+        Returns:
+            list: List of required dependencies
+
+        """
         return []
 
     def _instrument(self, **kwargs) -> None:
+        """
+        Install instrumentation.
+
+        Args:
+            **kwargs: Instrumentation options
+
+        """
         self._transaction_spans = {}
         original_stdio_server = mcp.server.stdio.stdio_server
 
@@ -43,6 +61,16 @@ class MCPInstrumentor(BaseInstrumentor):  # pragma: no cover
         mcp.server.stdio.stdio_server = instrumented_stdio_server
 
     def _uninstrument(self, **kwargs) -> Never:
+        """
+        Uninstall instrumentation.
+
+        Args:
+            **kwargs: Uninstallation options
+
+        Raises:
+            NotImplementedError: Uninstallation is not supported
+
+        """
         msg = "Uninstrumentation not supported"
         raise NotImplementedError(msg)
 
@@ -104,19 +132,39 @@ def _set_response_attributes(span, msg) -> None:
 
 
 class TracedSendStream:
+    """Stream wrapper that traces outgoing messages."""
+
     def __init__(self, stream, tracer, active_spans) -> None:
+        """
+        Initialize traced send stream.
+
+        Args:
+            stream: Stream to wrap
+            tracer: OpenTelemetry tracer
+            active_spans: Dictionary of active spans by message ID
+
+        """
         self._stream = stream
         self._tracer = tracer
         self._active_spans = active_spans
 
     async def __aenter__(self):
+        """Enter the async context manager."""
         await self._stream.__aenter__()
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
+        """Exit the async context manager."""
         return await self._stream.__aexit__(exc_type, exc_val, exc_tb)
 
     async def send(self, msg) -> None:
+        """
+        Send a message with tracing.
+
+        Args:
+            msg: Message to send
+
+        """
         root = getattr(msg, "root", None)
 
         if isinstance(root, JSONRPCNotification):
@@ -140,20 +188,40 @@ class TracedSendStream:
 
 
 class TracedReceiveStream:
+    """Stream wrapper that traces incoming messages."""
+
     def __init__(self, stream, tracer, active_spans) -> None:
+        """
+        Initialize traced receive stream.
+
+        Args:
+            stream: Stream to wrap
+            tracer: OpenTelemetry tracer
+            active_spans: Dictionary of active spans by message ID
+
+        """
         self._stream = stream
         self._tracer = tracer
         self._active_spans = active_spans
         self._current_span = None
 
     async def __aenter__(self):
+        """Enter the async context manager."""
         await self._stream.__aenter__()
         return self
 
     async def __aexit__(self, exc_type, exc_val, exc_tb):
+        """Exit the async context manager."""
         return await self._stream.__aexit__(exc_type, exc_val, exc_tb)
 
     async def receive(self):
+        """
+        Receive a message with tracing.
+
+        Returns:
+            Any: The received message
+
+        """
         msg = await self._stream.receive()
         root = getattr(msg, "root", None)
 
@@ -185,6 +253,8 @@ class TracedReceiveStream:
 
 
 class TracedAsyncIterator:
+    """Async iterator wrapper that traces message iteration."""
+
     def __init__(self, iterator: AsyncIterator, tracer, active_spans) -> None:
         self._iterator = iterator
         self._tracer = tracer

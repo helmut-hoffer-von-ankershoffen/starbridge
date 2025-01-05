@@ -1,3 +1,5 @@
+"""Logfire integration for instrumentation."""
+
 from typing import Annotated
 
 import logfire
@@ -10,6 +12,8 @@ from starbridge.utils.settings import load_settings
 
 
 class LogfireSettings(BaseSettings):
+    """Configuration settings for Logfire integration."""
+
     model_config = SettingsConfigDict(
         env_prefix=f"{__project_name__.upper()}_LOGFIRE_",
         extra="ignore",
@@ -36,6 +40,13 @@ class LogfireSettings(BaseSettings):
 
 
 def logfire_initialize() -> bool | None:
+    """
+    Initialize Logfire integration.
+
+    Returns:
+        bool | None: True if initialized successfully, False or None otherwise
+
+    """
     settings = load_settings(LogfireSettings)
 
     if settings.token is None:

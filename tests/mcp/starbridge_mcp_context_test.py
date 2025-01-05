@@ -1,3 +1,5 @@
+"""Tests for MCP context functionality."""
+
 import pytest
 
 from starbridge.instrumentation import logfire_initialize

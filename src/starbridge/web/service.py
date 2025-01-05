@@ -71,12 +71,12 @@ class Service(MCPBaseService):
         the Internet / the world wide web
             - This includes the case when the user simply pastes a URL without further context
             - This includes asks about current news, or e.g. if the user simply prompts the assitant with
-              "What's today on <some website>".
+                "What's today on <some website>".
             - This includes asks to download a pdf
         Further tips:
             - The agent is to disable transform to markdown, extract links, and additional context in error cases only.
             - The agent can use this tool to crawl multiple pages. I.e. when asked to crawl a URL use a get call, than
-              look at the top links extracted, follow them, and in the end provide a summary.
+                look at the top links extracted, follow them, and in the end provide a summary.
 
         Args:
             url (str): The URL to fetch content from
@@ -93,20 +93,20 @@ class Service(MCPBaseService):
             context (MCPContext | None, optional): Context object for request tracking. Defaults to None.
 
         Returns:
-            resource: The retrieved and possibly transformed resource:
+            'resource': The retrieved and possibly transformed resource:
                 - 'url' (string) the final URL after redirects
                 - 'type' (content type indicator as defined in http): the type of transformed content,
                     resp. the original
-                  content type if no transformation applied
+                    content type if no transformation applied
                 - 'text' (string): the transformed textual content, resp. the original content if no transformation
                     applied
                 - 'blob' (bytes): the binary content of the resource, if the resource has binary content
-            extracted_links: Optional list of links extracted from the resource, if extract_links=True.
+            'extracted_links': Optional list of links extracted from the resource, if extract_links=True.
                 Sorted by number of occurrences of a URL in the resource. Each item has:
                 - 'url' (string) the URL of the link
                 - 'occurrences' (int) the number of occurrences of the link in the resource
                 - 'anchor_texts' (list of strings) the anchor texts of the link
-            additional_context: Optional list of with extra context (only if additional_context=True). Each item has:
+            'additional_context': Optional list of with extra context (only if additional_context=True). Each item has:
                 - 'url' (string) the URL of the context
                 - 'type' (string) the type of context, e.g. llms_txt for text specifally prepared by a domain for an
                   assistant to read

@@ -1,3 +1,5 @@
+"""Data models for MCP functionality."""
+
 from dataclasses import dataclass
 
 
@@ -10,6 +12,13 @@ class ResourceMetadata:
     type: str
 
     def __str__(self) -> str:
+        """
+        Convert resource metadata to string representation.
+
+        Returns:
+            str: String representation in format "server://service/type"
+
+        """
         return f"{self.server}://{self.service}/{self.type}"
 
 
@@ -22,6 +31,13 @@ class PromptMetadata:
     type: str
 
     def __str__(self) -> str:
+        """
+        Convert prompt metadata to string representation.
+
+        Returns:
+            str: String representation in format "server_service_type"
+
+        """
         return f"{self.server}_{self.service}_{self.type}"
 
 
@@ -34,4 +50,11 @@ class ToolMetadata:
     name: str
 
     def __str__(self) -> str:
+        """
+        Convert tool metadata to string representation.
+
+        Returns:
+            str: String representation in format "server_service_name"
+
+        """
         return f"{self.server}_{self.service}_{self.name}"

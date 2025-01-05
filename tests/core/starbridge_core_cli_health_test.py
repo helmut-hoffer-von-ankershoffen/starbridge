@@ -1,3 +1,5 @@
+"""Tests for core health CLI functionality."""
+
 import json
 from unittest.mock import patch
 
@@ -9,7 +11,8 @@ from starbridge.utils import Health
 
 
 @pytest.fixture
-def runner():
+def runner() -> CliRunner:
+    """Get a Click CLI test runner."""
     return CliRunner()
 
 

@@ -1,3 +1,5 @@
+"""MCP implementation for starbridge."""
+
 from .cli import cli, serve
 from .context import MCPContext
 from .decorators import mcp_prompt, mcp_resource, mcp_resource_iterator, mcp_tool

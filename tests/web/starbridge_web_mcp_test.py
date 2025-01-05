@@ -1,3 +1,5 @@
+"""Test web MCP functionality."""
+
 import pytest
 from mcp import ClientSession
 from mcp.client.stdio import stdio_client
@@ -15,7 +17,8 @@ DOT_COVERAGE = ".coverage"
 
 
 @pytest.fixture
-def runner():
+def runner() -> CliRunner:
+    """Get a Click CLI test runner."""
     return CliRunner()
 
 

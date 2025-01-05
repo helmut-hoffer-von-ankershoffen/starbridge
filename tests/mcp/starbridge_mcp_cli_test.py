@@ -1,3 +1,5 @@
+"""Tests for MCP CLI functionality."""
+
 import json
 import os
 import subprocess
@@ -16,7 +18,8 @@ DOT_COVERAGE = ".coverage"
 
 
 @pytest.fixture
-def runner():
+def runner() -> CliRunner:
+    """Get a Click CLI test runner."""
     return CliRunner()
 
 
@@ -144,6 +147,7 @@ def test_mcp_cli_resource(mock_get_space, runner) -> None:
 
 
 def test_mcp_cli_inspector(runner) -> None:
+    """Test the MCP inspector functionality."""
     env = os.environ.copy()
     env.update({
         "COVERAGE_PROCESS_START": PYPROJECT_TOML,

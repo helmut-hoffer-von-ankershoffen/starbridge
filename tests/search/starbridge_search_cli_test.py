@@ -1,3 +1,5 @@
+"""Test search CLI functionality."""
+
 import json
 from unittest.mock import patch
 
@@ -11,7 +13,8 @@ from starbridge.cli import cli
 
 
 @pytest.fixture
-def runner():
+def runner() -> CliRunner:
+    """Get a Click CLI test runner."""
     return CliRunner()
 
 

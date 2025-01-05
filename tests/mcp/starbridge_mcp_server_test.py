@@ -1,3 +1,5 @@
+"""Test the MCP server functionality."""
+
 import asyncio
 import base64
 import os
@@ -55,7 +57,8 @@ EXPECTED_TOOLS = [
 
 
 @pytest.fixture
-def runner():
+def runner() -> CliRunner:
+    """Get a Click CLI test runner."""
     return CliRunner()
 
 
@@ -67,18 +70,17 @@ async def test_mcp_server_list_tools() -> None:
     if bridge:
         expected_tools.append("starbridge_hello_bridge")
 
-    async with stdio_client(_server_parameters()) as (read, write):
-        async with ClientSession(read, write) as session:
-            # Initialize the connection
-            await session.initialize()
+    async with stdio_client(_server_parameters()) as (read, write), ClientSession(read, write) as session:
+        # Initialize the connection
+        await session.initialize()
 
-            # List available tools
-            result = await session.list_tools()
+        # List available tools
+        result = await session.list_tools()
 
-            # Verify each expected tool is present
-            tool_names = [tool.name for tool in result.tools]
-            for expected_tool in expected_tools:
-                assert expected_tool in tool_names
+        # Verify each expected tool is present
+        tool_names = [tool.name for tool in result.tools]
+        for expected_tool in expected_tools:
+            assert expected_tool in tool_names
 
 
 @pytest.mark.skip(reason="SSE test disabled temporarily")
@@ -144,24 +146,27 @@ async def test_mcp_server_list_tools_sse() -> None:
 
 @pytest.mark.asyncio
 async def test_mcp_server_list_resources() -> None:
-    async with stdio_client(_server_parameters([MOCK_GET_ALL_SPACES])) as (read, write):
-        async with ClientSession(read, write) as session:
-            await session.initialize()
+    """Test listing of resources from the server."""
+    async with (
+        stdio_client(_server_parameters([MOCK_GET_ALL_SPACES])) as (read, write),
+        ClientSession(read, write) as session,
+    ):
+        await session.initialize()
 
-            result = await session.list_resources()
+        result = await session.list_resources()
 
-            assert result.resources is not None
-            assert len(result.resources) == 1
-            assert any(
-                resource.name == "helmut"
-                for resource in result.resources
-                if str(resource.uri) == "starbridge://confluence/space/~7120201709026d2b41448e93bb58d5fa301026"
-            )
+        assert result.resources is not None
+        assert len(result.resources) == 1
+        assert any(
+            resource.name == "helmut"
+            for resource in result.resources
+            if str(resource.uri) == "starbridge://confluence/space/~7120201709026d2b41448e93bb58d5fa301026"
+        )
 
 
 @pytest.mark.asyncio
 async def test_mcp_server_read_resource() -> None:
-    """Test getting prompt from server."""
+    """Test reading a resource from the server."""
     async with (
         stdio_client(
             _server_parameters([
@@ -190,94 +195,92 @@ async def test_mcp_server_read_resource() -> None:
 @pytest.mark.asyncio
 async def test_mcp_server_list_prompts() -> None:
     """Test listing of prompts from the server."""
-    async with stdio_client(_server_parameters()) as (read, write):
-        async with ClientSession(read, write) as session:
-            await session.initialize()
+    async with stdio_client(_server_parameters()) as (read, write), ClientSession(read, write) as session:
+        await session.initialize()
 
-            result = await session.list_prompts()
+        result = await session.list_prompts()
 
-            assert result.prompts is not None
+        assert result.prompts is not None
 
 
 @pytest.mark.asyncio
 async def test_mcp_server_prompt_get() -> None:
-    """Test getting prompt from server."""
-    async with stdio_client(_server_parameters([MOCK_GET_ALL_SPACES])) as (read, write):
-        async with ClientSession(read, write) as session:
-            await session.initialize()
+    """Test getting a prompt from the server."""
+    async with (
+        stdio_client(_server_parameters([MOCK_GET_ALL_SPACES])) as (read, write),
+        ClientSession(read, write) as session,
+    ):
+        await session.initialize()
 
-            result = await session.get_prompt(
-                "starbridge_confluence_space_summary",
-                {"style": "detailed"},
-            )
+        result = await session.get_prompt(
+            "starbridge_confluence_space_summary",
+            {"style": "detailed"},
+        )
 
-            assert len(result.messages) == 1
-            message = result.messages[0]
-            assert type(message) is PromptMessage
-            assert type(message.content) is TextContent
-            assert (
-                message.content.text
-                == "Here are the current spaces to summarize: Give extensive details.\n\n- ~7120201709026d2b41448e93bb58d5fa301026: helmut (personal)"
-            )
+        assert len(result.messages) == 1
+        message = result.messages[0]
+        assert type(message) is PromptMessage
+        assert type(message.content) is TextContent
+        assert (
+            message.content.text == "Here are the current spaces to summarize: Give extensive details.\n\n"
+            "- ~7120201709026d2b41448e93bb58d5fa301026: helmut (personal)"
+        )
 
 
 @pytest.mark.asyncio
 async def test_mcp_server_tool_call() -> None:
-    """Test listing of prompts from the server."""
-    async with stdio_client(_server_parameters()) as (read, write):
-        async with ClientSession(read, write) as session:
-            await session.initialize()
+    """Test calling a tool on the server."""
+    async with stdio_client(_server_parameters()) as (read, write), ClientSession(read, write) as session:
+        await session.initialize()
 
-            result = await session.call_tool("starbridge_hello_hello", {})
-            assert len(result.content) == 1
-            content = result.content[0]
-            assert type(content) is TextContent
-            assert content.text == "Hello World!"
+        result = await session.call_tool("starbridge_hello_hello", {})
+        assert len(result.content) == 1
+        content = result.content[0]
+        assert type(content) is TextContent
+        assert content.text == "Hello World!"
 
-            result = await session.call_tool(
-                "starbridge_hello_hello",
-                {"locale": "de_DE"},
-            )
-            assert len(result.content) == 1
-            content = result.content[0]
-            assert type(content) is TextContent
-            assert content.text == "Hallo Welt!"
+        result = await session.call_tool(
+            "starbridge_hello_hello",
+            {"locale": "de_DE"},
+        )
+        assert len(result.content) == 1
+        content = result.content[0]
+        assert type(content) is TextContent
+        assert content.text == "Hallo Welt!"
 
 
 if hasattr(HelloService, "bridge"):  # if extra imaging
 
     @pytest.mark.asyncio
     async def test_mcp_server_tool_call_with_image() -> None:
-        """Test listing of prompts from the server."""
-        async with stdio_client(_server_parameters()) as (read, write):
-            async with ClientSession(read, write) as session:
-                await session.initialize()
+        """Test calling a tool with image content on the server."""
+        async with stdio_client(_server_parameters()) as (read, write), ClientSession(read, write) as session:
+            await session.initialize()
 
-                result = await session.call_tool("starbridge_hello_bridge", {})
-                assert len(result.content) == 1
-                content = result.content[0]
-                assert type(content) is ImageContent
-                assert content.data == base64.b64encode(
-                    Path("tests/fixtures/starbridge.png").read_bytes(),
-                ).decode("utf-8")
+            result = await session.call_tool("starbridge_hello_bridge", {})
+            assert len(result.content) == 1
+            content = result.content[0]
+            assert type(content) is ImageContent
+            assert content.data == base64.b64encode(
+                Path("tests/fixtures/starbridge.png").read_bytes(),
+            ).decode("utf-8")
 
 
 @pytest.mark.asyncio
 async def test_mcp_server_tool_call_with_pdf() -> None:
-    """Test listing of prompts from the server."""
-    async with stdio_client(_server_parameters()) as (read, write):
-        async with ClientSession(read, write) as session:
-            await session.initialize()
+    """Test calling a tool with PDF content on the server."""
+    async with stdio_client(_server_parameters()) as (read, write), ClientSession(read, write) as session:
+        await session.initialize()
 
-            result = await session.call_tool("starbridge_hello_pdf", {})
-            assert len(result.content) == 1
-            content = result.content[0]
-            assert type(content) is EmbeddedResource
-            assert type(content.resource) is BlobResourceContents
-            assert content.resource.mimeType == "application/pdf"
-            assert content.resource.blob == base64.b64encode(
-                Path("tests/fixtures/starbridge.pdf").read_bytes(),
-            ).decode("utf-8")
+        result = await session.call_tool("starbridge_hello_pdf", {})
+        assert len(result.content) == 1
+        content = result.content[0]
+        assert type(content) is EmbeddedResource
+        assert type(content.resource) is BlobResourceContents
+        assert content.resource.mimeType == "application/pdf"
+        assert content.resource.blob == base64.b64encode(
+            Path("tests/fixtures/starbridge.pdf").read_bytes(),
+        ).decode("utf-8")
 
 
 @pytest.mark.skip(reason="test_core_env_args_passed disabled temporarily")
@@ -314,7 +317,7 @@ def test_mcp_server_sse_terminates(runner) -> None:
         try:
             response = requests.get("http://0.0.0.0:9000/terminate", timeout=10)
             response.raise_for_status()
-        except Exception:
+        except Exception:  # noqa: S110, BLE001
             pass
 
         # Wait for process to end (timeout after 5 seconds)

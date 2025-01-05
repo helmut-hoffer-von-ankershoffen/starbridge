@@ -1,3 +1,5 @@
+"""Claude Desktop application integration module."""
+
 from .cli import cli
 from .service import Service
 from .util import generate_mcp_server_config

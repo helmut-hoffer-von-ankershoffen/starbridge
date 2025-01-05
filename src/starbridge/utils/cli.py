@@ -1,3 +1,5 @@
+"""Command-line interface utilities for the starbridge package."""
+
 import typer
 
 from .di import (

@@ -1,3 +1,5 @@
+"""Platform and process related utilities."""  # noqa: A005
+
 from pathlib import Path
 
 import psutil
@@ -5,18 +7,28 @@ from pydantic import BaseModel
 
 
 class ParentProcessInfo(BaseModel):
+    """Information about a parent process."""
+
     name: str | None = None
     pid: int | None = None
 
 
 class ProcessInfo(BaseModel):
+    """Information about the current process."""
+
     project_root: str
     pid: int
     parent: ParentProcessInfo
 
 
 def get_process_info() -> ProcessInfo:
-    """Get information about the current process and its parent."""
+    """
+    Get information about the current process and its parent.
+
+    Returns:
+        ProcessInfo: Object containing process information.
+
+    """
     current_process = psutil.Process()
     parent = current_process.parent()
 

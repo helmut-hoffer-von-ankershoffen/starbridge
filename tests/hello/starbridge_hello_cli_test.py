@@ -1,3 +1,5 @@
+"""Tests for Hello World CLI functionality."""
+
 from pathlib import Path
 from unittest.mock import patch
 
@@ -13,7 +15,8 @@ except ImportError:
 
 
 @pytest.fixture
-def runner():
+def runner() -> CliRunner:
+    """Get a Click CLI test runner."""
     return CliRunner()
 
 

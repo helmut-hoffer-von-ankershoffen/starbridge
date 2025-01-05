@@ -1,3 +1,5 @@
+"""Tests for web CLI functionality."""
+
 import json
 from unittest.mock import patch
 
@@ -13,7 +15,8 @@ GET_LLMS_TXT_URL = "https://docs.anthropic.com"
 
 
 @pytest.fixture
-def runner():
+def runner() -> CliRunner:
+    """Get a Click CLI test runner."""
     return CliRunner()
 
 

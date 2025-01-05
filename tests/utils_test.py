@@ -1,3 +1,5 @@
+"""Test utility functions of the Starbridge package."""
+
 import os
 
 from mcp import StdioServerParameters

@@ -1,3 +1,5 @@
+"""Tests for platform-specific functionality."""
+
 import json
 import os
 import subprocess

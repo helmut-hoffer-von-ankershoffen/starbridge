@@ -33,7 +33,8 @@ if not __is_running_in_container__:
         """Print config of Claude Desktop application."""
         if not Service.is_installed():
             console.print(
-                f"Claude Desktop application is not installed at '{Service.application_directory()}' - you can install it from https://claude.ai/download",
+                f"Claude Desktop application is not installed at '{Service.application_directory()}' - "
+                "you can install it from https://claude.ai/download",
             )
             return
         if not Service.config_path().is_file():
@@ -69,8 +70,8 @@ if not __is_running_in_container__:
             f"Showing max {last} lines of log at '{log_path}' ({human_size}{', tailing' if tail else ''})",
         )
         if tail:
-            subprocess.run(
-                [
+            subprocess.run(  # noqa: S603
+                [  # noqa: S607
                     "tail",
                     "-n",
                     str(last),
@@ -80,8 +81,8 @@ if not __is_running_in_container__:
                 check=False,
             )
         else:
-            subprocess.run(
-                [
+            subprocess.run(  # noqa: S603
+                [  # noqa: S607
                     "tail",
                     "-n",
                     str(last),
@@ -95,7 +96,8 @@ if not __is_running_in_container__:
         """Restart Claude Desktop application."""
         if not Service.is_installed():
             console.print(
-                f"Claude Desktop application is not installed at '{Service.application_directory()}' - you can install it from https://claude.ai/download",
+                f"Claude Desktop application is not installed at '{Service.application_directory()}' - "
+                "you can install it from https://claude.ai/download",
             )
             return
         Service().restart()

@@ -1,3 +1,5 @@
+"""Tests for the web service functionality."""
+
 import asyncio
 from unittest.mock import patch
 

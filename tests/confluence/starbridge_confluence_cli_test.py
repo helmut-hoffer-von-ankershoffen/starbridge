@@ -1,3 +1,5 @@
+"""Tests for Confluence CLI functionality."""
+
 import json
 from pathlib import Path
 from unittest.mock import patch
@@ -15,7 +17,8 @@ FIXTURE_GET_ALL_SPACES = "tests/fixtures/get_all_spaces.json"
 
 
 @pytest.fixture
-def runner():
+def runner() -> CliRunner:
+    """Get a Click CLI test runner."""
     return CliRunner()
 
 

@@ -17,7 +17,7 @@ DocstringStyle = Literal["google", "numpy", "sphinx"]
 
 def description_and_params(  # noqa: C901
     func: Callable[..., Any],
-    excluded_params=("self", "context"),
+    excluded_params: tuple[str, ...] = ("self", "context"),
 ) -> tuple[str, list, dict[str, dict]]:
     """
     Extract the function description and parameter descriptions from a function's docstring.
@@ -83,7 +83,16 @@ def description_and_params(  # noqa: C901
 
 
 def _infer_docstring_style(doc: str) -> DocstringStyle:
-    """Simplistic docstring style inference."""
+    """
+    Simplistic docstring style inference.
+
+    Args:
+        doc: The docstring to analyze
+
+    Returns:
+        DocstringStyle: The inferred docstring style ('google', 'numpy', or 'sphinx')
+
+    """
     for pattern, replacements, style in _docstring_style_patterns:
         matches = (
             re.search(pattern.format(replacement), doc, re.IGNORECASE | re.MULTILINE) for replacement in replacements

@@ -1,3 +1,5 @@
+"""Tests for core CLI functionality."""
+
 import json
 import os
 import subprocess
@@ -30,7 +32,8 @@ INSTALLATION_INPUT = (
 
 
 @pytest.fixture
-def runner():
+def runner() -> CliRunner:
+    """Get a Click CLI test runner."""
     return CliRunner()
 
 
@@ -79,7 +82,7 @@ def test_core_cli_create_dot_env(runner, tmp_path) -> None:
         assert "STARBRIDGE_WEB_TIMEOUT=5" in dot_env
 
 
-def test_core_cli_install(runner, tmp_path) -> None:
+def test_core_cli_install(runner, tmp_path) -> None:  # noqa: PLR0915
     """Check configuration injected in claude as expected."""
     with patch(
         "starbridge.claude.service.Service.application_directory",
@@ -106,7 +109,7 @@ def test_core_cli_install(runner, tmp_path) -> None:
         server_config = output_json["mcpServers"]["starbridge"]
         assert server_config["env"]["STARBRIDGE_ATLASSIAN_URL"] == "https://test.atlassian.net"
         assert server_config["env"]["STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS"] == "test@test.com"
-        assert server_config["env"]["STARBRIDGE_ATLASSIAN_API_TOKEN"] == "TEST_CONFLUENCE_API_TOKEN"
+        assert server_config["env"]["STARBRIDGE_ATLASSIAN_API_TOKEN"] == "TEST_CONFLUENCE_API_TOKEN"  # noqa: S105
 
         mock_restart.reset_mock()
         result = runner.invoke(cli, ["uninstall"], input=inputs)
@@ -155,6 +158,7 @@ def test_core_cli_install(runner, tmp_path) -> None:
 
 
 def test_core_cli_main_guard() -> None:
+    """Test the main CLI guard functionality."""
     env = os.environ.copy()
     env.update({
         "COVERAGE_PROCESS_START": "pyproject.toml",
@@ -172,6 +176,7 @@ def test_core_cli_main_guard() -> None:
 
 
 def test_core_cli_main_guard_fail() -> None:
+    """Test the main CLI guard failure cases."""
     env = os.environ.copy()
     env.update({
         "COVERAGE_PROCESS_START": "pyproject.toml",

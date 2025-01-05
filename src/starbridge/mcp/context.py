@@ -1,6 +1,8 @@
+"""Context handling for MCP operations and requests."""
+
 from typing import Any, Literal
 
-from mcp.shared.context import RequestContext
+from mcp.shared.context import RequestContext, SessionT
 from pydantic import AnyUrl, BaseModel
 
 
@@ -14,21 +16,39 @@ class MCPContext(BaseModel):
         self,
         *,
         request_context: RequestContext | None = None,
-        mcp: Any | None = None,
-        **kwargs: Any,
+        mcp: type[Any] | None = None,
+        **kwargs: dict[str, type[Any]],
     ) -> None:
+        """
+        Initialize MCP context.
+
+        Args:
+            request_context (RequestContext): Current request context if any
+            mcp (MCPServer): Reference to MCP server instance
+            **kwargs (dict[str, type[Any]]): Additional context parameters
+
+        """
         super().__init__(**kwargs)
         self._request_context = request_context
         self._mcp = mcp
 
     @property
-    def mcp(self) -> Any:
+    def mcp(self) -> type[Any]:
         """Access to the MCP server."""
         return self._mcp
 
     @property
     def request_context(self) -> RequestContext:
-        """Access to the underlying request context."""
+        """
+        Access the underlying request context.
+
+        Returns:
+            RequestContext: The current request context.
+
+        Raises:
+            RuntimeError: If context is accessed outside of a request.
+
+        """
         if self._request_context is None:
             msg = "Context is not available outside of a request"
             raise RuntimeError(msg)
@@ -66,7 +86,7 @@ class MCPContext(BaseModel):
             uri: Resource URI to read
 
         Returns:
-            (str | bytes): The resource content as either text or bytes
+            (str | AnyUrl): The resource content as either text or bytes
 
         """
         return await self._mcp.read_resource(uri)
@@ -75,19 +95,20 @@ class MCPContext(BaseModel):
         self,
         level: Literal["debug", "info", "warning", "error"],
         message: str,
-        *,
         logger_name: str | None = None,
+        **extra: dict[str, type[Any]],  # noqa: ARG002
     ) -> None:
         r"""
         Send a log message to the client.
 
         Args:
-            level: Log level (debug, info, warning, error)
-            message: Log message
-            logger_name: Optional logger name
-            \*\*extra: Additional structured data to include
+            level (Literal["debug", "info", "warning", "error"]): Log level (debug, info, warning, error)
+            message (str): Log message
+            logger_name (str | None): Optional logger name
+            **extra (dict[str, type[Any]]): Additional structured data to include
 
         """
+        # TODO(@helmut-hoffer-von-ankershoffen): Inject extra data into log message
         await self.request_context.session.send_log_message(
             level=level,
             data=message,
@@ -105,23 +126,61 @@ class MCPContext(BaseModel):
         return str(self.request_context.request_id)
 
     @property
-    def session(self):
-        """Access to the underlying session for advanced usage."""
+    def session(self) -> SessionT:
+        """
+        Access to the underlying session for advanced usage.
+
+        Returns:
+            Session: The underlying session object
+
+        """
         return self.request_context.session
 
     # Convenience methods for common log levels
-    async def debug(self, message: str, **extra: Any) -> None:
-        """Send a debug log message."""
-        await self.log("debug", message, **extra)
+    async def debug(self, message: str, logger_name: str | None = None, **extra: dict[str, type[Any]]) -> None:
+        r"""
+        Send a debug log message.
 
-    async def info(self, message: str, **extra: Any) -> None:
-        """Send an info log message."""
-        await self.log("info", message, **extra)
+        Args:
+            message (str): The message to log
+            logger_name (str|Name): Name of the logger
+            **extra (dict[str, type[Any]]): Additional structured data to include
 
-    async def warning(self, message: str, **extra: Any) -> None:
-        """Send a warning log message."""
-        await self.log("warning", message, **extra)
+        """
+        await self.log("debug", message=message, logger_name=logger_name, **extra)
 
-    async def error(self, message: str, **extra: Any) -> None:
-        """Send an error log message."""
-        await self.log("error", message, **extra)
+    async def info(self, message: str, logger_name: str | None = None, **extra: dict[str, type[Any]]) -> None:
+        r"""
+        Send an info log message.
+
+        Args:
+            message (str): The message to log
+            logger_name (str|Name): Name of the logger
+            **extra (dict[str, type[Any]]): Additional structured data to include
+
+        """
+        await self.log("info", message=message, logger_name=logger_name, **extra)
+
+    async def warning(self, message: str, logger_name: str | None = None, **extra: dict[str, type[Any]]) -> None:
+        r"""
+        Send a warning log message.
+
+        Args:
+            message (str): The message to log
+            logger_name (str|Name): Name of the logger
+            **extra (dict[str, type[Any]]): Additional structured data to include
+
+        """
+        await self.log("warning", message=message, logger_name=logger_name, **extra)
+
+    async def error(self, message: str, logger_name: str | None = None, **extra: dict[str, type[Any]]) -> None:
+        r"""
+        Send an error log message.
+
+        Args:
+            message (str): The message to log
+            logger_name (str|Name): Name of the logger
+            **extra (dict[str, type[Any]]): Additional structured data to include
+
+        """
+        await self.log("error", message=message, logger_name=logger_name, **extra)

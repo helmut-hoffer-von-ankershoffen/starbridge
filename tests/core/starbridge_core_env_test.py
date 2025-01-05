@@ -1,6 +1,9 @@
+"""Tests for core environment handling."""
+
 import os
 import shutil
 import subprocess
+from collections.abc import Generator
 from pathlib import Path
 from typing import Never
 from unittest.mock import patch
@@ -13,12 +16,13 @@ from starbridge.cli import cli
 
 
 @pytest.fixture
-def runner():
+def runner() -> CliRunner:
+    """Get a Click CLI test runner."""
     return CliRunner()
 
 
 @pytest.fixture(autouse=True)
-def backup_env():
+def backup_env() -> Generator[None, None, None]:
     """Fixture to automatically backup and restore .env file."""
     env_path = Path(__file__).parent.parent / ".env"
     bak_path = Path(__file__).parent.parent / ".env.bak"

@@ -1,3 +1,5 @@
+"""Utility functions for Claude Desktop application integration."""
+
 from typing import Any
 
 from starbridge import (
@@ -12,7 +14,13 @@ def generate_mcp_server_config(
     env: dict[str, Any],
     image: str = "helmuthva/starbridge:latest",
 ) -> dict:
-    """Generate configuration file for Starbridge."""
+    """
+    Generate configuration file for Starbridge.
+
+    Returns:
+        dict: Generated configuration data.
+
+    """
     if __is_running_in_container__:
         args = ["run", "-i", "--rm"]
         for env_key in env:

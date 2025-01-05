@@ -19,13 +19,12 @@ extensions = [
     "sphinx.ext.imgconverter",
     "sphinx_inline_tabs",
     "sphinx_mdinclude",
-    "sphinxemoji.sphinxemoji",  # https://sphinxemojicodes.readthedocs.io/en/stable/
     "sphinxext.opengraph",
 ]
 
 project = "starbridge"
 author = "Helmut Hoffer von Ankershoffen"
-copyright = f" (c) 2025-{datetime.now(UTC).year}, {author}"
+copyright = f" (c) 2025-{datetime.now(UTC).year}, {author}"  # noqa: A001
 version = "0.0.67"
 release = version
 github_username = "helmut-hoffer-von-ankershoffen"
@@ -77,7 +76,9 @@ html_theme_options = {
         '<a target="_blank" href="https://github.com/helmut-hoffer-von-ankershoffen/starbridge">GitHub</a> - '
         '<a target="_blank" href="https://pypi.org/project/starbridge/">PyPI</a> - '
         '<a target="_blank" href="https://hub.docker.com/r/helmuthva/starbridge/tags">Docker</a> - '
-        '<a target="_blank" href="https://sonarcloud.io/summary/new_code?id=helmut-hoffer-von-ankershoffen_starbridge">SonarQube</a> - '
+        '<a target="_blank" '
+        'href="https://sonarcloud.io/summary/new_code?id=helmut-hoffer-von-ankershoffen_starbridge">'
+        "SonarQube</a> - "
         '<a target="_blank" href="https://app.codecov.io/gh/helmut-hoffer-von-ankershoffen/starbridge">Codecov</a>'
     ),
 }

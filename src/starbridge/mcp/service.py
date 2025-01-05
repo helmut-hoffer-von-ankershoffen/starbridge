@@ -1,3 +1,10 @@
+"""
+MCP Service module providing base classes and utilities for Model Context Protocol services.
+
+This module contains the core service abstractions including resource handling,
+tool management, and prompt processing for MCP-compatible services.
+"""
+
 from abc import ABC, abstractmethod
 from collections import defaultdict
 from dataclasses import dataclass
@@ -24,6 +31,13 @@ class ResourceType:
     type: str
 
     def __str__(self) -> str:
+        """
+        Return string representation as 'server://service/type'.
+
+        Returns:
+            str: Resource type in format 'server://service/type'
+
+        """
         return f"{self.server}://{self.service}/{self.type}"
 
 
@@ -33,6 +47,13 @@ class MCPBaseService(ABC):
     _settings: BaseSettings
 
     def __init__(self, settings_class: type[T] | None = None) -> None:
+        """
+        Initialize service with optional settings.
+
+        Args:
+            settings_class: Optional settings class to load configuration.
+
+        """
         if settings_class is not None:
             self._settings = self._load_settings(settings_class)
 
@@ -44,8 +65,17 @@ class MCPBaseService(ABC):
     def health(self, context: MCPContext | None = None) -> Health:
         """Get health of this service. Override in subclass."""
 
-    def tool_list(self, context: MCPContext | None = None) -> list[types.Tool]:
-        """Get available tools. Discovers tools by looking for methods decorated with @mcp_tool."""
+    def tool_list(self, context: MCPContext | None = None) -> list[types.Tool]:  # noqa: ARG002
+        """
+        Get available tools.
+
+        Args:
+            context (MCPContext | None): MCP context for the operation
+
+        Returns:
+            list[types.Tool]: List of available tools discovered via @mcp_tool decorator.
+
+        """
         tools = []
         for method_name in dir(self.__class__):
             method = getattr(self.__class__, method_name)
@@ -66,7 +96,19 @@ class MCPBaseService(ABC):
         return tools
 
     def resource_list(self, context: MCPContext | None = None) -> list[types.Resource]:
-        """Get available resources by discovering and calling all resource iterators."""
+        """
+        Get available resources by discovering and calling all resource iterators.
+
+        Args:
+            context (MCPContext | None): MCP context for the operation
+
+        Returns:
+            list[types.Resource]: List of available resources.
+
+        Raises:
+            ValueError: If duplicate resource types are found.
+
+        """
         resources = []
         type_map = defaultdict(list)
 
@@ -91,9 +133,18 @@ class MCPBaseService(ABC):
 
     def resource_type_list(
         self,
-        context: MCPContext | None = None,
+        context: MCPContext | None = None,  # noqa: ARG002
     ) -> set[ResourceMetadata]:
-        """Get available resource types by discovering all resource iterators."""
+        """
+        Get available resource types by discovering all resource iterators.
+
+        Args:
+            context (MCPContext | None): MCP context for the operation
+
+        Returns:
+            set[ResourceMetadata]: Set of available resource metadata types.
+
+        """
         types = set()
         for method_name in dir(self.__class__):
             method = getattr(self.__class__, method_name)
@@ -105,8 +156,17 @@ class MCPBaseService(ABC):
 
     # Remove resource_get method as it's now handled by MCPServer
 
-    def prompt_list(self, context: MCPContext | None = None) -> list[types.Prompt]:
-        """Get available prompts by discovering decorated prompt methods."""
+    def prompt_list(self, context: MCPContext | None = None) -> list[types.Prompt]:  # noqa: ARG002
+        """
+        Get available prompts by discovering decorated prompt methods.
+
+        Args:
+            context (MCPContext | None): MCP context for the operation
+
+        Returns:
+            list[types.Prompt]: List of available prompts.
+
+        """
         prompts = []
         for method_name in dir(self.__class__):
             method = getattr(self.__class__, method_name)
@@ -140,8 +200,15 @@ class MCPBaseService(ABC):
                 )
         return prompts
 
-    def _validate_resource_uri(self, resource, meta) -> None:
-        """Validate resource URI against metadata."""
+    @staticmethod
+    def _validate_resource_uri(resource: types.Resource, meta: ResourceMetadata) -> None:
+        """
+        Validate resource URI against metadata.
+
+        Raises:
+            ValueError: If URI scheme, service or path does not match metadata.
+
+        """
         parsed = urlparse(str(resource.uri))
         if parsed.scheme != meta.server:
             msg = f"Resource URI scheme '{parsed.scheme}' doesn't match decorator scheme '{meta.server}'"
@@ -157,8 +224,15 @@ class MCPBaseService(ABC):
             msg = f"Resource URI path doesn't start with '/{meta.type}/'"
             raise ValueError(msg)
 
-    def _check_type_uniqueness(self, type_map, meta, method_name) -> None:
-        """Ensure resource type is unique."""
+    @staticmethod
+    def _check_type_uniqueness(type_map: defaultdict[str, list[str]], meta: ResourceMetadata, method_name: str) -> None:
+        """
+        Ensure resource type is unique.
+
+        Raises:
+            ValueError: If multiple resource iterators are found for the same type.
+
+        """
         type_map[meta.type].append(method_name)
         if len(type_map[meta.type]) > 1:
             msg = f"Multiple resource iterators found for type '{meta.type}': {type_map[meta.type]}"
@@ -166,6 +240,13 @@ class MCPBaseService(ABC):
                 msg,
             )
 
-    def _load_settings(self, settings_class: type[T]) -> T:
-        """Load settings from context."""
+    @staticmethod
+    def _load_settings(settings_class: type[T]) -> T:
+        """
+        Load settings from context.
+
+        Returns:
+            T: Loaded settings instance
+
+        """
         return load_settings(settings_class)

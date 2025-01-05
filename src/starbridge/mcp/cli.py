@@ -112,11 +112,14 @@ def serve(
             help="Debug mode",
         ),
     ] = True,
-    env: Annotated[  # Parsed in bootstrap.py
+    env: Annotated[  # Parsed in bootstrap.py  # noqa: ARG001
         list[str] | None,
         typer.Option(
             "--env",
-            help='Environment variables in key=value format. Can be used multiple times in one call. Only STARBRIDGE_ prefixed vars are used. Example --env STARBRIDGE_ATLASSIAN_URL="https://your-domain.atlassian.net" --env STARBRIDGE_ATLASSIAN_EMAIL="YOUR_EMAIL"',
+            help="Environment variables in key=value format. Can be used multiple times in one call. "
+            "Only STARBRIDGE_ prefixed vars are used. Example --env "
+            'STARBRIDGE_ATLASSIAN_URL="https://your-domain.atlassian.net" '
+            '--env STARBRIDGE_ATLASSIAN_EMAIL="YOUR_EMAIL"',
         ),
     ] = None,
 ) -> None:
@@ -129,7 +132,9 @@ def inspect() -> None:
     """Run inspector."""
     process_info = get_process_info()
     console.print(
-        f"⭐ Starbridge controller: v{__version__} (project root {process_info.project_root}, pid {process_info.pid}), parent '{process_info.parent.name}' (pid {process_info.parent.pid})",
+        f"⭐ Starbridge controller: v{__version__} "
+        f"(project root {process_info.project_root}, pid {process_info.pid}), "
+        f"parent '{process_info.parent.name}' (pid {process_info.parent.pid})",
     )
     env_args = []
     for key, value in os.environ.items():
@@ -148,7 +153,7 @@ def inspect() -> None:
     ]
     console.print(f"Executing: {' '.join(cmd)}")
 
-    process = subprocess.Popen(
+    process = subprocess.Popen(  # noqa: S603
         cmd,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,

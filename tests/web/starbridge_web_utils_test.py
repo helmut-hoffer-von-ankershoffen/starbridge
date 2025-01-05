@@ -1,3 +1,5 @@
+"""Tests for web utilities functionality."""
+
 import asyncio
 from unittest.mock import patch
 
@@ -22,18 +24,16 @@ LLMS_DUMY_CONTENT = "llms content"
 
 def test_web_utils_robots_disallowed_on_timeout() -> None:
     """Check disallowing on robots.txt timing out."""
-    with pytest.raises(RobotForbiddenError):
-        with patch(HTTPX_ASYNC_CLIENT_GET) as mock_get:
-            mock_get.side_effect = TimeoutException(TIMEOUT_MESSAGE)
-            asyncio.run(_ensure_allowed_to_crawl(GET_TEST_URL, __project_name__))
+    with pytest.raises(RobotForbiddenError), patch(HTTPX_ASYNC_CLIENT_GET) as mock_get:
+        mock_get.side_effect = TimeoutException(TIMEOUT_MESSAGE)
+        asyncio.run(_ensure_allowed_to_crawl(GET_TEST_URL, __project_name__))
 
 
 def test_web_utils_robots_disallowed_on_401() -> None:
     """Check disallowing on robots.txt forbidden."""
-    with pytest.raises(RobotForbiddenError):
-        with patch(HTTPX_ASYNC_CLIENT_GET) as mock_get:
-            mock_get.return_value.status_code = 401
-            asyncio.run(_ensure_allowed_to_crawl(GET_TEST_URL, __project_name__))
+    with pytest.raises(RobotForbiddenError), patch(HTTPX_ASYNC_CLIENT_GET) as mock_get:
+        mock_get.return_value.status_code = 401
+        asyncio.run(_ensure_allowed_to_crawl(GET_TEST_URL, __project_name__))
 
 
 def test_web_utils_robots_allowed_on_404() -> None:

@@ -1,3 +1,5 @@
+"""Nox configuration file for managing build, test and deploy sessions and dependencies."""
+
 import json
 from pathlib import Path
 
@@ -9,7 +11,7 @@ nox.options.default_venv_backend = "uv"
 _JUNITXML_ARG = "--junitxml=junit.xml"
 
 
-def _setup_venv(session: nox.Session, all_extras=True) -> None:
+def _setup_venv(session: nox.Session, all_extras: bool = True) -> None:
     """Install dependencies for the given session using uv."""
     args = ["uv", "sync", "--frozen"]
     if all_extras:
@@ -25,6 +27,7 @@ def _setup_venv(session: nox.Session, all_extras=True) -> None:
 
 @nox.session(python=["3.13"])
 def lint(session: nox.Session) -> None:
+    """Run linting checks using ruff."""
     _setup_venv(session)
     session.run("ruff", "check", ".")
     session.run(
@@ -51,6 +54,7 @@ def docs(session: nox.Session) -> None:
 
 @nox.session(python=["3.13"])
 def audit(session: nox.Session) -> None:
+    """Perform security audit and output vulnerabilities."""
     _setup_venv(session)
     session.run("pip-audit", "-f", "json", "-o", "vulnerabilities.json")
     session.run("jq", ".", "vulnerabilities.json", external=True)
@@ -60,7 +64,6 @@ def audit(session: nox.Session) -> None:
     licenses_data = json.loads(Path("licenses.json").read_text(encoding="utf-8"))
 
     licenses_inverted: dict[str, list[dict[str, str]]] = {}
-    licenses_inverted = {}
     for pkg in licenses_data:
         license_name = pkg["License"]
         package_info = {"Name": pkg["Name"], "Version": pkg["Version"]}
@@ -81,6 +84,7 @@ def audit(session: nox.Session) -> None:
 
 @nox.session(python=["3.11", "3.12", "3.13"])
 def test(session: nox.Session) -> None:
+    """Run all test sessions and clean coverage data."""
     _setup_venv(session)
     session.run("rm", "-rf", ".coverage", external=True)
     session.run(
@@ -109,13 +113,17 @@ def test(session: nox.Session) -> None:
     session.run(
         "bash",
         "-c",
-        "docker compose ls --format json | jq -r '.[].Name' | grep ^pytest | xargs -I {} docker compose -p {} down --remove-orphans",
+        (
+            "docker compose ls --format json | jq -r '.[].Name' | "
+            "grep ^pytest | xargs -I {} docker compose -p {} down --remove-orphans"
+        ),
         external=True,
     )
 
 
 @nox.session(python=["3.11", "3.12", "3.13"])
 def test_no_extras(session: nox.Session) -> None:
+    """Run test sessions without extra dependencies."""
     _setup_venv(session, all_extras=False)
     session.run(
         "pytest",
@@ -130,6 +138,9 @@ def test_no_extras(session: nox.Session) -> None:
     session.run(
         "bash",
         "-c",
-        "docker compose ls --format json | jq -r '.[].Name' | grep ^pytest | xargs -I {} docker compose -p {} down --remove-orphans",
+        (
+            "docker compose ls --format json | jq -r '.[].Name' | "
+            "grep ^pytest | xargs -I {} docker compose -p {} down --remove-orphans"
+        ),
         external=True,
     )

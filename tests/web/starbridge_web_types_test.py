@@ -1,3 +1,5 @@
+"""Tests for web types functionality."""
+
 import pytest
 from pydantic import AnyHttpUrl, ValidationError
 
@@ -7,6 +9,7 @@ EXAMPLE_COM = "https://example.com"
 
 
 def test_web_types_resource_exactly_one() -> None:
+    """Test that Resource validation requires exactly one field to be set."""
     with pytest.raises(ValidationError):
         Resource(
             url=AnyHttpUrl(EXAMPLE_COM),
