@@ -142,8 +142,8 @@ target-version = "py311"
 preview = true
 fix = true
 line-length = 120
-exclude = [".fixme"]
 
+exclude = [".fixme"]
 
 [tool.ruff.lint]
 select = ["ALL"]
@@ -195,11 +195,11 @@ ignore = [
 
 [tool.ruff.lint.extend-per-file-ignores]
 
-[tool.ruff.format]
-docstring-code-format = true
-
 [tool.ruff.lint.pydocstyle]
 convention = "google"
+
+[tool.ruff.format]
+docstring-code-format = true
 
 [tool.pytest.ini_options]
 addopts = "-v --cov=starbridge --cov-report=term-missing --cov-report=xml:coverage.xml --cov-report=html:coverage_html"
