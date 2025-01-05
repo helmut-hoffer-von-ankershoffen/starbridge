@@ -329,7 +329,6 @@ body = """
 """
 # template for the changelog footer
 footer = """
-<!-- built with love in Berlin by Helmut Hoffer von Ankershoffen -->
 """
 # remove the leading and trailing whitespace from the templates
 trim = true

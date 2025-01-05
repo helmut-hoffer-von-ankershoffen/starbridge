@@ -1,6 +1,6 @@
 [![starbridge](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/tests/fixtures/starbridge.png?raw=true)](https://helmuthva.gitbook.io/starbridge) Starbridge
 
-## [0.0.69](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.68..0.0.69) - 2025-01-05
+## [0.0.69](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.68..v0.0.69) - 2025-01-05
 
 ### 🐛 Bug Fixes
 
@@ -622,4 +622,4 @@
 ## New Contributors ❤️
 
 * @helmut-hoffer-von-ankershoffen made their first contribution
-* @renovate[bot] made their first contribution in [#5](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/pull/5)<!-- built with love in Berlin by Helmut Hoffer von Ankershoffen -->
+* @renovate[bot] made their first contribution in [#5](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/pull/5)
