@@ -26,6 +26,9 @@ class Service(MCPBaseService):
         """
         Check the health of the core service of Starbridge.
 
+        Args:
+            context (MCPContext, optional): The context of the request. Defaults to None.
+
         Returns:
             Health: The health status of the core service
 
@@ -36,6 +39,9 @@ class Service(MCPBaseService):
     def info(self, context: MCPContext | None = None) -> dict:  # noqa: ARG002, PLR6301
         """
         Get info about the environment starbridge is running in and all services.
+
+        Args:
+            context (MCPContext, optional): The context of the request. Defaults to None.
 
         Returns:
             dict: Information about the Starbridge environment and its services

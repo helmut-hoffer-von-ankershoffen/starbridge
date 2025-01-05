@@ -30,6 +30,9 @@ class Service(MCPBaseService):
         """
         Check health of the web service.
 
+        Args:
+            context (MCPContext | None): MCP context for the operation
+
         Returns:
             Health: The health status of the web service
 
@@ -45,6 +48,9 @@ class Service(MCPBaseService):
     def info(self, context: MCPContext | None = None) -> dict:  # noqa: PLR6301, ARG002
         """
         Info about web environment.
+
+        Args:
+            context (MCPContext | None): MCP context for the operation
 
         Returns:
             dict: Information about the web environment
@@ -109,7 +115,7 @@ class Service(MCPBaseService):
             'additional_context': Optional list of with extra context (only if additional_context=True). Each item has:
                 - 'url' (string) the URL of the context
                 - 'type' (string) the type of context, e.g. llms_txt for text specifally prepared by a domain for an
-                  assistant to read
+                    assistant to read
                 - 'text' (string) the content of the context in markdown format
 
         Raises:

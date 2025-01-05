@@ -67,6 +67,15 @@ def get(  # noqa: PLR0913, PLR0917
     Fetch content from the world wide web via HTTP GET.
 
     Converts to content type as a best effort, extracts links, and provides additional context.
+
+    Args:
+        url (str): URL to fetch
+        accept_language (str): Accept-Language header value to send in the request
+        transform_to_markdown (bool): if possible transform content to markdown
+        extract_links (bool): include extracted links in the response
+        additional_context (bool): include additional context in the response
+        llms_full_txt (bool): provide llms-full.txt in contexts
+
     """
     try:
         rtn = asyncio.run(

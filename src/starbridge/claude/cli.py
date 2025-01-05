@@ -62,7 +62,15 @@ if not __is_running_in_container__:
             ),
         ] = __project_name__,
     ) -> None:
-        """Show logs."""
+        """
+        Show logs.
+
+        Args:
+            tail: Tail logs
+            last: Number of lines to show
+            name: Name of the MCP server - use 'main' for main mcp.log of Claude Desktop application
+
+        """
         log_path = Service.log_path(name if name != "main" else None)
         size = pathlib.Path(log_path).stat().st_size
         human_size = f"{size / 1024 / 1024:.1f}MB" if size > 1024 * 1024 else f"{size / 1024:.1f}KB"

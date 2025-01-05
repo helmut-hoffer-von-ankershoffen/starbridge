@@ -16,7 +16,7 @@ class MCPContext(BaseModel):
         self,
         *,
         request_context: RequestContext | None = None,
-        mcp: type[Any] | None = None,
+        mcp: "mcp.server.MCPServer | None" = None,  # type: ignore
         **kwargs: dict[str, type[Any]],
     ) -> None:
         """
@@ -24,7 +24,7 @@ class MCPContext(BaseModel):
 
         Args:
             request_context (RequestContext): Current request context if any
-            mcp (MCPServer): Reference to MCP server instance
+            mcp (MCPServer | None): Reference to MCP server instance
             **kwargs (dict[str, type[Any]]): Additional context parameters
 
         """
@@ -96,19 +96,19 @@ class MCPContext(BaseModel):
         level: Literal["debug", "info", "warning", "error"],
         message: str,
         logger_name: str | None = None,
-        **extra: dict[str, type[Any]],  # noqa: ARG002
+        **kwargs,  # noqa: ARG002
     ) -> None:
-        r"""
+        """
         Send a log message to the client.
 
         Args:
             level (Literal["debug", "info", "warning", "error"]): Log level (debug, info, warning, error)
             message (str): Log message
             logger_name (str | None): Optional logger name
-            **extra (dict[str, type[Any]]): Additional structured data to include
+            **kwargs (dict[str, type[Any]]): Additional structured data to include
 
         """
-        # TODO(@helmut-hoffer-von-ankershoffen): Inject extra data into log message
+        # TODO(@helmut-hoffer-von-ankershoffen): Inject kwargs into log message
         await self.request_context.session.send_log_message(
             level=level,
             data=message,
@@ -126,7 +126,7 @@ class MCPContext(BaseModel):
         return str(self.request_context.request_id)
 
     @property
-    def session(self) -> SessionT:
+    def session(self) -> SessionT:  # type: ignore
         """
         Access to the underlying session for advanced usage.
 
@@ -137,50 +137,50 @@ class MCPContext(BaseModel):
         return self.request_context.session
 
     # Convenience methods for common log levels
-    async def debug(self, message: str, logger_name: str | None = None, **extra: dict[str, type[Any]]) -> None:
-        r"""
+    async def debug(self, message: str, logger_name: str | None = None, **kwargs) -> None:
+        """
         Send a debug log message.
 
         Args:
             message (str): The message to log
             logger_name (str|Name): Name of the logger
-            **extra (dict[str, type[Any]]): Additional structured data to include
+            **kwargs (dict[str, type[Any]]): Additional structured data to include
 
         """
-        await self.log("debug", message=message, logger_name=logger_name, **extra)
+        await self.log("debug", message=message, logger_name=logger_name, **kwargs)
 
-    async def info(self, message: str, logger_name: str | None = None, **extra: dict[str, type[Any]]) -> None:
-        r"""
+    async def info(self, message: str, logger_name: str | None = None, **kwargs) -> None:
+        """
         Send an info log message.
 
         Args:
             message (str): The message to log
             logger_name (str|Name): Name of the logger
-            **extra (dict[str, type[Any]]): Additional structured data to include
+            **kwargs: Additional structured data to include
 
         """
-        await self.log("info", message=message, logger_name=logger_name, **extra)
+        await self.log("info", message=message, logger_name=logger_name, **kwargs)
 
-    async def warning(self, message: str, logger_name: str | None = None, **extra: dict[str, type[Any]]) -> None:
-        r"""
+    async def warning(self, message: str, logger_name: str | None = None, **kwargs) -> None:
+        """
         Send a warning log message.
 
         Args:
             message (str): The message to log
             logger_name (str|Name): Name of the logger
-            **extra (dict[str, type[Any]]): Additional structured data to include
+            **kwargs (dict[str, type[Any]]): Additional structured data to include
 
         """
-        await self.log("warning", message=message, logger_name=logger_name, **extra)
+        await self.log("warning", message=message, logger_name=logger_name, **kwargs)
 
-    async def error(self, message: str, logger_name: str | None = None, **extra: dict[str, type[Any]]) -> None:
-        r"""
+    async def error(self, message: str, logger_name: str | None = None, **kwargs) -> None:
+        """
         Send an error log message.
 
         Args:
             message (str): The message to log
             logger_name (str|Name): Name of the logger
-            **extra (dict[str, type[Any]]): Additional structured data to include
+            **kwargs (dict[str, type[Any]]): Additional structured data to include
 
         """
-        await self.log("error", message=message, logger_name=logger_name, **extra)
+        await self.log("error", message=message, logger_name=logger_name, **kwargs)

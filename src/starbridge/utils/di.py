@@ -15,6 +15,9 @@ def locate_implementations(_class: type[Any]) -> list[Any]:
     """
     Dynamically discover all Service classes in starbridge packages.
 
+    Args:
+        _class (type[Any]): Class to search for.
+
     Returns:
         list[Any]: List of discovered implementations of the given class.
 
@@ -43,6 +46,9 @@ def locate_implementations(_class: type[Any]) -> list[Any]:
 def locate_subclasses(_class: type[Any]) -> list[type[Any]]:
     """
     Dynamically discover all Service classes in starbridge packages.
+
+    Args:
+        _class (type[Any]): Parent class of subclasses to search for.
 
     Returns:
         list[type[Any]]: List of discovered subclasses of the given class.

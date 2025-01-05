@@ -3,14 +3,16 @@
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from functools import wraps
-from typing import Never
+from types import TracebackType
+from typing import Any, Never, Self
 
 import mcp.server.stdio
+from anyio.streams.memory import MemoryObjectReceiveStream, MemoryObjectSendStream
 from mcp import JSONRPCError, JSONRPCRequest, JSONRPCResponse
-from mcp.types import JSONRPCNotification
+from mcp.types import JSONRPCMessage, JSONRPCNotification
 from opentelemetry import trace
 from opentelemetry.instrumentation.instrumentor import BaseInstrumentor
-from opentelemetry.trace import StatusCode
+from opentelemetry.trace import Span, StatusCode, Tracer
 
 tracer = trace.get_tracer("mcp.server")
 
@@ -18,7 +20,7 @@ tracer = trace.get_tracer("mcp.server")
 class MCPInstrumentor(BaseInstrumentor):  # pragma: no cover
     """Instrumentor for MCP protocol communications."""
 
-    def instrumentation_dependencies(self) -> list:
+    def instrumentation_dependencies(self) -> list:  # noqa: PLR6301
         """
         Get instrumentation dependencies.
 
@@ -28,7 +30,7 @@ class MCPInstrumentor(BaseInstrumentor):  # pragma: no cover
         """
         return []
 
-    def _instrument(self, **kwargs) -> None:
+    def _instrument(self, **_kwargs) -> None:
         """
         Install instrumentation.
 
@@ -41,7 +43,9 @@ class MCPInstrumentor(BaseInstrumentor):  # pragma: no cover
 
         @asynccontextmanager
         @wraps(original_stdio_server)
-        async def instrumented_stdio_server(*args, **kwargs):
+        async def instrumented_stdio_server(
+            *args, **kwargs
+        ) -> AsyncIterator[tuple[TracedReceiveStream, TracedSendStream]]:
             async with original_stdio_server(*args, **kwargs) as (
                 read_stream,
                 write_stream,
@@ -60,7 +64,7 @@ class MCPInstrumentor(BaseInstrumentor):  # pragma: no cover
 
         mcp.server.stdio.stdio_server = instrumented_stdio_server
 
-    def _uninstrument(self, **kwargs) -> Never:
+    def _uninstrument(self, **_kwargs) -> Never:  # noqa: PLR6301
         """
         Uninstall instrumentation.
 
@@ -75,10 +79,17 @@ class MCPInstrumentor(BaseInstrumentor):  # pragma: no cover
         raise NotImplementedError(msg)
 
 
-def _handle_transaction(tracer, msg, span_kind, active_spans) -> None:
-    """Handle span lifecycle for a JSON-RPC request/response transaction."""
+def _handle_transaction(tracer: Tracer, msg: JSONRPCMessage, span_kind: str, active_spans: dict[str, Span]) -> None:
+    """Handle span lifecycle for a JSON-RPC request/response transaction.
+
+    Args:
+        tracer (Tracer): OpenTelemetry tracer
+        msg (JSONRPCMessage): Message to handle
+        span_kind (str): Span kind
+        active_spans (dict[str, Span]): Dictionary of active spans by message ID
+    """
     root = msg.root
-    msg_id = getattr(root, "id", None)
+    msg_id: str = getattr(root, "id", None) or ""
 
     if isinstance(root, JSONRPCRequest):
         # Start new transaction span
@@ -96,21 +107,32 @@ def _handle_transaction(tracer, msg, span_kind, active_spans) -> None:
             span.end()
 
 
-def _handle_notification(tracer, msg, span_kind) -> None:
-    """Handle span for a JSON-RPC notification."""
+def _handle_notification(tracer: Tracer, msg: JSONRPCNotification, span_kind: str) -> None:
+    """Handle span for a JSON-RPC notification.
+
+    Args:
+        tracer (Tracer): OpenTelemetry tracer
+        msg (JSONRPCMessage): Message to handle
+        span_kind (str): Span kind
+    """
     with tracer.start_span(
-        f"mcp.{span_kind.lower()}.notification.{msg.root.method}",
+        f"mcp.{span_kind.lower()}.notification.{msg.method}",
         kind=getattr(trace.SpanKind, span_kind.upper()),
     ) as span:
-        if isinstance(msg.root, JSONRPCNotification):
-            span.set_attribute("jsonrpc.notification.method", msg.root.method)
-            if hasattr(msg.root, "params"):
-                span.set_attribute("jsonrpc.notification.params", str(msg.root.params))
+        if isinstance(msg, JSONRPCNotification):
+            span.set_attribute("jsonrpc.notification.method", msg.method)
+            if hasattr(msg, "params"):
+                span.set_attribute("jsonrpc.notification.params", str(msg.params))
             span.set_status(StatusCode.OK)
 
 
-def _set_request_attributes(span, msg) -> None:
-    """Set span attributes for a JSON-RPC request."""
+def _set_request_attributes(span: Span, msg: JSONRPCMessage) -> None:
+    """Set span attributes for a JSON-RPC request.
+
+    Args:
+        span (Span): Span to set attributes on
+        msg (JSONRPCMessage): Message to set attributes from
+    """
     root = msg.root
     if isinstance(root, JSONRPCRequest):
         span.set_attribute("jsonrpc.request.id", root.id)
@@ -119,8 +141,13 @@ def _set_request_attributes(span, msg) -> None:
             span.set_attribute("jsonrpc.request.params", str(root.params))
 
 
-def _set_response_attributes(span, msg) -> None:
-    """Set span attributes for a JSON-RPC response."""
+def _set_response_attributes(span: Span, msg: JSONRPCMessage) -> None:
+    """Set span attributes for a JSON-RPC response.
+
+    Args:
+        span (Span): Span to set attributes on
+        msg: Message to set attributes from
+    """
     root = msg.root
     if isinstance(root, JSONRPCResponse):
         span.set_attribute("jsonrpc.response.result", str(root.result))
@@ -134,40 +161,53 @@ def _set_response_attributes(span, msg) -> None:
 class TracedSendStream:
     """Stream wrapper that traces outgoing messages."""
 
-    def __init__(self, stream, tracer, active_spans) -> None:
+    def __init__(self, stream: MemoryObjectSendStream, tracer: Tracer, active_spans: dict[str, Span]) -> None:
         """
         Initialize traced send stream.
 
         Args:
-            stream: Stream to wrap
-            tracer: OpenTelemetry tracer
-            active_spans: Dictionary of active spans by message ID
+            stream (MemoryObjectSendStream): Stream to wrap
+            tracer (Tracer): OpenTelemetry tracer
+            active_spans (dict[str, Span]): Dictionary of active spans by message ID
 
         """
         self._stream = stream
         self._tracer = tracer
         self._active_spans = active_spans
 
-    async def __aenter__(self):
-        """Enter the async context manager."""
+    async def __aenter__(self) -> Self:
+        """
+        Enter the async context manager.
+
+        Returns:
+            Self: The traced send stream instance.
+        """
         await self._stream.__aenter__()
         return self
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        """Exit the async context manager."""
-        return await self._stream.__aexit__(exc_type, exc_val, exc_tb)
+    async def __aexit__(
+        self, exc_type: type[BaseException] | None, exc_val: BaseException | None, exc_tb: TracebackType | None
+    ) -> None:
+        """
+        Exit the async context manager.
 
-    async def send(self, msg) -> None:
+        Args:
+            exc_type (type[BaseException] | None): Exception type
+            exc_val (BaseException | None): Exception value
+            exc_tb (TracebackType | None): Traceback
+
+        """
+        await self._stream.__aexit__(exc_type, exc_val, exc_tb)
+
+    async def send(self, msg: JSONRPCMessage) -> None:
         """
         Send a message with tracing.
 
         Args:
-            msg: Message to send
+            msg (JSONRPCMessage): Message to send
 
         """
-        root = getattr(msg, "root", None)
-
-        if isinstance(root, JSONRPCNotification):
+        if isinstance(msg, JSONRPCNotification):
             _handle_notification(
                 self._tracer,
                 msg,
@@ -183,21 +223,30 @@ class TracedSendStream:
 
         await self._stream.send(msg)
 
-    def __getattr__(self, attr):
+    def __getattr__(self, attr: str) -> type[Any]:
+        """
+        Get an attribute from the underlying stream.
+
+        Args:
+            attr (str): Name of the attribute to get.
+
+        Returns:
+            type[Any]: The attribute value from the underlying stream.
+        """
         return getattr(self._stream, attr)
 
 
 class TracedReceiveStream:
     """Stream wrapper that traces incoming messages."""
 
-    def __init__(self, stream, tracer, active_spans) -> None:
+    def __init__(self, stream: MemoryObjectReceiveStream, tracer: Tracer, active_spans: dict[str, Span]) -> None:
         """
         Initialize traced receive stream.
 
         Args:
-            stream: Stream to wrap
-            tracer: OpenTelemetry tracer
-            active_spans: Dictionary of active spans by message ID
+            stream (MemoryObjectReceiveStream): Stream to wrap
+            tracer (Tracer): OpenTelemetry tracer
+            active_spans (dict[str,Span]): Dictionary of active spans by message ID
 
         """
         self._stream = stream
@@ -205,21 +254,36 @@ class TracedReceiveStream:
         self._active_spans = active_spans
         self._current_span = None
 
-    async def __aenter__(self):
-        """Enter the async context manager."""
+    async def __aenter__(self) -> Self:
+        """
+        Enter the async context manager.
+
+        Returns:
+            Self: The traced receive stream instance.
+        """
         await self._stream.__aenter__()
         return self
 
-    async def __aexit__(self, exc_type, exc_val, exc_tb):
-        """Exit the async context manager."""
-        return await self._stream.__aexit__(exc_type, exc_val, exc_tb)
+    async def __aexit__(
+        self, exc_type: type[BaseException] | None, exc_val: BaseException | None, exc_tb: TracebackType | None
+    ) -> None:
+        """
+        Exit the async context manager.
 
-    async def receive(self):
+        Args:
+            exc_type (type[BaseException] | None): Exception type
+            exc_val (BaseException | None): Exception value
+            exc_tb (TracebackType | None): Traceback
+
+        """
+        await self._stream.__aexit__(exc_type, exc_val, exc_tb)
+
+    async def receive(self) -> JSONRPCMessage:
         """
         Receive a message with tracing.
 
         Returns:
-            Any: The received message
+            JSONRPCMessage: The received message
 
         """
         msg = await self._stream.receive()
@@ -242,28 +306,70 @@ class TracedReceiveStream:
         return msg
 
     def __aiter__(self) -> AsyncIterator:
+        """
+        Return async iterator for the traced receive stream.
+
+        Returns:
+            AsyncIterator: Traced async iterator for receiving messages.
+
+        """
         return TracedAsyncIterator(
             self._stream.__aiter__(),
             self._tracer,
             self._active_spans,
         )
 
-    def __getattr__(self, attr):
+    def __getattr__(self, attr: str) -> JSONRPCMessage:
+        """
+        Get an attribute from the underlying stream.
+
+        Args:
+            attr (str): Name of the attribute to get.
+
+        Returns:
+            JSONRPCMessage: The attribute value from the underlying stream.
+        """
         return getattr(self._stream, attr)
 
 
 class TracedAsyncIterator:
     """Async iterator wrapper that traces message iteration."""
 
-    def __init__(self, iterator: AsyncIterator, tracer, active_spans) -> None:
+    def __init__(self, iterator: AsyncIterator, tracer: Tracer, active_spans: dict[str, Span]) -> None:
+        """
+        Initialize traced async iterator.
+
+        Args:
+            iterator (AsyncIterator): Iterator to wrap
+            tracer (Tracer): OpenTelemetry tracer
+            active_spans (dict[str,Span]): Dictionary of active spans by message ID
+
+        """
         self._iterator = iterator
         self._tracer = tracer
         self._active_spans = active_spans
 
-    def __aiter__(self):
+    def __aiter__(self) -> Self:
+        """
+        Return the async iterator instance.
+
+        Returns:
+            Self: The traced async iterator instance.
+
+        """
         return self
 
-    async def __anext__(self):
+    async def __anext__(self) -> JSONRPCMessage:
+        """
+        Get next message from the iterator with tracing.
+
+        Returns:
+            JSONRPCMessage: The next message from the iterator.
+
+        Raises:
+            StopAsyncIteration: When there are no more items to iterate over.
+
+        """
         msg = await self._iterator.__anext__()
         root = getattr(msg, "root", None)
 

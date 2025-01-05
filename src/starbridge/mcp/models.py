@@ -5,7 +5,15 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class ResourceMetadata:
-    """A resource type is identified by a triple of (server, service, type)."""
+    """
+    A resource type is identified by a triple of (server, service, type).
+
+    Args:
+        server (str): The server name.
+        service (str): The service name.
+        type (str): The resource type.
+
+    """
 
     server: str
     service: str
@@ -24,7 +32,15 @@ class ResourceMetadata:
 
 @dataclass(frozen=True)
 class PromptMetadata:
-    """A prompt is identified by server, service, and type."""
+    """
+    A prompt is identified by server, service, and type.
+
+    Args:
+        server (str): The server name.
+        service (str): The service name.
+        type (str): The prompt type.
+
+    """
 
     server: str
     service: str
@@ -43,7 +59,15 @@ class PromptMetadata:
 
 @dataclass(frozen=True)
 class ToolMetadata:
-    """A tool is identified by server, service, and name."""
+    """
+    A tool is identified by server, service, and name.
+
+    Args:
+        server (str): The server name.
+        service (str): The service name.
+        name (str): The tool name.
+
+    """
 
     server: str
     service: str

@@ -22,6 +22,9 @@ class Service(MCPBaseService):
         """
         Check health of Hello World service.
 
+        Args:
+            context (MCPContext | None): Optional MCP context.
+
         Returns:
             Health: The health status of the service.
 
@@ -32,6 +35,9 @@ class Service(MCPBaseService):
     def info(self, context: MCPContext | None = None) -> dict:  # noqa: ARG002, PLR6301
         """
         Info about Hello world environment.
+
+        Args:
+            context (MCPContext | None): Optional MCP context.
 
         Returns:
             dict: Information about the Hello World service environment.
@@ -45,8 +51,8 @@ class Service(MCPBaseService):
         Print hello world in different languages.
 
         Args:
-            locale: Language/region code to use for the greeting.
-            context: Optional MCP context.
+            locale (str): Language/region code to use for the greeting.
+            context (MCPContext | None): Optional MCP context.
 
         Returns:
             str: The greeting message in the specified language.
@@ -71,11 +77,14 @@ class Service(MCPBaseService):
             """
             Show image of starbridge.
 
+            Args:
+                context (MCPContext | None): Optional MCP context.
+
             Returns:
                 PIL.Image.Image: Image object containing the starbridge logo
 
             """
-            import cairosvg  # noqa: PLC0415
+            import cairosvg  # type: ignore # noqa: PLC0415
             from PIL import Image  # noqa: PLC0415
 
             return Image.open(
@@ -88,6 +97,9 @@ class Service(MCPBaseService):
     def pdf(self, context: MCPContext | None = None) -> EmbeddedResource:  # noqa: ARG002, PLR6301
         """
         Show pdf document with Hello World.
+
+        Args:
+            context (MCPContext | None): Optional MCP context.
 
         Returns:
             EmbeddedResource: A PDF document containing Hello World
@@ -106,6 +118,9 @@ class Service(MCPBaseService):
     def pdf_bytes(context: MCPContext | None = None) -> bytes:  # noqa: ARG004
         """
         Show pdf document with Hello World.
+
+        Args:
+            context (MCPContext | None): Optional MCP context.
 
         Returns:
             bytes: PDF document containing Hello World as bytes

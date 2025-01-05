@@ -22,6 +22,10 @@ def description_and_params(  # noqa: C901
     """
     Extract the function description and parameter descriptions from a function's docstring.
 
+    Args:
+        func: The function to extract descriptions from.
+        excluded_params: A tuple of parameter names to exclude from the result.
+
     Returns:
         A tuple of (main function description, parameter properties dict).
 

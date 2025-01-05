@@ -75,7 +75,7 @@ def mcp_resource_iterator(
 
     def decorator(func: Callable) -> Callable:
         @wraps(func)
-        def wrapper(*args, **kwargs) -> R:
+        def wrapper(*args, **kwargs) -> R:  # type: ignore
             return func(*args, **kwargs)
 
         wrapper.__mcp_resource_iterator__ = ResourceMetadata(  # type: ignore
@@ -108,7 +108,7 @@ def mcp_resource(
 
     def decorator(func: Callable) -> Callable:
         @wraps(func)
-        def wrapper(*args, **kwargs) -> R:
+        def wrapper(*args, **kwargs) -> R:  # type: ignore
             return func(*args, **kwargs)
 
         wrapper.__mcp_resource__ = ResourceMetadata(  # type: ignore
@@ -141,7 +141,7 @@ def mcp_prompt(
 
     def decorator(func: Callable) -> Callable:
         @wraps(func)
-        def wrapper(*args, **kwargs) -> R:
+        def wrapper(*args, **kwargs) -> R:  # type: ignore
             return func(*args, **kwargs)
 
         wrapper.__mcp_prompt__ = PromptMetadata(  # type: ignore

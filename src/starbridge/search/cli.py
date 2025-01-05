@@ -32,7 +32,13 @@ def info() -> None:
 def web(
     q: Annotated[str, typer.Argument(help="Query")],
 ) -> None:
-    """Search the web."""
+    """
+    Search the web.
+
+    Args:
+        q (str): Query
+
+    """
     try:
         rtn = asyncio.run(Service().web(q=q))
         console.print_json(rtn.model_dump_json())

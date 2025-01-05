@@ -28,6 +28,9 @@ class Service(MCPBaseService):
         """
         Check if Claude Desktop application is installed and is running.
 
+        Args:
+            context (MCPContext | None): Optional MCP context.
+
         Returns:
             Health: Health status of the Claude Desktop application.
 
@@ -49,6 +52,9 @@ class Service(MCPBaseService):
         Get info about Claude Desktop application.
 
         This includes if it is installed, running, config, and processes running next to Claude.
+
+        Args:
+            context (MCPContext | None): Optional MCP context.
 
         Returns:
             dict: Information about the Claude Desktop application.
@@ -92,6 +98,9 @@ class Service(MCPBaseService):
         Restart Claude Desktop application.
 
         The agent should use this tool when asked to restart itself.
+
+        Args:
+            context (MCPContext | None): Optional MCP context.
 
         Returns:
             str: Confirmation message.
@@ -198,6 +207,9 @@ class Service(MCPBaseService):
         """
         Write config to file.
 
+        Args:
+            config (dict): Configuration data to write.
+
         Returns:
             dict: Written configuration data.
 
@@ -234,6 +246,9 @@ class Service(MCPBaseService):
         """
         Get path of MCP server log file.
 
+        Args:
+            mcp_server_name (str | None): Name of the MCP server. Defaults to project name.
+
         Returns:
             Path: Log file path.
 
@@ -251,6 +266,11 @@ class Service(MCPBaseService):
     ) -> bool:
         """
         Install MCP server in Claude Desktop application.
+
+        Args:
+            mcp_server_config (dict): Configuration for the MCP server.
+            mcp_server_name (str): Name of the MCP server.
+            restart (bool): Restart Claude Desktop application after installation.
 
         Returns:
             bool: True if installation successful.
@@ -287,6 +307,10 @@ class Service(MCPBaseService):
     ) -> bool:
         """
         Uninstall MCP server from Claude Desktop application.
+
+        Args:
+            mcp_server_name (str): Name of the MCP server.
+            restart (bool): Restart Claude Desktop application after uninstallation.
 
         Returns:
             bool: True if uninstallation successful.

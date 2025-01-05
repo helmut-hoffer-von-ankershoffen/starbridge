@@ -33,7 +33,13 @@ def info() -> None:
 
 @cli.command()
 def hello(locale: Annotated[str, typer.Option(help="Locale to use")] = "en_US") -> None:
-    """Print Hello World."""
+    """
+    Print Hello World.
+
+    Args:
+        locale (str): Locale to use
+
+    """
     console.print(Service().hello(locale))
 
 
@@ -49,7 +55,14 @@ if hasattr(Service, "bridge"):
             ),
         ] = False,
     ) -> None:
-        """Show image of starbridge."""
+        """
+        Show image of starbridge.
+
+        Args:
+            dump (bool): If set, will dump to file starbridge.png in current working directory.
+                Defaults to opening viewer to show the image.
+
+        """
         try:
             image = Service().bridge()
             if dump:
@@ -84,7 +97,14 @@ def pdf(
         ),
     ] = False,
 ) -> None:
-    """Show pdf of starbridge."""
+    """
+    Show pdf of starbridge.
+
+    Args:
+        dump (bool): If set, will dump to file starbridge.pdf in current working directory.
+            Defaults to opening viewer to show the document.
+
+    """
     pdf = Service().pdf_bytes()
 
     if dump:

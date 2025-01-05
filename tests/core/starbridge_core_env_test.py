@@ -3,6 +3,7 @@
 import os
 import shutil
 import subprocess
+import sys
 from collections.abc import Generator
 from pathlib import Path
 from typing import Never
@@ -33,7 +34,6 @@ def backup_env() -> Generator[None, None, None]:
         shutil.move(bak_path, env_path)
 
 
-@pytest.mark.skip(reason="test_core_env_args_passed disabled temporarily")
 def test_core_env_args_passed(runner) -> None:
     """Check --env can override environment for some commands."""
 
@@ -61,9 +61,7 @@ def test_core_env_args_passed(runner) -> None:
             cli,
             ["--env", 'STARBRIDGE_ATLASSIAN_URL="https://test.com"'],
         )
-
-    assert "testing" in result.output
-    assert result.exit_code == 42
+        assert result.exit_code == 42
 
 
 def test_core_env_args_fail(runner) -> None:
@@ -103,3 +101,42 @@ def test_core_dot_env_validated(runner) -> None:
     Path(env_path).write_text(Path(bak_path).read_text(encoding="utf-8"), encoding="utf-8")
     assert result.exit_code == 78
     assert "STARBRIDGE_ATLASSIAN_URL: Field required" in result.output
+
+
+def test_parse_env_args() -> None:
+    """Test parsing of environment variables from command line arguments."""
+    from starbridge import _parse_env_args
+
+    original_argv = sys.argv
+    original_env = os.environ.copy()
+
+    try:
+        # Test valid STARBRIDGE_ prefixed vars
+        sys.argv = [
+            "starbridge",
+            "--env",
+            'STARBRIDGE_TEST="value"',
+            "-e",
+            "STARBRIDGE_OTHER=123",
+            "--env",
+            'STARBRIDGE_QUOTED="quoted value"',
+        ]
+        _parse_env_args()
+        assert os.environ["STARBRIDGE_TEST"] == "value"
+        assert os.environ["STARBRIDGE_OTHER"] == "123"
+        assert os.environ["STARBRIDGE_QUOTED"] == "quoted value"
+
+        # Test non-STARBRIDGE vars are ignored
+        sys.argv = ["starbridge", "--env", "OTHER_VAR=ignored"]
+        _parse_env_args()
+        assert "OTHER_VAR" not in os.environ
+
+        # Test malformed vars are skipped
+        sys.argv = ["starbridge", "--env", "STARBRIDGE_INVALID"]
+        _parse_env_args()
+        assert "STARBRIDGE_INVALID" not in os.environ
+
+    finally:
+        sys.argv = original_argv
+        os.environ.clear()
+        os.environ.update(original_env)

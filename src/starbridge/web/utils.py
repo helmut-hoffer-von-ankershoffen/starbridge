@@ -58,6 +58,13 @@ async def get_respectfully(
     """
     Fetch URL with proper headers and robot.txt checking.
 
+    Args:
+        url (str): The URL to fetch
+        user_agent (str): User agent string to use for requests
+        accept_language (str): Accept-Language header value
+        timeout (int): Request timeout in seconds
+        respect_robots_txt (bool): Whether to respect robots.txt files when interacting with the web as an agent
+
     Returns:
         httpx.Response: The HTTP response from the requested URL.
 
@@ -82,7 +89,7 @@ def _get_robots_txt_url(url: str) -> str:
     Get the robots.txt URL for a given website URL.
 
     Args:
-        url: Website URL to get robots.txt for
+        url (str): Website URL to get robots.txt for
 
     Returns:
         URL of the robots.txt file
@@ -98,9 +105,9 @@ async def _ensure_allowed_to_crawl(url: str, user_agent: str, timeout: int = 5) 
     Ensure allowed to crawl the URL by the user agent according to the robots.txt file.
 
     Args:
-        url: Website URL to check
-        user_agent: User agent string to check permissions for
-        timeout: Request timeout in seconds
+        url (str): Website URL to check
+        user_agent (str): User agent string to check permissions for
+        timeout (int): Request timeout in seconds
 
     Raises:
         RobotForbiddenError: If crawling is not allowed according to the robots.txt file.
@@ -158,7 +165,7 @@ def _get_normalized_content_type(response: httpx.Response) -> str:
     Get the normalized content type from the response.
 
     Args:
-        response: The HTTP response to get the content type from.
+        response (httpx.Response): The HTTP response to get the content type from.
 
     Returns:
         str: The normalized MIME type of the response content.
@@ -200,7 +207,7 @@ def _get_markdown_from_html(html: str) -> str:
     Get markdown from HTML content.
 
     Args:
-        html: The HTML content to convert
+        html (str): The HTML content to convert
 
     Returns:
         str: The converted markdown content
@@ -217,6 +224,9 @@ def _get_markdown_from_html(html: str) -> str:
 def _get_markdown_from_pdf(response: httpx.Response) -> str | None:
     """
     Get markdown from PDF content.
+
+    Args:
+        response (httpx.Response): HTTP response containing PDF document
 
     Returns:
         str | None: Markdown string if conversion is successful, None otherwise
@@ -235,7 +245,7 @@ def _get_markdown_from_word(response: httpx.Response) -> str | None:
     Convert Word document content to markdown.
 
     Args:
-        response: HTTP response containing Word document
+        response (httpx.Response): HTTP response containing Word document
 
     Returns:
         Markdown string if conversion successful, None otherwise
@@ -268,8 +278,8 @@ def transform_content(
     Process response according to requested format.
 
     Args:
-        response: The HTTP response to process
-        transform_to_markdown: Whether to attempt converting content to markdown
+        response (httpx.Response): The HTTP response to process
+        transform_to_markdown (bool): Whether to attempt converting content to markdown
 
     Returns:
         Resource: Processed content as a Resource object
@@ -335,8 +345,8 @@ def _extract_links_from_html(html: str, url: str) -> list[LinkTarget]:
     Extract links from HTML content.
 
     Args:
-        html: The HTML content to extract links from
-        url: The base URL for resolving relative links
+        html (str): The HTML content to extract links from
+        url (str): The base URL for resolving relative links
 
     Returns:
         list[LinkTarget]: List of extracted links with metadata
@@ -374,7 +384,7 @@ def extract_links_from_response(
     Extract links from HTML content.
 
     Args:
-        response: The HTTP response to extract links from.
+        response (httpx.Response): The HTTP response to extract links from.
 
     Returns:
         list[LinkTarget]: List of extracted links with their metadata.
@@ -403,11 +413,11 @@ async def get_additional_context_for_url(
     Get additional context for the url.
 
     Args:
-        url: The URL to get additional context for
-        user_agent: User agent string to use for requests
-        accept_language: Accept-Language header value
-        timeout: Request timeout in seconds
-        full: Whether to try fetching llms-full.txt first
+        url (str): The URL to get additional context for
+        user_agent (str): User agent string to use for requests
+        accept_language (str): Accept-Language header value
+        timeout (int): Request timeout in seconds
+        full (bool): Whether to try fetching llms-full.txt first
 
     Returns:
         List of Context objects with additional information

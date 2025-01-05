@@ -71,7 +71,13 @@ def prompts() -> None:
 def prompt_space_summary(
     style: Annotated[str, typer.Option(help="Style of summary")] = "brief",
 ) -> None:
-    """Prompt to generate summary of spaces."""
+    """
+    Prompt to generate summary of spaces.
+
+    Args:
+        style (str): Style of summary
+
+    """
     console.print(Service().space_summary(style))
 
 
@@ -101,7 +107,13 @@ def page() -> None:
 
 @cli_page.command(name="list")
 def page_list(space_key: str = typer.Option(..., help="Space key")) -> None:
-    """List pages in a space."""
+    """
+    List pages in a space.
+
+    Args:
+        space_key (str): Key of the space to list pages from
+
+    """
     console.print(Service().page_list(space_key))
 
 
@@ -112,7 +124,16 @@ def page_create(
     body: str = typer.Option(..., help="Body of the page"),
     page_id: str = typer.Option(None, help="Parent page id"),
 ) -> None:
-    """Create a new page."""
+    """
+    Create a new page.
+
+    Args:
+        space_key (str): Key of the space to create the page in
+        title (str): Title of the page
+        body (str): Body of the page
+        page_id (str): Parent page
+
+    """
     console.print(Service().page_create(space_key, title, body, page_id))
 
 
@@ -130,11 +151,25 @@ def page_update(
     title: str = typer.Option(..., help="Title of the page"),
     body: str = typer.Option(..., help="Body of the page"),
 ) -> None:
-    """Update a page."""
+    """
+    Update a page.
+
+    Args:
+        page_id (str): Page id
+        title (str): Title of the page
+        body (str): Body of the page
+
+    """
     console.print(Service().page_update(page_id, title, body))
 
 
 @cli_page.command(name="delete")
 def page_delete(page_id: str = typer.Option(..., help="Pager id")) -> None:
-    """Delete a page."""
+    """
+    Delete a page.
+
+    Args:
+        page_id (str): Page id
+
+    """
     console.print(Service().page_delete(page_id))

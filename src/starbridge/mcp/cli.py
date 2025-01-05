@@ -42,7 +42,14 @@ def tool(
         typer.Option(help="Arguments in key=value format"),
     ] = None,
 ) -> None:
-    """Get tool by name with optional arguments."""
+    """
+    Get tool by name with optional arguments.
+
+    Args:
+        name (str): Name of the tool
+        arguments (list[str]): Arguments in key=value format
+
+    """
     args = {}
     if arguments:
         for arg in arguments:
@@ -59,7 +66,13 @@ def resources() -> None:
 
 @cli.command()
 def resource(uri: str) -> None:
-    """Get resource by URI."""
+    """
+    Get resource by URI.
+
+    Args:
+        uri (str): URI of the resources
+
+    """
     console.print(MCPServer.resource(uri))
 
 
@@ -77,7 +90,14 @@ def prompt(
         typer.Option(help="Arguments in key=value format"),
     ] = None,
 ) -> None:
-    """Get a prompt by name with optional arguments."""
+    """
+    Get a prompt by name with optional arguments.
+
+    Args:
+        name (str): Name of the prompt
+        arguments (list[str]): Arguments in key=value format
+
+    """
     args = {}
     if arguments:
         for arg in arguments:
@@ -123,7 +143,18 @@ def serve(
         ),
     ] = None,
 ) -> None:
-    """Run MCP server."""
+    """
+    Run MCP server.
+
+    Args:
+        host (str): Host to run the server on
+        port (int): Port to run the server on
+        debug (bool): Debug mode
+        env (list[str]): Environment variables in key=value format. Can be used multiple times in one call.
+            Only `STARBRIDGE_` prefixed vars are used. Example --env
+            `STARBRIDGE_ATLASSIAN_URL="https://your-domain.atlassian.net" --env STARBRIDGE_ATLASSIAN_EMAIL="YOUR_EMAIL"`
+
+    """
     MCPServer().serve(host, port, debug)
 
 

@@ -32,6 +32,9 @@ class Service(MCPBaseService):
         """
         Check health of the search service.
 
+        Args:
+            context (MCPContext | None): MCP context for the operation
+
         Returns:
             Health: The health status of the search service.
 
@@ -47,6 +50,9 @@ class Service(MCPBaseService):
     def info(self, context: MCPContext | None = None) -> dict:  # noqa: ARG002, PLR6301
         """
         Info about search environment.
+
+        Args:
+            context (MCPContext | None): MCP context for the
 
         Returns:
             dict: Information about the search environment configuration.

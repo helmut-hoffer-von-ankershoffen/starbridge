@@ -63,7 +63,19 @@ def main(
         ),
     ] = None,
 ) -> None:
-    """Run MCP Server - alias for 'mcp serve'."""
+    """
+    Run MCP Server - alias for 'mcp serve'.
+
+    Args:
+        ctx (typer.Context): Typer context
+        host (str): Host to run the server on
+        port (int): Port to run the server on
+        debug (bool): Debug mode
+        env (list[str]): Environment variables in key=value format. Can be used multiple times in one call.
+            Only STARBRIDGE_ prefixed vars are used. Example --env
+            'STARBRIDGE_ATLASSIAN_URL="https://your-domain.atlassian.net" --env STARBRIDGE_ATLASSIAN_EMAIL="YOUR_EMAIL"'
+
+    """
     # --env parsed in main __init__.py
     if ctx.invoked_subcommand is None:
         MCPServer.serve(host, port, debug)
@@ -126,6 +138,11 @@ def install(
     Install starbridge within Claude Desktop application.
 
     Adds starbridge configuration and restarts Claude Desktop app.
+
+    Args:
+        restart_claude (bool): Restart Claude Desktop application post installation
+        image (str): Docker image to use for Starbridge. Only applies if started as container
+
     """
     if ClaudeService.install_mcp_server(
         generate_mcp_server_config(prompt_for_env(), image),
@@ -153,6 +170,10 @@ def uninstall(
     Uninstall starbridge from Claude Desktop application.
 
     Removes starbridge configuration and restarts Claude Desktop app.
+
+    Args:
+        restart_claude (bool): Restart Claude Desktop application post installation
+
     """
     if ClaudeService.uninstall_mcp_server(restart=restart_claude):
         console.print("Starbridge uninstalled from Claude Destkop application.")
