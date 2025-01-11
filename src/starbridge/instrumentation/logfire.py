@@ -33,9 +33,13 @@ class LogfireSettings(BaseSettings):
             default="production",
         ),
     ]
-    instrument_mcp_enabled: Annotated[
+    instrument_mcp: Annotated[
         bool,
-        Field(description="Enable MCP instrumentation", default=False),
+        Field(description="Enable MCP instrumentation", default=True),
+    ]
+    instrument_system_metrics: Annotated[
+        bool,
+        Field(description="Enable system metrics instrumentation", default=False),
     ]
 
 
@@ -64,8 +68,10 @@ def logfire_initialize() -> bool | None:
             root_path="",
         ),
     )
-    logfire.instrument_system_metrics(base="full")
-
-    if settings.instrument_mcp_enabled:
+    if settings.instrument_mcp:
         MCPInstrumentor().instrument()
+
+    if settings.instrument_system_metrics:
+        logfire.instrument_system_metrics(base="full")
+
     return None

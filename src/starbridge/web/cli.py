@@ -62,6 +62,16 @@ def get(  # noqa: PLR0913, PLR0917
             help="provide llms-full.txt in contexts",
         ),
     ] = False,
+    force_not_respecting_robots_txt: Annotated[
+        bool,
+        typer.Option(
+            "--force-not-respecting-robots-txt",
+            help="Force not respecting robots.txt. If True, the agent will ignore robots.txt."
+            "If False, the agent will respect robots.txt if the environment variable"
+            "STARBRIDGE_WEB_RESPPECT_ROBOTS_TXT is set to 1."
+            "Defaults to False.",
+        ),
+    ] = False,
 ) -> None:
     """
     Fetch content from the world wide web via HTTP GET.
@@ -75,6 +85,10 @@ def get(  # noqa: PLR0913, PLR0917
         extract_links (bool): include extracted links in the response
         additional_context (bool): include additional context in the response
         llms_full_txt (bool): provide llms-full.txt in contexts
+        force_not_respecting_robots_txt (bool): do not respect robots.txt
+            If False, the agent will respect robots.txt if the environment variable
+                STARBRIDGE_WEB_RESPPECT_ROBOTS_TXT is set to 1.
+            Defaults to False
 
     """
     try:
@@ -86,6 +100,7 @@ def get(  # noqa: PLR0913, PLR0917
                 extract_links=extract_links,
                 additional_context=additional_context,
                 llms_full_txt=llms_full_txt,
+                force_not_respecting_robots_txt=force_not_respecting_robots_txt,
             ),
         )
         console.print_json(rtn.model_dump_json())

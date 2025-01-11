@@ -1,18 +1,16 @@
 """Utility functions for web-related operations like URL handling, content transformation, and link extraction."""
 
+import warnings
 from http import HTTPStatus
 from urllib.parse import urljoin, urlparse, urlunparse
 
 import httpx
 import markdown
-import requests
 from bs4 import BeautifulSoup
 from httpx import AsyncClient, HTTPError
-from markdownify import ATX, MarkdownConverter, markdownify
-from markitdown import MarkItDown
+from markdownify import ATX, MarkdownConverter
 from protego import Protego
 from pydantic import AnyHttpUrl
-from readabilipy.simple_json import simple_json_from_html_string
 
 from starbridge.utils import get_logger
 
@@ -37,13 +35,10 @@ def is_connected() -> bool:
 
     """
     try:
-        response = requests.head("https://www.google.com", timeout=5)
-        logger.info(
-            "Called head on https://www.google.com/, got status_code: %s",
-            response.status_code,
-        )
+        response = httpx.head("https://www.google.com", timeout=5)
         return response.status_code == HTTPStatus.OK
-    except requests.exceptions.RequestException:
+
+    except httpx.HTTPError:
         logger.exception("Failed to connect to www.google.com: %s")
     return False
 
@@ -213,9 +208,10 @@ def _get_markdown_from_html(html: str) -> str:
         str: The converted markdown content
 
     """
-    simplified = simple_json_from_html_string(html, use_readability=False)
-    if simplified["content"]:
-        return markdownify(simplified["content"], heading_style=ATX, strip=["img"])
+    # TODO (@helmut-hoffer-von-ankershoffen): Find reliable solution
+    # simplified = simple_json_from_html_string(html, use_readability=False)  # noqa: ERA001
+    # if simplified["content"]:
+    #    return markdownify(simplified["content"], heading_style=ATX, strip=["img"])  # noqa: ERA001
     return MarkdownConverter(heading_style=ATX, strip=["img"]).convert_soup(
         BeautifulSoup(html, HTML_PARSER),
     )
@@ -233,8 +229,12 @@ def _get_markdown_from_pdf(response: httpx.Response) -> str | None:
 
     """
     try:
-        rtn = MarkItDown().convert(str(response.url))
-        return rtn.text_content
+        with warnings.catch_warnings():  # See https://github.com/swig/swig/issues/2881
+            warnings.filterwarnings("ignore", category=DeprecationWarning)
+            import pymupdf4llm  # noqa: PLC0415
+            from pymupdf import Document as PyMuPDFDocument  # noqa: PLC0415
+
+            return pymupdf4llm.to_markdown(PyMuPDFDocument(None, response.content), show_progress=False)
     except Exception:
         logger.exception("Failed to convert PDF to markdown")
         return None
@@ -251,6 +251,8 @@ def _get_markdown_from_word(response: httpx.Response) -> str | None:
         Markdown string if conversion successful, None otherwise
 
     """
+    from markitdown import MarkItDown  # noqa: PLC0415, performance
+
     rtn = MarkItDown().convert(str(response.url))
     return rtn.text_content
 
@@ -266,6 +268,8 @@ def _get_markdown_from_excel(response: httpx.Response) -> str | None:
         Markdown string if conversion successful, None otherwise
 
     """
+    from markitdown import MarkItDown  # noqa: PLC0415, performance
+
     rtn = MarkItDown().convert(str(response.url))
     return rtn.text_content
 

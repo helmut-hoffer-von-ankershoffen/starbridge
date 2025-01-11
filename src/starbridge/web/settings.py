@@ -34,4 +34,4 @@ class Settings(BaseSettings):
         ),
     ]
 
-    timeout: Annotated[int, Field(default=5, description="Timeout for web requests.")]
+    timeout: Annotated[int, Field(default=60, description="Timeout for web requests.")]

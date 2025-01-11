@@ -1,0 +1,70 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "sync",
+            "type": "shell",
+            "command": "uv sync",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build"
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "parallel test",
+            "type": "shell",
+            "command": "uv run nox -s test",
+            "problemMatcher": [],
+            "group": {
+                "kind": "test"
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "lint",
+            "type": "shell",
+            "command": "uv run nox -s lint",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build"
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "docs",
+            "type": "shell",
+            "command": "uv run nox -s docs",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build"
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        },
+        {
+            "label": "build docker image",
+            "type": "shell",
+            "command": "docker build -t starbridge .",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build"
+            },
+            "presentation": {
+                "reveal": "always",
+                "panel": "new"
+            }
+        }
+    ]
+}

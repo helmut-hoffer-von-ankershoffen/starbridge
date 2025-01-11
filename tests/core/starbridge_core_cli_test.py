@@ -20,6 +20,7 @@ INSTALLATION_INPUT = (
     "TEST_LOGFIRE_TOKEN\n"  # logfire token
     "production\n"  # logfire environment
     "1\n"  # instrument mcp server
+    "0\n"  # instrument system metrics
     "TEST\n"  # brave search api
     "INFO\n"  # log level
     "1\n"  # log to file
@@ -71,7 +72,8 @@ def test_core_cli_create_dot_env(runner, tmp_path) -> None:
         assert "STARBRIDGE_ATLASSIAN_API_TOKEN=TEST_CONFLUENCE_API_TOKEN" in dot_env
         assert "STARBRIDGE_LOGFIRE_TOKEN=TEST_LOGFIRE_TOKEN" in dot_env
         assert "STARBRIDGE_LOGFIRE_ENVIRONMENT=production" in dot_env
-        assert "STARBRIDGE_LOGFIRE_INSTRUMENT_MCP_ENABLED=1" in dot_env
+        assert "STARBRIDGE_LOGFIRE_INSTRUMENT_MCP=1" in dot_env
+        assert "STARBRIDGE_LOGFIRE_INSTRUMENT_SYSTEM_METRICS=0" in dot_env
         assert "STARBRIDGE_SEARCH_BRAVE_SEARCH_API_KEY=TEST" in dot_env
         assert "STARBRIDGE_LOGGING_LOGLEVEL=INFO" in dot_env
         assert "STARBRIDGE_LOGGING_LOG_FILE_ENABLED=1" in dot_env

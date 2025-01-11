@@ -67,6 +67,7 @@ class Service(MCPBaseService):
         extract_links: bool = True,
         additional_context: bool = True,
         llms_full_txt: bool = False,
+        force_not_respecting_robots_txt: bool = False,
         context: MCPContext | None = None,  # noqa: ARG002
     ) -> GetResult:
         """
@@ -96,6 +97,11 @@ class Service(MCPBaseService):
             additional_context (bool, optional): If set will include additional context about the URL
                 or it's domain in the response. Defaults to True.
             llms_full_txt (bool, optional): Whether to include llms-full.txt in additional context. Defaults to False.
+            force_not_respecting_robots_txt (bool, optional): Whether to **not** check robots.txt.
+                If True, the agent will ignore robots.txt.
+                If False, the agent will respect robots.txt if the environment variable
+                STARBRIDGE_WEB_RESPPECT_ROBOTS_TXT is set to 1.
+                Defaults to False.
             context (MCPContext | None, optional): Context object for request tracking. Defaults to None.
 
         Returns:
@@ -126,7 +132,7 @@ class Service(MCPBaseService):
         """
         response = await get_respectfully(
             url=url,
-            respect_robots_txt=self._settings.respect_robots_txt,
+            respect_robots_txt=(not force_not_respecting_robots_txt) and self._settings.respect_robots_txt,
             user_agent=self._settings.user_agent,
             accept_language=accept_language,
             timeout=self._settings.timeout,

@@ -3,8 +3,8 @@
 import json
 from unittest.mock import patch
 
+import httpx
 import pytest
-import requests
 from typer.testing import CliRunner
 
 from starbridge.cli import cli
@@ -33,10 +33,10 @@ def test_web_cli_health(runner) -> None:
     assert result.exit_code == 0
 
 
-@patch("requests.head")
+@patch("httpx.head")
 def test_web_cli_health_not_connected(mock_head, runner) -> None:
     """Check web health down when not connected."""
-    mock_head.side_effect = requests.exceptions.Timeout()
+    mock_head.side_effect = httpx.TimeoutException("timeout")
 
     result = runner.invoke(cli, ["web", "health"])
     assert '"DOWN"' in result.output
@@ -46,7 +46,7 @@ def test_web_cli_health_not_connected(mock_head, runner) -> None:
 @patch("httpx.AsyncClient.get")
 def test_web_cli_get_timeouts(mock_get, runner) -> None:
     """Check getting content fails."""
-    mock_get.side_effect = requests.exceptions.Timeout()
+    mock_get.side_effect = httpx.TimeoutException("timeout")
 
     result = runner.invoke(
         cli,
@@ -56,7 +56,7 @@ def test_web_cli_get_timeouts(mock_get, runner) -> None:
             GET_TEST_HTML_URL,
         ],
     )
-    assert "Request failed" in result.output
+    assert "Failed to fetch robots.txt" in result.output
     assert result.exit_code == 1
 
 
@@ -140,7 +140,7 @@ def test_web_cli_get_additional_context_llms_text(runner) -> None:
     rtn = GetResult.model_validate(json.loads(result.output))
     llms_txt = rtn.get_context_by_type("llms_txt")
     assert llms_txt is not None
-    assert "Get Api Key" in llms_txt.text
+    assert "Use Workbench to create evals" in llms_txt.text
     assert len(llms_txt.text) < 400 * 1024
     assert result.exit_code == 0
     invalid_context = rtn.get_context_by_type("invalid")
@@ -161,7 +161,7 @@ def test_web_cli_get_additional_context_llms_full_txt(runner) -> None:
     rtn = GetResult.model_validate(json.loads(result.output))
     llms_txt = rtn.get_context_by_type("llms_txt")
     assert llms_txt is not None
-    assert "Get Api Key" in llms_txt.text
+    assert "knowledge base was last updated in August 2023" in llms_txt.text
     assert len(llms_txt.text) > 400 * 1024
     assert result.exit_code == 0
 
@@ -184,7 +184,7 @@ def test_web_cli_get_additional_context_not(runner) -> None:
     assert llms_context is None
 
 
-def test_web_cli_get_forbidden(runner) -> None:
+def test_web_cli_get_forbidden_respected(runner) -> None:
     """Check getting content where robots.txt disallows fails."""
     result = runner.invoke(
         cli,
@@ -196,3 +196,18 @@ def test_web_cli_get_forbidden(runner) -> None:
     )
     assert "robots.txt disallows crawling" in result.output
     assert result.exit_code == 1
+
+
+def test_web_cli_get_forbidden_ignored(runner) -> None:
+    """Check getting content where robots.txt disallows fails."""
+    result = runner.invoke(
+        cli,
+        [
+            "web",
+            "get",
+            "--force-not-respecting-robots-txt",
+            "https://github.com/search/advanced",
+        ],
+    )
+    assert "Where software is built" in result.output
+    assert result.exit_code == 0
