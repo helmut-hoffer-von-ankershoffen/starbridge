@@ -64,7 +64,7 @@ class MCPInstrumentor(BaseInstrumentor):  # pragma: no cover
 
         mcp.server.stdio.stdio_server = instrumented_stdio_server
 
-    def _uninstrument(self, **_kwargs) -> Never:  # noqa: PLR6301
+    def _uninstrument(self, **_kwargs) -> Never:
         """
         Uninstall instrumentation.
 

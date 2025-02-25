@@ -1,4 +1,4 @@
-"""Logging configuration and utilities for the starbridge package."""  # noqa: A005
+"""Logging configuration and utilities for the starbridge package."""
 
 import logging as python_logging
 from typing import Annotated, Literal

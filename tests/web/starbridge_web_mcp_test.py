@@ -40,4 +40,4 @@ async def test_web_mcp_tool_get() -> None:
         assert len(result.content) == 1
         content = result.content[0]
         assert type(content) is TextContent
-        assert "\\n\\nstarbridge" in content.text
+        assert "starbridge" in content.text

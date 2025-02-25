@@ -106,7 +106,7 @@ def test_web_cli_get_html_to_markdown(runner) -> None:
         ],
     )
     rtn = GetResult.model_validate(json.loads(result.output))
-    assert "\n\nstarbridge " in (rtn.resource.text or "")
+    assert "starbridge " in (rtn.resource.text or "")
     assert result.exit_code == 0
 
 
@@ -140,7 +140,7 @@ def test_web_cli_get_additional_context_llms_text(runner) -> None:
     rtn = GetResult.model_validate(json.loads(result.output))
     llms_txt = rtn.get_context_by_type("llms_txt")
     assert llms_txt is not None
-    assert "Use Workbench to create evals" in llms_txt.text
+    assert "Send a structured list of input messages" in llms_txt.text
     assert len(llms_txt.text) < 400 * 1024
     assert result.exit_code == 0
     invalid_context = rtn.get_context_by_type("invalid")

@@ -1,4 +1,4 @@
-"""Platform and process related utilities."""  # noqa: A005
+"""Platform and process related utilities."""
 
 from pathlib import Path
 
