@@ -13,6 +13,7 @@ MOCK_GET_ALL_SPACES = "atlassian.Confluence.get_all_spaces"
 MOCK_GET_SPACE = "atlassian.Confluence.get_space"
 MOCK_GET_ALL_PAGES_FROM_SPACE = "atlassian.Confluence.get_all_pages_from_space"
 MOCK_GET_PAGE_BY_ID = "atlassian.Confluence.get_page_by_id"
+MOCK_CQL = "atlassian.Confluence.cql"
 FIXTURE_GET_ALL_SPACES = "tests/fixtures/get_all_spaces.json"
 
 
@@ -134,6 +135,26 @@ def test_confluence_cli_page_read(get_page_by_id, runner) -> None:
         ],
     )
     assert "Amazon Leadership Principles" in result.output
+    assert result.exit_code == 0
+
+
+@patch(MOCK_CQL)
+def test_confluence_cli_page_search(cql, runner) -> None:
+    """Check page list."""
+    # Mock the response data that would come from get_all_spaces
+    with Path("tests/fixtures/confluence_page_search.json").open(encoding="utf-8") as f:
+        cql.return_value = json.loads(f.read())
+    result = runner.invoke(
+        cli,
+        [
+            "confluence",
+            "page",
+            "search",
+            "--query",
+            '"title ~ Helmut"',
+        ],
+    )
+    assert "4711" in result.output
     assert result.exit_code == 0
 
 

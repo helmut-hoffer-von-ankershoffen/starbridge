@@ -1,0 +1,57 @@
+{
+    "results": [
+        {
+            "content": {
+                "id": "4711",
+                "type": "page",
+                "status": "current",
+                "title": "Helmut Rudolf (Oertel) Hoffer von Ankershoffen",
+                "childTypes": {},
+                "macroRenderedOutput": {},
+                "restrictions": {},
+                "_expandable": {
+                    "container": "",
+                    "metadata": "",
+                    "extensions": "",
+                    "operations": "",
+                    "children": "",
+                    "history": "/rest/api/content/4711/history",
+                    "ancestors": "",
+                    "body": "",
+                    "version": "",
+                    "descendants": "",
+                    "space": "/rest/api/space/~4711"
+                },
+                "_links": {
+                    "webui": "/spaces/~4711/overview",
+                    "self": "https://aignx.atlassian.net/wiki/rest/api/content/1426260788",
+                    "tinyui": "/x/NAMDVQ"
+                }
+            },
+            "title": "@@@hl@@@Helmut@@@endhl@@@ Rudolf (Oertel) @@@hl@@@Hoffer@@@endhl@@@ @@@hl@@@von@@@endhl@@@ @@@hl@@@Ankershoffen@@@endhl@@@",
+            "excerpt": "@@@hl@@@Contact@@@endhl@@@:\nSlack: @@@hl@@@helmut@@@endhl@@@  (preferred)\n@@@hl@@@Phone@@@endhl@@@: +494711  (urgencies only)\nMail: helmut@mail.com!",
+            "url": "/spaces/~4711/overview",
+            "resultGlobalContainer": {
+                "title": "helmut",
+                "displayUrl": "/spaces/~4711"
+            },
+            "breadcrumbs": [],
+            "entityType": "content",
+            "iconCssClass": "aui-icon content-type-page",
+            "lastModified": "2025-02-26T07:35:33.000Z",
+            "friendlyLastModified": "8 minutes ago",
+            "score": 0.0
+        }
+    ],
+    "start": 0,
+    "limit": 1000,
+    "size": 1,
+    "totalSize": 5,
+    "cqlQuery": "text ~ \"Helmut Hoffer von Ankershoffen phone number\" OR text ~ \"Helmut phone\" OR text ~ \"contact information Helmut\"",
+    "searchDuration": 268,
+    "_links": {
+        "base": "https://aignx.atlassian.net/wiki",
+        "context": "/wiki",
+        "self": "https://aignx.atlassian.net/wiki/rest/api/search?expand=False&includeArchivedSpaces=True&cql=text+~+%22Helmut+Hoffer+von+Ankershoffen+phone+number%22+OR+text+~+%22Helmut+phone%22+OR+text+~+%22contact+information+Helmut%22"
+    }
+}

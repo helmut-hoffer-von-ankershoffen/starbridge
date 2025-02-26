@@ -117,6 +117,20 @@ def page_list(space_key: str = typer.Option(..., help="Space key")) -> None:
     console.print(Service().page_list(space_key))
 
 
+@cli_page.command(name="search")
+def page_search(
+    query: str = typer.Option(..., help="Confluence query language (CQL) query to search for pages"),
+) -> None:
+    """
+    Search pages in a space.
+
+    Args:
+        query (str): Confluence query language (CQL) query to search for pages
+
+    """
+    console.print(Service().page_search(query))
+
+
 @cli_page.command(name="create")
 def page_create(
     space_key: str = typer.Option(..., help="Space key"),

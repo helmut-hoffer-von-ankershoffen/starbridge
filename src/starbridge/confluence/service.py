@@ -263,7 +263,7 @@ class Service(MCPBaseService):
         self,
         page_id: str,
         status: str | None = None,
-        expand: str | None = None,
+        expand: str = "space,history,body.view,metadata.labels,version",
         version: str | None = None,
         context: MCPContext | None = None,  # noqa: ARG002
     ) -> Response | type[Any] | bytes | str | None:
@@ -274,8 +274,8 @@ class Service(MCPBaseService):
             page_id (str): The ID of the page to retrieve
             status (str | None): Page status to retrieve ('current' or specific version, defaults to None, i.e. current"
                 " version")
-            expand (str | None): A comma-separated list of properties to expand in the response
-                (defaults to None, i.e. 'history,space,version')
+            expand (str): A comma-separated list of properties to expand in the response
+                (defaults to 'space,history,body.view,metadata.labels,version')
             version (str | None): Specific version number to retrieve (optional)
             context (MCPContext | None): MCP context for the operation
 
@@ -385,11 +385,11 @@ class Service(MCPBaseService):
 
         Args:
             space_key (str): The key of the space to get pages from
-            start (iint): The starting index of the returned pages (defaults to 0)
+            start (int): The starting index of the returned pages (defaults to 0)
             limit (int): Maximum number of pages to return (defaults to 1000)
             status (str | None): Filter by page status ('current' or 'archived', defaults to None, i.e. all pages)
             expand (str | None): A comma-separated list of properties to expand in the response
-                (defaults to None, i.e. 'history,space,version')
+                (defaults to None, i.e. 'space,history,body.view,metadata.labels,version')
             content_type (str): The type of content to return (defaults to 'page')
             context (MCPContext | None): MCP context for the operation
 
@@ -408,3 +408,40 @@ class Service(MCPBaseService):
             expand,
             content_type,
         )
+
+    @mcp_tool()
+    def page_search(
+        self,
+        query: str,
+        start: int = 0,
+        limit: int = 1000,
+        include_archived_spaces: bool = False,
+        excerpt: bool = True,
+        context: MCPContext | None = None,  # noqa: ARG002
+    ) -> Response | type[Any] | bytes | str | None:
+        """Search for pages within or across a confluence space.
+
+        As an agent remember that the query is to be given in Confluence query language (CQL).
+        E.g. 'title ~ Helmut OR text ~ Helmut' searches in those fields.
+        See https://developer.atlassian.com/server/confluence/advanced-searching-using-cql
+        for a definition of CQL.
+
+        Args:
+            query (str): Confluence query language (CQL) query to search for pages.
+                E.g. 'title ~ Helmut OR text ~ Helmut' searches in those fields.
+                See https://developer.atlassian.com/server/confluence/advanced-searching-using-cql
+                for a definition of CQL.
+            start (int): The starting index of the returned pages (defaults to 0)
+            limit (int): Maximum number of pages to return (defaults to 1000)
+            include_archived_spaces (bool): If True, include archived spaces in the search (defaults to False)
+            excerpt (bool): If True, include an excerpt of the page content in the response (defaults to True)
+            context (MCPContext | None): MCP context for the operation
+
+        Raises:
+            HTTPError: If the request to the Confluence API fails
+
+        Returns:
+            Response | type[Any] | bytes | str | None: List of pages in the specified space
+
+        """
+        return self._api.cql(query, start, limit, include_archived_spaces, excerpt)
