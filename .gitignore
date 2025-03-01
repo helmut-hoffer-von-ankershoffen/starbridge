@@ -1,5 +1,17 @@
-# Python build artifacts
-*.py[cod]
+# Environment
+.env
+.env.backup
+.env.bak
+ENV/
+env/
+.envrc
+
+# Python virtual environment
+venv/
+.venv/
+
+# Python temps
+*.py[cdo]
 __pycache__/
 *.so
 *.egg
@@ -9,31 +21,18 @@ dist/
 build/
 eggs/
 parts/
-var/
 sdist/
 develop-eggs/
 .installed.cfg
-lib/
-lib64/
 .Python
-
-# Virtual environment
-venv/
-.venv/
-ENV/
-
-# IDE
-.idea/
-*.swp
-*.swo
-
-# OS
-.DS_Store
-
-# Build
-.pytest_cache
-.ruff_cache
+.pytest_cache/
+.ruff_cache/
 .nox
+.dmypy.json
+.mypy_cache/
+
+
+# Build Artefacts
 junit.xml
 .coverage*
 coverage.xml
@@ -43,13 +42,30 @@ licenses.json
 licenses-inverted.json
 sbom.json
 
-# Env
-.env
-.env.backup
-.env.bak
+# IDE
+.idea/
+*.swp
+*.swo
 
-# Ruff -> Claude roundtrip
+# macOS
+.DS_Store
+
+# Other OS
+lib/
+lib64/
+
+# Data
+var/
+tmp/
+
+# Node temps
+node_modules/
+
+# AI workflow
 .fixme
+
+# Copier
+*.rej
 
 # Application specific
 /starbridge.pdf
