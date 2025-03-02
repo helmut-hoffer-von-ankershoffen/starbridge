@@ -49,7 +49,6 @@ keywords = [
     "devcontainer",
     "docker",
     "docker-compose",
-    "gitbook",
     "github-actions",
     "git-cliff",
     "google-drive",
@@ -275,7 +274,7 @@ output = "CHANGELOG.md"
 render = true
 # template for the changelog header
 header = """
-[![starbridge](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/tests/fixtures/starbridge.png?raw=true)](https://helmuthva.gitbook.io/starbridge) Starbridge\n
+[⭐ Starbridge](https://starbridge.readthedocs.io/)\n
 """
 # template for the changelog body
 # https://keats.github.io/tera/docs/#introduction

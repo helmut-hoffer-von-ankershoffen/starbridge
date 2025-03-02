@@ -40,6 +40,7 @@ def inspector_service(docker_ip, docker_services) -> str:
 
 
 @pytest.mark.xdist_group(name="docker")
+@pytest.mark.skip_with_act
 def test_core_docker_inspector_healthy(inspector_service) -> None:
     """Test that the docker inspector service is healthy and responding."""
     status = 200
@@ -50,6 +51,7 @@ def test_core_docker_inspector_healthy(inspector_service) -> None:
 
 
 @pytest.mark.xdist_group(name="docker")
+@pytest.mark.skip_with_act
 def test_core_docker_cli_help_with_love(docker_services) -> None:
     """Test the CLI help command with docker services returns expected output."""
     out = docker_services._docker_compose.execute("run starbridge --help ")
@@ -58,6 +60,7 @@ def test_core_docker_cli_help_with_love(docker_services) -> None:
 
 
 @pytest.mark.xdist_group(name="docker")
+@pytest.mark.skip_with_act
 def test_core_docker_cli_mcp_services(docker_services) -> None:
     """Test the MCP services command with docker services returns expected output."""
     out = docker_services._docker_compose.execute("run starbridge mcp services")

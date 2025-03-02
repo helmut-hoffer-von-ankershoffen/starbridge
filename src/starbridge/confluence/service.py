@@ -410,7 +410,7 @@ class Service(MCPBaseService):
         )
 
     @mcp_tool()
-    def page_search(
+    def page_search(  # noqa: PLR0913, PLR0917
         self,
         query: str,
         start: int = 0,

@@ -1,14 +1,13 @@
 """Nox configuration file for managing build, test and deploy sessions and dependencies."""
 
 import json
+import os
 from pathlib import Path
 
 import nox
 
 nox.options.reuse_existing_virtualenvs = True
 nox.options.default_venv_backend = "uv"
-
-_JUNITXML_ARG = "--junitxml=junit.xml"
 
 
 def _setup_venv(session: nox.Session, all_extras: bool = True) -> None:
@@ -23,6 +22,11 @@ def _setup_venv(session: nox.Session, all_extras: bool = True) -> None:
             "UV_PYTHON": str(session.python),
         },
     )
+
+
+def _is_act_environment() -> bool:
+    """Check if running in GitLab ACT environment."""  # noqa: DOC201
+    return os.environ.get("GITLAB_WORKFLOW_RUNTIME") == "ACT"
 
 
 @nox.session(python=["3.13"])
@@ -87,29 +91,32 @@ def test(session: nox.Session) -> None:
     """Run all test sessions and clean coverage data."""
     _setup_venv(session)
     session.run("rm", "-rf", ".coverage", external=True)
-    session.run(
-        "pytest",
-        "--disable-warnings",
-        _JUNITXML_ARG,
-        "-n",
-        "auto",
-        "--dist",
-        "loadgroup",
-        "-m",
-        "not sequential",
-    )
-    session.run(
+
+    # Build pytest arguments with skip_with_act filter if needed
+    pytest_args = ["pytest", "--disable-warnings", "--junitxml=junit.xml", "-n", "auto", "--dist", "loadgroup"]
+    if _is_act_environment():
+        pytest_args.extend(["-k", "not skip_with_act"])
+    pytest_args.extend(["-m", "not sequential"])
+
+    session.run(*pytest_args)
+
+    # Sequential tests
+    sequential_args = [
         "pytest",
         "--cov-append",
         "--disable-warnings",
-        _JUNITXML_ARG,
+        "--junitxml=junit.xml",
         "-n",
         "auto",
         "--dist",
         "loadgroup",
-        "-m",
-        "sequential",
-    )
+    ]
+    if _is_act_environment():
+        sequential_args.extend(["-k", "not skip_with_act"])
+    sequential_args.extend(["-m", "sequential"])
+
+    session.run(*sequential_args)
+
     session.run(
         "bash",
         "-c",
@@ -125,16 +132,14 @@ def test(session: nox.Session) -> None:
 def test_no_extras(session: nox.Session) -> None:
     """Run test sessions without extra dependencies."""
     _setup_venv(session, all_extras=False)
-    session.run(
-        "pytest",
-        "--cov-append",
-        "--disable-warnings",
-        _JUNITXML_ARG,
-        "-n",
-        "1",
-        "-m",
-        "no_extras",
-    )
+
+    no_extras_args = ["pytest", "--cov-append", "--disable-warnings", "--junitxml=junit.xml", "-n", "1"]
+    if _is_act_environment():
+        no_extras_args.extend(["-k", "not skip_with_act"])
+    no_extras_args.extend(["-m", "no_extras"])
+
+    session.run(*no_extras_args)
+
     session.run(
         "bash",
         "-c",
