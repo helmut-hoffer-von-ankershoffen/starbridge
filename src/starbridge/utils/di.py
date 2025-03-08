@@ -2,7 +2,6 @@
 
 import importlib
 import pkgutil
-import sys
 from inspect import isclass
 from typing import Any
 
@@ -30,17 +29,12 @@ def locate_implementations(_class: type[Any]) -> list[Any]:
     package = importlib.import_module(__project_name__)
 
     for _, name, _ in pkgutil.iter_modules(package.__path__):
-        try:
-            module = importlib.import_module(f"{__project_name__}.{name}")
-            # Check all members of the module
-            for member_name in dir(module):
-                member = getattr(module, member_name)
-                if isinstance(member, _class):
-                    implementations.append(member)
-        except ImportError as e:
-            print(e)  # noqa: T201
-            sys.exit(1)
-        continue
+        module = importlib.import_module(f"{__project_name__}.{name}")
+        # Check all members of the module
+        for member_name in dir(module):
+            member = getattr(module, member_name)
+            if isinstance(member, _class):
+                implementations.append(member)
 
     _implementation_cache[_class] = implementations
     return implementations
