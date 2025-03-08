@@ -1,6 +1,13 @@
 [⭐ Starbridge](https://starbridge.readthedocs.io/en/latest/)
 
-## [0.0.76](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.74..0.0.76) - 2025-03-08
+## [0.0.77](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.76..0.0.77) - 2025-03-08
+
+### ⚙️ Miscellaneous Tasks
+
+- *(deps)* Bump - ([dc9fe09](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/dc9fe09a300cc297ddac0413e69807356352cd5e))
+
+
+## [0.0.76](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.74..v0.0.76) - 2025-03-08
 
 ### 🚜 Refactor
 
@@ -10,9 +17,6 @@
 
 - *(deps)* Bump - ([0c02252](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/0c0225276e2118a25b242c05db37cfa27bf18eca))
 
-## New Contributors ❤️
-
-* @helmut-hoffer-von-ankershoffen made their first contribution
 
 ## [0.0.74](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.73..v0.0.74) - 2025-03-02
 
