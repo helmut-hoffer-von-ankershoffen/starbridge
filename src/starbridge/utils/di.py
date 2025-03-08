@@ -2,6 +2,7 @@
 
 import importlib
 import pkgutil
+import sys
 from inspect import isclass
 from typing import Any
 
@@ -36,8 +37,10 @@ def locate_implementations(_class: type[Any]) -> list[Any]:
                 member = getattr(module, member_name)
                 if isinstance(member, _class):
                     implementations.append(member)
-        except ImportError:
-            continue
+        except ImportError as e:
+            print(e)  # noqa: T201
+            sys.exit(1)
+        continue
 
     _implementation_cache[_class] = implementations
     return implementations

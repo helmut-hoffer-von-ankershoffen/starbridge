@@ -1,10 +1,11 @@
 .. only:: html
 
    .. include:: main.rst
-.. toctree::
-	:hidden:
 
-	Home<self>
+.. toctree::
+   :hidden:
+
+   Home<self>
 
 .. toctree::
    :maxdepth: 2
@@ -14,7 +15,6 @@
    reference
    release-notes
    contributing
-
 
 .. sidebar-links::
    :caption: Links

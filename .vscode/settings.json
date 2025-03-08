@@ -3,7 +3,6 @@
         "**/__pycache__ ": true
     },
     "editor.formatOnSave": true,
-    "editor.defaultFormatter": "charliermarsh.ruff",
     "terminal.integrated.scrollback": 100000,
     "[python]": {
         "editor.codeActionsOnSave": {
@@ -44,6 +43,11 @@
     ],
     "github.copilot.selectedCompletionModel": "gpt-4o-copilot",
     "github.copilot.nextEditSuggestions.enabled": true,
+    "github.copilot.enable": {
+        "plaintext": true,
+        "markdown": true,
+        "scminput": true
+    },
     "github.copilot.advanced": {
 
     },

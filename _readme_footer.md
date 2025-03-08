@@ -1,4 +1,3 @@
-
 ## Further Reading
 
 * The [Docker manual](https://starbridge.readthedocs.io/en/latest/docker.html) explains how to run Starbridge within Docker.
@@ -14,7 +13,7 @@
 
 ## Star History
 
-<a href="https://star-history.com/#helmut-hoffer-von-ankershoffen/starbridge&Date">
+<a href="https://star-history.com/#helmut-hoffer-von-ankershoffen/starbridge">
  <picture>
    <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=helmut-hoffer-von-ankershoffen/starbridge&type=Date&theme=dark" />
    <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=helmut-hoffer-von-ankershoffen/starbridge&type=Date" />

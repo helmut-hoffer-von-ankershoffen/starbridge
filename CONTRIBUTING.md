@@ -1,10 +1,10 @@
-# Contributing to starbridge
+# Contributing to Starbridge
 
-Thank you for considering contributing to starbridge!
+Thank you for considering contributing to Starbridge!
 
-## Development Environment Setup
+## Setup
 
-Clone this GitHub repository via ```git clone git@github.com:helmut-hoffer-von-ankershoffen/starbridge.git``` and change into the directory of your local starbridge repository: ```cd starbridge```
+Clone this GitHub repository via ```git clone git@github.com:helmut-hoffer-von-ankershoffen/starbridge.git``` and change into the directory of your local Starbridge repository: ```cd starbridge```
 
 Install the dependencies:
 
@@ -31,9 +31,9 @@ Notes:
 - .github/workflows/test.yml might provide further information
 
 ```shell
-sudo sudo apt install -y curl jq libxml2-utils libcairo2 gnupg2 npm  # tooling
+sudo sudo apt install -y curl jq libxml2-utils gnupg2  # tooling
 curl --proto '=https' --tlsv1.2 -sSf https://raw.githubusercontent.com/nektos/act/master/install.sh | sudo bash # act
-uv run pre-commit install                   # see https://pre-commit.com/
+uv run pre-commit install # see https://pre-commit.com/
 ```
 
 ## Configuration
@@ -83,7 +83,7 @@ To show the configuration of starbridge within Claude, you can use ```uv run sta
 All build steps are defined in `noxfile.py`.
 
 ```shell
-uv run nox
+uv run nox        # Runs all build steps except setup_dev
 ```
 
 You can run individual build steps - called sessions in nox as follows:
@@ -95,15 +95,24 @@ uv run nox -s audit     # run security and license audit, inc. sbom generation
 uv run nox -s docs      # build documentation, output in docs/build/html
 ```
 
-## Running GitHub CI workflow locally
-
-Notes:
-
-- Workflow defined in .github/workflows/ci.yml
-- Calls all build steps defined in noxfile.py
+### Running GitHub CI workflow locally
 
 ```shell
 ./github-action-run.sh
+```
+
+Notes:
+
+- Workflow defined in `.github/workflows/*.yml`
+- test-and-report.yml calls all build steps defined in noxfile.py
+
+
+### Copier
+
+Update scaffold from template
+
+```shell
+copier update --trust --skip-tasks --skip-answered
 ```
 
 ## Pull Request Guidelines

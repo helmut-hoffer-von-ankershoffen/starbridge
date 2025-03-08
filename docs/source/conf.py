@@ -33,9 +33,9 @@ github_repository = "starbridge"
 language = "en"
 
 ogp_site_name = "Starbridge"
-ogp_image = "https://starbridge.readthedocs.io/en/latest/_static/starbridge.png"
+ogp_image = "https://starbridge.readthedocs.io/en/latest/_static/logo.png"
 ogp_custom_meta_tags = [
-    '<meta name="twitter:card" content="Starbridge MCP Server" />',
+    '<meta name="twitter:card" content="Starbridge" />',
 ]
 ogp_enable_meta_description = True
 ogp_description_length = 300
@@ -65,24 +65,22 @@ linkcheck_ignore = [
     r"http://localhost",
 ]
 
+
 templates_path = ["_templates"]
 exclude_patterns = []
 
 html_theme = "furo"
 html_static_path = ["_static"]
-html_logo = "../../starbridge.png"
+html_logo = "../../logo.png"
 html_theme_options = {
     "announcement": (
         '<a target="_blank" href="https://github.com/helmut-hoffer-von-ankershoffen/starbridge">GitHub</a> - '
-        '<a target="_blank" href="https://pypi.org/project/starbridge/">PyPI</a> - '
+        '<a target="_blank" href="https://pypi.org/project/starbridge">PyPI</a> - '
         '<a target="_blank" href="https://hub.docker.com/r/helmuthva/starbridge/tags">Docker</a> - '
-        '<a target="_blank" '
-        'href="https://sonarcloud.io/summary/new_code?id=helmut-hoffer-von-ankershoffen_starbridge">'
-        "SonarQube</a> - "
+        '<a target="_blank" href="https://sonarcloud.io/summary/new_code?id=helmut-hoffer-von-ankershoffen_starbridge">SonarQube</a> - '  # noqa: E501
         '<a target="_blank" href="https://app.codecov.io/gh/helmut-hoffer-von-ankershoffen/starbridge">Codecov</a>'
     ),
 }
-
 
 latex_engine = "lualatex"  # https://github.com/readthedocs/readthedocs.org/issues/8382
 
@@ -123,4 +121,4 @@ latex_documents = [
     ("index", f"{slug}.tex", rf"{project} Documentation", author, "manual", False),
 ]
 
-latex_logo = "../../starbridge.png"
+latex_logo = "../../logo.png"

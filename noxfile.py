@@ -1,4 +1,4 @@
-"""Nox configuration file for managing build, test and deploy sessions and dependencies."""
+"""Nox configuration for test automation and development tasks."""
 
 import json
 import os
@@ -25,13 +25,17 @@ def _setup_venv(session: nox.Session, all_extras: bool = True) -> None:
 
 
 def _is_act_environment() -> bool:
-    """Check if running in GitLab ACT environment."""  # noqa: DOC201
-    return os.environ.get("GITLAB_WORKFLOW_RUNTIME") == "ACT"
+    """Check if running in GitHub ACT environment.
+
+    Returns:
+        bool: True if running in ACT environment, False otherwise.
+    """
+    return os.environ.get("GITHUB_WORKFLOW_RUNTIME") == "ACT"
 
 
 @nox.session(python=["3.13"])
 def lint(session: nox.Session) -> None:
-    """Run linting checks using ruff."""
+    """Run code formatting checks, linting, and static type checking."""
     _setup_venv(session)
     session.run("ruff", "check", ".")
     session.run(
@@ -40,6 +44,7 @@ def lint(session: nox.Session) -> None:
         "--check",
         ".",
     )
+    # session.run("mypy", "src") # noqa: ERA001
 
 
 @nox.session(python=["3.13"])
@@ -58,7 +63,7 @@ def docs(session: nox.Session) -> None:
 
 @nox.session(python=["3.13"])
 def audit(session: nox.Session) -> None:
-    """Perform security audit and output vulnerabilities."""
+    """Run security audit and license checks."""
     _setup_venv(session)
     session.run("pip-audit", "-f", "json", "-o", "vulnerabilities.json")
     session.run("jq", ".", "vulnerabilities.json", external=True)
@@ -68,6 +73,7 @@ def audit(session: nox.Session) -> None:
     licenses_data = json.loads(Path("licenses.json").read_text(encoding="utf-8"))
 
     licenses_inverted: dict[str, list[dict[str, str]]] = {}
+    licenses_inverted = {}
     for pkg in licenses_data:
         license_name = pkg["License"]
         package_info = {"Name": pkg["Name"], "Version": pkg["Version"]}
@@ -88,7 +94,7 @@ def audit(session: nox.Session) -> None:
 
 @nox.session(python=["3.11", "3.12", "3.13"])
 def test(session: nox.Session) -> None:
-    """Run all test sessions and clean coverage data."""
+    """Run tests with pytest."""
     _setup_venv(session)
     session.run("rm", "-rf", ".coverage", external=True)
 
@@ -149,3 +155,22 @@ def test_no_extras(session: nox.Session) -> None:
         ),
         external=True,
     )
+
+
+@nox.session(python=["3.13"], default=False)
+def setup_dev(session: nox.Session) -> None:
+    """Setup dev environment post project creation."""
+    _setup_venv(session)
+    session.run("ruff", "format", ".", external=True)
+    git_dir = Path(".git")
+    if git_dir.is_dir():
+        session.run("echo", "found .git directory, running pre-commit install and hooks", external=True)
+        session.run("pre-commit", "install", external=True)
+        with Path(".secrets.baseline").open("w", encoding="utf-8") as out:
+            session.run("detect-secrets", "scan", stdout=out, external=True)
+        session.run("git", "add", ".", external=True)
+        try:
+            session.run("pre-commit", external=True)
+        except Exception:  # noqa: BLE001
+            session.log("pre-commit run failed, continuing anyway")
+        session.run("git", "add", ".", external=True)
