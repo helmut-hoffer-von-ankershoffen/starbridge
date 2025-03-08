@@ -9,6 +9,8 @@ import nox
 nox.options.reuse_existing_virtualenvs = True
 nox.options.default_venv_backend = "uv"
 
+NOT_SKIP_WITH_ACT = "not skip_with_act"
+
 
 def _setup_venv(session: nox.Session, all_extras: bool = True) -> None:
     """Install dependencies for the given session using uv."""
@@ -101,7 +103,7 @@ def test(session: nox.Session) -> None:
     # Build pytest arguments with skip_with_act filter if needed
     pytest_args = ["pytest", "--disable-warnings", "--junitxml=junit.xml", "-n", "auto", "--dist", "loadgroup"]
     if _is_act_environment():
-        pytest_args.extend(["-k", "not skip_with_act"])
+        pytest_args.extend(["-k", NOT_SKIP_WITH_ACT])
     pytest_args.extend(["-m", "not sequential"])
 
     session.run(*pytest_args)
@@ -118,7 +120,7 @@ def test(session: nox.Session) -> None:
         "loadgroup",
     ]
     if _is_act_environment():
-        sequential_args.extend(["-k", "not skip_with_act"])
+        sequential_args.extend(["-k", NOT_SKIP_WITH_ACT])
     sequential_args.extend(["-m", "sequential"])
 
     session.run(*sequential_args)
@@ -141,7 +143,7 @@ def test_no_extras(session: nox.Session) -> None:
 
     no_extras_args = ["pytest", "--cov-append", "--disable-warnings", "--junitxml=junit.xml", "-n", "1"]
     if _is_act_environment():
-        no_extras_args.extend(["-k", "not skip_with_act"])
+        no_extras_args.extend(["-k", NOT_SKIP_WITH_ACT])
     no_extras_args.extend(["-m", "no_extras"])
 
     session.run(*no_extras_args)

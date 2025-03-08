@@ -376,7 +376,7 @@ wheels = [
 
 [[package]]
 name = "brave-search-python-client"
-version = "0.3.11"
+version = "0.3.12"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "httpx" },
@@ -386,9 +386,9 @@ dependencies = [
     { name = "tenacity" },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/28/5c/45cafac835be4c5ef710498df5375d48daf55f2dccf09308975636f753a6/brave_search_python_client-0.3.11.tar.gz", hash = "sha256:e1e5c9d6ccf2e9ed9cda16ee446cdf257eda41b330e02cbf4682205b7cbd2a7c", size = 37349012 }
+sdist = { url = "https://files.pythonhosted.org/packages/04/99/be3566d12440bc1560bdef8fc9258ea86c599015cb85210e5e891e5a47d7/brave_search_python_client-0.3.12.tar.gz", hash = "sha256:a8776544e6ffe9fef51cb08bd66263bd75c07873ffa071a2bbd61121862b9774", size = 37349130 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/74/52/c56115af6738db71f35bfc66977d92f7b132cc333bc77fb99ded9e957c07/brave_search_python_client-0.3.11-py3-none-any.whl", hash = "sha256:eb08a908002d0ef69f8a275768e2eaa918f7926769db1ab3c811d9d7b28a23c4", size = 67814 },
+    { url = "https://files.pythonhosted.org/packages/a9/36/2d54b7bea003a370849f436ab54f086cf0596f2756ad13d31b714e5dd05c/brave_search_python_client-0.3.12-py3-none-any.whl", hash = "sha256:ffef0f5926aa9758e8738cc66dfc2ef278faa9b3acf5df43eb5048e73432f0c7", size = 67815 },
 ]
 
 [[package]]
@@ -4479,7 +4479,7 @@ dev = [
 requires-dist = [
     { name = "atlassian-python-api", specifier = ">=3.41.19" },
     { name = "beautifulsoup4", specifier = ">=4.13.3" },
-    { name = "brave-search-python-client", specifier = ">=0.3.11" },
+    { name = "brave-search-python-client", specifier = ">=0.3.12" },
     { name = "cairosvg", marker = "extra == 'imaging'", specifier = ">=2.7.1" },
     { name = "cryptography", specifier = ">=44.0.1" },
     { name = "email-validator", specifier = ">=2.2.0" },
