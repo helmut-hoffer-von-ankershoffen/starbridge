@@ -28,11 +28,12 @@
 [![ghcr.io - Sze](https://ghcr-badge.egpl.dev/helmut-hoffer-von-ankershoffen/starbridge/size?color=%2344cc11&tag=latest&label=size&trim=)](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/pkgs/container/starbridge)
 -->
 
-> [!WARNING]
-> This project is currently in pre-alpha phase, i.e. partly functional. Feel free to already watch or star the repository to stay updated on its progress.
-
 > [!TIP]
 > 📚 [Online documentation](https://starbridge.readthedocs.io/en/latest/) - 📖 [PDF Manual](https://starbridge.readthedocs.io/_/downloads/en/latest/pdf/)
+
+> [!NOTE]
+> 🧠 This project was scaffolded using the template [oe-python-template](https://github.com/helmut-hoffer-von-ankershoffen/oe-python-template) with [copier](https://copier.readthedocs.io/).
+
 ---
 
 
