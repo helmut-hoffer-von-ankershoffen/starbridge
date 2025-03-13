@@ -1,6 +1,13 @@
 [⭐ Starbridge](https://starbridge.readthedocs.io/en/latest/)
 
-## [0.0.79](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.78..0.0.79) - 2025-03-13
+## [0.0.80](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.79..0.0.80) - 2025-03-13
+
+### 🚜 Refactor
+
+- *(codesmell)* Dry - ([43df2f0](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/43df2f09dfc5a87cc8fb68b6b98221adb3faab07))
+
+
+## [0.0.79](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.78..v0.0.79) - 2025-03-13
 
 ### 🐛 Bug Fixes
 
