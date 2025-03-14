@@ -1,6 +1,13 @@
 [⭐ Starbridge](https://starbridge.readthedocs.io/en/latest/)
 
-## [0.0.87](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.86..0.0.87) - 2025-03-14
+## [0.0.88](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.87..0.0.88) - 2025-03-14
+
+### 📚 Documentation
+
+- Consistency - ([4063dc8](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/4063dc8e8003634372955aa45a5964d00a716038))
+
+
+## [0.0.87](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.86..v0.0.87) - 2025-03-14
 
 ### 📚 Documentation
 
