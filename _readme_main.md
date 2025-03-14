@@ -8,7 +8,7 @@ Integrates Claude Desktop with the web, Google and Atlassian workspaces.
 3. **Improve efficiency**: Automate repetitive workflows such as generating
    Confluence pages from Google Docs.
 
-## Qualities
+## Operational Excellence
 
 - [Complete reference documenation](https://starbridge.readthedocs.io/en/latest/reference.html)
   on Read the Docs
