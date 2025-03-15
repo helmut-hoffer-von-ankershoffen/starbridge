@@ -14,6 +14,7 @@
    docker
    reference
    release-notes
+   security
    contributing
 
 .. sidebar-links::
