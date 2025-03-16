@@ -1,3 +1,6 @@
+
+[//]: # (README.md generated from docs/partials/README_*.md)
+
 # ⭐ Starbridge
 
 [![License](https://img.shields.io/github/license/helmut-hoffer-von-ankershoffen/starbridge?logo=opensourceinitiative&logoColor=3DA639&labelColor=414042&color=A41831)](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/LICENSE)
@@ -145,16 +148,15 @@ interface, with Claude acting as an MCP client.
 
 ## Further Reading
 
-* The [Docker manual](https://starbridge.readthedocs.io/en/latest/docker.html) explains how to run Starbridge within Docker.
-* Check out the [reference](https://starbridge.readthedocs.io/en/latest/reference.html) with detailed documentation of public classes and functions.
-* Our [release notes](https://starbridge.readthedocs.io/en/latest/release-notes.html) provide a complete log of recent improvements and changes.
-* In case you want to help us improve Starbridge: The [contribution guidelines](https://starbridge.readthedocs.io/en/latest/contributing.html) explain how to setup your development environment and create pull requests.
-
-## Additional Resources
-
-* [MCP Press release](https://www.anthropic.com/news/model-context-protocol)
-* [MCP Specification and SDKs](https://github.com/modelcontextprotocol)
-* [MCP Info to amend Claude's context](https://modelcontextprotocol.io/llms-full.txt)
+- Check out the
+  [reference](https://starbridge.readthedocs.io/en/latest/reference.html) with
+  detailed documentation of public classes and functions.
+- Our
+  [release notes](https://starbridge.readthedocs.io/en/latest/release-notes.html)
+  provide a complete log of recent improvements and changes.
+- In case you want to help us improve ⭐ Starbridge: The
+  [contribution guidelines](https://starbridge.readthedocs.io/en/latest/contributing.html)
+  explain how to setup your development environment and create pull requests.
 
 ## Star History
 
