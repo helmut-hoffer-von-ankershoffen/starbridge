@@ -1,5 +1,12 @@
 [⭐ Starbridge](https://starbridge.readthedocs.io/en/latest/)
 
+## [0.1.0](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.93..0.1.0) - 2025-03-16
+
+### ⛰️  Features
+
+- Code-style for humans and ai - ([823fd55](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/823fd550b171f37b82641e55154247b4c4473cd5))
+
+
 ## [0.0.88](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.87..v0.0.88) - 2025-03-14
 
 ### 📚 Documentation
