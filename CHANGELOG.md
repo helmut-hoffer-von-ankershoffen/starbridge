@@ -1,6 +1,6 @@
 [⭐ Starbridge](https://starbridge.readthedocs.io/en/latest/)
 
-## [0.1.0](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.93..0.1.0) - 2025-03-16
+## [0.1.0](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.93..v0.1.0) - 2025-03-16
 
 ### ⛰️  Features
 
