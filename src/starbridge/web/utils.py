@@ -208,10 +208,6 @@ def _get_markdown_from_html(html: str) -> str:
         str: The converted markdown content
 
     """
-    # TODO (@helmut-hoffer-von-ankershoffen): Find reliable solution
-    # simplified = simple_json_from_html_string(html, use_readability=False)  # noqa: ERA001
-    # if simplified["content"]:
-    #    return markdownify(simplified["content"], heading_style=ATX, strip=["img"])  # noqa: ERA001
     return MarkdownConverter(heading_style=ATX, strip=["img"]).convert_soup(
         BeautifulSoup(html, HTML_PARSER),
     )
@@ -402,8 +398,7 @@ def extract_links_from_response(
                 markdown.markdown(response.text),
                 str(response.url),
             )
-        case _:
-            return []
+    return []
 
 
 async def get_additional_context_for_url(

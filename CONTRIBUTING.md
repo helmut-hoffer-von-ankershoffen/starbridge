@@ -4,7 +4,9 @@ Thank you for considering contributing to Starbridge!
 
 ## Setup
 
-Clone this GitHub repository via ```git clone git@github.com:helmut-hoffer-von-ankershoffen/starbridge.git``` and change into the directory of your local Starbridge repository: ```cd starbridge```
+Clone this GitHub repository via
+`git clone git@github.com:helmut-hoffer-von-ankershoffen/starbridge.git` and
+change into the directory of your local Starbridge repository: `cd starbridge`
 
 Install the dependencies:
 
@@ -20,6 +22,7 @@ fi
 which jq &> /dev/null || brew install jq
 which xmllint &> /dev/null || brew install xmllint
 which act &> /dev/null || brew install act
+which pinact &> /dev/null || brew install pinact
 uv run pre-commit install             # install pre-commit hooks, see https://pre-commit.com/
 ```
 
@@ -38,7 +41,8 @@ uv run pre-commit install # see https://pre-commit.com/
 
 ## Configuration
 
-You can use the following helper command to create the .env file. This will prompt you for the required configuration values.
+You can use the following helper command to create the .env file. This will
+prompt you for the required configuration values.
 
 ```bash
 uv run starbridge configure # creates .env file
@@ -50,7 +54,7 @@ You can validate starbridge is working correctly by checking the health endpoint
 uv run starbridge health # shows healtiness of starbridge including dependencies
 ```
 
-To see all commands starvridge offers you can call ```uv run starbridge --help```
+To see all commands starvridge offers you can call `uv run starbridge --help`
 
 ## Debugging
 
@@ -60,11 +64,16 @@ Inspect starbridge using the MCP inspector
 uv run starbridge mcp inspect
 ```
 
-Upon launching, the Inspector will display a URL that you can access in your browser to begin debugging. Environment values are loaded from the ```.env``` file generated in the previous step
+Upon launching, the Inspector will display a URL that you can access in your
+browser to begin debugging. Environment values are loaded from the `.env` file
+generated in the previous step
 
 ## Installing the development version of starbridge with Claude Desktop application
 
-You can use the following helper command to install the development version of starbridge with Claude Desktop application. This will amend the configuration file of Claude Desktop to reference your local repository, and restart Claude Desktop.
+You can use the following helper command to install the development version of
+starbridge with Claude Desktop application. This will amend the configuration
+file of Claude Desktop to reference your local repository, and restart Claude
+Desktop.
 
 ```bash
 uv run starbridge install
@@ -72,11 +81,16 @@ uv run starbridge install
 
 ## Code and configuration changes
 
-For the Claude Desktop app to pick up code changes to starbridge restart the Claude Desktop application with ```uv run starbridge claude restart```.
+For the Claude Desktop app to pick up code changes to starbridge restart the
+Claude Desktop application with `uv run starbridge claude restart`.
 
-If you added additional configuration keys in .env.template, run ```uv run starbridge configure``` again, to update the .env file. After that run ```uv run starbridge install``` to install the updated configuration with the Claude Desktop application.
+If you added additional configuration keys in .env.template, run
+`uv run starbridge configure` again, to update the .env file. After that run
+`uv run starbridge install` to install the updated configuration with the Claude
+Desktop application.
 
-To show the configuration of starbridge within Claude, you can use ```uv run starbridge claude config```.
+To show the configuration of starbridge within Claude, you can use
+`uv run starbridge claude config`.
 
 ## Running all build steps
 
@@ -93,9 +107,10 @@ uv run nox -s test      # run tests
 uv run nox -s lint      # run formatting and linting
 uv run nox -s audit     # run security and license audit, inc. sbom generation
 uv run nox -s docs      # build documentation, output in docs/build/html
+uv run nox -s docs_pdf  # locally build pdf manual to docs/build/latex/starbridge.pdf
 ```
 
-As a shortcut, you can run build steps using `./n`:
+As a shortcut, you can run build steps using `./n`, e.g.
 
 ```shell
 ./n test
@@ -104,14 +119,16 @@ As a shortcut, you can run build steps using `./n`:
 ```
 
 Generate a wheel using uv
+
 ```shell
 uv build
 ```
 
 Notes:
-1. Reports dumped into ```reports/```
-3. Documentation dumped into ```docs/build/html/```
-2. Distribution dumped into ```dist/```
+
+1. Reports dumped into `reports/`
+2. Documentation dumped into `docs/build/html/`
+3. Distribution dumped into `dist/`
 
 ### Running GitHub CI workflow locally
 
@@ -124,10 +141,9 @@ Notes:
 - Workflow defined in `.github/workflows/*.yml`
 - test-and-report.yml calls all build steps defined in noxfile.py
 
-
 ### Copier
 
-Update scaffold from template
+Update from template
 
 ```shell
 uv run nox -s update_from_template
@@ -135,10 +151,15 @@ uv run nox -s update_from_template
 
 ## Pull Request Guidelines
 
-- Before starting to write code read the [code style guide](CODE_STYLE.md) document for mandatory coding style
-  guidelines.
-- **Pre-Commit Hooks:** We use pre-commit hooks to ensure code quality. Please install the pre-commit hooks by running `uv run pre-commit install`. This ensure all tests, linting etc. pass locally before you can commit.
-- **Squash Commits:** Before submitting a pull request, please squash your commits into a single commit.
-- **Branch Naming:** Use descriptive branch names like `feature/your-feature` or `fix/issue-number`.
+- Before starting to write code read the [code style guide](CODE_STYLE.md)
+  document for mandatory coding style guidelines.
+- **Pre-Commit Hooks:** We use pre-commit hooks to ensure code quality. Please
+  install the pre-commit hooks by running `uv run pre-commit install`. This
+  ensure all tests, linting etc. pass locally before you can commit.
+- **Squash Commits:** Before submitting a pull request, please squash your
+  commits into a single commit.
+- **Branch Naming:** Use descriptive branch names like `feature/your-feature` or
+  `fix/issue-number`.
 - **Testing:** Ensure new features have appropriate test coverage.
-- **Documentation:** Update documentation to reflect any changes or new features.
+- **Documentation:** Update documentation to reflect any changes or new
+  features.

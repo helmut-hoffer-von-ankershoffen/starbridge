@@ -23,6 +23,7 @@ def is_responsive(url) -> bool | None:
             return True
     except RequestsConnectionError:
         return False
+    return None
 
 
 @pytest.fixture(scope="session")
