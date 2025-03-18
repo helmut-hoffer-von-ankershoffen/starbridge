@@ -1,5 +1,15 @@
 [⭐ Starbridge](https://starbridge.readthedocs.io/en/latest/)
 
+## [0.10.3](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.10.1..0.10.3) - 2025-03-18
+
+### Sec
+
+- Security-extended, security-and-quality - ([e5dd59c](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/e5dd59c0b7227590c1cb30da85cdc34619664abf))
+
+## New Contributors ❤️
+
+* @helmut-hoffer-von-ankershoffen made their first contribution
+
 ## [0.1.0](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.0.93..v0.1.0) - 2025-03-16
 
 ### ⛰️  Features
