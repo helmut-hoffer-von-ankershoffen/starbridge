@@ -1,8 +1,9 @@
-_commit: v0.6.0
+_commit: v0.6.13
 _src_path: gh:helmut-hoffer-von-ankershoffen/oe-python-template
 author_email: helmuthva@googlemail.com
 author_github_username: helmut-hoffer-von-ankershoffen
 author_name: Helmut Hoffer von Ankershoffen
+docker_io_enabled: true
 docker_io_image_name: starbridge
 docker_io_owner: helmuthva
 github_repository_name: starbridge
@@ -16,6 +17,7 @@ project_description: Integrates Claude Desktop with the web, Google and Atlassia
 project_icon: ⭐
 project_name: Starbridge
 pypi_distribution_name: starbridge
+readthedocs_domain: readthedocs.org
 readthedocs_project_key: starbridge
 sonarqube_key: helmut-hoffer-von-ankershoffen_starbridge
 streamlit_project_key: starbridge
