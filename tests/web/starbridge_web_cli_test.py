@@ -11,7 +11,7 @@ from starbridge.cli import cli
 from starbridge.web import GetResult
 
 GET_TEST_HTML_URL = "https://starbridge.readthedocs.io/en/latest/"
-GET_LLMS_TXT_URL = "https://docs.anthropic.com"
+GET_LLMS_TXT_URL = "https://docs.zapier.com/"
 
 
 @pytest.fixture
@@ -135,12 +135,13 @@ def test_web_cli_get_additional_context_llms_text(runner) -> None:
             "web",
             "get",
             GET_LLMS_TXT_URL,
+            "--force-not-respecting-robots-txt",
         ],
     )
     rtn = GetResult.model_validate(json.loads(result.output))
     llms_txt = rtn.get_context_by_type("llms_txt")
     assert llms_txt is not None
-    assert "Send a structured list of input messages" in llms_txt.text
+    assert "Get details of a specific action" in llms_txt.text
     assert len(llms_txt.text) < 400 * 1024
     assert result.exit_code == 0
     invalid_context = rtn.get_context_by_type("invalid")
@@ -161,7 +162,7 @@ def test_web_cli_get_additional_context_llms_full_txt(runner) -> None:
     rtn = GetResult.model_validate(json.loads(result.output))
     llms_txt = rtn.get_context_by_type("llms_txt")
     assert llms_txt is not None
-    assert "knowledge base was last updated in August 2023" in llms_txt.text
+    assert "Get Action Details" in llms_txt.text
     assert len(llms_txt.text) > 400 * 1024
     assert result.exit_code == 0
 

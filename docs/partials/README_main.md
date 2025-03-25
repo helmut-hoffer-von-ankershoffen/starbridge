@@ -10,30 +10,34 @@ Integrates Claude Desktop with the web, Google and Atlassian workspaces.
 
 ## Operational Excellence
 
-- [Complete reference documenation](https://starbridge.readthedocs.io/en/latest/reference.html)
-  on Read the Docs
-- [Transparent test coverage](https://app.codecov.io/gh/helmut-hoffer-von-ankershoffen/starbridge)
-  including unit and E2E tests (reported on Codecov)
-- Matrix tested with
-  [multiple python versions](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/noxfile.py)
-  to ensure compatibility (powered by [Nox](https://nox.thea.codes/en/stable/))
-- Compliant with modern linting and formatting standards (powered by
-  [Ruff](https://github.com/astral-sh/ruff))
-- Up-to-date dependencies (monitored by
-  [Renovate](https://github.com/renovatebot/renovate) and
-  [GitHub Dependabot](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/security/dependabot))
-- [A-grade code quality](https://sonarcloud.io/summary/new_code?id=helmut-hoffer-von-ankershoffen_starbridge)
-  in security, maintainability, and reliability with low technical debt and
-  codesmell (verified by SonarQube)
-- Additional code security checks using
-  [GitHub CodeQL](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/security/code-scanning)
-- [Security Policy](SECURITY.md)
-- 1-liner for installation and execution of command line interface (CLI) via
-  [uv(x)](https://github.com/astral-sh/uv) or
-  [Docker](https://hub.docker.com/r/helmuthva/starbridge/tags)
-- Setup for developing inside a
-  [devcontainer](https://code.visualstudio.com/docs/devcontainers/containers)
-  included (supports VSCode and GitHub Codespaces)
+This project is designed with operational excellence in mind, using modern
+Python tooling and practices. It includes:
+
+1. [Complete reference documentation](https://starbridge.readthedocs.io/en/latest/reference.html)
+   on Read the Docs
+2. [Transparent test coverage](https://app.codecov.io/gh/helmut-hoffer-von-ankershoffen/starbridge)
+   including unit and E2E tests (reported on Codecov)
+3. Matrix tested with
+   [multiple python versions](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/blob/main/noxfile.py)
+   to ensure compatibility (powered by [Nox](https://nox.thea.codes/en/stable/))
+4. Compliant with modern linting and formatting standards (powered by
+   [Ruff](https://github.com/astral-sh/ruff))
+5. Up-to-date dependencies (monitored by
+   [Renovate](https://github.com/renovatebot/renovate) and
+   [Dependabot](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/security/dependabot))
+6. [A-grade code quality](https://sonarcloud.io/summary/new_code?id=helmut-hoffer-von-ankershoffen_starbridge)
+   in security, maintainability, and reliability with low technical debt and
+   codesmell (verified by SonarQube)
+7. Additional code security checks using
+   [CodeQL](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/security/code-scanning)
+8. [Security Policy](SECURITY.md)
+9. [License](LICENSE) compliant with the Open Source Initiative (OSI)
+10. 1-liner for installation and execution of command line interface (CLI) via
+    [uv(x)](https://github.com/astral-sh/uv) or
+    [Docker](https://hub.docker.com/r/helmuthva/starbridge/tags)
+11. Setup for developing inside a
+    [devcontainer](https://code.visualstudio.com/docs/devcontainers/containers)
+    included (supports VSCode and GitHub Codespaces)
 
 ## Example Prompts
 
