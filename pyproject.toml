@@ -65,8 +65,12 @@ classifiers = [
 requires-python = ">=3.11, <4.0"
 
 dependencies = [
-    "fastapi[standard,all]>=0.115.12",
     "pydantic>=2.10.6",
+    "pydantic-settings>=2.8.1",
+    "mcp==1.3.0",
+    "griffe>=1.6.2",
+    "typer>=0.15.2",
+    "atlassian-python-api>=4.0.0",
     "python-dotenv>=1.1.0",
     "logfire[system-metrics]>=3.10.0",
     "opentelemetry-api>=1.31.1",
@@ -86,7 +90,7 @@ dependencies = [
     "readabilipy>=0.3.0",
     "markitdown[docx,xlsx]>=0.1.1",
     "cryptography>=44.0.1",
-    "brave-search-python-client>=0.4.6",
+    "brave-search-python-client>=0.4.7",
     "enum-tools>=0.12.0",
     "sphinx-toolbox>=3.8.3",
     "pymupdf4llm>=0.0.18",

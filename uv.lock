@@ -178,6 +178,24 @@ wheels = [
 ]
 
 [[package]]
+name = "atlassian-python-api"
+version = "4.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "beautifulsoup4" },
+    { name = "deprecated" },
+    { name = "jmespath" },
+    { name = "oauthlib" },
+    { name = "requests" },
+    { name = "requests-oauthlib" },
+    { name = "six" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/db/e7/609cf2c11f49d116bb3f994682b66e047894b97484e71bb696e70dab946c/atlassian_python_api-4.0.0.tar.gz", hash = "sha256:e9f255bfa69f1d5f08274607c4a7e34f1bf2c8d4d3ea9b990f0fb12cd445b6b9", size = 235862 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/43/1c/8d713bcf30aab2506aae6ac8fbfdf552d33361911b0ca70b506a1e5e897f/atlassian_python_api-4.0.0-py3-none-any.whl", hash = "sha256:24651e31fab0560ee495f848fb493e6bfef3a3fd118ec81cd6e25bc12f9eeeae", size = 183000 },
+]
+
+[[package]]
 name = "attrs"
 version = "25.3.0"
 source = { registry = "https://pypi.org/simple" }
@@ -279,17 +297,18 @@ wheels = [
 
 [[package]]
 name = "brave-search-python-client"
-version = "0.4.6"
+version = "0.4.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "fastapi", extra = ["all", "standard"] },
     { name = "pydantic" },
     { name = "python-dotenv" },
+    { name = "tenacity" },
     { name = "typer" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/73/50/cf591fbf8612595bde8325d0424b63cec04bc07aee050dd223c6f9c96214/brave_search_python_client-0.4.6.tar.gz", hash = "sha256:d5e0329f974cfc088e0832a5bc67952adfdbb155d5f8839cdde75109a8112d8c", size = 71858 }
+sdist = { url = "https://files.pythonhosted.org/packages/a6/4c/c39202320709e449b375290a0113767d4e2da349c4cd754e64cc177636dc/brave_search_python_client-0.4.7.tar.gz", hash = "sha256:266296a57131b8677a03e1f1986b8cfad98adc07c5c0eae4ddaea27428d38ce5", size = 71871 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/da/7b/cf98b350b68df0d2576d0ec22da3e463f08a762f11561b750454fe7403ba/brave_search_python_client-0.4.6-py3-none-any.whl", hash = "sha256:ee8c71fb6a0502c255f1afe79f348e5475e057a92828ccdb3decf75befd0e336", size = 70337 },
+    { url = "https://files.pythonhosted.org/packages/1c/09/6f676557ccefd855a0a84b19d9c289f58796f8a805a222055955b931f0ef/brave_search_python_client-0.4.7-py3-none-any.whl", hash = "sha256:77a9f41454ca60603eb72781115dbc7a4ac7e806785d6c74e7efc8613f6ad7c7", size = 70352 },
 ]
 
 [[package]]
@@ -1157,6 +1176,18 @@ wheels = [
 ]
 
 [[package]]
+name = "griffe"
+version = "1.6.2"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "colorama" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/2f/f2/b00eb72b853ecb5bf31dd47857cdf6767e380ca24ec2910d43b3fa7cc500/griffe-1.6.2.tar.gz", hash = "sha256:3a46fa7bd83280909b63c12b9a975732a927dd97809efe5b7972290b606c5d91", size = 392836 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/4e/bc/bd8b7de5e748e078b6be648e76b47189a9182b1ac1eb7791ff7969f39f27/griffe-1.6.2-py3-none-any.whl", hash = "sha256:6399f7e663150e4278a312a8e8a14d2f3d7bd86e2ef2f8056a1058e38579c2ee", size = 128638 },
+]
+
+[[package]]
 name = "h11"
 version = "0.14.0"
 source = { registry = "https://pypi.org/simple" }
@@ -1233,6 +1264,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/b1/df/48c586a5fe32a0f01324ee087459e112ebb7224f646c0b5023f5e79e9956/httpx-0.28.1.tar.gz", hash = "sha256:75e98c5f16b0f35b567856f597f06ff2270a374470a5c2392242528e3e3e42fc", size = 141406 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/2a/39/e50c7c3a983047577ee07d2a9e53faf5a69493943ec3f6a384bdc792deb2/httpx-0.28.1-py3-none-any.whl", hash = "sha256:d909fcccc110f8c7faf814ca82a9a4d816bc5a6dbfea25d6591d6985b8ba59ad", size = 73517 },
+]
+
+[[package]]
+name = "httpx-sse"
+version = "0.4.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/4c/60/8f4281fa9bbf3c8034fd54c0e7412e66edbab6bc74c4996bd616f8d0406e/httpx-sse-0.4.0.tar.gz", hash = "sha256:1e81a3a3070ce322add1d3529ed42eb5f70817f45ed6ec915ab753f961139721", size = 12624 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e1/9b/a181f281f65d776426002f330c31849b86b31fc9d848db62e16f03ff739f/httpx_sse-0.4.0-py3-none-any.whl", hash = "sha256:f329af6eae57eaa2bdfd962b42524764af68075ea87370a2de920af5341e318f", size = 7819 },
 ]
 
 [[package]]
@@ -1412,6 +1452,15 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/df/bf/f7da0350254c0ed7c72f3e33cef02e048281fec7ecec5f032d4aac52226b/jinja2-3.1.6.tar.gz", hash = "sha256:0137fb05990d35f1275a587e9aee6d56da821fc83491a0fb838183be43f66d6d", size = 245115 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/62/a1/3d680cbfd5f4b8f15abc1d571870c5fc3e594bb582bc3b64ea099db13e56/jinja2-3.1.6-py3-none-any.whl", hash = "sha256:85ece4451f492d0c13c5dd7c13a64681a86afae63a5f347908daf103ce6d2f67", size = 134899 },
+]
+
+[[package]]
+name = "jmespath"
+version = "1.0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/00/2a/e867e8531cf3e36b41201936b7fa7ba7b5702dbef42922193f05c8976cd6/jmespath-1.0.1.tar.gz", hash = "sha256:90261b206d6defd58fdd5e85f478bf633a2901798906be2ad389150c5c60edbe", size = 25843 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/31/b4/b9b800c45527aadd64d5b442f9b932b00648617eb5d63d2c7a6587b7cafc/jmespath-1.0.1-py3-none-any.whl", hash = "sha256:02e2e4cc71b5bcab88332eebf907519190dd9e6e82107fa7f83b1003a6252980", size = 20256 },
 ]
 
 [[package]]
@@ -2062,6 +2111,25 @@ wheels = [
 ]
 
 [[package]]
+name = "mcp"
+version = "1.3.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "anyio" },
+    { name = "httpx" },
+    { name = "httpx-sse" },
+    { name = "pydantic" },
+    { name = "pydantic-settings" },
+    { name = "sse-starlette" },
+    { name = "starlette" },
+    { name = "uvicorn" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/6b/b6/81e5f2490290351fc97bf46c24ff935128cb7d34d68e3987b522f26f7ada/mcp-1.3.0.tar.gz", hash = "sha256:f409ae4482ce9d53e7ac03f3f7808bcab735bdfc0fba937453782efb43882d45", size = 150235 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d0/d2/a9e87b506b2094f5aa9becc1af5178842701b27217fa43877353da2577e3/mcp-1.3.0-py3-none-any.whl", hash = "sha256:2829d67ce339a249f803f22eba5e90385eafcac45c94b00cab6cef7e8f217211", size = 70672 },
+]
+
+[[package]]
 name = "mdurl"
 version = "0.1.2"
 source = { registry = "https://pypi.org/simple" }
@@ -2365,6 +2433,15 @@ wheels = [
     { url = "https://files.pythonhosted.org/packages/53/43/c0f5411c7b3ea90adf341d05ace762dad8cb9819ef26093e27b15dd121ac/numpy-2.2.3-cp313-cp313t-musllinux_1_2_x86_64.whl", hash = "sha256:daf43a3d1ea699402c5a850e5313680ac355b4adc9770cd5cfc2940e7861f1bf", size = 17872920 },
     { url = "https://files.pythonhosted.org/packages/5b/57/6dbdd45ab277aff62021cafa1e15f9644a52f5b5fc840bc7591b4079fb58/numpy-2.2.3-cp313-cp313t-win32.whl", hash = "sha256:cf802eef1f0134afb81fef94020351be4fe1d6681aadf9c5e862af6602af64ef", size = 6346584 },
     { url = "https://files.pythonhosted.org/packages/97/9b/484f7d04b537d0a1202a5ba81c6f53f1846ae6c63c2127f8df869ed31342/numpy-2.2.3-cp313-cp313t-win_amd64.whl", hash = "sha256:aee2512827ceb6d7f517c8b85aa5d3923afe8fc7a57d028cffcd522f1c6fd082", size = 12706784 },
+]
+
+[[package]]
+name = "oauthlib"
+version = "3.2.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/6d/fa/fbf4001037904031639e6bfbfc02badfc7e12f137a8afa254df6c4c8a670/oauthlib-3.2.2.tar.gz", hash = "sha256:9859c40929662bec5d64f34d01c99e093149682a3f38915dc0655d5a633dd918", size = 177352 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/7e/80/cab10959dc1faead58dc8384a781dfbf93cb4d33d50988f7a69f1b7c9bbe/oauthlib-3.2.2-py3-none-any.whl", hash = "sha256:8139f29aac13e25d502680e9e19963e83f16838d48a0d71c287fe40e7067fbca", size = 151688 },
 ]
 
 [[package]]
@@ -3717,6 +3794,19 @@ wheels = [
 ]
 
 [[package]]
+name = "requests-oauthlib"
+version = "2.0.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "oauthlib" },
+    { name = "requests" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/42/f2/05f29bc3913aea15eb670be136045bf5c5bbf4b99ecb839da9b422bb2c85/requests-oauthlib-2.0.0.tar.gz", hash = "sha256:b3dffaebd884d8cd778494369603a9e7b58d29111bf6b41bdc2dcd87203af4e9", size = 55650 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/3b/5d/63d4ae3b9daea098d5d6f5da83984853c1bbacd5dc826764b249fe119d24/requests_oauthlib-2.0.0-py2.py3-none-any.whl", hash = "sha256:7dd8a5c40426b779b0868c404bdef9768deccf22749cde15852df527e6269b36", size = 24179 },
+]
+
+[[package]]
 name = "rfc3339-validator"
 version = "0.1.4"
 source = { registry = "https://pypi.org/simple" }
@@ -4289,6 +4379,19 @@ wheels = [
 ]
 
 [[package]]
+name = "sse-starlette"
+version = "2.2.1"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "anyio" },
+    { name = "starlette" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/71/a4/80d2a11af59fe75b48230846989e93979c892d3a20016b42bb44edb9e398/sse_starlette-2.2.1.tar.gz", hash = "sha256:54470d5f19274aeed6b2d473430b08b4b379ea851d953b11d7f1c4a2c118b419", size = 17376 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/d9/e0/5b8bd393f27f4a62461c5cf2479c75a2cc2ffa330976f9f00f5f6e4f50eb/sse_starlette-2.2.1-py3-none-any.whl", hash = "sha256:6410a3d3ba0c89e7675d4c273a301d64649c03a5ef1ca101f10b47f895fd0e99", size = 10120 },
+]
+
+[[package]]
 name = "stack-data"
 version = "0.6.3"
 source = { registry = "https://pypi.org/simple" }
@@ -4316,16 +4419,18 @@ name = "starbridge"
 version = "0.10.5"
 source = { editable = "." }
 dependencies = [
+    { name = "atlassian-python-api" },
     { name = "beautifulsoup4" },
     { name = "brave-search-python-client" },
     { name = "cryptography" },
     { name = "email-validator" },
     { name = "enum-tools" },
-    { name = "fastapi", extra = ["all", "standard"] },
+    { name = "griffe" },
     { name = "logfire", extra = ["system-metrics"] },
     { name = "markdown" },
     { name = "markdownify" },
     { name = "markitdown", extra = ["docx", "xlsx"] },
+    { name = "mcp" },
     { name = "opentelemetry-api" },
     { name = "opentelemetry-instrumentation" },
     { name = "opentelemetry-instrumentation-httpx" },
@@ -4336,12 +4441,14 @@ dependencies = [
     { name = "opentelemetry-instrumentation-urllib3" },
     { name = "protego" },
     { name = "pydantic" },
+    { name = "pydantic-settings" },
     { name = "pymupdf" },
     { name = "pymupdf4llm" },
     { name = "python-dotenv" },
     { name = "readabilipy" },
     { name = "sphinx-toolbox" },
     { name = "strip-markdown" },
+    { name = "typer" },
 ]
 
 [package.optional-dependencies]
@@ -4397,13 +4504,14 @@ dev = [
 
 [package.metadata]
 requires-dist = [
+    { name = "atlassian-python-api", specifier = ">=4.0.0" },
     { name = "beautifulsoup4", specifier = ">=4.13.3" },
-    { name = "brave-search-python-client", specifier = ">=0.4.6" },
+    { name = "brave-search-python-client", specifier = ">=0.4.7" },
     { name = "cairosvg", marker = "extra == 'imaging'", specifier = ">=2.7.1" },
     { name = "cryptography", specifier = ">=44.0.1" },
     { name = "email-validator", specifier = ">=2.2.0" },
     { name = "enum-tools", specifier = ">=0.12.0" },
-    { name = "fastapi", extras = ["standard", "all"], specifier = ">=0.115.12" },
+    { name = "griffe", specifier = ">=1.6.2" },
     { name = "jinja2", marker = "extra == 'examples'", specifier = ">=3.1.6" },
     { name = "jupyter", marker = "extra == 'examples'", specifier = ">=1.1.1" },
     { name = "logfire", extras = ["system-metrics"], specifier = ">=3.10.0" },
@@ -4411,6 +4519,7 @@ requires-dist = [
     { name = "markdown", specifier = ">=3.7" },
     { name = "markdownify", specifier = ">=1.0.0" },
     { name = "markitdown", extras = ["docx", "xlsx"], specifier = ">=0.1.1" },
+    { name = "mcp", specifier = "==1.3.0" },
     { name = "opentelemetry-api", specifier = ">=1.31.1" },
     { name = "opentelemetry-instrumentation", specifier = ">=0.50b0" },
     { name = "opentelemetry-instrumentation-httpx", specifier = ">=0.50b0" },
@@ -4421,6 +4530,7 @@ requires-dist = [
     { name = "opentelemetry-instrumentation-urllib3", specifier = ">=0.50b0" },
     { name = "protego", specifier = ">=0.4.0" },
     { name = "pydantic", specifier = ">=2.10.6" },
+    { name = "pydantic-settings", specifier = ">=2.8.1" },
     { name = "pymupdf", specifier = "==1.25.4" },
     { name = "pymupdf4llm", specifier = ">=0.0.18" },
     { name = "python-dotenv", specifier = ">=1.1.0" },
@@ -4429,6 +4539,7 @@ requires-dist = [
     { name = "streamlit", marker = "extra == 'examples'", specifier = ">=1.43.2" },
     { name = "strip-markdown", specifier = ">=1.3" },
     { name = "svglib", marker = "extra == 'imaging'", specifier = ">=1.5.1" },
+    { name = "typer", specifier = ">=0.15.2" },
 ]
 provides-extras = ["imaging", "examples"]
 
