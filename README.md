@@ -59,6 +59,63 @@ Integrates Claude Desktop with the web, Google and Atlassian workspaces.
 3. **Improve efficiency**: Automate repetitive workflows such as generating
    Confluence pages from Google Docs.
 
+## Example Prompts
+
+- "Create a page about road cycling, focusing on Canyon bikes, in the personal
+  confluence space of Helmut."
+
+## Setup
+
+If you already have [uv](https://astral.sh/uv) package manager and
+[Claude Desktop](https://claude.ai/download) installed on your Mac:
+
+```shell
+# Installs starbridge in an isolated Python environment
+# Auto-injects configuration into Claude Desktop
+uvx starbridge install
+```
+
+If you first need to install uv:
+
+```shell
+if ! command -v brew &> /dev/null; then # Install Homebrew
+   /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+fi
+brew install uv # Install uv via Homebrew
+uvx starbridge install # Install starbridge via uv
+```
+
+If you want to install starbridge with the imaging extra
+
+```shell
+uvx --with "starbridge[imaging]" starbridge install
+```
+
+You can as well
+[run Starbridge with Docker](https://starbridge.readthedocs.io/en/latest/docker.html).
+
+## MCP Server
+
+Starbridge implements the
+[MCP Server](https://modelcontextprotocol.io/docs/concepts/architecture)
+interface, with Claude acting as an MCP client.
+
+### Resources
+
+[TODO: Document resources exposed to Claude Desktop]
+
+### Prompts
+
+[TODO: Document prompts exposed to Claude Desktop]
+
+### Tools
+
+[TODO: Document tools exposed to Claude Desktop]
+
+## CLI
+
+[TODO: Document CLI commands]
+
 ## Operational Excellence
 
 This project is designed with operational excellence in mind, using modern
@@ -89,65 +146,6 @@ Python tooling and practices. It includes:
 11. Setup for developing inside a
     [devcontainer](https://code.visualstudio.com/docs/devcontainers/containers)
     included (supports VSCode and GitHub Codespaces)
-
-## Example Prompts
-
-- "Create a page about road cycling, focusing on Canyon bikes, in the personal
-  confluence space of Helmut."
-
-## Setup
-
-`uvx starbridge install` - that's all.
-
-Prequisites:
-
-- You are running Mac OS X
-- You already have the uv package manager installed
-- You already have Claude Desktop for Mac OS X installed
-- You don't care for the imaging extra
-
-If you need to first install homebrew and uv - and care for all extras:
-
-```shell
-if [[ "$OSTYPE" == "darwin"* ]]; then # Install dependencies for macOS X
-  if ! command -v brew &> /dev/null; then # Install Homebrew if not present
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-  fi
-  brew install cairo
-elif [[ "$OSTYPE" == "linux-gnu"* ]]; then # Install dependencies for Linux
-  sudo apt-get update -y && sudo apt-get install curl libcairo2 -y
-fi
-if ! command -v uvx &> /dev/null; then # Install uv package manager if not present
-  curl -LsSf https://astral.sh/uv/install.sh | sh
-  source $HOME/.local/bin/env
-fi
-uvx --with "starbridge[imaging]" starbridge install # Install starbridge, including configuration and injection into Claude Desktop App
-```
-
-Starbridge can be
-[run within Docker](https://starbridge.readthedocs.io/en/latest/docker.html).
-
-## MCP Server
-
-Starbridge implements the
-[MCP Server](https://modelcontextprotocol.io/docs/concepts/architecture)
-interface, with Claude acting as an MCP client.
-
-### Resources
-
-[TODO: Document resources exposed to Claude Desktop]
-
-### Prompts
-
-[TODO: Document prompts exposed to Claude Desktop]
-
-### Tools
-
-[TODO: Document tools exposed to Claude Desktop]
-
-## CLI
-
-[TODO: Document CLI commands]
 
 
 ## Further Reading
