@@ -1,6 +1,13 @@
 [⭐ Starbridge](https://starbridge.readthedocs.io/en/latest/)
 
-## [0.10.6](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.10.5..0.10.6) - 2025-03-25
+## [0.10.7](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.10.6..0.10.7) - 2025-03-26
+
+### 📚 Documentation
+
+- Simplify readme - ([28c2482](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/28c24825109ca25dea236afcb86040423a749670))
+
+
+## [0.10.6](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.10.5..v0.10.6) - 2025-03-25
 
 ### 🧪 Testing
 
@@ -10,9 +17,6 @@
 
 - *(sonarqube)* Workaround false positive in sonarqube duplication detector - ([620e84b](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/620e84b16efd0e410487d97d2478cdcd3c813cb5))
 
-## New Contributors ❤️
-
-* @helmut-hoffer-von-ankershoffen made their first contribution
 
 ## [0.10.3](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.10.1..v0.10.3) - 2025-03-18
 
