@@ -1,5 +1,12 @@
 [⭐ Starbridge](https://starbridge.readthedocs.io/en/latest/)
 
+## [0.10.9](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.10.8..0.10.9) - 2025-03-27
+
+### 🐛 Bug Fixes
+
+- *(deps)* Readd missing dep - ([ff4817c](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/ff4817c3bb52c1757802253bcbe8be50e57896f8))
+
+
 ## [0.10.7](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.10.6..v0.10.7) - 2025-03-26
 
 ### 📚 Documentation
