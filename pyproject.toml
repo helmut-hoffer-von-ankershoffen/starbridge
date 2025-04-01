@@ -94,7 +94,7 @@ dependencies = [
     "enum-tools>=0.12.0",
     "sphinx-toolbox>=3.8.3",
     "pymupdf4llm>=0.0.18",
-    "pymupdf==1.25.4",                                 # explicitely required as 1.25.3 misses the linux/arm64 wheel and pympudf4llm requires unpinned
+    "pymupdf==1.25.5",                                 # explicitely required as 1.25.3 misses the linux/arm64 wheel and pympudf4llm requires unpinned
 ]
 
 
