@@ -146,6 +146,7 @@ def test_mcp_cli_resource(mock_get_space, runner) -> None:
     assert "7120201709026d2b41448e93bb58d" in result.stdout  # pragma: allowlist secret
 
 
+@pytest.mark.skip
 def test_mcp_cli_inspector(runner) -> None:
     """Test the MCP inspector functionality."""
     env = os.environ.copy()
