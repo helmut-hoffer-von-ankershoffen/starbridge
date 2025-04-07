@@ -72,7 +72,7 @@ jobs:
             fi
 
       - name: Smoke tests
-        run: uv run --no-dev starbridge hello-world
+        run: uv run --no-dev starbridge --help
 
       - name: Lint
         run: make lint
