@@ -1,6 +1,20 @@
 [⭐ Starbridge](https://starbridge.readthedocs.io/en/latest/)
 
-## [0.10.9](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.10.8..0.10.9) - 2025-03-27
+## [0.10.10](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.10.9..0.10.10) - 2025-04-07
+
+### 🧪 Testing
+
+- Revert - ([6b8384a](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/6b8384ac2068e1be8eb2dac77783e1f20a6c9d55))
+
+### ⚙️ Miscellaneous Tasks
+
+- *(audit)* Allow affero - ([a9140bc](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/a9140bc7b53c595fe61ff91b9ddbdcb255415b84))
+- *(nox)* Fix typo - ([cf90705](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/cf90705d6986090d777449153747b05837c43380))
+- *(smoke)* Revert - ([3cb7ed9](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/3cb7ed9921bf087eec884998ce147806407db23f))
+- Deactive mcp inspector for now - ([1e5b9f3](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/1e5b9f3cc350d8ae6228e14099316f1ebed25cf0))
+
+
+## [0.10.9](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.10.8..v0.10.9) - 2025-03-27
 
 ### 🐛 Bug Fixes
 
