@@ -70,7 +70,10 @@ interface, with Claude acting as an MCP client.
 This project is designed with operational excellence in mind, using modern
 Python tooling and practices. It includes:
 
-1. [Complete reference documentation](https://starbridge.readthedocs.io/en/latest/reference.html)
+1. Complete reference documentation
+   [of the CLI](https://starbridge.readthedocs.io/en/latest/cli_reference.html)
+   and
+   [of the library](https://starbridge.readthedocs.io/en/latest/lib_reference.html)
    on Read the Docs
 2. [Transparent test coverage](https://app.codecov.io/gh/helmut-hoffer-von-ankershoffen/starbridge)
    including unit and E2E tests (reported on Codecov)

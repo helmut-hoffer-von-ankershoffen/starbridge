@@ -51,14 +51,13 @@ COPY .python-version /app
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-dev --no-editable
 
-# MCP Inspector
-EXPOSE 5173/tcp
-
-# MCP proxy server
-EXPOSE 3000/tcp
-
 ENV STARBRIDGE_RUNNING_IN_CONTAINER=1
 
-# When running the container, start the Starbridge MCP server
+# API will run on port 8000 by default
+EXPOSE 8000/tcp
+
+# No healthcheck by default
+HEALTHCHECK NONE
+
 # But feel free to add arguments and options as needed when doing a docker run
 ENTRYPOINT ["uv", "run", "--no-dev", "starbridge"]
