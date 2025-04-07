@@ -17,7 +17,7 @@ LATEXMK_VERSION_MIN = 4.86
 LICENSES_JSON_PATH = "reports/licenses.json"
 SBOM_CYCLONEDX_PATH = "reports/sbom.json"
 SBOM_SPDX_PATH = "reports/sbom.spdx"
-
+JUNIT_XML = "reports/junit.xml"
 CLI_MODULE = "cli"
 API_VERSIONS = []
 
@@ -463,11 +463,69 @@ def docs_pdf(session: nox.Session) -> None:
 @nox.session(python=["3.11", "3.12", "3.13"])
 def test(session: nox.Session) -> None:
     """Run tests with pytest."""
-    _setup_venv(session, True)
-    pytest_args = ["pytest", "--disable-warnings", "--junitxml=reports/junit.xml", "-n", "auto", "--dist", "loadgroup"]
+    _setup_venv(session)
+    session.run("rm", "-rf", ".coverage", external=True)
+
+    # Build pytest arguments with skip_with_act filter if needed
+    pytest_args = ["pytest", "--disable-warnings", JUNIT_XML, "-n", "auto", "--dist", "loadgroup"]
     if _is_act_environment():
         pytest_args.extend(["-k", NOT_SKIP_WITH_ACT])
+    pytest_args.extend(["-m", "not sequential"])
+    pytest_args.extend(session.posargs)
+
     session.run(*pytest_args)
+
+    # Sequential tests
+    sequential_args = [
+        "pytest",
+        "--cov-append",
+        "--disable-warnings",
+        JUNIT_XML,
+        "-n",
+        "auto",
+        "--dist",
+        "loadgroup",
+    ]
+    if _is_act_environment():
+        sequential_args.extend(["-k", NOT_SKIP_WITH_ACT])
+    sequential_args.extend(["-m", "sequential"])
+    sequential_args.extend(session.posargs)
+
+    session.run(*sequential_args)
+
+    session.run(
+        "bash",
+        "-c",
+        (
+            "docker compose ls --format json | jq -r '.[].Name' | "
+            "grep ^pytest | xargs -I {} docker compose -p {} down --remove-orphans"
+        ),
+        external=True,
+    )
+
+
+@nox.session(python=["3.11", "3.12", "3.13"])
+def test_no_extras(session: nox.Session) -> None:
+    """Run test sessions without extra dependencies."""
+    _setup_venv(session, all_extras=False)
+
+    no_extras_args = ["pytest", "--cov-append", "--disable-warnings", JUNIT_XML, "-n", "1"]
+    if _is_act_environment():
+        no_extras_args.extend(["-k", NOT_SKIP_WITH_ACT])
+    no_extras_args.extend(["-m", "no_extras"])
+    no_extras_args.extend(session.posargs)
+
+    session.run(*no_extras_args)
+
+    session.run(
+        "bash",
+        "-c",
+        (
+            "docker compose ls --format json | jq -r '.[].Name' | "
+            "grep ^pytest | xargs -I {} docker compose -p {} down --remove-orphans"
+        ),
+        external=True,
+    )
 
 
 @nox.session(python=["3.13"], default=False)

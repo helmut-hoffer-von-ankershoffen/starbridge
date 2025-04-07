@@ -11,12 +11,9 @@
    :maxdepth: 2
 
    main
-   api_explorer_v2
-   api_explorer_v1
+   docker
    cli_reference
    lib_reference
-   api_reference_v2
-   api_reference_v1
    contributing
    code-style
    release-notes
@@ -27,11 +24,11 @@
 .. sidebar-links::
    :caption: Links
    :github:
-   :pypi: {{ pypi_distribution_name }}
-   Docker <https://hub.docker.com/r/{{ docker_io_owner }}/{{ docker_io_image_name }}/tags>
-   ghcr.io <{{ github_repository_url_https }}/pkgs/container/{{ github_repository_name }}>
-   SonarQube <https://sonarcloud.io/summary/new_code?id={{ sonarqube_key }}>
-   Codecov <https://app.codecov.io/gh/{{ github_repository_owner }}/{{ github_repository_name }}>
+   :pypi: starbridge
+   Docker <https://hub.docker.com/r/helmuthva/starbridge/tags>
+   ghcr.io <https://github.com/helmut-hoffer-von-ankershoffen/starbridge/pkgs/container/starbridge>
+   SonarQube <https://sonarcloud.io/summary/new_code?id=helmut-hoffer-von-ankershoffen_starbridge>
+   Codecov <https://app.codecov.io/gh/helmut-hoffer-von-ankershoffen/starbridge>
 
 .. only:: html
 
