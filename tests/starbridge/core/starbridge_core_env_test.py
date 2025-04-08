@@ -25,8 +25,8 @@ def runner() -> CliRunner:
 @pytest.fixture(autouse=True)
 def backup_env() -> Generator[None, None, None]:
     """Fixture to automatically backup and restore .env file."""
-    env_path = Path(__file__).parent.parent / ".env"
-    bak_path = Path(__file__).parent.parent / ".env.bak"
+    env_path = Path(__file__).parent.parent.parent.parent / ".env"
+    bak_path = Path(__file__).parent.parent.parent.parent / ".env.bak"
     if env_path.is_file():
         shutil.copy2(env_path, bak_path)
     yield
@@ -83,9 +83,9 @@ def test_core_dot_env_validated(runner) -> None:
     assert result.exit_code == 0
 
     # Read .env, remove STARBRIDGE_ATLASSIAN_URL line and write back
-    env_path = Path(__file__).parent.parent.parent / ".env"
+    env_path = Path(__file__).parent.parent.parent.parent / ".env"
     # Backup .env using Pathlib
-    bak_path = Path(__file__).parent.parent.parent / ".env.bak"
+    bak_path = Path(__file__).parent.parent.parent.parent / ".env.bak"
     Path(bak_path).write_text(Path(env_path).read_text(encoding="utf-8"), encoding="utf-8")
 
     with open(env_path, encoding="utf-8") as f:
