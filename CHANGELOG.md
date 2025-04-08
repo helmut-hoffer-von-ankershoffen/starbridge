@@ -1,5 +1,12 @@
 [⭐ Starbridge](https://starbridge.readthedocs.io/en/latest/)
 
+## [0.10.12](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.10.11..0.10.12) - 2025-04-08
+
+### ⚙️ Miscellaneous Tasks
+
+- *(test)* Move - ([356d272](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/commit/356d272ff5433113e0b03b1a1edb1be2fd21c3be))
+
+
 ## [0.10.10](https://github.com/helmut-hoffer-von-ankershoffen/starbridge/compare/v0.10.9..v0.10.10) - 2025-04-07
 
 ### 🧪 Testing
