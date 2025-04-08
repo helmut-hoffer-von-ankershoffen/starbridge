@@ -26733,7 +26733,7 @@ license:
 
 ```
 
-## starbridge (0.10.9) - MIT License
+## starbridge (0.10.10) - MIT License
 
 ⭐ Integrates Claude Desktop with the web, Google and Atlassian workspaces.
 

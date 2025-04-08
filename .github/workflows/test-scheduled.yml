@@ -29,8 +29,14 @@ jobs:
       - name: Create .env file
         uses: SpicyPizza/create-envfile@ace6d4f5d7802b600276c23ca417e669f1a06f6f # v2.0.3
         with:
-          envkey_ENV_KEY: "ENV_VALUE"
+          envkey_STARBRIDGE_ATLASSIAN_URL: "https://your-domain.atlassian.net"
+          envkey_STARBRIDGE_ATLASSIAN_EMAIL_ADDRESS: "you@your-domain.com"
+          envkey_STARBRIDGE_ATLASSIAN_API_TOKEN: "YOUR_API_TOKEN"
+          envkey_STARBRIDGE_SEARCH_BRAVE_SEARCH_API_KEY: "MOCK"
+          envkey_STARBRIDGE_LOGFIRE_TOKEN: "${{ secrets.STARBRIDGE_LOGFIRE_TOKEN }}"
+          envkey_STARBRIDGE_LOGFIRE_INSTRUMENT_MCP_ENABLED: 1
+          envkey_STARBRIDGE_LOGFIRE_ENVIRONMENT: "github_action_test"
           fail_on_empty: true
-
+          
       - name: Run scheduled tests
         run: make test_scheduled

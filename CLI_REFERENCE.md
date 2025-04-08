@@ -27,7 +27,7 @@ $ starbridge [OPTIONS] COMMAND [ARGS]...
 * `--show-completion`: Show completion for the current shell, to copy it or customize the installation.
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -59,7 +59,7 @@ $ starbridge health [OPTIONS]
 * `--json / --no-json`: Output health as JSON  [default: no-json]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ## `starbridge info`
 
@@ -75,7 +75,7 @@ $ starbridge info [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ## `starbridge create-dot-env`
 
@@ -94,7 +94,7 @@ $ starbridge create-dot-env [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ## `starbridge install`
 
@@ -118,7 +118,7 @@ $ starbridge install [OPTIONS]
 * `--image TEXT`: Docker image to use for Starbridge. Only applies if started as container.  [default: helmuthva/starbridge:latest]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ## `starbridge uninstall`
 
@@ -140,7 +140,7 @@ $ starbridge uninstall [OPTIONS]
 * `--restart-claude / --no-restart-claude`: Restart Claude Desktop application post installation  [default: restart-claude]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ## `starbridge claude`
 
@@ -156,7 +156,7 @@ $ starbridge claude [OPTIONS] COMMAND [ARGS]...
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -180,7 +180,7 @@ $ starbridge claude health [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge claude info`
 
@@ -196,7 +196,7 @@ $ starbridge claude info [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge claude config`
 
@@ -212,7 +212,7 @@ $ starbridge claude config [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge claude log`
 
@@ -236,7 +236,7 @@ $ starbridge claude log [OPTIONS]
 * `--name TEXT`: Name of the MCP server - use &#x27;main&#x27; for main mcp.log of Claude Desktop application  [default: starbridge]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge claude restart`
 
@@ -252,7 +252,7 @@ $ starbridge claude restart [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ## `starbridge Starbridge CLI`
 
@@ -281,7 +281,7 @@ $ starbridge Starbridge CLI [OPTIONS] COMMAND [ARGS]...
 * `--env TEXT`: Environment variables in key=value format. Can be used multiple times in one call. Only STARBRIDGE_ prefixed vars are evaluated. Example --env STARBRIDGE_ATLASSIAN_URL=&quot;https://your-domain.atlassian.net&quot; --env STARBRIDGE_ATLASSIAN_EMAIL=&quot;YOUR_EMAIL&quot;
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -312,7 +312,7 @@ $ starbridge Starbridge CLI health [OPTIONS]
 * `--json / --no-json`: Output health as JSON  [default: no-json]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge Starbridge CLI info`
 
@@ -328,7 +328,7 @@ $ starbridge Starbridge CLI info [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge Starbridge CLI create-dot-env`
 
@@ -347,7 +347,7 @@ $ starbridge Starbridge CLI create-dot-env [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge Starbridge CLI install`
 
@@ -371,7 +371,7 @@ $ starbridge Starbridge CLI install [OPTIONS]
 * `--image TEXT`: Docker image to use for Starbridge. Only applies if started as container.  [default: helmuthva/starbridge:latest]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge Starbridge CLI uninstall`
 
@@ -393,7 +393,7 @@ $ starbridge Starbridge CLI uninstall [OPTIONS]
 * `--restart-claude / --no-restart-claude`: Restart Claude Desktop application post installation  [default: restart-claude]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge Starbridge CLI claude`
 
@@ -409,7 +409,7 @@ $ starbridge Starbridge CLI claude [OPTIONS] COMMAND [ARGS]...
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -433,7 +433,7 @@ $ starbridge Starbridge CLI claude health [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI claude info`
 
@@ -449,7 +449,7 @@ $ starbridge Starbridge CLI claude info [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI claude config`
 
@@ -465,7 +465,7 @@ $ starbridge Starbridge CLI claude config [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI claude log`
 
@@ -489,7 +489,7 @@ $ starbridge Starbridge CLI claude log [OPTIONS]
 * `--name TEXT`: Name of the MCP server - use &#x27;main&#x27; for main mcp.log of Claude Desktop application  [default: starbridge]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI claude restart`
 
@@ -505,7 +505,7 @@ $ starbridge Starbridge CLI claude restart [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge Starbridge CLI confluence`
 
@@ -521,7 +521,7 @@ $ starbridge Starbridge CLI confluence [OPTIONS] COMMAND [ARGS]...
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -545,7 +545,7 @@ $ starbridge Starbridge CLI confluence health [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI confluence info`
 
@@ -561,7 +561,7 @@ $ starbridge Starbridge CLI confluence info [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI confluence mcp`
 
@@ -577,7 +577,7 @@ $ starbridge Starbridge CLI confluence mcp [OPTIONS] COMMAND [ARGS]...
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -602,7 +602,7 @@ $ starbridge Starbridge CLI confluence mcp tools [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ##### `starbridge Starbridge CLI confluence mcp resources`
 
@@ -618,7 +618,7 @@ $ starbridge Starbridge CLI confluence mcp resources [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ##### `starbridge Starbridge CLI confluence mcp resource-types`
 
@@ -634,7 +634,7 @@ $ starbridge Starbridge CLI confluence mcp resource-types [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ##### `starbridge Starbridge CLI confluence mcp space`
 
@@ -654,7 +654,7 @@ $ starbridge Starbridge CLI confluence mcp space [OPTIONS] KEY
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ##### `starbridge Starbridge CLI confluence mcp prompts`
 
@@ -670,7 +670,7 @@ $ starbridge Starbridge CLI confluence mcp prompts [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ##### `starbridge Starbridge CLI confluence mcp space-summary`
 
@@ -690,7 +690,7 @@ $ starbridge Starbridge CLI confluence mcp space-summary [OPTIONS]
 * `--style TEXT`: Style of summary  [default: brief]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI confluence space`
 
@@ -706,7 +706,7 @@ $ starbridge Starbridge CLI confluence space [OPTIONS] COMMAND [ARGS]...
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -726,7 +726,7 @@ $ starbridge Starbridge CLI confluence space list [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI confluence page`
 
@@ -742,7 +742,7 @@ $ starbridge Starbridge CLI confluence page [OPTIONS] COMMAND [ARGS]...
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -771,7 +771,7 @@ $ starbridge Starbridge CLI confluence page list [OPTIONS]
 * `--space-key TEXT`: Space key  [required]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ##### `starbridge Starbridge CLI confluence page search`
 
@@ -791,7 +791,7 @@ $ starbridge Starbridge CLI confluence page search [OPTIONS]
 * `--query TEXT`: Confluence query language (CQL) query to search for pages  [required]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ##### `starbridge Starbridge CLI confluence page create`
 
@@ -817,7 +817,7 @@ $ starbridge Starbridge CLI confluence page create [OPTIONS]
 * `--page-id TEXT`: Parent page id
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ##### `starbridge Starbridge CLI confluence page read`
 
@@ -834,7 +834,7 @@ $ starbridge Starbridge CLI confluence page read [OPTIONS]
 * `--page-id TEXT`: Page id
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ##### `starbridge Starbridge CLI confluence page update`
 
@@ -858,7 +858,7 @@ $ starbridge Starbridge CLI confluence page update [OPTIONS]
 * `--body TEXT`: Body of the page  [required]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ##### `starbridge Starbridge CLI confluence page delete`
 
@@ -878,7 +878,7 @@ $ starbridge Starbridge CLI confluence page delete [OPTIONS]
 * `--page-id TEXT`: Pager id  [required]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge Starbridge CLI hello`
 
@@ -894,7 +894,7 @@ $ starbridge Starbridge CLI hello [OPTIONS] COMMAND [ARGS]...
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -918,7 +918,7 @@ $ starbridge Starbridge CLI hello health [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI hello info`
 
@@ -934,7 +934,7 @@ $ starbridge Starbridge CLI hello info [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI hello hello`
 
@@ -954,7 +954,7 @@ $ starbridge Starbridge CLI hello hello [OPTIONS]
 * `--locale TEXT`: Locale to use  [default: en_US]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI hello bridge`
 
@@ -975,7 +975,7 @@ $ starbridge Starbridge CLI hello bridge [OPTIONS]
 * `--dump / --no-dump`: If set, will dump to file starbridge.png in current working directory. Defaults to opening viewer to show the image.  [default: no-dump]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI hello pdf`
 
@@ -996,7 +996,7 @@ $ starbridge Starbridge CLI hello pdf [OPTIONS]
 * `--dump / --no-dump`: If set, will dump to file starbridge.pdf in current working directory. Defaults to opening viewer to show the document.  [default: no-dump]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge Starbridge CLI mcp`
 
@@ -1012,7 +1012,7 @@ $ starbridge Starbridge CLI mcp [OPTIONS] COMMAND [ARGS]...
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -1042,7 +1042,7 @@ $ starbridge Starbridge CLI mcp health [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI mcp services`
 
@@ -1058,7 +1058,7 @@ $ starbridge Starbridge CLI mcp services [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI mcp tools`
 
@@ -1074,7 +1074,7 @@ $ starbridge Starbridge CLI mcp tools [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI mcp tool`
 
@@ -1099,7 +1099,7 @@ $ starbridge Starbridge CLI mcp tool [OPTIONS] NAME
 * `--arguments TEXT`: Arguments in key=value format
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI mcp resources`
 
@@ -1115,7 +1115,7 @@ $ starbridge Starbridge CLI mcp resources [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI mcp resource`
 
@@ -1138,7 +1138,7 @@ $ starbridge Starbridge CLI mcp resource [OPTIONS] URI
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI mcp prompts`
 
@@ -1154,7 +1154,7 @@ $ starbridge Starbridge CLI mcp prompts [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI mcp prompt`
 
@@ -1179,7 +1179,7 @@ $ starbridge Starbridge CLI mcp prompt [OPTIONS] NAME
 * `--arguments TEXT`: Arguments in key=value format
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI mcp resource-types`
 
@@ -1195,7 +1195,7 @@ $ starbridge Starbridge CLI mcp resource-types [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI mcp serve`
 
@@ -1223,7 +1223,7 @@ $ starbridge Starbridge CLI mcp serve [OPTIONS]
 * `--env TEXT`: Environment variables in key=value format. Can be used multiple times in one call. Only STARBRIDGE_ prefixed vars are used. Example --env STARBRIDGE_ATLASSIAN_URL=&quot;https://your-domain.atlassian.net&quot; --env STARBRIDGE_ATLASSIAN_EMAIL=&quot;YOUR_EMAIL&quot;
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI mcp inspect`
 
@@ -1239,7 +1239,7 @@ $ starbridge Starbridge CLI mcp inspect [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge Starbridge CLI search`
 
@@ -1255,7 +1255,7 @@ $ starbridge Starbridge CLI search [OPTIONS] COMMAND [ARGS]...
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -1277,7 +1277,7 @@ $ starbridge Starbridge CLI search health [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI search info`
 
@@ -1293,7 +1293,7 @@ $ starbridge Starbridge CLI search info [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI search web`
 
@@ -1316,7 +1316,7 @@ $ starbridge Starbridge CLI search web [OPTIONS] Q
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge Starbridge CLI web`
 
@@ -1332,7 +1332,7 @@ $ starbridge Starbridge CLI web [OPTIONS] COMMAND [ARGS]...
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -1354,7 +1354,7 @@ $ starbridge Starbridge CLI web health [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI web info`
 
@@ -1370,7 +1370,7 @@ $ starbridge Starbridge CLI web info [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge Starbridge CLI web get`
 
@@ -1410,7 +1410,7 @@ $ starbridge Starbridge CLI web get [OPTIONS] URL
 * `--force-not-respecting-robots-txt`: Force not respecting robots.txt. If True, the agent will ignore robots.txt.If False, the agent will respect robots.txt if the environment variableSTARBRIDGE_WEB_RESPPECT_ROBOTS_TXT is set to 1.Defaults to False.
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ## `starbridge confluence`
 
@@ -1426,7 +1426,7 @@ $ starbridge confluence [OPTIONS] COMMAND [ARGS]...
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -1450,7 +1450,7 @@ $ starbridge confluence health [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge confluence info`
 
@@ -1466,7 +1466,7 @@ $ starbridge confluence info [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge confluence mcp`
 
@@ -1482,7 +1482,7 @@ $ starbridge confluence mcp [OPTIONS] COMMAND [ARGS]...
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -1507,7 +1507,7 @@ $ starbridge confluence mcp tools [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge confluence mcp resources`
 
@@ -1523,7 +1523,7 @@ $ starbridge confluence mcp resources [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge confluence mcp resource-types`
 
@@ -1539,7 +1539,7 @@ $ starbridge confluence mcp resource-types [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge confluence mcp space`
 
@@ -1559,7 +1559,7 @@ $ starbridge confluence mcp space [OPTIONS] KEY
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge confluence mcp prompts`
 
@@ -1575,7 +1575,7 @@ $ starbridge confluence mcp prompts [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge confluence mcp space-summary`
 
@@ -1595,7 +1595,7 @@ $ starbridge confluence mcp space-summary [OPTIONS]
 * `--style TEXT`: Style of summary  [default: brief]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge confluence space`
 
@@ -1611,7 +1611,7 @@ $ starbridge confluence space [OPTIONS] COMMAND [ARGS]...
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -1631,7 +1631,7 @@ $ starbridge confluence space list [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge confluence page`
 
@@ -1647,7 +1647,7 @@ $ starbridge confluence page [OPTIONS] COMMAND [ARGS]...
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -1676,7 +1676,7 @@ $ starbridge confluence page list [OPTIONS]
 * `--space-key TEXT`: Space key  [required]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge confluence page search`
 
@@ -1696,7 +1696,7 @@ $ starbridge confluence page search [OPTIONS]
 * `--query TEXT`: Confluence query language (CQL) query to search for pages  [required]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge confluence page create`
 
@@ -1722,7 +1722,7 @@ $ starbridge confluence page create [OPTIONS]
 * `--page-id TEXT`: Parent page id
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge confluence page read`
 
@@ -1739,7 +1739,7 @@ $ starbridge confluence page read [OPTIONS]
 * `--page-id TEXT`: Page id
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge confluence page update`
 
@@ -1763,7 +1763,7 @@ $ starbridge confluence page update [OPTIONS]
 * `--body TEXT`: Body of the page  [required]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 #### `starbridge confluence page delete`
 
@@ -1783,7 +1783,7 @@ $ starbridge confluence page delete [OPTIONS]
 * `--page-id TEXT`: Pager id  [required]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ## `starbridge hello`
 
@@ -1799,7 +1799,7 @@ $ starbridge hello [OPTIONS] COMMAND [ARGS]...
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -1823,7 +1823,7 @@ $ starbridge hello health [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge hello info`
 
@@ -1839,7 +1839,7 @@ $ starbridge hello info [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge hello hello`
 
@@ -1859,7 +1859,7 @@ $ starbridge hello hello [OPTIONS]
 * `--locale TEXT`: Locale to use  [default: en_US]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge hello bridge`
 
@@ -1880,7 +1880,7 @@ $ starbridge hello bridge [OPTIONS]
 * `--dump / --no-dump`: If set, will dump to file starbridge.png in current working directory. Defaults to opening viewer to show the image.  [default: no-dump]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge hello pdf`
 
@@ -1901,7 +1901,7 @@ $ starbridge hello pdf [OPTIONS]
 * `--dump / --no-dump`: If set, will dump to file starbridge.pdf in current working directory. Defaults to opening viewer to show the document.  [default: no-dump]
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ## `starbridge mcp`
 
@@ -1917,7 +1917,7 @@ $ starbridge mcp [OPTIONS] COMMAND [ARGS]...
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -1947,7 +1947,7 @@ $ starbridge mcp health [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge mcp services`
 
@@ -1963,7 +1963,7 @@ $ starbridge mcp services [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge mcp tools`
 
@@ -1979,7 +1979,7 @@ $ starbridge mcp tools [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge mcp tool`
 
@@ -2004,7 +2004,7 @@ $ starbridge mcp tool [OPTIONS] NAME
 * `--arguments TEXT`: Arguments in key=value format
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge mcp resources`
 
@@ -2020,7 +2020,7 @@ $ starbridge mcp resources [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge mcp resource`
 
@@ -2043,7 +2043,7 @@ $ starbridge mcp resource [OPTIONS] URI
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge mcp prompts`
 
@@ -2059,7 +2059,7 @@ $ starbridge mcp prompts [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge mcp prompt`
 
@@ -2084,7 +2084,7 @@ $ starbridge mcp prompt [OPTIONS] NAME
 * `--arguments TEXT`: Arguments in key=value format
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge mcp resource-types`
 
@@ -2100,7 +2100,7 @@ $ starbridge mcp resource-types [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge mcp serve`
 
@@ -2128,7 +2128,7 @@ $ starbridge mcp serve [OPTIONS]
 * `--env TEXT`: Environment variables in key=value format. Can be used multiple times in one call. Only STARBRIDGE_ prefixed vars are used. Example --env STARBRIDGE_ATLASSIAN_URL=&quot;https://your-domain.atlassian.net&quot; --env STARBRIDGE_ATLASSIAN_EMAIL=&quot;YOUR_EMAIL&quot;
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge mcp inspect`
 
@@ -2144,7 +2144,7 @@ $ starbridge mcp inspect [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ## `starbridge search`
 
@@ -2160,7 +2160,7 @@ $ starbridge search [OPTIONS] COMMAND [ARGS]...
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -2182,7 +2182,7 @@ $ starbridge search health [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge search info`
 
@@ -2198,7 +2198,7 @@ $ starbridge search info [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge search web`
 
@@ -2221,7 +2221,7 @@ $ starbridge search web [OPTIONS] Q
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ## `starbridge web`
 
@@ -2237,7 +2237,7 @@ $ starbridge web [OPTIONS] COMMAND [ARGS]...
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 **Commands**:
 
@@ -2259,7 +2259,7 @@ $ starbridge web health [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge web info`
 
@@ -2275,7 +2275,7 @@ $ starbridge web info [OPTIONS]
 
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
 
 ### `starbridge web get`
 
@@ -2315,4 +2315,4 @@ $ starbridge web get [OPTIONS] URL
 * `--force-not-respecting-robots-txt`: Force not respecting robots.txt. If True, the agent will ignore robots.txt.If False, the agent will respect robots.txt if the environment variableSTARBRIDGE_WEB_RESPPECT_ROBOTS_TXT is set to 1.Defaults to False.
 * `--help`: Show this message and exit.
 
-⭐ Starbridge v0.10.9 - built with love in Berlin 🐻
+⭐ Starbridge v0.10.10 - built with love in Berlin 🐻
