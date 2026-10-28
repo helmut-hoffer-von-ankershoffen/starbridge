@@ -109,7 +109,7 @@ Changelog = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/releas
 Issues = "https://github.com/helmut-hoffer-von-ankershoffen/starbridge/issues"
 
 [build-system]
-requires = ["hatchling==1.27.0"]
+requires = ["hatchling==1.33.0"]
 build-backend = "hatchling.build"
 
 [tool.hatch.build]
